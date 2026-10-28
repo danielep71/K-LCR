@@ -201,9 +201,11 @@ The configuration integrated into main via PR #45 targets `release/0.1.0`.
 Dependabot reads its configuration from the default branch, so future grouped
 GitHub Actions update PRs target the active release branch.
 
-K-LCR remains private. Public hosting, private vulnerability reporting and
-public-repository-only security options are not copied. Repository-specific
-credentials, collaborators, deployments and environments are not cloned.
+The owner made K-LCR public on 2026-10-28. The project website is tracked
+in #63; public visibility alone does not establish a successful Pages deployment.
+Private vulnerability reporting and additional security products still require
+explicit verification. Repository-specific credentials, collaborators,
+deployments and environments are not cloned.
 
 ## 🔎 Activation boundaries and remaining verification
 
@@ -212,10 +214,10 @@ Live label reconciliation is deliberately restricted to main. Release-branch
 changes to these definitions/policies are staged until an authorized integration;
 do not bypass that boundary to activate them early.
 
-The settings above were recorded during the 2026-10-28 alignment. K-LCR is
-private: feature availability depends on its GitHub plan and enabled products,
-and features available in public repositories are not evidence of availability here. No account
-plan, public hosting or additional security product entitlement is assumed.
+The settings above were recorded during the 2026-10-28 alignment, initially
+while K-LCR was private. The repository is now public. This visibility change
+does not prove that optional security or hosting features are configured;
+verify each feature and record its evidence separately.
 Controlled fail/pass protection demonstrations and fresh settings verification
 remain in issue #16. Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;
