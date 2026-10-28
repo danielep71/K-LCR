@@ -1,30 +1,173 @@
+#==============================================================================
+# .editorconfig
+#------------------------------------------------------------------------------
+# PURPOSE
+#   Provide the editing baseline for the K-LCR repository.
+#
+# POLICY
+#   - Exported VBA source uses CRLF and 4-space indentation.
+#   - Documentation, GitHub configuration, and cross-platform tooling use LF.
+#   - YAML, JSON, XML, and JavaScript use 2-space indentation.
+#   - Python and shell scripts use 4-space indentation.
+#   - Trailing whitespace is removed except in Markdown, where two trailing
+#     spaces can represent an explicit line break.
+#   - Exported VBA encoding will be decided and host-tested in issues #6/#14.
+#   - Do not assume an ASCII-only or Windows code-page contract before host evidence.
+#
+# RELATIONSHIP WITH .gitattributes
+#   .editorconfig controls how supporting editors create and save working-tree
+#   files. .gitattributes remains authoritative for Git normalization, binary
+#   classification, merge and diff behavior, Linguist, and release archives.
+#==============================================================================
+
 root = true
 
+
+#------------------------------------------------------------------------------
+# DEFAULT TEXT POLICY
+#------------------------------------------------------------------------------
 [*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
+tab_width = 4
+
+
+#------------------------------------------------------------------------------
+# EXPORTED VBA SOURCE
+#------------------------------------------------------------------------------
+# Do not set charset: VBE import/export encoding awaits issue #6.
+[*.{bas,cls,frm}]
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+tab_width = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# PYTHON TOOLING
+#------------------------------------------------------------------------------
+[*.{py,pyw}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+tab_width = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# NODE / JAVASCRIPT TOOLING
+#------------------------------------------------------------------------------
+[*.{js,mjs,cjs}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# GITHUB / STRUCTURED CONFIGURATION
+#------------------------------------------------------------------------------
+[*.{yml,yaml,json,jsonc}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# XML
+#------------------------------------------------------------------------------
+[*.xml]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# OTHER CROSS-PLATFORM TEXT
+#------------------------------------------------------------------------------
+[*.{toml,cfg,csv,tsv,svg}]
+charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{bas,cls,frm}]
-indent_size = 4
-end_of_line = crlf
-# The VBE export encoding is host-dependent. Issue #6 will set an explicit
-# import/export contract after a real round-trip; do not force charset here.
 
-[*.{yml,yaml,json,js,mjs,cjs,xml}]
-charset = utf-8
-indent_size = 2
-end_of_line = lf
-
-[*.{py,sh,md,txt,csv,tsv}]
-charset = utf-8
-end_of_line = lf
-
+#------------------------------------------------------------------------------
+# DOCUMENTATION
+#------------------------------------------------------------------------------
 [*.md]
-# Markdown may use two trailing spaces for an intentional hard break.
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+# Preserve intentional Markdown hard line breaks.
 trim_trailing_whitespace = false
 
-[*.{cmd,bat,ps1}]
+[*.txt]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[LICENSE]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# WINDOWS-NATIVE SCRIPTS / HOST-SENSITIVE TEXT
+#------------------------------------------------------------------------------
+# Do not force an encoding: some Windows-native formats remain host-specific.
+[*.{bat,cmd,ps1,psm1,psd1,vbs,reg,ini}]
 end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# POSIX SHELL SCRIPTS
+#------------------------------------------------------------------------------
+[*.sh]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+tab_width = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# REPOSITORY CONTROL FILES
+#------------------------------------------------------------------------------
+[{.editorconfig,.gitattributes,.gitignore,.gitkeep}]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+#------------------------------------------------------------------------------
+# REGULATORY SOURCE COPIES
+#------------------------------------------------------------------------------
+# No copies are committed to K-LCR. Add an exact-path byte-preservation rule
+# only if a source is approved and its hash and redistribution terms are known.
