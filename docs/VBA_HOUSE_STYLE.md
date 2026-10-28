@@ -1,4 +1,8 @@
-# VBA house style and contracts
+# ✍️ VBA house style and contracts
+
+[![Scope: VBA exports](https://img.shields.io/badge/Scope-VBA_exports-217346?style=flat-square)](#-module-rules)
+[![Contracts: Explicit](https://img.shields.io/badge/Contracts-Explicit-6f42c1?style=flat-square)](#-procedure-contracts)
+[![Host: Untested](https://img.shields.io/badge/Host-Untested-BF8700?style=flat-square)](../INSTALLATION.md#-host-matrix)
 
 This is the K-LCR adaptation of the established VBA style structure: naming,
 module rules, procedure contracts, cleanup, layout, export compatibility and
@@ -7,7 +11,7 @@ review. [Architecture](REPOSITORY_STRUCTURE.md) owns layer boundaries;
 The project has no VBA source or validated workbook yet. These are design
 rules; the static gates in #12 and the Excel run in #15 are still pending.
 
-## Naming and component boundaries
+## 🏷️ Naming and component boundaries
 
 | Layer | Path | Component naming | Visibility |
 | --- | --- | --- | --- |
@@ -23,7 +27,7 @@ names. Distinct EU and Basel implementations include their profile in names
 and fixtures. Avoid identical public procedure names in different modules,
 hidden defaults and a generic `Calculate` entry point without profile/version.
 
-## Module rules
+## ⚙️ Module rules
 
 - Every module starts with `Option Explicit`. Core/test standard modules
   use `Option Private Module`. Explicitly declare array bounds; do not use
@@ -47,7 +51,7 @@ hidden defaults and a generic `Calculate` entry point without profile/version.
   Host-only late binding must be named, bounded, error-checked and reviewed.
   Static checking (#12) is a complement to actual compilation.
 
-## Procedure contracts
+## 📜 Procedure contracts
 
 Every substantive procedure documents PURPOSE, INPUTS (units, domain and
 ownership), RETURNS/OUTPUTS, ERROR POLICY, DEPENDENCIES, STATE OWNERSHIP,
@@ -70,7 +74,7 @@ If worksheet functions are added, their error-value mapping is specified
 separately and tested. Exact error numbers and signatures are fixed with the
 first API implementation, before callers depend on them.
 
-## Operation and cleanup
+## 🧹 Operation and cleanup
 
 Capture only the Excel settings an adapter changes; restore them on success
 and failure. Preserve the original error when cleanup also fails and report
@@ -78,7 +82,7 @@ both outcomes. Never save or close a user workbook implicitly. Avoid
 `On Error Resume Next` except around one checked statement, followed by
 normal error handling. Do not leak client data through error text or logs.
 
-## Module layout and source presentation
+## 🗂️ Module layout and source presentation
 
 Keep modules focused on one responsibility. A header states role, exports,
 dependencies and source status. Indent VBA with four spaces, no tabs or
@@ -87,7 +91,7 @@ visibility, and wrap long expressions for reviewability. A format-only PR
 does not change signatures, semantics or expected results. Keep comments and
 their UPDATED dates current.
 
-## Export compatibility and host evidence
+## 📦 Export compatibility and host evidence
 
 Git stores VBA text with LF and checks it out with CRLF. Use an ASCII-only
 repository source convention for future exported VBA (`ChrW` for deliberate
@@ -98,7 +102,7 @@ in #14/#15 before claiming support. `.frm` and `.frx` remain paired and
 the latter binary. Workbook/sheet document modules cannot be imported as
 ordinary standard modules; map them to the corresponding host components.
 
-The current portable Repository integrity gate validates setup tooling, not
-VBA syntax, compilation or LCR calculations. Static checks in #12 and a
+The current portable Repository integrity gate validates tooling, tracked text
+and workflow syntax, not VBA syntax, compilation or LCR calculations. Static checks in #12 and a
 candidate-bound Excel run in #15 are separate gates. Record the exact tested
 commit, Excel build/bitness, locale, fixture count and cleanup result.

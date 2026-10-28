@@ -1,4 +1,7 @@
-# Licensing, provenance and data
+# 📜 Licensing, provenance and data
+
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-2ea44f?style=flat-square)](LICENSE)
+[![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-privacy)
 
 Copyright 2026 Daniele Penza and contributors.
 
@@ -14,7 +17,7 @@ not change repository visibility or grant permission to disclose client,
 employer or third-party material. Distribution and publication remain separate
 owner decisions.
 
-## Imported material
+## 📚 Imported material
 
 The initial repository setup included files adapted from
 [danielep71/K-SFTs](https://github.com/danielep71/K-SFTs). Source revision
@@ -32,13 +35,14 @@ an assertion of byte-for-byte identity.
 | `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at the source revision; same blobs | Used with K-LCR repository variables and policy. |
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee, links and platform-neutral guidance. |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
+| `tools/check.py`, `tools/test_check.py`, `.github/workflows/repository-integrity.yml` | K-SFTs runner, tests and workflow structure at the source revision, adapted under #7 | K-LCR gates for current tooling, text fixtures, workflow lint and candidate report; no SFT calculation or Excel evidence. |
 | `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
+| Markdown presentation and badges in this documentation set | K-SFTs structure and glyph/badge vocabulary, adapted under the documentation polish PR | K-LCR-specific status and links; no borrowed execution or release claims. |
 | `SECURITY.md` | K-SFTs security-policy structure at the source revision, adapted | Private reporting without assuming public-only reporting features or a published version; K-LCR workflow and data boundaries. |
 | `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
 
-`.github/workflows/repository-integrity.yml` and `.github/dependabot.yml`
-were written for this repository, using standard GitHub Actions configuration
+`.github/dependabot.yml` was written for this repository, using standard GitHub Actions configuration
 and pinned upstream actions. `README.md`, `docs/REPOSITORY_STRUCTURE.md`
 and `docs/DECISIONS.md` describe K-LCR decisions. This register does not
 assign copyright in source files to someone else or claim ownership of
@@ -50,7 +54,7 @@ workbooks, regulatory document text, third-party code or imagery merely
 because they are accessible. A citation/link to an official regulatory source
 is preferable to redistributing its full text.
 
-## External tools
+## 🧰 External tools
 
 The workflows use `actions/checkout`, `actions/setup-python` and
 `actions/upload-artifact` pinned by commit SHA; they are dependencies fetched
@@ -58,7 +62,7 @@ by GitHub Actions, not vendored files in K-LCR. Python and Node runtimes used
 for repository checks are not bundled. Verify upstream license/version metadata
 when adding or changing a dependency; preserve any required notices.
 
-## Data and privacy
+## 🔒 Data and privacy
 
 Fixtures, bug reports, examples and documentation use synthetic data only.
 Do not commit client, employer, counterparty, customer, personal or proprietary

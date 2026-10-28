@@ -1,10 +1,13 @@
-# Security and confidential data
+# 🔒 Security and confidential data
+
+[![Visibility: Private](https://img.shields.io/badge/Visibility-Private-1f3a5f?style=flat-square)](#-supported-scope-and-reporting)
+[![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-contributions-and-examples)
 
 K-LCR is a private Excel/VBA reference and independent-validation project at
 repository-setup stage. It has no validated LCR engine or production workbook.
 Treat its examples and outputs as unverified until independently validated.
 
-## Supported scope and reporting
+## 🛡️ Supported scope and reporting
 
 No version has been published. The protected release branch and main receive
 best-effort fixes. Report the exact commit; modified copies are outside this
@@ -12,7 +15,7 @@ repository's support. In scope are its workflows, scripts, issue forms and,
 when added, VBA source and workbook templates. Vulnerabilities in Excel,
 Windows, GitHub, Python or Node themselves should be reported upstream.
 
-## Report a vulnerability
+## 📨 Report a vulnerability
 
 Do not open a public issue or include exploit steps, tokens, client details or
 private workbooks in a PR. Contact the maintainer, @danielep71, through an
@@ -22,7 +25,7 @@ option is visible and enabled for this repository, it may be used; its
 availability has not been verified here. The maintainer will coordinate scope,
 fix and disclosure. Do not assume public security advisory workflows are enabled.
 
-## Contributions and examples
+## 🧪 Contributions and examples
 
 - Use synthetic, non-identifying inputs and independently derived expected
   values. Avoid copies of client portfolios, trades, collateral, account
@@ -46,7 +49,7 @@ remediation privately. Do not paste the sensitive value into a cleanup issue.
 Security-feature availability and any future reporting policy changes are
 recorded in [governance](docs/GOVERNANCE.md).
 
-## Current automation boundary
+## ⚙️ Current automation boundary
 
 The required Repository integrity workflow runs on PRs and pushes to main and
 release/** with read-only contents permission. Issue triage audits open issues
