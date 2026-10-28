@@ -1,5 +1,7 @@
-# SHA-pinned GitHub Actions updates are proposed for the active release branch.
-# Maintainer review and repository integrity are required before integration.
+# SHA-pinned GitHub Actions and the hash-locked Python quality tools
+# (tools/requirements-quality-ci.txt) are proposed for the active release
+# branch. Maintainer review and repository integrity are required before
+# integration. Dependabot reads this file from the default branch.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -20,5 +22,29 @@ updates:
       prefix: ci
     groups:
       github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: pip
+    directory: /tools
+    target-branch: release/0.1.0
+    schedule:
+      interval: weekly
+      day: monday
+      time: "05:00"
+      timezone: Europe/Rome
+    # Prefer releases at least two weeks old, as the manual update rule does.
+    cooldown:
+      default-days: 14
+    open-pull-requests-limit: 5
+    labels:
+      - ci
+      - P3
+    assignees:
+      - danielep71
+    commit-message:
+      prefix: ci
+    groups:
+      python-quality-tools:
         patterns:
           - "*"

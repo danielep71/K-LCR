@@ -195,8 +195,10 @@ cannot create or approve pull requests, and retain logs/artifacts for 90 days.
 Dependency graph and Dependabot alerts are enabled; automatic dependency
 submission, security updates and grouped security updates are disabled.
 
-Dependabot proposes grouped GitHub Actions updates weekly on Mondays at 05:00
-Europe/Rome, with ci/P3 labels and danielep71 assigned.
+Dependabot proposes grouped GitHub Actions updates, and grouped updates to the
+hash-locked Ruff/mypy requirements (pip, `/tools`, releases at least 14 days
+old), weekly on Mondays at 05:00 Europe/Rome, with ci/P3 labels and
+danielep71 assigned. The pip entry takes effect only after it reaches main.
 The configuration integrated into main via PR #45 targets `release/0.1.0`.
 Dependabot reads its configuration from the default branch, so future grouped
 GitHub Actions update PRs target the active release branch.
