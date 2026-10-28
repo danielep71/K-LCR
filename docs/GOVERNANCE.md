@@ -174,7 +174,7 @@ cannot be deleted or force-pushed.
 release/0.1.0 exists and is the development target. No traffic-history branch
 has been created. The integrity check runs on every pull request and push to main and release/** and currently
 validates label scripts and manifest, issue forms and triage tests, tracked
-text format and workflow syntax. It produces candidate-bound reports; it does
+text format, Python lint and strict typing of `tools/`, and workflow syntax. It produces candidate-bound reports; it does
 not compile VBA, execute Excel or validate LCR calculations.
 Its first main run passed: [40740544583](https://github.com/danielep71/K-LCR/actions/runs/40740544583).
 These are configured controls; destructive enforcement probes were not performed.
