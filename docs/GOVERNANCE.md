@@ -244,9 +244,11 @@ GitHub Actions update PRs target the active release branch.
 
 The owner made K-LCR public on 2026-10-28. The project website is tracked
 in #63; public visibility alone does not establish a successful Pages deployment.
-Private vulnerability reporting and additional security products still require
-explicit verification. Repository-specific credentials, collaborators,
-deployments and environments are not cloned.
+The owner enabled private vulnerability reporting, secret scanning and push
+protection the same day; their read-back states are recorded in the dated
+security-features table of [SECURITY.md](../SECURITY.md#-security-features)
+(#66). Repository-specific credentials, collaborators, deployments and
+environments are not cloned.
 
 ## 🔎 Activation boundaries and remaining verification
 
@@ -271,5 +273,6 @@ execution or these future gates.
 The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
 and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.
 Keep vulnerability details and confidential data out of ordinary issues and
-PRs; [SECURITY.md](../SECURITY.md) defines private reporting and synthetic
-examples. Licensing does not itself change this repository's private visibility.
+PRs; [SECURITY.md](../SECURITY.md) defines private vulnerability reporting
+through GitHub, response targets and synthetic examples. Licensing and
+visibility are separate owner decisions.

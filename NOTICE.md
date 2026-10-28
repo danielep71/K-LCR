@@ -42,7 +42,7 @@ an assertion of byte-for-byte identity.
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | Markdown presentation and badges in this documentation set | K-SFTs structure and glyph/badge vocabulary, adapted under the documentation polish PR | K-LCR-specific status and links; no borrowed execution or release claims. |
 | `docs/index.html`, `docs/assets/site.css` | K-SFTs `docs/index.html` structure and `docs/assets/site.css` at the source revision, adapted under #63; MPL-2.0 | K-LCR scope, profiles, setup status, public-repository links and static publishing; no copied product or validation claims. The architecture SVG is original K-LCR source. |
-| `SECURITY.md` | K-SFTs security-policy structure at the source revision, adapted | Private reporting without assuming public-only reporting features or a published version; K-LCR workflow and data boundaries. |
+| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub only; same best-effort response targets and safe harbor; K-LCR's own dated security-features read-back; no published version. |
 | `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
 
 `.github/dependabot.yml`, `tools/check_files.py` and `docs/SOURCE_CONTROL.md`
