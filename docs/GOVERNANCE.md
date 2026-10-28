@@ -135,7 +135,46 @@ explicitly. Issue completion on release does not imply integration into main.
 After closure, review dependent issues and remove blocked only when all named
 prerequisites are resolved.
 
-## 🏷️ Label workflows
+## 🏷️ Labels
+
+### When to use each label
+
+Every issue carries exactly one priority label, defined under
+[Issues](#-issues): `P1` (confirmed calculation bug; requires `bug`), `P2` or
+`P3`. The forms default to `P2` for bugs and `P3` for enhancements and
+documentation; Dependabot update PRs get `P3`. Triage confirms or changes it.
+
+Type labels say what kind of work an issue or PR is. The forms set `bug`,
+`enhancement` or `documentation`; add others where they apply.
+
+| Label | Use for |
+| --- | --- |
+| `bug` | Confirmed defect in behavior, correctness, error handling, or a documented contract |
+| `enhancement` | New capability or meaningful improvement to supported behavior |
+| `documentation` | User-facing or maintainer-facing documentation |
+| `tests` | Regression coverage, test harnesses, fixtures, or manual validation |
+| `refactor` | Internal restructuring intended to preserve supported behavior |
+| `behavior-change` | Intentional externally observable behavior change |
+| `ci` | Automated quality checks, workflow maintenance, or release certification |
+| `repository` | Repository structure, governance, metadata, tooling, or maintenance |
+| `release` | Release preparation, certification, evidence, packaging, or publication |
+| `security` | Security boundary, vulnerability handling, supply chain, or hardening; never for an undisclosed vulnerability, which follows [SECURITY.md](../SECURITY.md) |
+
+Status and triage labels:
+
+| Label | Use when |
+| --- | --- |
+| `blocked` | A named open prerequisite or an `External condition:` line prevents progress; remove it when none remains |
+| `question` | Further information or a maintainer decision is required |
+| `help wanted` | The maintainer welcomes external investigation, implementation, validation, or review |
+| `good first issue` | Well-scoped task suitable for a first contribution |
+| `duplicate` | An existing issue or pull request already covers this work |
+| `invalid` | The report is incomplete, unsupported, or not actionable as submitted |
+| `wontfix` | The maintainer has decided not to implement or continue this work |
+
+Labels do not assign priorities or milestones automatically.
+
+### Label workflows
 
 - Sync issue labels validates and self-tests changes on pull requests into
   main and release/**. Relevant pushes to main, or manual dispatch on the
