@@ -10,6 +10,8 @@ EU and Basel regulatory profiles. Initial host target: Windows desktop Excel,
 - [Scope, architecture and planned layout](docs/REPOSITORY_STRUCTURE.md)
 - [Decisions and follow-on backlog](docs/DECISIONS.md)
 - [Development and issue governance](docs/GOVERNANCE.md)
+- [License and provenance](NOTICE.md)
+- [Security and synthetic data](SECURITY.md)
 
 All development targets `release/0.1.0`. Integration into `main` requires
 explicit owner authorization. This project is intended for reference and

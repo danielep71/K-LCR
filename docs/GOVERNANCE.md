@@ -198,3 +198,11 @@ remain in issue #16. Expanded CI and dependency retargeting are in #7; metadata
 automation in #8; traffic activation in #17; release procedure in #20; final
 baseline certification in #23. Existing green checks cover only the installed
 label/issue checks, not LCR calculations, host execution or these future gates.
+
+## Licensing and data
+
+The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
+and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.
+Keep vulnerability details and confidential data out of ordinary issues and
+PRs; [SECURITY.md](../SECURITY.md) defines private reporting and synthetic
+examples. Licensing does not itself change this repository's private visibility.
