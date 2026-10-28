@@ -161,8 +161,7 @@ Tags v* cannot be updated, deleted or force-pushed. Traffic-history branches
 cannot be deleted or force-pushed.
 
 release/0.1.0 exists and is the development target. No traffic-history branch
-has been created. The integrity
-check runs on every pull request and push to main and release/** and currently
+has been created. The integrity check runs on every pull request and push to main and release/** and currently
 validates label scripts and manifest, issue forms and triage tests, tracked
 text format and workflow syntax. It produces candidate-bound reports; it does
 not compile VBA, execute Excel or validate LCR calculations.
@@ -199,10 +198,11 @@ private: feature availability depends on its GitHub plan and enabled products,
 and features available in public repositories are not evidence of availability here. No account
 plan, public hosting or additional security product entitlement is assumed.
 Controlled fail/pass protection demonstrations and fresh settings verification
-remain in issue #16. Expanded portable CI and dependency retargeting were delivered in #7;
-metadata automation is in #8; traffic activation in #17; release procedure in #20; final
-baseline certification in #23. Existing green checks cover only the installed portable gates, not LCR
-calculations, host execution or these future gates.
+remain in issue #16. Expanded portable CI and dependency retargeting were
+delivered in #7; metadata automation is in #8; traffic activation in #17;
+release procedure in #20; final baseline certification in #23. Existing green
+checks cover only the installed portable gates, not LCR calculations, host
+execution or these future gates.
 
 ## 🔒 Licensing and data
 

@@ -77,8 +77,8 @@ behavior; fixture or workbook state is not evidence of a regulatory source.
   Do not silently choose a default profile or substitute an invalid input.
 - Issue #10 defines field-level schemas, currency conversion, date semantics
   and missing-value representation. Issue #11 defines rounding and comparison
-  tolerances. Neither issue changes these general type rules implicitly. Do not conflate EU
-and Basel sources or infer a profile from workbook names.
+  tolerances. Neither issue changes these general type rules implicitly.
+  Do not conflate EU and Basel sources or infer a profile from workbook names.
 
 The public API exposes a deliberate inventory of named entry points. It
 validates the entire request, returns a deterministic result or an actionable
