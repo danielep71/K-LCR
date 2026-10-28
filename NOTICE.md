@@ -22,9 +22,11 @@ owner decisions.
 The initial repository setup included files adapted from
 [danielep71/K-SFTs](https://github.com/danielep71/K-SFTs). Source revision
 `e6bae6df272083ba596c9eb866b14e6f9152bc15` was inspected on
-2026-10-28. That repository carries MPL-2.0. Git blob identity was verified
-for the first four rows; other rows were adapted and require this provenance
-record rather than an assertion of byte-for-byte identity.
+2026-10-28. That repository carries MPL-2.0. Git blob identity was verified for `.github/labels.json`,
+`.github/label-policy.json`, `.github/scripts/labels-sync.mjs` and
+`.github/scripts/labels-drift.mjs` (rechecked on 2026-10-28). The other
+imported files were adapted and require this provenance record rather than
+an assertion of byte-for-byte identity.
 
 | K-LCR paths | Source and relationship | Local adaptation |
 | --- | --- | --- |

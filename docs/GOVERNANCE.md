@@ -47,8 +47,14 @@ authorization required for main. CI and review are separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 If a Codex or other external review is used, record whether it actually completed
 for that SHA, including findings; do not infer coverage from a previous review.
-External review automation has not been verified for K-LCR. An outstanding
-requested review or unresolved finding prevents task completion.
+Automated Codex code review was observed on 2026-10-28 for exact PR heads,
+including [PR #24](https://github.com/danielep71/K-LCR/pull/24#issuecomment-6477467917)
+at `6063d866a9bec9bf89a02e4634dd726650ee5f6a` and
+[PR #40](https://github.com/danielep71/K-LCR/pull/40#issuecomment-6478923525)
+at `2815175929c60cd144fa172bd26517c88b58aec8`, with no reported findings.
+These receipts establish code-review completion for those commits only, not
+maintainer approval, security-review completion or guaranteed future coverage.
+An outstanding requested review or unresolved finding prevents task completion.
 
 ## 🌿 Release integration and synchronization
 
