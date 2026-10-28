@@ -14,7 +14,7 @@ body:
         Describe the result you need and how it will be proved before any implementation. A calculation change cites its regulatory source and states units and valid input domains. Triage sets the milestone and confirms the priority (`P3` by default).
 
         > [!NOTE]
-        > Synthetic data only: no real trades, counterparties, collateral, credentials or private links.
+        > Synthetic data only: no real financial records, customer or counterparty data, credentials or private links.
 
   - type: dropdown
     id: area
@@ -23,7 +23,7 @@ body:
       options:
         - Calculation engine
         - Public API
-        - Workbook and VBA source
+        - Host integration and source
         - Tests and fixtures
         - Tooling and CI
         - Documentation
