@@ -48,6 +48,14 @@ independent expected values will support validation as those components are
 implemented. Exact regulatory editions, inputs, outputs and reconciliation
 rules are tracked in the setup issues rather than presumed here.
 
+### Where K-LCR belongs
+
+K-LCR adds liquidity risk to the
+[K-Risk Engines](https://github.com/danielep71/K-Risk-Engines) portfolio of
+independent risk calculators, whose other projects cover counterparty credit,
+market, CVA and interest-rate risk. It is planned, not implemented: no LCR
+result exists yet, and the portfolio hub does not list K-LCR yet.
+
 ## 📥 Get started
 
 Clone the repository and switch to the active integration branch:
@@ -94,3 +102,13 @@ versions. All examples and test data must be synthetic.
 
 All development first targets `release/0.1.0`. Integration into `main`
 requires explicit owner authorization; see [governance](docs/GOVERNANCE.md).
+
+## 👤 Author
+
+**Daniele Penza** — [@danielep71](https://github.com/danielep71). This is an
+independent personal project.
+
+## 📄 License
+
+[Mozilla Public License 2.0](LICENSE). Provenance of imported material is
+recorded in [NOTICE](NOTICE.md).
