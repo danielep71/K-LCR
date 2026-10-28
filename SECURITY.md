@@ -1,9 +1,9 @@
 # 🔒 Security and confidential data
 
-[![Visibility: Private](https://img.shields.io/badge/Visibility-Private-1f3a5f?style=flat-square)](#-supported-scope-and-reporting)
+[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#-supported-scope-and-reporting)
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-contributions-and-examples)
 
-K-LCR is a private Excel/VBA reference and independent-validation project at
+K-LCR is a public Excel/VBA reference and independent-validation project at
 repository-setup stage. It has no validated LCR engine or production workbook.
 Treat its examples and outputs as unverified until independently validated.
 
