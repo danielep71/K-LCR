@@ -1,6 +1,9 @@
-# Architecture decisions and follow-on backlog
+# 🧭 Architecture decisions and follow-on backlog
 
-## Accepted owner decisions — 2026-10-28
+[![Stack: Excel VBA](https://img.shields.io/badge/Stack-Excel_VBA-217346?style=flat-square)](#-accepted-owner-decisions--2026-10-28)
+[![Profiles: EU + Basel planned](https://img.shields.io/badge/Profiles-EU_%2B_Basel_planned-1f3a5f?style=flat-square)](#-accepted-owner-decisions--2026-10-28)
+
+## ✅ Accepted owner decisions — 2026-10-28
 
 These decisions were supplied by @danielep71 while implementing issue #3.
 
@@ -14,13 +17,13 @@ The [scope and architecture](REPOSITORY_STRUCTURE.md) implements these decisions
 The initial Windows desktop Excel 64-bit target is an engineering baseline;
 exact supported builds and tested configurations remain subject to #6 and #15.
 
-## Remaining setup decisions
+## 📋 Remaining setup decisions
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
 | Licensing, imported-code provenance and confidentiality policy | #4 | Owner decision and applicable notices/policies |
 | Source layout, encoding and generated-file handling | #5 | Conventions and fresh-checkout evidence |
-| Host matrix, API/error/type conventions and import/export rules | #6 | Explicit specification; no unsupported compatibility claims |
+| Host matrix, API/error/type conventions and import/export rules | #6 | Documented in VBA_HOUSE_STYLE.md and INSTALLATION.md; supported-host evidence remains in #14/#15 |
 | Exact EU/Basel source editions, applicability and interpretation register | #9 | Authoritative sources and resolved requirements |
 | Data, parameter and output schemas; units and reconciliation | #10 | Versioned contracts and synthetic examples |
 | Independent fixture schema and comparison/rounding rules | #11 | Independently derived examples and validation criteria |
@@ -29,7 +32,7 @@ exact supported builds and tested configurations remain subject to #6 and #15.
 Do not silently turn an unresolved item into a default. Record the owner decision
 or source-based resolution in its tracking issue and update the relevant document.
 
-## Follow-on backlog after repository setup
+## 🗺️ Follow-on backlog after repository setup
 
 These are planning entries, not implemented features or scheduled promises.
 Before starting an entry, create a scoped issue with owner, priority, milestone,

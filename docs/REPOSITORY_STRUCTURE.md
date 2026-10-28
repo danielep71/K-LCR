@@ -1,6 +1,9 @@
-# K-LCR scope and architecture
+# 🏗️ K-LCR scope and architecture
 
-## Purpose and maturity
+[![Architecture: VBA + Excel host](https://img.shields.io/badge/Architecture-VBA_%2B_Excel_host-217346?style=flat-square)](#-implementation-and-host-profile)
+[![Maturity: Setup](https://img.shields.io/badge/Maturity-Setup-BF8700?style=flat-square)](#-purpose-and-maturity)
+
+## ✨ Purpose and maturity
 
 K-LCR is an Excel/VBA reference implementation of the Liquidity Coverage Ratio
 for learning, research and independent validation. Intended users are risk
@@ -17,7 +20,7 @@ and evidence requirements. It does not certify regulatory compliance or readines
 for operational bank reporting. Production use would require a separate scope
 decision, data controls, independent validation and operational acceptance.
 
-## Regulatory profiles
+## 📚 Regulatory profiles
 
 EU and Basel are distinct planned profiles, not interchangeable labels for one
 parameter set. Neither profile is implemented or numerically validated yet.
@@ -40,7 +43,7 @@ and outflow treatment, intermediate reconciliations, diagnostics and ratio
 outputs. The precise perimeter, currency and entity aggregation rules are
 requirements to resolve through those source and data-contract issues.
 
-## Implementation and host profile
+## 🖥️ Implementation and host profile
 
 The calculation implementation is VBA. Excel provides input/output and the user
 interface; Python and Node scripts in this repository are development/CI tooling,
@@ -63,7 +66,7 @@ worksheet state or Excel object-model calls. Host-specific functionality belongs
 behind explicit adapters and is subject to the conventions in #6. Do not infer
 support from the absence of known failures.
 
-## Boundaries and data flow
+## 🔀 Boundaries and data flow
 
 1. The Excel adapter reads explicitly identified workbook inputs and converts
    them to the versioned input contract.
@@ -91,7 +94,7 @@ the code it tests. Record its source or derivation and distinguish registered,
 executed, passed, failed and not-run cases. A green portable CI run is not Excel
 execution evidence or numerical certification.
 
-## Repository layout
+## 🗂️ Repository layout
 
 Create a directory only with its first meaningful file. Proposed paths below
 are not claims that those components exist today.
@@ -123,7 +126,7 @@ Basel. Module/class prefixes, exported extensions, encoding and import rules are
 finalized in #6. Repository paths use consistent lowercase directory names;
 do not create generic placeholder modules solely to fill the layout.
 
-## Setup exclusions and follow-on work
+## 🗺️ Setup exclusions and follow-on work
 
 v0.1.0 does not deliver production formulas, a completed calculation workbook,
 regulatory reporting submission, bank-system integration, real customer data,
