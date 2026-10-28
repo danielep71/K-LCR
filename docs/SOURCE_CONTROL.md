@@ -12,7 +12,8 @@ canonical calculation source.
   are binary. Documentation, configuration, Python and JavaScript check out
   with LF. `.editorconfig` guides editors; `.gitattributes` controls Git.
 - No VBA encoding conversion is configured. The VBE export code page and
-  import behavior need a real supported-host round trip under #6/#14. The ASCII-only repository convention in [VBA house style](VBA_HOUSE_STYLE.md)
+  import behavior need a real supported-host round trip under #14/#15. The
+  ASCII-only repository convention in [VBA house style](VBA_HOUSE_STYLE.md)
   is a source-authoring rule, not a validated VBE encoding or code-page claim.
 - Ignore generated workbooks, reports, caches, secrets and workstation files.
   Keep exported source, fixtures and repository configuration trackable.

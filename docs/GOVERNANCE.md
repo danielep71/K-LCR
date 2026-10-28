@@ -135,11 +135,7 @@ prerequisites are resolved.
 ## 🧪 Local validation
 
 ```sh
-node .github/scripts/labels-sync.mjs --self-test
-node .github/scripts/labels-sync.mjs --mode validate
-node .github/scripts/labels-drift.mjs --self-test
-python tools/check_issues.py --check-config
-python -m unittest discover -s tools -p 'test_check_issues.py'
+python tools/check.py --ci
 ```
 
 ## 📜 Provenance
@@ -165,9 +161,10 @@ Tags v* cannot be updated, deleted or force-pushed. Traffic-history branches
 cannot be deleted or force-pushed.
 
 release/0.1.0 exists and is the development target. No traffic-history branch
-has been created. The integrity
-check runs on every pull request and push to main and release/** and currently
-validates the label scripts, label manifest, issue forms and triage tests.
+has been created. The integrity check runs on every pull request and push to main and release/** and currently
+validates label scripts and manifest, issue forms and triage tests, tracked
+text format and workflow syntax. It produces candidate-bound reports; it does
+not compile VBA, execute Excel or validate LCR calculations.
 Its first main run passed: [40740544583](https://github.com/danielep71/K-LCR/actions/runs/40740544583).
 These are configured controls; destructive enforcement probes were not performed.
 
@@ -181,11 +178,9 @@ submission, security updates and grouped security updates are disabled.
 
 Dependabot proposes grouped GitHub Actions updates weekly on Mondays at 05:00
 Europe/Rome, with ci/P3 labels and danielep71 assigned.
-The installed configuration on main still targets main; retargeting is tracked
-in issue #7. Dependabot reads configuration from the default branch, so a
-release-only configuration change will not activate until an explicitly
-authorized integration into main. Until then, retarget any generated task PR
-to release/0.1.0 before proceeding; do not merge it into main.
+The configuration integrated into main via PR #45 targets `release/0.1.0`.
+Dependabot reads its configuration from the default branch, so future grouped
+GitHub Actions update PRs target the active release branch.
 
 K-LCR remains private. Public hosting, private vulnerability reporting and
 public-repository-only security options are not copied. Repository-specific
@@ -203,10 +198,11 @@ private: feature availability depends on its GitHub plan and enabled products,
 and features available in public repositories are not evidence of availability here. No account
 plan, public hosting or additional security product entitlement is assumed.
 Controlled fail/pass protection demonstrations and fresh settings verification
-remain in issue #16. Expanded CI and dependency retargeting are in #7; metadata
-automation in #8; traffic activation in #17; release procedure in #20; final
-baseline certification in #23. Existing green checks cover only the installed
-label/issue checks, not LCR calculations, host execution or these future gates.
+remain in issue #16. Expanded portable CI and dependency retargeting were
+delivered in #7; metadata automation is in #8; traffic activation in #17;
+release procedure in #20; final baseline certification in #23. Existing green
+checks cover only the installed portable gates, not LCR calculations, host
+execution or these future gates.
 
 ## 🔒 Licensing and data
 

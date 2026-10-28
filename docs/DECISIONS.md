@@ -15,15 +15,20 @@ These decisions were supplied by @danielep71 while implementing issue #3.
 
 The [scope and architecture](REPOSITORY_STRUCTURE.md) implements these decisions.
 The initial Windows desktop Excel 64-bit target is an engineering baseline;
-exact supported builds and tested configurations remain subject to #6 and #15.
+exact supported builds and tested configurations remain subject to #15.
+
+## ✅ Completed setup decisions
+
+| Decision or deliverable | Tracking issue | Evidence |
+| --- | --- | --- |
+| Licensing, imported-code provenance and confidentiality policy | #4 | [NOTICE](../NOTICE.md), [LICENSE](../LICENSE) and [SECURITY](../SECURITY.md) |
+| Source layout, encoding and generated-file handling | #5 | [Source control](SOURCE_CONTROL.md), `.editorconfig`, `.gitattributes` and `.gitignore` |
+| General host, API, numeric-type and source-authoring conventions | #6 | [VBA house style](VBA_HOUSE_STYLE.md) and [Installation](../INSTALLATION.md); actual host execution remains #14/#15 |
 
 ## 📋 Remaining setup decisions
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
-| Licensing, imported-code provenance and confidentiality policy | #4 | Owner decision and applicable notices/policies |
-| Source layout, encoding and generated-file handling | #5 | Conventions and fresh-checkout evidence |
-| Host matrix, API/error/type conventions and import/export rules | #6 | Documented in VBA_HOUSE_STYLE.md and INSTALLATION.md; supported-host evidence remains in #14/#15 |
 | Exact EU/Basel source editions, applicability and interpretation register | #9 | Authoritative sources and resolved requirements |
 | Data, parameter and output schemas; units and reconciliation | #10 | Versioned contracts and synthetic examples |
 | Independent fixture schema and comparison/rounding rules | #11 | Independently derived examples and validation criteria |
