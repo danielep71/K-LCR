@@ -1,0 +1,30 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{bas,cls,frm}]
+indent_size = 4
+end_of_line = crlf
+# The VBE export encoding is host-dependent. Issue #6 will set an explicit
+# import/export contract after a real round-trip; do not force charset here.
+
+[*.{yml,yaml,json,js,mjs,cjs,xml}]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+[*.{py,sh,md,txt,csv,tsv}]
+charset = utf-8
+end_of_line = lf
+
+[*.md]
+# Markdown may use two trailing spaces for an intentional hard break.
+trim_trailing_whitespace = false
+
+[*.{cmd,bat,ps1}]
+end_of_line = crlf
