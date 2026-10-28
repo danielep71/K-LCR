@@ -14,7 +14,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-SCOPE = ("Repository tooling, labels, issue forms, tracked text and workflow syntax; no Excel execution.")
+SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text and "
+         "workflow syntax; no Excel execution.")
 LABEL_POLICY = ".github/label-policy.json"
 
 
@@ -96,6 +97,10 @@ def default_gates() -> list[Gate]:
         Gate("issue-config", "python", (python, "tools/check_issues.py", "--check-config")),
         Gate("format-fixtures", "python", (python, "tools/check_files.py", "--self-test")),
         Gate("tracked-text", "python", (python, "tools/check_files.py")),
+        Gate("ruff", "ruff", ("ruff", "check", "--no-cache", "tools")),
+        Gate("ruff-complexity-probe", "ruff", probe=ruff_complexity_probe),
+        Gate("mypy", "mypy", ("mypy", "--no-incremental")),
+        Gate("mypy-strict-probe", "mypy", probe=mypy_strict_probe),
         Gate("actionlint", "actionlint", ("actionlint", "-no-color")),
     ]
 
