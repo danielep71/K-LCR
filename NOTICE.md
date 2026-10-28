@@ -31,6 +31,7 @@ record rather than an assertion of byte-for-byte identity.
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee, links and platform-neutral guidance. |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
 | `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
+| `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | `SECURITY.md` | K-SFTs security-policy structure at the source revision, adapted | Private reporting without assuming public-only reporting features or a published version; K-LCR workflow and data boundaries. |
 | `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
 

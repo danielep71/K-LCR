@@ -11,6 +11,7 @@ EU and Basel regulatory profiles. Initial host target: Windows desktop Excel,
 - [Decisions and follow-on backlog](docs/DECISIONS.md)
 - [Development and issue governance](docs/GOVERNANCE.md)
 - [Source control and generated files](docs/SOURCE_CONTROL.md)
+- [VBA conventions](docs/VBA_HOUSE_STYLE.md) and [host evidence](INSTALLATION.md)
 - [License and provenance](NOTICE.md)
 - [Security and synthetic data](SECURITY.md)
 

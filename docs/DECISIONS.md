@@ -20,7 +20,7 @@ exact supported builds and tested configurations remain subject to #6 and #15.
 | --- | --- | --- |
 | Licensing, imported-code provenance and confidentiality policy | #4 | Owner decision and applicable notices/policies |
 | Source layout, encoding and generated-file handling | #5 | Conventions and fresh-checkout evidence |
-| Host matrix, API/error/type conventions and import/export rules | #6 | Explicit specification; no unsupported compatibility claims |
+| Host matrix, API/error/type conventions and import/export rules | #6 | Documented in VBA_HOUSE_STYLE.md and INSTALLATION.md; supported-host evidence remains in #14/#15 |
 | Exact EU/Basel source editions, applicability and interpretation register | #9 | Authoritative sources and resolved requirements |
 | Data, parameter and output schemas; units and reconciliation | #10 | Versioned contracts and synthetic examples |
 | Independent fixture schema and comparison/rounding rules | #11 | Independently derived examples and validation criteria |
