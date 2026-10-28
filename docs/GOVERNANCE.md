@@ -103,7 +103,9 @@ does not mechanically enforce it.
 Use the Bug report, Enhancement or Documentation form. Each issue is assigned
 to danielep71, has exactly one priority and belongs to a milestone selected
 during triage, and an explicit Target end date: YYYY-MM-DD (Europe/Rome) in
-its body. End-date validation is planned in issue #8; it is not yet automated.
+its body. The target end date of a new issue must be earlier than the due date
+of its milestone. End-date validation, including this comparison, is planned
+in issue #8; it is not yet automated.
 Forms default bugs to P2 and enhancements/documentation to P3.
 
 - P1: confirmed calculation bug producing wrong results for valid inputs; requires bug.
