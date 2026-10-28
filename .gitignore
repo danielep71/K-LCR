@@ -1,0 +1,59 @@
+# Excel lock, recovery and generated workbooks.
+~$*
+*.xlk
+*.tmp
+*.temp
+*.bak
+*.backup
+*.xls
+*.xlsx
+*.xlsm
+*.xlsb
+*.xltx
+*.xltm
+*.xlam
+# No template is approved yet. Issue #14 may add one exact rooted exception
+# after macro-free inspection, manifest review and owner approval.
+
+# Generated local outputs (rooted to avoid hiding nested source).
+/build/
+/dist/
+/out/
+/test-results/
+/coverage/
+/htmlcov/
+.coverage*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.npm/
+/tmp/
+/temp/
+*.log
+
+# Credentials, personal editor and machine state.
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+.vscode/
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*.orig
+*.rej
+
+# Never ignore exported VBA source (.bas/.cls/.frm/.frx), docs, fixtures,
+# manifests, workflows or test source. Review ignored paths before committing.
