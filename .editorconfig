@@ -11,8 +11,10 @@
 #   - Python and shell scripts use 4-space indentation.
 #   - Trailing whitespace is removed except in Markdown, where two trailing
 #     spaces can represent an explicit line break.
-#   - Exported VBA encoding will be decided and host-tested in issues #6/#14.
-#   - Do not assume an ASCII-only or Windows code-page contract before host evidence.
+#   - Future exported VBA source is authored with ASCII-only characters.
+#     This source rule does not prove a VBE encoding or Windows code page.
+#   - VBE import/export encoding and round-trip behavior need host evidence
+#     in issues #14/#15; no charset conversion is configured here.
 #
 # RELATIONSHIP WITH .gitattributes
 #   .editorconfig controls how supporting editors create and save working-tree
@@ -38,7 +40,8 @@ tab_width = 4
 #------------------------------------------------------------------------------
 # EXPORTED VBA SOURCE
 #------------------------------------------------------------------------------
-# Do not set charset: VBE import/export encoding awaits issue #6.
+# Do not set charset: an ASCII-only source rule is distinct from untested
+# VBE import/export encoding and code-page behavior (issues #14/#15).
 [*.{bas,cls,frm}]
 end_of_line = crlf
 indent_style = space

@@ -59,11 +59,26 @@ REFERENCE (source register ID/locator where a regulatory rule is implemented)
 and UPDATED date. Omit a section only when truly inapplicable. Comments match
 behavior; fixture or workbook state is not evidence of a regulatory source.
 
-Amounts use a documented currency and unit; profile, reporting date, parameter
-and source versions are explicit arguments. Define numeric representation,
-rounding, tolerance, date semantics and missing-value behavior in #10/#11
-before implementation. Do not silently replace invalid input with a default,
-conflate EU and Basel sources, or infer a profile from workbook names.
+### Numeric types and units
+
+- Use VBA `Double` for calculation amounts and intermediate ratios, with the
+  currency and unscaled unit stated in each contract. Do not use `Currency`,
+  `Decimal` or implicit `Variant` conversion for regulatory arithmetic without
+  a reviewed, tested exception; their precision and conversion behavior must
+  be justified for that field.
+- Use `Double` for rates, factors and proportions as decimals (`0.05` means
+  5%), and state valid domains. Use `Long` for counts and indexes, `Boolean`
+  for flags, `Date` for dates and `String` for identifiers and version keys.
+  A duration uses a `Double` in years unless its name and contract state
+  another unit. Avoid `Single`, floating-point equality and silent coercion.
+- Profile, reporting date, parameter version and regulatory source edition
+  are explicit inputs; configuration is caller-owned and never mutated.
+  Validate missing, non-finite or out-of-domain values before calculation.
+  Do not silently choose a default profile or substitute an invalid input.
+- Issue #10 defines field-level schemas, currency conversion, date semantics
+  and missing-value representation. Issue #11 defines rounding and comparison
+  tolerances. Neither issue changes these general type rules implicitly. Do not conflate EU
+and Basel sources or infer a profile from workbook names.
 
 The public API exposes a deliberate inventory of named entry points. It
 validates the entire request, returns a deterministic result or an actionable
