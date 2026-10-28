@@ -9,8 +9,9 @@
 #   - Documentation, GitHub configuration, and cross-platform tooling use LF.
 #   - YAML, JSON, XML, and JavaScript use 2-space indentation.
 #   - Python and shell scripts use 4-space indentation.
-#   - Trailing whitespace is removed except in Markdown, where two trailing
-#     spaces can represent an explicit line break.
+#   - Trailing whitespace is removed everywhere, Markdown included: the
+#     tracked-text gate (tools/check_files.py) rejects it. Write an explicit
+#     Markdown line break as a trailing backslash or <br>.
 #   - Future exported VBA source is authored with ASCII-only characters.
 #     This source rule does not prove a VBE encoding or Windows code page.
 #   - VBE import/export encoding and round-trip behavior need host evidence
@@ -120,8 +121,9 @@ trim_trailing_whitespace = true
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true
-# Preserve intentional Markdown hard line breaks.
-trim_trailing_whitespace = false
+# Use a trailing backslash or <br> for a hard line break; the tracked-text
+# gate rejects trailing whitespace in every checked file.
+trim_trailing_whitespace = true
 
 [*.txt]
 charset = utf-8

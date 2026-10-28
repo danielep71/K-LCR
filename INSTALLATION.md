@@ -1,6 +1,6 @@
 # 📦 Installation and host evidence
 
-[![Host: Windows 64-bit target](https://img.shields.io/badge/Host-Windows_64-bit_target-217346?style=flat-square)](#-host-matrix)
+[![Host: Windows 64-bit target](https://img.shields.io/badge/Host-Windows_64--bit_target-217346?style=flat-square)](#-host-matrix)
 [![Evidence: Not run](https://img.shields.io/badge/Evidence-Not_run-BF8700?style=flat-square)](#-host-matrix)
 
 K-LCR currently contains repository setup and planned contracts, with no
