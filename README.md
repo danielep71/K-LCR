@@ -16,6 +16,7 @@
 
 <br>
 
+[Website](https://danielep71.github.io/K-LCR/) · [Wiki](https://github.com/danielep71/K-LCR/wiki) ·
 [Status](#-status) · [What this project is](#-what-this-project-is) ·
 [Get started](#-get-started) · [Architecture](#-architecture) ·
 [Documentation](#-documentation) · [Limitations](#-limitations)

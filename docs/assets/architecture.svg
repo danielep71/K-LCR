@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="680" viewBox="0 0 800 680" role="img" aria-labelledby="title desc">
+  <title id="title">Planned K-LCR architecture</title>
+  <desc id="desc">A selected EU or Basel profile and versioned liquidity inputs feed a deterministic VBA core. The planned output includes results, reconciliation and diagnostics. This is a design diagram, not implementation evidence.</desc>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#062962"/><stop offset="1" stop-color="#00183f"/></linearGradient><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#71c8fc" stroke-width="2"/></marker></defs>
+  <rect width="800" height="680" fill="url(#bg)"/>
+  <g fill="none" stroke="#244776" opacity=".5"><path d="M0 80H800M0 160H800M0 240H800M0 320H800M0 400H800M0 480H800M0 560H800M0 640H800M80 0V680M160 0V680M240 0V680M320 0V680M400 0V680M480 0V680M560 0V680M640 0V680M720 0V680"/></g>
+  <g font-family="system-ui, sans-serif">
+    <text x="46" y="54" fill="#9ed9ff" font-size="15" letter-spacing="3">K-LCR / PLANNED DESIGN</text>
+    <rect x="46" y="91" width="708" height="106" rx="12" fill="#133d75" stroke="#5387bb"/>
+    <text x="70" y="123" fill="#aecce9" font-size="13" letter-spacing="2">01 / EXPLICIT PROFILE</text>
+    <text x="70" y="163" fill="white" font-size="28" font-weight="650">EU</text><path d="M148 139V172" stroke="#5a8ab9"/><text x="177" y="163" fill="white" font-size="28" font-weight="650">Basel</text>
+    <text x="720" y="160" fill="#b9d8f2" font-size="16" text-anchor="end">Source · Date · Version</text>
+    <path d="M400 201V233" stroke="#71c8fc" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="46" y="247" width="708" height="110" rx="12" fill="#f5f9ff"/>
+    <text x="70" y="280" fill="#005eb8" font-size="13" letter-spacing="2">02 / VERSIONED INPUTS</text>
+    <text x="70" y="322" fill="#172c4d" font-size="23" font-weight="650">Liquidity buffer</text><text x="370" y="322" fill="#172c4d" font-size="23" font-weight="650">Inflows / Outflows</text>
+    <path d="M400 362V394" stroke="#71c8fc" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="46" y="408" width="708" height="110" rx="12" fill="#0b5b9e" stroke="#7bc9f2"/>
+    <text x="70" y="441" fill="#b4e7ff" font-size="13" letter-spacing="2">03 / DETERMINISTIC VBA CORE</text>
+    <text x="70" y="482" fill="white" font-size="25" font-weight="650">Classify · Apply rules · Reconcile</text>
+    <path d="M400 523V555" stroke="#71c8fc" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="46" y="568" width="708" height="70" rx="12" fill="#133d75" stroke="#5387bb"/>
+    <text x="70" y="610" fill="white" font-size="22">Results + diagnostics + evidence trail</text>
+  </g>
+</svg>
