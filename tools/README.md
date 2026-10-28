@@ -113,25 +113,33 @@ reports on every pull request and is the required check of both rulesets.
 
 ## 📦 Dependency updates
 
-`.github/dependabot.yml` proposes weekly updates to the pinned GitHub Actions,
-grouped into one pull request against the active release branch, with the
-`ci` and `P3` labels and danielep71 as assignee. Dependabot reads this file
+`.github/dependabot.yml` proposes weekly updates to the pinned GitHub Actions
+and, separately, to the hash-locked Ruff/mypy requirements
+(`tools/requirements-quality-ci.txt`, releases at least 14 days old). Each
+ecosystem's updates are grouped into one pull request against the active
+release branch, with the `ci` and `P3` labels and danielep71 as assignee. Dependabot reads this file
 from the default branch, `main`, so a change to it takes effect once it is
 integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
 Nothing merges automatically. Before merging an update:
 
-1. Read the release notes between the old and new versions of each action.
-2. Check that each new pin is a full SHA that the upstream tag points to.
-3. Wait for `Repository integrity` to pass on the pull request; actionlint
-   checks the updated workflows.
+1. Read the release notes between the old and new versions of each action
+   or package.
+2. For an action, check that each new pin is a full SHA that the upstream tag
+   points to. For a Python package, check that every new `--hash` matches the
+   wheel published on PyPI and that the file still installs with
+   `--only-binary=:all: --require-hashes`.
+3. Wait for `Repository integrity` to pass on the pull request: it installs
+   the updated requirements and runs Ruff and mypy, and actionlint checks the
+   updated workflows.
 4. Review the final diff and head SHA yourself: the automated code reviewer
    does not review bot-authored pull requests
    ([docs/GOVERNANCE.md](../docs/GOVERNANCE.md#-task-integration-and-review)).
 
-Dependabot does not update `tools/requirements-quality-ci.txt` (planned in
-#71) or the actionlint checksum. Update them by hand: choose releases at
-least two weeks old, download the wheels for CPython 3.13 on Linux x86_64,
-compare every SHA-256 with PyPI, and for actionlint with the release's
-checksums file.
+Dependabot does not update the actionlint version or checksum in
+`.github/workflows/repository-integrity.yml`. Update it by hand: choose a
+release at least two weeks old and compare its SHA-256 with the release's
+checksums file. Until the pip entry is active on `main`, update the Python
+requirements the same way: download the wheels for CPython 3.13 on Linux
+x86_64 and compare every SHA-256 with PyPI.
