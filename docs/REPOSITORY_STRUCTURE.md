@@ -117,7 +117,7 @@ component; tests may exercise each layer. Keep profile identifiers explicit in
 fixtures and diagnostics. Use descriptive filenames and stable case IDs.
 
 VBA exported component names use the K-LCR namespace without a hyphen:
-LCR_Core_<Name>, LCR_API_<Name>, LCR_Excel_<Name>; tests use TEST_LCR_<Name>.
+`LCR_Core_<Name>`, `LCR_API_<Name>`, `LCR_Excel_<Name>`; tests use `TEST_LCR_<Name>`.
 Keep component names within VBA's limits. Profile-specific names include EU or
 Basel. Module/class prefixes, exported extensions, encoding and import rules are
 finalized in #6. Repository paths use consistent lowercase directory names;
