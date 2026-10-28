@@ -30,13 +30,13 @@ record rather than an assertion of byte-for-byte identity.
 | `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at the source revision; same blobs | Used with K-LCR repository variables and policy. |
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee, links and platform-neutral guidance. |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
+| `tools/check.py`, `tools/test_check.py`, `.github/workflows/repository-integrity.yml` | K-SFTs runner, tests and workflow structure at the source revision, adapted under #7 | K-LCR gates for current tooling, text fixtures, workflow lint and candidate report; no SFT calculation or Excel evidence. |
 | `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | `SECURITY.md` | K-SFTs security-policy structure at the source revision, adapted | Private reporting without assuming public-only reporting features or a published version; K-LCR workflow and data boundaries. |
 | `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
 
-`.github/workflows/repository-integrity.yml` and `.github/dependabot.yml`
-were written for this repository, using standard GitHub Actions configuration
+`.github/dependabot.yml` was written for this repository, using standard GitHub Actions configuration
 and pinned upstream actions. `README.md`, `docs/REPOSITORY_STRUCTURE.md`
 and `docs/DECISIONS.md` describe K-LCR decisions. This register does not
 assign copyright in source files to someone else or claim ownership of

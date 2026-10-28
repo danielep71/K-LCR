@@ -1,15 +1,10 @@
-# Proposes updates to the SHA-pinned GitHub Actions used by the workflows.
-# Every update arrives as a pull request for maintainer review; nothing merges
-# automatically. See docs/GOVERNANCE.md.
-# release/0.1.0 is the development target. Retargeting this configuration is
-# tracked in issue #7; main remains below until that change is integrated.
-# Retarget generated task PRs to release/0.1.0 before proceeding.
-# Milestones belong to issues only; link each PR to a tracking issue in triage.
+# SHA-pinned GitHub Actions updates are proposed for the active release branch.
+# Maintainer review and repository integrity are required before integration.
 version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
-    target-branch: main
+    target-branch: release/0.1.0
     schedule:
       interval: weekly
       day: monday
