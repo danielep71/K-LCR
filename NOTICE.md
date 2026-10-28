@@ -64,7 +64,9 @@ are dependencies fetched by GitHub Actions, not vendored files in K-LCR. The
 Repository integrity workflow downloads the
 [actionlint](https://github.com/rhysd/actionlint) 1.7.12 release binary and
 verifies it against a pinned SHA-256 before use; it is not redistributed.
-Python and Node runtimes used for repository checks are not bundled. Verify
+It also installs Ruff, mypy and their dependencies from PyPI at the versions
+and wheel hashes pinned in `tools/requirements-quality-ci.txt`; they are not
+vendored. Python and Node runtimes used for repository checks are not bundled. Verify
 upstream license/version metadata when adding or changing a dependency;
 preserve any required notices.
 
