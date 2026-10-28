@@ -14,7 +14,7 @@ body:
         Name the exact commit, give steps anyone can repeat, and state where the expected value comes from. Triage sets the milestone and confirms the priority: `P2` by default, `P1` only for a confirmed calculation bug.
 
         > [!CAUTION]
-        > Synthetic data only: never paste real trades, counterparties, collateral, credentials or private workbooks. Do not include vulnerability details in an issue.
+        > Synthetic data only: never paste real financial records, customer or counterparty data, credentials or private files. Do not include vulnerability details in an issue.
 
   - type: dropdown
     id: area
@@ -23,7 +23,7 @@ body:
       options:
         - Calculation engine
         - Public API
-        - Workbook and VBA source
+        - Host integration and source
         - Tests and fixtures
         - Tooling and CI
         - Documentation
@@ -83,9 +83,9 @@ body:
       label: "🖥️ Environment"
       description: Write "N/A" for tooling or documentation defects that do not depend on the host.
       value: |
-        Excel version/build:
-        Office bitness:
-        Windows version:
+        Application / runtime version:
+        Architecture / bitness (if relevant):
+        Operating system / version:
         Locale / decimal separator:
     validations:
       required: true
@@ -105,7 +105,7 @@ body:
     id: validation
     attributes:
       label: "🧪 Validation evidence required"
-      description: The checks and evidence that will prove the fix, for example a regression case, or an Excel run on the exact commit.
+      description: The checks and evidence that will prove the fix, for example a regression case, or a run on the relevant host at the exact commit.
     validations:
       required: true
 

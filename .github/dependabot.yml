@@ -1,7 +1,9 @@
 # Proposes updates to the SHA-pinned GitHub Actions used by the workflows.
 # Every update arrives as a pull request for maintainer review; nothing merges
 # automatically. See docs/GOVERNANCE.md.
-# K-LCR has no release branch yet; target main until one is designated.
+# release/0.1.0 is the development target. Retargeting this configuration is
+# tracked in issue #7; main remains below until that change is integrated.
+# Retarget generated task PRs to release/0.1.0 before proceeding.
 # Milestones belong to issues only; link each PR to a tracking issue in triage.
 version: 2
 updates:
