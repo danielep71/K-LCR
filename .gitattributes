@@ -1,0 +1,40 @@
+# Text is stored with LF in Git; working-tree VBA exports use CRLF.
+# Encoding of VBA exports awaits the import/export decision in issue #6.
+* text=auto eol=lf
+*.bas text eol=crlf diff=vba linguist-language=VBA
+*.cls text eol=crlf diff=vba linguist-language=VBA
+*.frm text eol=crlf diff=vba linguist-language=VBA
+*.frx binary merge=binary
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Exact binary formats; no line-based normalization or merge.
+*.xls binary merge=binary
+*.xlsx binary merge=binary
+*.xlsm binary merge=binary
+*.xlsb binary merge=binary
+*.xltx binary merge=binary
+*.xltm binary merge=binary
+*.xlam binary merge=binary
+*.png binary merge=binary
+*.jpg binary merge=binary
+*.jpeg binary merge=binary
+*.pdf binary merge=binary
+*.zip binary merge=binary
+
+# Repository text and tools use LF regardless of core.autocrlf.
+*.md text eol=lf
+*.txt text eol=lf
+*.py text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.csv text eol=lf
+*.tsv text eol=lf
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+LICENSE text eol=lf
