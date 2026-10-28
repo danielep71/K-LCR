@@ -1,10 +1,13 @@
-# Repository governance
+# 🏛️ Repository governance
+
+[![Branch: release/0.1.0](https://img.shields.io/badge/Branch-release%2F0.1.0-217346?style=flat-square)](#-ownership-and-development-target)
+[![Checks: Repository integrity](https://img.shields.io/badge/Checks-Repository_integrity-0969da?style=flat-square)](#-local-validation)
 
 K-LCR uses a 20-label catalogue and the issue-triage rules defined below.
 Names, colors and descriptions are versioned in [.github/labels.json](../.github/labels.json).
 The application profile has no additional labels.
 
-## Ownership and development target
+## 👤 Ownership and development target
 
 Daniele Penza (@danielep71) decides scope, priorities and release integration.
 All development goes first into **release/0.1.0**. The GitHub default branch
@@ -22,7 +25,7 @@ A new active release branch requires an owner decision. A release branch name,
 completed issue, green check or closed milestone does not authorize integration
 into main, tagging, publication or a visibility change.
 
-## Task integration and review
+## 🔀 Task integration and review
 
 1. Read the issue, branch from the current release/0.1.0 head and keep the change
    within the authorized task.
@@ -47,7 +50,7 @@ for that SHA, including findings; do not infer coverage from a previous review.
 External review automation has not been verified for K-LCR. An outstanding
 requested review or unresolved finding prevents task completion.
 
-## Release integration and synchronization
+## 🌿 Release integration and synchronization
 
 1. Prepare a release/0.1.0 -> main PR with candidate head/base SHAs, carried
    issues and PRs, validation evidence and known limitations.
@@ -70,7 +73,7 @@ protected branch moves unexpectedly during integration/sync, stop integration,
 record the divergence and obtain an owner decision on recovery; use reviewed
 PRs without weakening protections.
 
-## Exceptions and deferred work
+## ⏳ Exceptions and deferred work
 
 Record any exception in the affected issue/PR with the reason, scope, owner
 decision, residual risk and follow-on issue/milestone/date. Pending work stays
@@ -79,7 +82,7 @@ Policy text is not proof of platform enforcement. In particular, the explicit
 owner authorization gate above is procedural: the zero-approval GitHub rule
 does not mechanically enforce it.
 
-## Issues
+## 🎫 Issues
 
 Use the Bug report, Enhancement or Documentation form. Each issue is assigned
 to danielep71, has exactly one priority and belongs to a milestone selected
@@ -111,7 +114,7 @@ explicitly. Issue completion on release does not imply integration into main.
 After closure, review dependent issues and remove blocked only when all named
 prerequisites are resolved.
 
-## Label workflows
+## 🏷️ Label workflows
 
 - Sync issue labels validates and self-tests changes on pull requests into
   main and release/**. Relevant pushes to main, or manual dispatch on the
@@ -123,7 +126,7 @@ prerequisites are resolved.
 - Issue triage checks assignee, priority, milestone, catalogue membership
   and dependency status.
 
-## Local validation
+## 🧪 Local validation
 
 ```sh
 node .github/scripts/labels-sync.mjs --self-test
@@ -133,7 +136,7 @@ python tools/check_issues.py --check-config
 python -m unittest discover -s tools -p 'test_check_issues.py'
 ```
 
-## Provenance
+## 📜 Provenance
 
 The initial label and issue-triage configuration was adapted from K-SFTs on
 2026-10-28. This historical source attribution is not an operational dependency
@@ -141,7 +144,7 @@ or an instruction to follow another repository's current policy. K-LCR's branch
 and review policy is defined above: release first, main only with explicit
 owner authorization.
 
-## Repository settings (2026-10-28)
+## ⚙️ Repository settings (2026-10-28)
 
 The five active K-LCR rulesets were read back:
 Protect main, Protect release branches, Prevent release branch deletion,
@@ -182,7 +185,7 @@ K-LCR remains private. Public hosting, private vulnerability reporting and
 public-repository-only security options are not copied. Repository-specific
 credentials, collaborators, deployments and environments are not cloned.
 
-## Activation boundaries and remaining verification
+## 🔎 Activation boundaries and remaining verification
 
 Issue-event and scheduled workflows use their default-branch definitions.
 Live label reconciliation is deliberately restricted to main. Release-branch
@@ -199,7 +202,7 @@ automation in #8; traffic activation in #17; release procedure in #20; final
 baseline certification in #23. Existing green checks cover only the installed
 label/issue checks, not LCR calculations, host execution or these future gates.
 
-## Licensing and data
+## 🔒 Licensing and data
 
 The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
 and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.

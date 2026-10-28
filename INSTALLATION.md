@@ -1,11 +1,14 @@
-# Installation and host evidence
+# 📦 Installation and host evidence
+
+[![Host: Windows 64-bit target](https://img.shields.io/badge/Host-Windows_64-bit_target-217346?style=flat-square)](#-host-matrix)
+[![Evidence: Not run](https://img.shields.io/badge/Evidence-Not_run-BF8700?style=flat-square)](#-host-matrix)
 
 K-LCR currently contains repository setup and planned contracts, with no
 Excel/VBA calculation components or workbook to install. This page adapts
 the established installation guidance to K-LCR's present state; it does not
 describe a procedure already executed.
 
-## Host matrix
+## 🖥️ Host matrix
 
 | Host | Intended status | Tested status |
 | --- | --- | --- |
@@ -18,7 +21,7 @@ Exact build and locale support will be recorded after genuine host runs in
 Excel and Office references available in a new desktop workbook; any added
 library or COM dependency needs a reviewed inventory and host test.
 
-## Source and developer setup
+## 🛠️ Source and developer setup
 
 Fetch the current `release/0.1.0` candidate and verify its full commit SHA.
 Read [source-control conventions](docs/SOURCE_CONTROL.md),
@@ -27,17 +30,19 @@ Read [source-control conventions](docs/SOURCE_CONTROL.md),
 are:
 
 ```sh
-node .github/scripts/labels-sync.mjs --self-test
-node .github/scripts/labels-sync.mjs --mode validate
-node .github/scripts/labels-drift.mjs --self-test
-python tools/check_issues.py --check-config
-python -m unittest discover -s tools -p 'test_check_issues.py'
+python tools/check.py --ci
 ```
+
+The CI command requires Python 3.13, Node.js 22 and actionlint 1.7.12,
+as configured in [the workflow](.github/workflows/repository-integrity.yml).
+It checks the exact candidate and writes reports in `test-results/`.
+On a developer machine, use `python tools/check.py --allow-missing`
+only to diagnose missing tools; an INCOMPLETE result is not a pass.
 
 These checks do not require Excel and do not demonstrate VBA behavior.
 Generated reports belong in `test-results/`, which Git ignores.
 
-## Future Excel import/export contract
+## 📥 Future Excel import/export contract
 
 Issue #14 will define the actual macro-free template, component manifest,
 backup-before-change rule and repeatable import/export tooling. Standard
