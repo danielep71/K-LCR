@@ -8,7 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".bas", ".cls", ".frm"}
+TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".toml", ".txt",
+                 ".bas", ".cls", ".frm"}
 TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore"}
 EXCLUDED = {"LICENSE"}
 
@@ -48,6 +49,8 @@ def self_test() -> list[str]:
         ("README.md", b"# OK\n", False),
         ("tools/example.py", b"print(1)\n", False),
         (".github/workflows/ci.yml", b"name: CI\n", False),
+        ("pyproject.toml", b"[tool.ruff]\n", False),
+        ("pyproject.toml", b"[tool.ruff] \n", True),
         ("README.md", b"# Bad  \n", True),
         ("tools/example.py", b"print(1)", True),
         (".github/workflows/ci.yml", b"name: CI\r\n", True),
