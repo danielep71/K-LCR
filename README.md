@@ -88,7 +88,7 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | Topic | Read |
 | --- | --- |
 | Scope, decisions and follow-on work | [Architecture](docs/REPOSITORY_STRUCTURE.md) · [Decisions](docs/DECISIONS.md) |
-| Development and review | [Governance](docs/GOVERNANCE.md) |
+| Development, review and checks | [Governance](docs/GOVERNANCE.md) · [Repository tooling](tools/README.md) |
 | Source files and generated artifacts | [Source control](docs/SOURCE_CONTROL.md) |
 | VBA and Excel target | [House style](docs/VBA_HOUSE_STYLE.md) · [Installation](INSTALLATION.md) |
 | License, provenance and safe examples | [Notice](NOTICE.md) · [Security](SECURITY.md) |
