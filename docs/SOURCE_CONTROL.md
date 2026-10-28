@@ -1,4 +1,7 @@
-# Source control and generated files
+# 🗃️ Source control and generated files
+
+[![Text: LF in Git](https://img.shields.io/badge/Text-LF_in_Git-0969da?style=flat-square)](#-verify-a-checkout)
+[![VBA: CRLF checkout](https://img.shields.io/badge/VBA-CRLF_checkout-217346?style=flat-square)](#-verify-a-checkout)
 
 These rules implement issue #5 for the selected Excel/VBA architecture. The
 tracked source remains text first; a workbook is a host artifact, not the
@@ -9,8 +12,8 @@ canonical calculation source.
   are binary. Documentation, configuration, Python and JavaScript check out
   with LF. `.editorconfig` guides editors; `.gitattributes` controls Git.
 - No VBA encoding conversion is configured. The VBE export code page and
-  import behavior need a real supported-host round trip under #6/#14. Until
-  then, do not claim Unicode/ASCII or a particular code-page contract.
+  import behavior need a real supported-host round trip under #6/#14. The ASCII-only repository convention in [VBA house style](VBA_HOUSE_STYLE.md)
+  is a source-authoring rule, not a validated VBE encoding or code-page claim.
 - Ignore generated workbooks, reports, caches, secrets and workstation files.
   Keep exported source, fixtures and repository configuration trackable.
   An approved macro-free template, if introduced in #14, gets one exact
@@ -18,7 +21,7 @@ canonical calculation source.
 - Create `src/`, `tests/` and `templates/` only with meaningful content,
   following [the proposed layout](REPOSITORY_STRUCTURE.md).
 
-## Verify a checkout
+## 🧪 Verify a checkout
 
 From a fresh checkout at the exact candidate commit:
 
