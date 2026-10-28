@@ -43,7 +43,7 @@ jobs:
       contents: read
       issues: read
       # Without it the issues API omits pull requests, and a dependency
-      # section naming one is reported as a missing issue (#32).
+      # section naming one is reported as a missing issue.
       pull-requests: read
     env:
       PYTHONUTF8: "1"

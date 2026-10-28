@@ -1,6 +1,6 @@
 # Repository governance
 
-K-LCR adopts the 20-label catalogue and issue-triage rules from K-SFTs.
+K-LCR uses a 20-label catalogue and the issue-triage rules defined below.
 Names, colors and descriptions are versioned in [.github/labels.json](../.github/labels.json).
 The application profile has no additional labels.
 
@@ -133,16 +133,17 @@ python tools/check_issues.py --check-config
 python -m unittest discover -s tools -p 'test_check_issues.py'
 ```
 
-## Source
+## Provenance
 
-Initial configuration copied from K-SFTs on 2026-10-28 and adapted for K-LCR.
-K-SACCR has the same 20 names and colors; K-SFTs supplies the P1 and wontfix
-descriptions. Branch and review policy is adapted from K-SFTs governance for the owner's
-K-LCR instruction: release first, main only with explicit authorization.
+The initial label and issue-triage configuration was adapted from K-SFTs on
+2026-10-28. This historical source attribution is not an operational dependency
+or an instruction to follow another repository's current policy. K-LCR's branch
+and review policy is defined above: release first, main only with explicit
+owner authorization.
 
 ## Repository settings (2026-10-28)
 
-The five active rulesets were read back and match K-SFTs exactly:
+The five active K-LCR rulesets were read back:
 Protect main, Protect release branches, Prevent release branch deletion,
 Protect release tags and Protect traffic history. No bypass actors are configured.
 
@@ -170,7 +171,7 @@ Dependency graph and Dependabot alerts are enabled; automatic dependency
 submission, security updates and grouped security updates are disabled.
 
 Dependabot proposes grouped GitHub Actions updates weekly on Mondays at 05:00
-Europe/Rome, with ci/P3 labels and danielep71 assigned, matching K-SFTs.
+Europe/Rome, with ci/P3 labels and danielep71 assigned.
 The installed configuration on main still targets main; retargeting is tracked
 in issue #7. Dependabot reads configuration from the default branch, so a
 release-only configuration change will not activate until an explicitly
@@ -190,7 +191,7 @@ do not bypass that boundary to activate them early.
 
 The settings above were recorded during the 2026-10-28 alignment. K-LCR is
 private: feature availability depends on its GitHub plan and enabled products,
-and public K-SFTs capabilities are not evidence of availability here. No account
+and features available in public repositories are not evidence of availability here. No account
 plan, public hosting or additional security product entitlement is assumed.
 Controlled fail/pass protection demonstrations and fresh settings verification
 remain in issue #16. Expanded CI and dependency retargeting are in #7; metadata
