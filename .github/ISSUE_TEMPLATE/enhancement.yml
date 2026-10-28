@@ -14,7 +14,7 @@ body:
         Describe the result you need and how it will be proved before any implementation. A calculation change cites its regulatory source and states units and valid input domains. Triage sets the milestone and confirms the priority (`P3` by default).
 
         > [!NOTE]
-        > Synthetic data only: no real financial records, customer or counterparty data, credentials or private links.
+        > Synthetic data only: no real financial records, customer or counterparty data, credentials or private links. Report a vulnerability privately as [`SECURITY.md`](https://github.com/danielep71/K-LCR/blob/main/SECURITY.md) describes, never in an issue.
 
   - type: dropdown
     id: area
@@ -23,7 +23,7 @@ body:
       options:
         - Calculation engine
         - Public API
-        - Host integration and source
+        - Workbook and VBA source
         - Tests and fixtures
         - Tooling and CI
         - Documentation
