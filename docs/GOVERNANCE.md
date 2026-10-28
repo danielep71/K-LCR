@@ -44,9 +44,10 @@ into main, tagging, publication or a visibility change.
    changed, what was validated and what was not, ending with `Refs #<issue>`.
    Verify the release push check, then record issue completion evidence.
 
-The sole owner cannot approve their own PR. Rulesets therefore require a PR
-with zero approving reviews; this does not waive review or the separate owner
-authorization required for main. CI and review are separate evidence. After any
+The sole owner cannot approve their own PR. The main ruleset therefore
+requires a PR with zero approving reviews; this does not waive review or the
+separate owner authorization required for main. The release-branch ruleset
+requires no PR, so routing task changes through PRs is procedural there. CI and review are separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 The automated code reviewer reviews PRs opened by people, not bot-authored PRs,
 and does not re-run after a fix push. Wait for its review to complete before
@@ -84,7 +85,8 @@ An outstanding requested review or unresolved finding prevents task completion.
    after the release push check passes.
 
 Apart from that fast-forward, do not push directly to main or a protected
-release branch, and never force-push or use Update branch on them. Do not
+release branch, even where the ruleset would allow it, and never force-push or
+use Update branch on them. Do not
 rebase or amend shared history. If either protected branch moves unexpectedly
 during integration/sync, stop integration, record the divergence and obtain
 an owner decision on recovery; use reviewed PRs without weakening protections.
@@ -166,10 +168,14 @@ Protect main, Protect release branches, Prevent release branch deletion,
 Protect release tags and Protect traffic history. No bypass actors are configured.
 
 Main requires a pull request, resolved review conversations, an up-to-date
-branch and the passing Repository integrity check from GitHub Actions.
-Only merge commits are permitted into main; release/** permits squash or merge.
-Deletion and force pushes are blocked. Release branches may be created before
-their first status check. The separate release deletion rule is retained.
+branch and the passing Repository integrity check from GitHub Actions; only
+merge commits are permitted into main. Protect release branches (release/**)
+requires the passing Repository integrity check but no pull request: the owner
+turned the pull-request requirement off and verified the result on 2026-10-28,
+after it refused the documented fast-forward synchronization. A pushed commit
+must still carry a passing Repository integrity check. Deletion and force
+pushes are blocked on both. Release branches may be created before their first
+status check. The separate release deletion rule is retained unchanged.
 Tags v* cannot be updated, deleted or force-pushed. Traffic-history branches
 cannot be deleted or force-pushed.
 
