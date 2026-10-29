@@ -242,8 +242,9 @@ The configuration integrated into main via PR #45 targets `release/0.1.0`.
 Dependabot reads its configuration from the default branch, so future grouped
 GitHub Actions update PRs target the active release branch.
 
-The owner made K-LCR public on 2026-10-28. The project website is tracked
-in #63; public visibility alone does not establish a successful Pages deployment.
+The owner made K-LCR public on 2026-10-28 and enabled GitHub Pages (main,
+`/docs`) on 2026-10-29; the project website is live at
+<https://danielep71.github.io/K-LCR/> (#63).
 The owner enabled private vulnerability reporting, secret scanning and push
 protection the same day; their read-back states are recorded in the dated
 security-features table of [SECURITY.md](../SECURITY.md#-security-features)
