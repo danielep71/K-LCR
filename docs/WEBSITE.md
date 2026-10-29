@@ -8,18 +8,19 @@ K-LCR copy and the SVG describe the current setup scope.
 
 ## 📦 Publishing
 
-The intended public URL is <https://danielep71.github.io/K-LCR/>.
-K-LCR is public. Use Settings → Pages → **Deploy from a branch**,
-branch **main**, folder **/docs**, matching the sibling project sites.
+The site is live at <https://danielep71.github.io/K-LCR/>. GitHub Pages
+deploys it from Settings → Pages → **Deploy from a branch**, branch **main**,
+folder **/docs**, matching the sibling project sites. Its deployment of
+`4f4277f` on 2026-10-29 was verified live (#63).
 The empty `.nojekyll` file makes this a plain static site: no package
 installation, JavaScript, analytics or external fonts are required.
 
 Changes follow the active release branch, review and owner-authorized main
 integration process in [Governance](GOVERNANCE.md). The live page updates only
 after the reviewed files reach main and GitHub's Pages deployment succeeds.
-Verify that deployment and the live page before claiming publication or
-setting About → Website to the URL. A README link alone is not deployment
-evidence. Do not change repository visibility as part of site maintenance.
+Verify that deployment and the live page after each change. A README link
+alone is not deployment evidence. Do not change repository visibility as part
+of site maintenance.
 
 ## 🔎 Maintenance
 
