@@ -154,7 +154,7 @@ CPython 3.13 on Linux x86_64 and compare every SHA-256 with PyPI.
 `traffic_history.py` is adapted from the existing sibling implementation.
 It merges local GitHub traffic responses into CSV history, with no network
 access or credentials. `test_traffic_history.py` runs in the existing
-`tool-tests` gate and covers overlap, replay, idempotence, history preservation
+`tool-tests` gate and covers overlap, replay after unchanged observations, idempotence, history preservation
 and invalid/missing inputs. Analytics collection itself never runs tests.
 
 ```sh

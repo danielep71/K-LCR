@@ -55,8 +55,8 @@ never be merged into a source branch, and must never be force-pushed.
 
 | File | Key | Contents |
 | --- | --- | --- |
-| `daily.csv` | `date` | Views and unique views, clones and unique clones per UTC day. `views_collected_at` and `clones_collected_at` give the collection that last changed each pair. |
-| `snapshots.csv` | `snapshot_date` | One row per collection day: the first and last day the API reported, the 14-day totals, and `collected_at`, the collection that last changed that day's snapshot, referrers or paths. |
+| `daily.csv` | `date` | Views and unique views, clones and unique clones per UTC day. `views_collected_at` and `clones_collected_at` give the collection that last changed each pair; `views_observed_at` and `clones_observed_at` record the latest observation. |
+| `snapshots.csv` | `snapshot_date` | One row per collection day: the first and last day the API reported, the 14-day totals, and `collected_at`, the collection that last changed that day's snapshot, referrers or paths. `observed_at` records the latest observation of that unit. |
 | `referrers.csv` | `snapshot_date`, `rank` | The top 10 referrers over the 14 days before each collection. |
 | `paths.csv` | `snapshot_date`, `rank` | The top 10 repository paths over the same window. |
 
@@ -71,7 +71,8 @@ them only as 14-day totals, never per day.
   replace the stored ones. The newest collection wins, so a day that was
   incomplete when first collected is corrected later. Views and clones are
   merged separately, each with its own collection time, which stays unchanged
-  when its values do not change.
+  when its values do not change. Separate observed-at watermarks advance on
+  every newer observation, even if counts are identical.
 - **Older history:** dates the collection does not report keep their values.
   Nothing is deleted.
 - **No double counting:** values are replaced, never added. Unique counts are
@@ -79,15 +80,16 @@ them only as 14-day totals, never per day.
   `snapshots.csv`.
 - **Same-day runs:** a collection day's snapshot, referrers and paths are one
   unit. A second collection on the same UTC day replaces the unit only if any
-  of the three changed. Running the workflow twice with the same data changes
-  nothing.
+  of the three changed. An unchanged later collection advances the observation
+  watermarks only. Replaying identical data with the same collection timestamp
+  changes nothing.
 - **Order:** "newest" means the latest collection time. Merging an older
   collection after a newer one, when a saved collection is replayed or a run
   is rebuilt on a newer branch tip, never replaces what the newer one stored;
-  it can only fill a date or metric that nothing newer reported. A stored
-  time is that of the collection that last *changed* the values; a day's
-  counts only grow until the day ends, so an older collection replayed later
-  cannot hold different values.
+  it can only fill a date or metric that nothing newer reported. Freshness uses
+  the latest-observed watermark, separately from the last-change time; this
+  remains correct when counts or rankings are corrected or return to an
+  earlier value.
 
 ### Zero or unavailable
 
@@ -125,8 +127,10 @@ a release branch is deliberately skipped.
 After activation, record the main commit and workflow run URLs in #17:
 
 1. Run the first collection and inspect all four CSV files and the step summary.
-2. Rerun on the same day: identical payloads must produce no commit; changed
-   payloads must replace the day's values without duplicates.
+2. Rerun on the same day: identical payloads with a newer collection time
+   advance observation watermarks only; changed payloads replace the day's
+   values without duplicates. An exact replay including its timestamp must
+   produce no commit (covered by offline tests).
 3. Confirm previous dates remain intact and failed fetches leave the data
    branch unchanged. Offline regression tests cover replay, overlap and
    malformed or missing responses; those tests are not live-run evidence.
