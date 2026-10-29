@@ -42,8 +42,10 @@ an assertion of byte-for-byte identity.
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | Markdown presentation and badges in this documentation set | K-SFTs structure and glyph/badge vocabulary, adapted under the documentation polish PR | K-LCR-specific status and links; no borrowed execution or release claims. |
 | `docs/index.html`, `docs/assets/site.css` | K-SFTs `docs/index.html` structure and `docs/assets/site.css` at the source revision, adapted under #63; MPL-2.0 | K-LCR scope, profiles, setup status, public-repository links and static publishing; no copied product or validation claims. The architecture SVG is original K-LCR source. |
-| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub or by email (#79); same best-effort response targets and safe harbor; K-LCR's own dated security-features read-back; no published version. |
-| `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
+| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub or by email (#79); same best-effort response targets and safe harbor; current security-feature states kept in the settings evidence (#90); no published version. |
+| `docs/REPOSITORY_SETTINGS.md` | K-SFTs `docs/REPOSITORY_SETTINGS.md` at `3a6ed87388cd0f65c4665c84f2c41f59ff688715` (K-SFTs #163); same blob `a938d56`, adopted under #90 | Portable register without repository identifiers; every row checked against K-LCR's live settings on 2026-10-29. |
+| `docs/REPOSITORY_SETTINGS_EVIDENCE.md` | K-SFTs `docs/REPOSITORY_SETTINGS_EVIDENCE.md` structure at the same revision, adapted under #90 | K-LCR's own dated read-backs, rule IDs, run evidence and historical record; no K-SFTs observations. |
+| `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and working rules; settings are kept in the settings register and evidence (#90). |
 
 `.github/dependabot.yml`, `tools/check_files.py` and `docs/SOURCE_CONTROL.md`
 were written for this repository; Dependabot uses standard GitHub Actions

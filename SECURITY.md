@@ -69,21 +69,12 @@ Update this inventory when workflows, tokens or security features change.
 
 ## 🛡️ Security features
 
-First recorded on **2026-10-28**, the day K-LCR became public (#66), and
-updated on **2026-10-29** (#85). The states marked *API* were read back from
-the public GitHub API on those dates.
-
-| Feature | Status |
-| --- | --- |
-| Private vulnerability reporting | Enabled (API). One of the two reporting channels above. |
-| Secret scanning | Enabled (API). Non-provider patterns and validity checks are not enabled (API). |
-| Push protection | Enabled (API). |
-| Dependabot alerts | Enabled, as recorded in [docs/GOVERNANCE.md](docs/GOVERNANCE.md); not readable through the public API. |
-| Dependabot security updates | Enabled on 2026-10-29 (API). Their pull requests target `main`; see [docs/GOVERNANCE.md](docs/GOVERNANCE.md). |
-| Dependabot version updates | Configured in `.github/dependabot.yml` for GitHub Actions and the hash-locked Python quality tools; updates arrive as pull requests for review. |
-| Code scanning | CodeQL default setup, configured on 2026-10-29 (API): Actions and Python, default query suite, weekly schedule; the first analysis on `main` passed. It covers the Python tools and workflows, not the VBA. Alerts are not readable through the public API. |
-
-Update this table, with its date, when a feature is enabled or changed.
+Current security-feature observations, verification dates, evidence and
+limitations are maintained in the [repository settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md#security-settings).
+Its 2026-10-29 observations supersede the tables recorded here on 2026-10-28
+(#66) and 2026-10-29 (#85). This policy remains authoritative for reporting and
+handling vulnerabilities; a settings record does not establish scan coverage
+or enforcement.
 
 ## 🔑 Data and secrets
 

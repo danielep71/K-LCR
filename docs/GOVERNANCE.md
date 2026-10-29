@@ -44,12 +44,11 @@ into main, tagging, publication or a visibility change.
    changed, what was validated and what was not, ending with `Refs #<issue>`.
    Verify the release push check, then record issue completion evidence.
 
-The sole owner cannot approve their own PR. The main ruleset therefore
-requires a PR with zero approving reviews; this does not waive review or the
-separate owner authorization required for main. The release-branch ruleset
-also requires a PR with zero approving reviews, resolved review conversations
-and an up-to-date branch, and permits only merge commits and squash merges
-there. CI and review are separate evidence. After any
+The sole owner cannot approve their own PR, so the main and release-branch
+rulesets require a PR with zero approving reviews
+([settings](REPOSITORY_SETTINGS.md#rulesets)); this does not waive review or
+the separate owner authorization required for main. CI and review are
+separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 The automated code reviewer reviews PRs opened by people, not bot-authored PRs,
 and does not re-run after a fix push. Wait for its review to complete before
@@ -200,68 +199,32 @@ or an instruction to follow another repository's current policy. K-LCR's branch
 and review policy is defined above: release first, main only with explicit
 owner authorization.
 
-## ⚙️ Repository settings (2026-10-28)
+## ⚙️ Repository settings
 
-The five active K-LCR rulesets were read back:
-Protect main, Protect release branches, Prevent release branch deletion,
-Protect release tags and Protect traffic history. No bypass actors are configured.
+The dated settings, evidence, historical snapshots and unverified controls are
+maintained in [REPOSITORY_SETTINGS_EVIDENCE.md](REPOSITORY_SETTINGS_EVIDENCE.md).
+The portable non-default settings reference is
+[REPOSITORY_SETTINGS.md](REPOSITORY_SETTINGS.md). GitHub's live settings remain
+authoritative. Do not restate current settings here or in
+[SECURITY.md](../SECURITY.md); update the evidence snapshot, with its date and
+evidence, whenever a setting is configured, verified or changed.
 
-Main requires a pull request, resolved review conversations, an up-to-date
-branch and the passing Repository integrity check from GitHub Actions; only
-merge commits are permitted into main. Protect release branches (release/**),
-read back on 2026-10-29 (#88), requires a pull request with zero approving
-reviews and resolved review conversations, an up-to-date branch and the
-passing Repository integrity check; only merge commits and squash merges are
-permitted. The owner had turned its pull-request requirement off on 2026-10-28,
-after it refused a fast-forward synchronization, and restored it with the
-merge-method restriction on 2026-10-29; release branches are therefore
-synchronized with main through sync PRs. Deletion and force pushes are blocked
-on both. Release branches may be created before their first
-status check. The separate release deletion rule is retained unchanged.
-Tags v* cannot be updated, deleted or force-pushed. Traffic-history branches
-cannot be deleted or force-pushed.
+Working rules that depend on those settings:
 
-release/0.1.0 exists and is the development target. No traffic-history branch
-has been created. The integrity check runs on every pull request and push to main and release/** and currently
-validates label scripts and manifest, issue forms and triage tests, tracked
-text format, Python lint and strict typing of `tools/`, and workflow syntax. It produces candidate-bound reports; it does
-not compile VBA, execute Excel or validate LCR calculations.
-Its first main run passed: [40740544583](https://github.com/danielep71/K-LCR/actions/runs/40740544583).
-These are configured controls; destructive enforcement probes were not performed.
-
-Projects are disabled; merge, squash and rebase are enabled at repository level
-(subject to the branch rules). Auto-merge is disabled. Branch-update suggestions
-and automatic deletion of merged head branches are enabled.
-Actions require full-length SHA pins, use read-only default token permissions,
-cannot create or approve pull requests, and retain logs/artifacts for 90 days.
-Dependency graph and Dependabot alerts are enabled; automatic dependency
-submission and grouped security updates are disabled. The owner enabled
-Dependabot security updates and CodeQL code scanning (default setup: Actions
-and Python, weekly) on 2026-10-29 (#85).
-
-Dependabot proposes grouped GitHub Actions updates, and grouped updates to the
-hash-locked Ruff/mypy requirements (pip, `/tools`, releases at least 14 days
-old), weekly on Mondays at 05:00 Europe/Rome, with ci/P3 labels and
-danielep71 assigned. The pip entry reached main with #81; its first run
-opened #82, which the owner closed on 2026-10-29 to update K-LCR and K-SFTs
-together. The configuration integrated into main via PR #45 targets
-`release/0.1.0`. Dependabot reads its configuration from the default branch,
-so future grouped version-update PRs target the active release branch.
-
-Dependabot security updates ignore `target-branch` and open pull requests
-against `main`. Review them as described in
-[tools/README.md](../tools/README.md#-dependency-updates); merging one into
-main needs the owner's approval, like any main integration. Then synchronize
-the release branch with main through a sync PR, as for any integration.
-
-The owner made K-LCR public on 2026-10-28 and enabled GitHub Pages (main,
-`/docs`) on 2026-10-29; the project website is live at
-<https://danielep71.github.io/K-LCR/> (#63).
-The owner enabled private vulnerability reporting, secret scanning and push
-protection on 2026-10-28; their read-back states are recorded in the dated
-security-features table of [SECURITY.md](../SECURITY.md#-security-features)
-(#66). Repository-specific credentials, collaborators, deployments and
-environments are not cloned.
+- The Repository integrity check runs on every pull request and push to main
+  and release/** and is the required check of both PR rulesets. It produces
+  candidate-bound reports; it does not compile VBA, execute Excel or validate
+  LCR calculations ([tools/README.md](../tools/README.md)).
+- Dependabot reads `.github/dependabot.yml` from the default branch. Version
+  updates target the active release branch; update `target-branch` when a new
+  release branch is opened.
+- Dependabot security updates ignore `target-branch` and open pull requests
+  against `main`. Review them as described in
+  [tools/README.md](../tools/README.md#-dependency-updates); merging one into
+  main needs the owner's approval, like any main integration. Then synchronize
+  the release branch with main through a sync PR, as for any integration.
+- GitHub Pages publishes main `/docs`; site changes follow
+  [WEBSITE.md](WEBSITE.md).
 
 ## 🔎 Activation boundaries and remaining verification
 
@@ -270,10 +233,8 @@ Live label reconciliation is deliberately restricted to main. Release-branch
 changes to these definitions/policies are staged until an authorized integration;
 do not bypass that boundary to activate them early.
 
-The settings above were recorded during the 2026-10-28 alignment, initially
-while K-LCR was private. The repository is now public. This visibility change
-does not prove that optional security or hosting features are configured;
-verify each feature and record its evidence separately.
+Settings observations, their dates and the controls still to verify are kept
+in the [evidence snapshot](REPOSITORY_SETTINGS_EVIDENCE.md).
 Controlled fail/pass protection demonstrations and fresh settings verification
 remain in issue #16. Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;

@@ -122,8 +122,8 @@ from the default branch, `main`, so a change to it takes effect once it is
 integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
-Dependabot security updates, enabled on 2026-10-29, ignore `target-branch`:
-their pull requests target `main`, and merging one needs the owner's approval
+Dependabot security updates ignore `target-branch`: their pull requests target
+`main`, and merging one needs the owner's approval
 ([docs/GOVERNANCE.md](../docs/GOVERNANCE.md)).
 
 Nothing merges automatically. Before merging an update:
