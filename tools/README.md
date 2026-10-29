@@ -35,7 +35,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, and the issue-triage rules. |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, and traffic-history merging. |
 | `labels-sync-self-test` | The label synchronizer's validation, overlay and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is valid under `.github/label-policy.json`. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
@@ -148,3 +148,20 @@ checksums file. Dependabot's pip updates list a hash for every published
 wheel, not only the CPython 3.13 Linux x86_64 wheel this file pins. To keep
 that format, update the Python requirements by hand: download the wheels for
 CPython 3.13 on Linux x86_64 and compare every SHA-256 with PyPI.
+
+## 📈 Traffic history
+
+`traffic_history.py` is adapted from the existing sibling implementation.
+It merges local GitHub traffic responses into CSV history, with no network
+access or credentials. `test_traffic_history.py` runs in the existing
+`tool-tests` gate and covers overlap, replay, idempotence, history preservation
+and invalid/missing inputs. Analytics collection itself never runs tests.
+
+```sh
+python -m unittest discover -s tools -p 'test_traffic_history.py'
+python tools/traffic_history.py init --data /tmp/k-lcr-traffic/data
+```
+
+The scheduled/manual workflow writes only the data-only branch. Credential
+setup, public visibility, retention, failure handling and the pending live
+activation evidence are documented in [TRAFFIC.md](../docs/TRAFFIC.md).
