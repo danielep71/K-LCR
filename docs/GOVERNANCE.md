@@ -47,7 +47,9 @@ into main, tagging, publication or a visibility change.
 The sole owner cannot approve their own PR. The main ruleset therefore
 requires a PR with zero approving reviews; this does not waive review or the
 separate owner authorization required for main. The release-branch ruleset
-requires no PR, so routing task changes through PRs is procedural there. CI and review are separate evidence. After any
+also requires a PR with zero approving reviews, resolved review conversations
+and an up-to-date branch, and permits only merge commits and squash merges
+there. CI and review are separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 The automated code reviewer reviews PRs opened by people, not bot-authored PRs,
 and does not re-run after a fix push. Wait for its review to complete before
@@ -74,19 +76,17 @@ An outstanding requested review or unresolved finding prevents task completion.
 3. With current required checks passing and review findings resolved, use a
    merge commit (never squash or rebase) for the authorized integration.
 4. Freeze task merges into the release branch from opening the integration PR
-   until synchronization completes. After the main push check passes,
-   fast-forward the release branch to main:
-   `git push origin origin/main:refs/heads/release/0.1.0`. This pushes only a
-   commit main has already checked; it creates no new commit.
-5. If a ruleset refuses the fast-forward, open a main -> release/0.1.0 sync PR
-   and merge it with a merge commit after CI passes. For a genuinely empty file
-   diff, record the compared SHAs and CI result; content review need not be
-   repeated. A non-empty sync requires normal review. Resume task merges only
-   after the release push check passes.
+   until synchronization completes. After the main push check passes, open a
+   main -> release/0.1.0 sync PR and merge it with a merge commit after
+   Repository integrity passes. The release ruleset requires a PR, so a direct
+   fast-forward push is refused.
+5. For a sync PR whose file diff is genuinely empty, record the compared SHAs
+   and CI result; content review need not be repeated. A non-empty sync
+   requires normal review. Resume task merges only after the release push check
+   passes.
 
-Apart from that fast-forward, do not push directly to main or a protected
-release branch, even where the ruleset would allow it, and never force-push or
-use Update branch on them. Do not
+Do not push directly to main or a protected release branch, and never
+force-push or use Update branch on them. Do not
 rebase or amend shared history. If either protected branch moves unexpectedly
 during integration/sync, stop integration, record the divergence and obtain
 an owner decision on recovery; use reviewed PRs without weakening protections.
@@ -208,12 +208,15 @@ Protect release tags and Protect traffic history. No bypass actors are configure
 
 Main requires a pull request, resolved review conversations, an up-to-date
 branch and the passing Repository integrity check from GitHub Actions; only
-merge commits are permitted into main. Protect release branches (release/**)
-requires the passing Repository integrity check but no pull request: the owner
-turned the pull-request requirement off and verified the result on 2026-10-28,
-after it refused the documented fast-forward synchronization. A pushed commit
-must still carry a passing Repository integrity check. Deletion and force
-pushes are blocked on both. Release branches may be created before their first
+merge commits are permitted into main. Protect release branches (release/**),
+read back on 2026-10-29 (#88), requires a pull request with zero approving
+reviews and resolved review conversations, an up-to-date branch and the
+passing Repository integrity check; only merge commits and squash merges are
+permitted. The owner had turned its pull-request requirement off on 2026-10-28,
+after it refused a fast-forward synchronization, and restored it with the
+merge-method restriction on 2026-10-29; release branches are therefore
+synchronized with main through sync PRs. Deletion and force pushes are blocked
+on both. Release branches may be created before their first
 status check. The separate release deletion rule is retained unchanged.
 Tags v* cannot be updated, deleted or force-pushed. Traffic-history branches
 cannot be deleted or force-pushed.
@@ -248,9 +251,8 @@ so future grouped version-update PRs target the active release branch.
 Dependabot security updates ignore `target-branch` and open pull requests
 against `main`. Review them as described in
 [tools/README.md](../tools/README.md#-dependency-updates); merging one into
-main needs the owner's approval, like any main integration. Then bring the
-release branch up to date with main: fast-forward it, or open a main→release
-sync PR when it has commits of its own.
+main needs the owner's approval, like any main integration. Then synchronize
+the release branch with main through a sync PR, as for any integration.
 
 The owner made K-LCR public on 2026-10-28 and enabled GitHub Pages (main,
 `/docs`) on 2026-10-29; the project website is live at
