@@ -1,4 +1,4 @@
-# Repository settings evidence snapshot
+# ⚙️ Repository settings evidence snapshot
 
 This file preserves the dated repository-specific observations for **K-LCR**.
 The portable non-default settings reference is [REPOSITORY_SETTINGS.md](REPOSITORY_SETTINGS.md).
@@ -11,6 +11,31 @@ not automatic enforcement or authorization to change a setting.
 
 Snapshot date: **2026-10-29 (Europe/Rome)**. Tracking: [#90](https://github.com/danielep71/K-LCR/issues/90).
 
+## 🔎 Supplemental live Settings UI verification — 2026-10-29
+
+The following observations supersede the historical or unverified
+UI entries in the original snapshot below. They do not certify a live traffic
+collection or extend the automatic review to other commits.
+
+| Surface | Verified observation |
+| --- | --- |
+| General | Wiki edits restricted to collaborators; release immutability off; issue/PR creation open to all users; automatic issue closure on; web sign-off off. |
+| Actions | All actions/reusable workflows allowed; full SHA pins required; default token read-only; creation/approval of PRs disabled; approval required for first-time contributors; retention 90 days. No self-hosted runners or additional Actions policies. |
+| Dependency security | Dependency graph, Dependabot alerts and security updates on; automatic dependency submission, grouped security updates and malware alerts off. |
+| Auto-triage | GitHub preset dismissing low-impact development dependency alerts enabled; malware auto-dismiss preset disabled. |
+| CodeQL | Default setup, GitHub Actions and Python, default query suite, standard GitHub runner, push/PR triggers displayed for main and protected branches, weekly schedule. Actual release-PR coverage still requires run evidence (#86). |
+| Scanning | Private reporting, secret scanning and push protection on. Security failure threshold High or higher; standard threshold Only errors. These do not themselves require scanning for merge. |
+| AI | Repository/PR AI scans, AI-application scans and agentic autofix off; Copilot Autofix on. Account UI reports no Copilot code-review/cloud license. |
+| Pages | main `/docs`, HTTPS, no custom domain; github-pages environment allows main only, no reviewers/wait timer, administrator bypass enabled, no secrets or variables. |
+| Access and integrations | No collaborators, deploy keys, webhooks or custom autolinks; ChatGPT Codex Connector and Claude listed. App-internal permissions were not audited. |
+| Secrets and variables | No repository secrets in Actions, Agents, Codespaces or Dependabot; no Actions/Agents variables. The analytics environment now permits only main, with no secrets or variables; the traffic credential remains pending. Secret values were never accessed. |
+| Other controls | No Codespaces prebuilds; default immutable OIDC subject; no moderation limits; agent issue suggestions Cautious; Copilot firewalls/default allowlists on, custom allowlists empty and MCP configuration empty. |
+
+Traffic implementation is staged under #17: collection workflow, merge tool,
+regression tests and [operations guide](TRAFFIC.md). Activation requires the
+dedicated owner-provisioned credential and authorized integration into main.
+The first successful collection creates the data-only branch. No live success is claimed.
+
 ## Reading the register
 
 - **Verified**: read from the live GitHub API or Settings UI on the stated date.
@@ -19,7 +44,8 @@ Snapshot date: **2026-10-29 (Europe/Rome)**. Tracking: [#90](https://github.com/
 - **Unverified**: no conclusive current read-back. Never interpret this as disabled.
 - **Desired**: existing policy or a proposed baseline explicitly marked as such.
 
-No settings were changed to prepare this document. An enabled scanner is not
+The analytics environment was created and restricted to main as part of #17;
+no credential was created and no other setting was changed in this supplement. An enabled scanner is not
 proof that its findings block merges, and static checks are not Excel or
 numerical validation.
 
