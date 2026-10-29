@@ -122,6 +122,10 @@ from the default branch, `main`, so a change to it takes effect once it is
 integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
+Dependabot security updates, enabled on 2026-10-29, ignore `target-branch`:
+their pull requests target `main`, and merging one needs the owner's approval
+([docs/GOVERNANCE.md](../docs/GOVERNANCE.md)).
+
 Nothing merges automatically. Before merging an update:
 
 1. Read the release notes between the old and new versions of each action
@@ -140,6 +144,7 @@ Nothing merges automatically. Before merging an update:
 Dependabot does not update the actionlint version or checksum in
 `.github/workflows/repository-integrity.yml`. Update it by hand: choose a
 release at least two weeks old and compare its SHA-256 with the release's
-checksums file. Until the pip entry is active on `main`, update the Python
-requirements the same way: download the wheels for CPython 3.13 on Linux
-x86_64 and compare every SHA-256 with PyPI.
+checksums file. Dependabot's pip updates list a hash for every published
+wheel, not only the CPython 3.13 Linux x86_64 wheel this file pins. To keep
+that format, update the Python requirements by hand: download the wheels for
+CPython 3.13 on Linux x86_64 and compare every SHA-256 with PyPI.

@@ -232,21 +232,31 @@ and automatic deletion of merged head branches are enabled.
 Actions require full-length SHA pins, use read-only default token permissions,
 cannot create or approve pull requests, and retain logs/artifacts for 90 days.
 Dependency graph and Dependabot alerts are enabled; automatic dependency
-submission, security updates and grouped security updates are disabled.
+submission and grouped security updates are disabled. The owner enabled
+Dependabot security updates and CodeQL code scanning (default setup: Actions
+and Python, weekly) on 2026-10-29 (#85).
 
 Dependabot proposes grouped GitHub Actions updates, and grouped updates to the
 hash-locked Ruff/mypy requirements (pip, `/tools`, releases at least 14 days
 old), weekly on Mondays at 05:00 Europe/Rome, with ci/P3 labels and
-danielep71 assigned. The pip entry takes effect only after it reaches main.
-The configuration integrated into main via PR #45 targets `release/0.1.0`.
-Dependabot reads its configuration from the default branch, so future grouped
-GitHub Actions update PRs target the active release branch.
+danielep71 assigned. The pip entry reached main with #81; its first run
+opened #82, which the owner closed on 2026-10-29 to update K-LCR and K-SFTs
+together. The configuration integrated into main via PR #45 targets
+`release/0.1.0`. Dependabot reads its configuration from the default branch,
+so future grouped version-update PRs target the active release branch.
+
+Dependabot security updates ignore `target-branch` and open pull requests
+against `main`. Review them as described in
+[tools/README.md](../tools/README.md#-dependency-updates); merging one into
+main needs the owner's approval, like any main integration. Then bring the
+release branch up to date with main: fast-forward it, or open a main→release
+sync PR when it has commits of its own.
 
 The owner made K-LCR public on 2026-10-28 and enabled GitHub Pages (main,
 `/docs`) on 2026-10-29; the project website is live at
 <https://danielep71.github.io/K-LCR/> (#63).
 The owner enabled private vulnerability reporting, secret scanning and push
-protection the same day; their read-back states are recorded in the dated
+protection on 2026-10-28; their read-back states are recorded in the dated
 security-features table of [SECURITY.md](../SECURITY.md#-security-features)
 (#66). Repository-specific credentials, collaborators, deployments and
 environments are not cloned.
