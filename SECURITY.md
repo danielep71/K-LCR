@@ -1,7 +1,7 @@
 # 🔒 Security and confidential data
 
 [![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#-security-features)
-[![Reporting: Private](https://img.shields.io/badge/Reporting-Private_on_GitHub-1f3a5f?style=flat-square)](#-report-a-vulnerability)
+[![Reporting: Private](https://img.shields.io/badge/Reporting-Private-1f3a5f?style=flat-square)](#-report-a-vulnerability)
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-secrets)
 
 K-LCR is a public Excel/VBA reference and independent-validation project at
@@ -20,8 +20,12 @@ unsupported unless the problem reproduces in this repository.
 Do **not** disclose a suspected vulnerability in an issue, pull request,
 commit message, sample file or screenshot.
 
-Report it privately on GitHub, through **Security → Report a vulnerability**
-(<https://github.com/danielep71/K-LCR/security/advisories/new>).
+Report it privately in either of two ways:
+
+- on GitHub, through **Security → Report a vulnerability**
+  (<https://github.com/danielep71/K-LCR/security/advisories/new>); or
+- by email to **danielep71@gmail.com**, with the subject
+  **Private security report — K-LCR**.
 
 Include:
 
@@ -68,7 +72,7 @@ Recorded on **2026-10-28**, the day K-LCR became public. The states marked
 
 | Feature | Status |
 | --- | --- |
-| Private vulnerability reporting | Enabled (API). Reports are filed on GitHub, as above. |
+| Private vulnerability reporting | Enabled (API). One of the two reporting channels above. |
 | Secret scanning | Enabled (API). Non-provider patterns and validity checks are not enabled (API). |
 | Push protection | Enabled (API). |
 | Dependabot alerts | Enabled, as recorded in [docs/GOVERNANCE.md](docs/GOVERNANCE.md); not readable through the public API. |

@@ -274,5 +274,5 @@ The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
 and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.
 Keep vulnerability details and confidential data out of ordinary issues and
 PRs; [SECURITY.md](../SECURITY.md) defines private vulnerability reporting
-through GitHub, response targets and synthetic examples. Licensing and
-visibility are separate owner decisions.
+through GitHub or by email, response targets and synthetic examples.
+Licensing and visibility are separate owner decisions.
