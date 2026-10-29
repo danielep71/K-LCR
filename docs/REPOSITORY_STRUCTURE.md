@@ -104,7 +104,7 @@ are not claims that those components exist today.
 | Path | Purpose | Status |
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
-| docs/ | Governance, scope, decisions, contracts and evidence guidance | Present |
+| docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
 | .github/ | Labels, issue forms, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
