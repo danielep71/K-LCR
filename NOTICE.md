@@ -33,15 +33,16 @@ an assertion of byte-for-byte identity.
 | `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no regulatory-copy or workbook-template exception, Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
 | `.github/labels.json`, `.github/label-policy.json` | K-SFTs files at the source revision; same blobs | Selected application profile with no domain overlay. |
 | `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at the source revision; same blobs | Used with K-LCR repository variables and policy. |
-| `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee, links and platform-neutral guidance. |
+| `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee and links; Excel/VBA environment and area fields after the stack decision (#69). |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
 | `tools/check.py`, `tools/test_check.py`, `.github/workflows/repository-integrity.yml` | K-SFTs runner, tests and workflow structure at the source revision, adapted under #7 | K-LCR gates for current tooling, text fixtures, workflow lint and candidate report; no SFT calculation or Excel evidence. |
 | `pyproject.toml`, `tools/requirements-quality-ci.txt` | K-SFTs Ruff/mypy configuration and hash-locked pins at the source revision, adapted under #52 | Python 3.13 target matching the CI runtime; identical package pins and hashes; K-LCR installation reference. |
+| `tools/README.md` | K-SFTs `tools/README.md` structure at the source revision, adapted under #68 | K-LCR gates, tracked-text checker, tool versions and dependency-update procedure; no VBA, Excel-evidence or traffic tooling described before it exists. |
 | `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | Markdown presentation and badges in this documentation set | K-SFTs structure and glyph/badge vocabulary, adapted under the documentation polish PR | K-LCR-specific status and links; no borrowed execution or release claims. |
 | `docs/index.html`, `docs/assets/site.css` | K-SFTs `docs/index.html` structure and `docs/assets/site.css` at the source revision, adapted under #63; MPL-2.0 | K-LCR scope, profiles, setup status, public-repository links and static publishing; no copied product or validation claims. The architecture SVG is original K-LCR source. |
-| `SECURITY.md` | K-SFTs security-policy structure at the source revision, adapted | Private reporting without assuming public-only reporting features or a published version; K-LCR workflow and data boundaries. |
+| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub or by email (#79); same best-effort response targets and safe harbor; K-LCR's own dated security-features read-back; no published version. |
 | `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
 
 `.github/dependabot.yml`, `tools/check_files.py` and `docs/SOURCE_CONTROL.md`

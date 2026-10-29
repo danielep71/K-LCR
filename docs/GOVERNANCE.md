@@ -135,7 +135,46 @@ explicitly. Issue completion on release does not imply integration into main.
 After closure, review dependent issues and remove blocked only when all named
 prerequisites are resolved.
 
-## 🏷️ Label workflows
+## 🏷️ Labels
+
+### When to use each label
+
+Every issue carries exactly one priority label, defined under
+[Issues](#-issues): `P1` (confirmed calculation bug; requires `bug`), `P2` or
+`P3`. The forms default to `P2` for bugs and `P3` for enhancements and
+documentation; Dependabot update PRs get `P3`. Triage confirms or changes it.
+
+Type labels say what kind of work an issue or PR is. The forms set `bug`,
+`enhancement` or `documentation`; add others where they apply.
+
+| Label | Use for |
+| --- | --- |
+| `bug` | Confirmed defect in behavior, correctness, error handling, or a documented contract |
+| `enhancement` | New capability or meaningful improvement to supported behavior |
+| `documentation` | User-facing or maintainer-facing documentation |
+| `tests` | Regression coverage, test harnesses, fixtures, or manual validation |
+| `refactor` | Internal restructuring intended to preserve supported behavior |
+| `behavior-change` | Intentional externally observable behavior change |
+| `ci` | Automated quality checks, workflow maintenance, or release certification |
+| `repository` | Repository structure, governance, metadata, tooling, or maintenance |
+| `release` | Release preparation, certification, evidence, packaging, or publication |
+| `security` | Security boundary, vulnerability handling, supply chain, or hardening; never for an undisclosed vulnerability, which follows [SECURITY.md](../SECURITY.md) |
+
+Status and triage labels:
+
+| Label | Use when |
+| --- | --- |
+| `blocked` | A named open prerequisite or an `External condition:` line prevents progress; remove it when none remains |
+| `question` | Further information or a maintainer decision is required |
+| `help wanted` | The maintainer welcomes external investigation, implementation, validation, or review |
+| `good first issue` | Well-scoped task suitable for a first contribution |
+| `duplicate` | An existing issue or pull request already covers this work |
+| `invalid` | The report is incomplete, unsupported, or not actionable as submitted |
+| `wontfix` | The maintainer has decided not to implement or continue this work |
+
+Labels do not assign priorities or milestones automatically.
+
+### Label workflows
 
 - Sync issue labels validates and self-tests changes on pull requests into
   main and release/**. Relevant pushes to main, or manual dispatch on the
@@ -195,17 +234,21 @@ cannot create or approve pull requests, and retain logs/artifacts for 90 days.
 Dependency graph and Dependabot alerts are enabled; automatic dependency
 submission, security updates and grouped security updates are disabled.
 
-Dependabot proposes grouped GitHub Actions updates weekly on Mondays at 05:00
-Europe/Rome, with ci/P3 labels and danielep71 assigned.
+Dependabot proposes grouped GitHub Actions updates, and grouped updates to the
+hash-locked Ruff/mypy requirements (pip, `/tools`, releases at least 14 days
+old), weekly on Mondays at 05:00 Europe/Rome, with ci/P3 labels and
+danielep71 assigned. The pip entry takes effect only after it reaches main.
 The configuration integrated into main via PR #45 targets `release/0.1.0`.
 Dependabot reads its configuration from the default branch, so future grouped
 GitHub Actions update PRs target the active release branch.
 
 The owner made K-LCR public on 2026-10-28. The project website is tracked
 in #63; public visibility alone does not establish a successful Pages deployment.
-Private vulnerability reporting and additional security products still require
-explicit verification. Repository-specific credentials, collaborators,
-deployments and environments are not cloned.
+The owner enabled private vulnerability reporting, secret scanning and push
+protection the same day; their read-back states are recorded in the dated
+security-features table of [SECURITY.md](../SECURITY.md#-security-features)
+(#66). Repository-specific credentials, collaborators, deployments and
+environments are not cloned.
 
 ## 🔎 Activation boundaries and remaining verification
 
@@ -230,5 +273,6 @@ execution or these future gates.
 The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
 and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.
 Keep vulnerability details and confidential data out of ordinary issues and
-PRs; [SECURITY.md](../SECURITY.md) defines private reporting and synthetic
-examples. Licensing does not itself change this repository's private visibility.
+PRs; [SECURITY.md](../SECURITY.md) defines private vulnerability reporting
+through GitHub or by email, response targets and synthetic examples.
+Licensing and visibility are separate owner decisions.
