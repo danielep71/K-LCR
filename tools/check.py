@@ -95,7 +95,7 @@ def default_gates() -> list[Gate]:
              ("node", ".github/scripts/labels-sync.mjs", "--mode", "validate")),
         Gate("labels-drift-self-test", "node",
              ("node", ".github/scripts/labels-drift.mjs", "--self-test")),
-        Gate("issue-config", "python", (python, "tools/check_issues.py", "--check-config")),
+        Gate("issue-config", "pyyaml", (python, "tools/check_issues.py", "--check-config")),
         Gate("format-fixtures", "python", (python, "tools/check_files.py", "--self-test")),
         Gate("tracked-text", "python", (python, "tools/check_files.py")),
         Gate("ruff", "ruff", ("ruff", "check", "--no-cache", "tools")),

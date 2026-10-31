@@ -21,6 +21,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import check_workflows
+
 PRIORITIES = ("P1", "P2", "P3")
 BLOCKED = "blocked"
 FORM_PRIORITIES = {"bug.yml": "P2", "enhancement.yml": "P3", "documentation.yml": "P3"}
@@ -199,37 +201,6 @@ def documented_labels(text: str) -> list[str]:
     return found
 
 
-def block_lists(text: str, key: str) -> list[list[str]]:
-    """Every list under ``key:`` in a simple YAML file, read line by line.
-
-    A list is either written inline (``key: [a, b]``) or as the ``- item``
-    lines that follow ``key:``, indented at least as far as the key. The key
-    may open a sequence item (``- key: ...``), as the first key of a mapping
-    in a list. Trailing comments, comment lines and blank lines are skipped;
-    quotes around items are removed.
-    """
-    lists = []
-    lines = text.splitlines()
-    for index, line in enumerate(lines):
-        inline = re.match(rf"^\s*(?:-\s+)?{re.escape(key)}:\s*\[(.*?)\]\s*(?:#.*)?$", line)
-        if inline:
-            lists.append([item.strip().strip("\"'") for item in inline.group(1).split(",") if item.strip()])
-            continue
-        start = re.match(rf"^(\s*(?:-\s+)?){re.escape(key)}:\s*(?:#.*)?$", line)
-        if not start:
-            continue
-        indent, items = len(start.group(1)), []
-        for following in lines[index + 1:]:
-            if not following.strip() or following.lstrip().startswith("#"):
-                continue
-            item = re.match(r"^(\s*)-\s+(.*?)\s*(?:#.*)?$", following)
-            if not item or len(item.group(1)) < indent:
-                break
-            items.append(item.group(2).strip("\"'"))
-        lists.append(items)
-    return lists
-
-
 def config_findings(root: Path) -> list[str]:
     """Check the label catalogue, the issue forms, the label guide of
     GOVERNANCE.md and the labels and assignees of Dependabot against the
@@ -272,46 +243,44 @@ def config_findings(root: Path) -> list[str]:
         problems.append(f"{GOVERNANCE.as_posix()} is missing")
     dependabot = root / DEPENDABOT
     if dependabot.is_file():
-        text = dependabot.read_text(encoding="utf-8")
-        problems += [f"{DEPENDABOT.as_posix()} sets unknown label {label!r}"
-                     for found in block_lists(text, "labels") for label in found if label not in labels]
-        problems += [f"{DEPENDABOT.as_posix()} assigns {person!r}, not {assignee!r}"
-                     for found in block_lists(text, "assignees") for person in found if person != assignee]
-        # Every update entry must assign the person, not merely avoid others.
-        entries = update_entries(text)
-        assigned = sum(1 for entry in entries if block_lists(entry, "assignees") == [[assignee]])
-        if assigned != len(entries):
-            problems.append(f"{DEPENDABOT.as_posix()} must assign {assignee!r} in each of its "
-                            f"{len(entries)} update entries, found {assigned}")
+        problems += dependabot_findings(dependabot.read_text(encoding="utf-8"), labels, assignee)
     else:
         problems.append(f"{DEPENDABOT.as_posix()} is missing")
     return problems
 
 
-def update_entries(text: str) -> list[str]:
-    """The text of each item of the top-level ``updates:`` list, read line by line.
+def dependabot_findings(text: str, labels: Collection[str], assignee: str) -> list[str]:
+    """Labels and assignees of every Dependabot update, read with PyYAML.
 
-    An item starts at a ``- `` line at the indentation of the list's first
-    item, whatever key it begins with, and runs until the next such line or
-    the next top-level key.
+    Each update may set only catalogue labels and must assign exactly the
+    forms' person. PyYAML is pinned in tools/requirements-quality-ci.txt;
+    without it the configuration cannot be read, which is a finding.
     """
-    entries: list[list[str]] = []
-    inside, indent = False, -1
-    for line in text.splitlines():
-        if re.match(r"^updates:\s*(?:#.*)?$", line):
-            inside = True
-            continue
-        if not inside:
-            continue
-        if line.strip() and not line[0].isspace() and not line.startswith(("-", "#")):
-            break
-        item = re.match(r"^(\s*)-\s", line)
-        if item and (indent < 0 or len(item.group(1)) == indent):
-            indent = len(item.group(1))
-            entries.append([line])
-        elif entries:
-            entries[-1].append(line)
-    return ["\n".join(entry) for entry in entries]
+    name = DEPENDABOT.as_posix()
+    yaml = check_workflows.load_yaml()
+    if yaml is None:
+        return [f"{name} cannot be read: PyYAML is not installed (tools/requirements-quality-ci.txt)"]
+    try:
+        config = yaml.load(text, Loader=check_workflows.strict_loader(yaml))
+    except yaml.YAMLError as error:
+        return [f"{name} is not valid YAML: {error}"]
+    updates = config.get("updates") if isinstance(config, Mapping) else None
+    if not isinstance(updates, list):
+        return [f"{name} has no updates list"]
+    problems = []
+    assigned = 0
+    for update in updates:
+        entry = update if isinstance(update, Mapping) else {}
+        problems += [f"{name} sets unknown label {label!r}"
+                     for label in entry.get("labels") or [] if str(label) not in labels]
+        people = [str(person) for person in entry.get("assignees") or []]
+        problems += [f"{name} assigns {person!r}, not {assignee!r}" for person in people if person != assignee]
+        assigned += people == [assignee]
+    # Every update entry must assign the person, not merely avoid others.
+    if assigned != len(updates):
+        problems.append(f"{name} must assign {assignee!r} in each of its {len(updates)} "
+                        f"update entries, found {assigned}")
+    return problems
 
 
 def flow_list(text: str, key: str) -> list[str]:

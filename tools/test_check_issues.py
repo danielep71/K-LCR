@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
 import shutil
 import tempfile
 import unittest
@@ -12,6 +13,7 @@ import unittest.mock
 from pathlib import Path
 
 import check_issues
+import check_workflows
 from check_issues import Issue
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,6 +109,15 @@ class DependencyTests(unittest.TestCase):
 
 
 class ConfigTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        # The Dependabot rules read .github/dependabot.yml with PyYAML.
+        if check_workflows.load_yaml() is None:
+            if os.environ.get("GITHUB_ACTIONS"):
+                raise RuntimeError("PyYAML is required on GitHub Actions "
+                                   "(tools/requirements-quality-ci.txt)")
+            raise unittest.SkipTest("PyYAML is not installed; skipped locally only")
+
     def test_repository_configuration_passes(self) -> None:
         self.assertEqual(check_issues.config_findings(ROOT), [])
 
@@ -228,23 +239,28 @@ class ConfigTests(unittest.TestCase):
             self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
                           check_issues.config_findings(root))
 
-    def test_update_entries(self) -> None:
-        text = ("version: 2\nupdates:\n  - directory: /\n    package-ecosystem: pip\n    labels:\n"
-                "      - ci\n  - package-ecosystem: npm\n- not: nested\nregistries: {}\n")
-        entries = check_issues.update_entries(text)
-        self.assertEqual(len(entries), 2)
-        self.assertIn("labels:\n      - ci", entries[0])
-        self.assertEqual(check_issues.update_entries("updates:\n- a: 1\n- b: 2\n"), ["- a: 1", "- b: 2"])
+    def test_dependabot_flow_style_entries_are_read(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            config = root / ".github/dependabot.yml"
+            config.write_text("version: 2\nupdates:\n"
+                              "  - {package-ecosystem: pip, directory: /tools, labels: [no-such-label],"
+                              " assignees: [danielep71]}\n", encoding="utf-8")
+            self.assertEqual(check_issues.config_findings(root),
+                             [".github/dependabot.yml sets unknown label 'no-such-label'"])
 
-    def test_block_lists(self) -> None:
-        text = ("updates:\n  - x: 1\n    labels:\n      - ci   # a comment\n\n      - \"P3\"\n"
-                "    assignees: [triage-person]\n    other: y\n  - x: 2\n    labels:\n    - tests\n")
-        self.assertEqual(check_issues.block_lists(text, "labels"), [["ci", "P3"], ["tests"]])
-        self.assertEqual(check_issues.block_lists(text, "assignees"), [["triage-person"]])
-        self.assertEqual(check_issues.block_lists(text, "missing"), [])
-        commented = "labels: [no-such-label, P3]  # custom labels\nassignees: [someone-else] # owner\n"
-        self.assertEqual(check_issues.block_lists(commented, "labels"), [["no-such-label", "P3"]])
-        self.assertEqual(check_issues.block_lists(commented, "assignees"), [["someone-else"]])
+    def test_dependabot_needs_pyyaml(self) -> None:
+        with unittest.mock.patch.object(check_workflows, "load_yaml", return_value=None):
+            findings = check_issues.dependabot_findings("updates: []\n", {"P3"}, "triage-person")
+        self.assertEqual(findings, [".github/dependabot.yml cannot be read: PyYAML is not installed "
+                                    "(tools/requirements-quality-ci.txt)"])
+
+    def test_dependabot_duplicate_key_and_missing_updates(self) -> None:
+        self.assertIn("is not valid YAML", check_issues.dependabot_findings(
+            "updates:\n  - labels: [ci]\n    labels: [P3]\n", {"ci", "P3"}, "triage-person")[0])
+        self.assertEqual(check_issues.dependabot_findings("version: 2\n", {"P3"}, "triage-person"),
+                         [".github/dependabot.yml has no updates list"])
 
     def test_flow_list(self) -> None:
         text = 'name: x\nlabels: ["bug", "P2"]\nassignees: [triage-person]\n'
