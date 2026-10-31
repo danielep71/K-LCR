@@ -12,12 +12,18 @@ TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".toml", ".txt"
                  ".bas", ".cls", ".frm"}
 TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore"}
 EXCLUDED = {"LICENSE"}
+# Byte-for-byte copies of regulatory sources (.gitattributes); only the README
+# beside them is ordinary documentation.
+SOURCE_COPIES = "docs/methodology/sources/"
+SOURCE_README = SOURCE_COPIES + "README.md"
 
 
 def validate(path: str, content: bytes) -> list[str]:
     """Return violations without depending on the checkout's line-ending conversion."""
     if path in EXCLUDED or (Path(path).suffix.lower() not in TEXT_SUFFIXES
                             and Path(path).name not in TEXT_NAMES):
+        return []
+    if path.startswith(SOURCE_COPIES) and path != SOURCE_README:
         return []
     errors: list[str] = []
     if not content:
@@ -55,6 +61,8 @@ def self_test() -> list[str]:
         ("tools/example.py", b"print(1)", True),
         (".github/workflows/ci.yml", b"name: CI\r\n", True),
         ("tools/example.py", b"\xff\n", True),
+        ("docs/methodology/sources/EBA_QA.md", b"Copy \r\nno final newline", False),
+        ("docs/methodology/sources/README.md", b"# Sources \n", True),
     ]
     return [f"fixture {index}: unexpected outcome" for index, (path, data, bad)
             in enumerate(cases, 1) if bool(validate(path, data)) != bad]

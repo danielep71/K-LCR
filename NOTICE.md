@@ -31,7 +31,7 @@ provenance record rather than an assertion of byte-for-byte identity.
 
 | K-LCR paths | Source and relationship | Local adaptation |
 | --- | --- | --- |
-| `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no regulatory-copy or workbook-template exception, Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
+| `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no workbook-template exception, the byte-for-byte rule for regulatory source copies taken from `dfed6bc` (#97), Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
 | `.github/labels.json` | K-SFTs schema-2 catalogue at `dfed6bc`, adapted under #93 | Single `labels` list, no overlays; the separate selection policy file is removed. |
 | `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at `dfed6bc`; same blobs (#93) | Used with the K-LCR catalogue and repository variables. |
 | `.github/PULL_REQUEST_TEMPLATE.md` | K-SFTs `.github/PULL_REQUEST_TEMPLATE.md` at `dfed6bc`, adapted under #95 | release/0.1.0 base, `python tools/check.py --ci`, review record matching this governance; no changelog step and no tool vendor named. |
