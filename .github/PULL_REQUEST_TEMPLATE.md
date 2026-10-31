@@ -53,7 +53,7 @@ review. -->
 ## ☑️ Checklist
 
 - [ ] The base follows docs/GOVERNANCE.md: release/0.1.0 for tasks; main only for an approved integration.
-- [ ] Each linked issue has the assignee, exactly one priority label and a milestone.
+- [ ] Each linked issue has the assignee, exactly one priority label and a milestone; this PR has no milestone and carries the labels of its issue.
 - [ ] Scope is focused: no unrelated changes, local artifacts or generated output.
 - [ ] Documentation affected by the change is updated.
 - [ ] No tokens, credentials, real portfolio or client data.
