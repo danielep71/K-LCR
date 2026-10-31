@@ -7,6 +7,8 @@ import copy
 import io
 import os
 import re
+import shutil
+import tempfile
 import unittest
 from collections.abc import Callable
 from pathlib import Path
@@ -61,9 +63,25 @@ class WorkflowInvariantTests(unittest.TestCase):
         self.assertEqual(self.repo.findings(), [])
 
     def test_every_workflow_is_read(self) -> None:
-        names = {path.name for path in (ROOT / cw.WORKFLOWS).glob("*.yml")}
+        folder = ROOT / cw.WORKFLOWS
+        names = {path.name for pattern in ("*.yml", "*.yaml") for path in folder.glob(pattern)}
         self.assertEqual(set(self.repo.workflows), names)
         self.assertIn(cw.MILESTONES_FILE, names)
+
+    def test_yaml_extension_is_read(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in (cw.DEPENDABOT, cw.GOVERNANCE, cw.SETTINGS):
+                (root / name).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(ROOT / name, root / name)
+            (root / cw.WORKFLOWS).mkdir(parents=True)
+            (root / cw.WORKFLOWS / "extra.yaml").write_text(
+                "on: push\njobs:\n  a:\n    runs-on: ubuntu-24.04\n    steps:\n"
+                "      - uses: actions/checkout@v7\n", encoding="utf-8")
+            workflows, _, _, _ = cw.load(root, YAML)
+            self.assertIn("extra.yaml", workflows)
+            findings = cw.action_findings("extra.yaml", workflows["extra.yaml"])
+            self.assertTrue(any("not pinned" in finding for finding in findings), findings)
 
     # Actions and checkout
     def test_unpinned_action(self) -> None:
@@ -154,7 +172,12 @@ class WorkflowInvariantTests(unittest.TestCase):
     # labels-sync and pr-milestones
     def test_labels_sync_condition(self) -> None:
         self.repo.job("labels-sync.yml", "reconcile")["if"] = "github.event_name != 'pull_request'"
-        self.assertFinding("reconcile's condition no longer checks the default branch")
+        self.assertFinding("labels-sync.yml: reconcile's condition must be:")
+
+    def test_labels_sync_condition_weakened_with_or(self) -> None:
+        job = self.repo.job("labels-sync.yml", "reconcile")
+        job["if"] = job["if"].replace("&&", "||")
+        self.assertFinding("labels-sync.yml: reconcile's condition must be:")
 
     def test_milestones_events(self) -> None:
         self.repo.on("pr-milestones.yml")["pull_request"] = None

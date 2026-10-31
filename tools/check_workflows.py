@@ -27,6 +27,8 @@ SETTINGS = Path("docs/REPOSITORY_SETTINGS.md")
 
 SHA_PINNED = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[0-9a-f]{40}$")
 DEFAULT_BRANCH_REF = "github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"
+# The whole condition, so that `||` or an extra clause cannot weaken it.
+LABELS_IF = "github.event_name != 'pull_request' && " + DEFAULT_BRANCH_REF
 
 # The only write permissions a job may hold: (workflow file, job id) -> scopes.
 ALLOWED_WRITES: dict[tuple[str, str], frozenset[str]] = {
@@ -184,8 +186,8 @@ def labels_sync_findings(workflows: Mapping[str, Workflow]) -> list[str]:
     job = dict(jobs(workflows.get("labels-sync.yml", {}))).get("reconcile")
     if job is None:
         return ["labels-sync.yml: no reconcile job"]
-    if DEFAULT_BRANCH_REF not in squash(job.get("if", "")):
-        return ["labels-sync.yml: reconcile's condition no longer checks the default branch"]
+    if squash(job.get("if", "")) != LABELS_IF:
+        return [f"labels-sync.yml: reconcile's condition must be: {LABELS_IF}"]
     return []
 
 
@@ -263,10 +265,16 @@ def findings_for(workflows: Mapping[str, Workflow], dependabot: Any, governance:
     return findings
 
 
+def workflow_files(root: Path) -> list[Path]:
+    """Every workflow file; GitHub runs both the .yml and .yaml extensions."""
+    folder = root / WORKFLOWS
+    return sorted([*folder.glob("*.yml"), *folder.glob("*.yaml")])
+
+
 def load(root: Path, yaml: Any) -> tuple[dict[str, Workflow], Any, str, str]:
     loader = strict_loader(yaml)
     workflows = {path.name: yaml.load(path.read_text(encoding="utf-8"), Loader=loader)
-                 for path in sorted((root / WORKFLOWS).glob("*.yml"))}
+                 for path in workflow_files(root)}
     dependabot = yaml.load((root / DEPENDABOT).read_text(encoding="utf-8"), Loader=loader)
     return (workflows, dependabot, (root / GOVERNANCE).read_text(encoding="utf-8"),
             (root / SETTINGS).read_text(encoding="utf-8"))
