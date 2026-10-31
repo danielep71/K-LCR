@@ -32,8 +32,8 @@ into main, tagging, publication or a visibility change.
    within the authorized task.
 2. Open a PR explicitly targeting release/0.1.0 and fill in
    [the PR template](../.github/PULL_REQUEST_TEMPLATE.md). Link the issue,
-   describe the resulting behavior, validation and limitations. Assign the release
-   milestone and the labels of the linked issue.
+   describe the resulting behavior, validation and limitations. Add the labels
+   of the linked issue; milestones belong to issues only.
 3. Review the final diff and record the exact head SHA, reviewer identity,
    findings and their resolution in the PR description or review. Keep author
    attribution truthful; an agent review must not be described as owner approval.
@@ -125,8 +125,10 @@ manual dispatch. Findings require maintainer triage; the workflow never edits
 issues. Its mechanical P1 check requires bug; confirming a calculation defect
 remains a maintainer decision.
 
-PRs into the active release branch, bot PRs included, carry the release
-milestone and labels matching their tracking issue. Integration and sync PRs
+PRs into the active release branch, bot PRs included, carry labels matching
+their tracking issue but no milestone: milestones belong to issues only, and
+the Keep milestones issue-only workflow removes a milestone set on a pull
+request. Integration and sync PRs
 link the issues and PRs they carry. Close an issue only after its
 criteria are evidenced on the release branch; add a Resolution section with PR,
 commit, actual checks/results and limitations. A release-targeted PR does not
@@ -185,6 +187,12 @@ Labels do not assign priorities or milestones automatically.
   It reports differences without changing labels and retains evidence for 30 days.
 - Issue triage checks assignee, priority, milestone, catalogue membership
   and dependency status.
+- Keep milestones issue-only removes a milestone from any pull request. It
+  runs on pull request events through `pull_request_target`, which always
+  uses the default-branch copy of the workflow, daily at 03:17 UTC, and on
+  manual dispatch or a change of the workflow on the default branch. It never
+  checks out or runs pull request contents; only its job can write pull
+  requests.
 
 ## 🧪 Local validation
 

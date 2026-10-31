@@ -62,6 +62,36 @@ workbooks, regulatory document text, third-party code or imagery merely
 because they are accessible. A citation/link to an official regulatory source
 is preferable to redistributing its full text.
 
+## ⚖️ MIT-licensed material
+
+`.github/workflows/pr-milestones.yml` is copied unchanged (same Git blob
+`91f45e6`) from `.github/workflows/pr-milestones.yml` in
+[danielep71/K-FRTB-SA](https://github.com/danielep71/K-FRTB-SA) at revision
+`80495bebf4cf300660c2fdf386bee6bbad83eed6`, inspected on 2026-10-31 (#107).
+That file is distributed under the MIT License, reproduced here:
+
+> MIT License
+>
+> Copyright (c) 2026 Daniele Penza
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
 ## 🧰 External tools
 
 The workflows use `actions/checkout`, `actions/setup-python`,
