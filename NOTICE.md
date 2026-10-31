@@ -24,15 +24,16 @@ The initial repository setup included files adapted from
 `e6bae6df272083ba596c9eb866b14e6f9152bc15` was inspected on
 2026-10-28. That repository carries MPL-2.0. Git blob identity was verified for `.github/labels.json`,
 `.github/label-policy.json`, `.github/scripts/labels-sync.mjs` and
-`.github/scripts/labels-drift.mjs` (rechecked on 2026-10-28). The other
-imported files were adapted and require this provenance record rather than
-an assertion of byte-for-byte identity.
+`.github/scripts/labels-drift.mjs` (rechecked on 2026-10-28). The label files
+were later replaced by the schema-2 versions from revision
+`dfed6bc079cb83f751a0778684e2d436378398b7` (#93). The other imported files were adapted and require this
+provenance record rather than an assertion of byte-for-byte identity.
 
 | K-LCR paths | Source and relationship | Local adaptation |
 | --- | --- | --- |
 | `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no regulatory-copy or workbook-template exception, Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
-| `.github/labels.json`, `.github/label-policy.json` | K-SFTs files at the source revision; same blobs | Selected application profile with no domain overlay. |
-| `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at the source revision; same blobs | Used with K-LCR repository variables and policy. |
+| `.github/labels.json` | K-SFTs schema-2 catalogue at `dfed6bc`, adapted under #93 | Single `labels` list, no overlays; the separate selection policy file is removed. |
+| `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at `dfed6bc`; same blobs (#93) | Used with the K-LCR catalogue and repository variables. |
 | `.github/PULL_REQUEST_TEMPLATE.md` | K-SFTs `.github/PULL_REQUEST_TEMPLATE.md` at `dfed6bc`, adapted under #95 | release/0.1.0 base, `python tools/check.py --ci`, review record matching this governance; no changelog step and no tool vendor named. |
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee and links; Excel/VBA environment and area fields after the stack decision (#69). |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
