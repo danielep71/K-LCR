@@ -10,8 +10,8 @@
 #   - Office packages, UserForm binaries, archives, and media remain binary.
 #   - Binary payloads never receive text normalization or line-based merges.
 #   - GitHub Linguist reports exported modules as VBA.
-#   - Text/binary handling follows file type. Any future byte-preserved
-#     regulatory source requires a reviewed exact path and recorded hash.
+#   - Text/binary handling follows file type, except for copies of regulatory
+#     sources in docs/methodology/sources/, which are stored byte for byte.
 #   - VBA export encoding awaits an actual host round trip in issues #6/#14.
 #
 # PLACEMENT
@@ -234,7 +234,12 @@ VERSION         text eol=lf
 #------------------------------------------------------------------------------
 # REGULATORY SOURCE COPIES
 #------------------------------------------------------------------------------
-# No regulatory source copies are committed. Add exact paths only after review.
+# Convention: a published regulatory source kept in docs/methodology/sources/
+# is a byte-for-byte copy whose SHA-256 is recorded in the README beside it.
+# Never normalized, so the checked-out bytes keep the recorded hash; the README
+# itself is ordinary documentation. No copy is committed yet.
+docs/methodology/sources/**             -text
+docs/methodology/sources/README.md      text eol=lf
 
 
 #------------------------------------------------------------------------------

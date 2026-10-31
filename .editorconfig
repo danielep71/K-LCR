@@ -12,6 +12,8 @@
 #   - Trailing whitespace is removed everywhere, Markdown included: the
 #     tracked-text gate (tools/check_files.py) rejects it. Write an explicit
 #     Markdown line break as a trailing backslash or <br>.
+#   - Regulatory source copies in docs/methodology/sources/ are left byte for
+#     byte: no line-ending, final-newline, white-space or charset changes.
 #   - Future exported VBA source is authored with ASCII-only characters.
 #     This source rule does not prove a VBE encoding or Windows code page.
 #   - VBE import/export encoding and round-trip behavior need host evidence
@@ -174,5 +176,18 @@ trim_trailing_whitespace = true
 #------------------------------------------------------------------------------
 # REGULATORY SOURCE COPIES
 #------------------------------------------------------------------------------
-# No copies are committed to K-LCR. Add an exact-path byte-preservation rule
-# only if a source is approved and its hash and redistribution terms are known.
+# Convention: byte-for-byte copies with recorded hashes. Editors must not
+# change line endings, final newlines, white space or encoding. No copy is
+# committed yet.
+[docs/methodology/sources/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = false
+
+# The README beside them is ordinary documentation.
+[docs/methodology/sources/README.md]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true

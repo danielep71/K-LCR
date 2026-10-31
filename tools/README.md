@@ -41,7 +41,7 @@ versions; each gate also writes `<gate>.log`.
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
 | `issue-config` | The issue forms set the assignee and exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have a dependencies field; blank issues are disabled; `blocked` is the catalogue's only dependency status label (`check_issues.py --check-config`). |
 | `format-fixtures` | The tracked-text checker's own fixtures: valid samples pass, malformed ones fail (`check_files.py --self-test`). |
-| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` is excluded. |
+| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
 | `ruff` | Lint of `tools/` with the rules in `pyproject.toml`. |
 | `ruff-complexity-probe` | The complexity ceiling is active: a synthetic complexity-15 function passes and one at 16 is rejected. |
 | `mypy` | `mypy --strict` over `tools/`, tests included. |
