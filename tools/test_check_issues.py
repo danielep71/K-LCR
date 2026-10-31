@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import shutil
 import tempfile
 import unittest
 import unittest.mock
@@ -14,13 +15,13 @@ import check_issues
 from check_issues import Issue
 
 ROOT = Path(__file__).resolve().parents[1]
-REPOSITORY = "danielep71/K-LCR"
+REPOSITORY = "example-org/sample-project"
 BLOCKED_LABEL = check_issues.BLOCKED
 READY = "## Dependencies and blocking status\n\n**Ready to start**: none.\n"
 
 
 def issue(number: int, *labels: str, state: str = "open", body: str = READY,
-          assignees: tuple[str, ...] = ("danielep71",), milestone: str | None = "v0.1.0") -> Issue:
+          assignees: tuple[str, ...] = ("triage-person",), milestone: str | None = "v0.1.0") -> Issue:
     return Issue(number, state, labels or ("P3",), assignees, milestone, body)
 
 
@@ -33,7 +34,7 @@ def rules(issues: list[Issue], states: dict[int, str] | None = None,
           pulls: frozenset[int] = frozenset()) -> list[tuple[int, str]]:
     known = states if states is not None else {i.number: i.state for i in issues}
     return [(f.number, f.rule)
-            for f in check_issues.audit(issues, known, REPOSITORY, pulls=pulls)]
+            for f in check_issues.audit(issues, known, REPOSITORY, pulls=pulls, assignee="triage-person")]
 
 
 class MetadataTests(unittest.TestCase):
@@ -55,7 +56,7 @@ class MetadataTests(unittest.TestCase):
 
     def test_unknown_labels_are_reported_against_the_catalogue(self) -> None:
         findings = check_issues.audit([issue(1, "P3", "ready")], {1: "open"}, REPOSITORY,
-                                      catalogue={"P3"})
+                                      catalogue={"P3"}, assignee="triage-person")
         self.assertEqual([(f.number, f.rule) for f in findings], [(1, "catalogue")])
 
 
@@ -109,10 +110,92 @@ class ConfigTests(unittest.TestCase):
     def test_repository_configuration_passes(self) -> None:
         self.assertEqual(check_issues.config_findings(ROOT), [])
 
+    def test_unsupported_overlays_are_rejected_instead_of_ignored(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(ROOT / ".github/scripts", root / ".github/scripts")
+            manifest = json.loads((ROOT / ".github/labels.json").read_text())
+            manifest["overlays"] = {"selected": [{"name": "extra"}]}
+            (root / ".github/labels.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "root must contain exactly"):
+                check_issues.catalogue_labels(root)
+
+    def test_assignee_comes_from_configuration_not_repository_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            forms = root / ".github/ISSUE_TEMPLATE"
+            forms.mkdir(parents=True)
+            (forms / "bug.yml").write_text('assignees: [triage-person]\n')
+            self.assertEqual(check_issues.configured_assignee(root), "triage-person")
+            (forms / "bug.yml").write_text('assignees: []\n')
+            with self.assertRaises(ValueError):
+                check_issues.configured_assignee(root)
+
+    @staticmethod
+    def copy_configuration(root: Path) -> None:
+        """The files config_findings reads, copied from the repository."""
+        for folder in (".github/scripts", ".github/ISSUE_TEMPLATE"):
+            shutil.copytree(ROOT / folder, root / folder)
+        for name in (".github/labels.json", ".github/dependabot.yml", "docs/GOVERNANCE.md"):
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(ROOT / name, root / name)
+
+    def test_label_guide_explains_every_catalogue_label_once(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            guide = root / "docs/GOVERNANCE.md"
+            text = guide.read_text(encoding="utf-8")
+            row = next(line for line in text.splitlines() if line.startswith("| `wontfix` |"))
+            guide.write_text(text.replace(row + "\n", ""), encoding="utf-8")
+            self.assertIn("docs/GOVERNANCE.md must explain label 'wontfix' exactly once in the label tables "
+                          "of Issues, found 0", check_issues.config_findings(root))
+            guide.write_text(text.replace(row, row + "\n" + row), encoding="utf-8")
+            self.assertIn("docs/GOVERNANCE.md must explain label 'wontfix' exactly once in the label tables "
+                          "of Issues, found 2", check_issues.config_findings(root))
+            guide.write_text(text.replace(row, row + "\n| `stale` | Not a label. |"), encoding="utf-8")
+            self.assertIn("docs/GOVERNANCE.md explains label 'stale', which is not in the catalogue",
+                          check_issues.config_findings(root))
+
+    def test_documented_labels_reads_only_the_label_tables_of_issues(self) -> None:
+        text = ("## Branches\n\n| Label | Use |\n| --- | --- |\n| `main` | x |\n\n"
+                "## 🗂️ Issues\n\n| Priority | Use |\n| --- | --- |\n| `P1` | x |\n\nText `bug`.\n\n"
+                "| Other | Use |\n| --- | --- |\n| `ci` | x |\n\n| Label | Use |\n| --- | --- |\n| `bug` | x |\n\n"
+                "## Releases\n\n| Label | Use |\n| --- | --- |\n| `release` | x |\n")
+        self.assertEqual(check_issues.documented_labels(text), ["P1", "bug"])
+
+    def test_dependabot_labels_and_assignees_are_checked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            self.assertEqual(check_issues.config_findings(root), [])
+            config = root / ".github/dependabot.yml"
+            text = config.read_text(encoding="utf-8")
+            config.write_text(text.replace("      - ci\n", "      - no-such-label\n", 1), encoding="utf-8")
+            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
+                          check_issues.config_findings(root))
+            config.write_text(text.replace("      - danielep71\n", "      - someone-else\n", 1), encoding="utf-8")
+            self.assertIn(".github/dependabot.yml assigns 'someone-else', not 'danielep71'",
+                          check_issues.config_findings(root))
+            config.write_text(text.replace("    labels:\n      - ci\n      - P3\n",
+                                           "    labels: [no-such-label] # custom labels\n", 1), encoding="utf-8")
+            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
+                          check_issues.config_findings(root))
+
+    def test_block_lists(self) -> None:
+        text = ("updates:\n  - x: 1\n    labels:\n      - ci   # a comment\n\n      - \"P3\"\n"
+                "    assignees: [triage-person]\n    other: y\n  - x: 2\n    labels:\n    - tests\n")
+        self.assertEqual(check_issues.block_lists(text, "labels"), [["ci", "P3"], ["tests"]])
+        self.assertEqual(check_issues.block_lists(text, "assignees"), [["triage-person"]])
+        self.assertEqual(check_issues.block_lists(text, "missing"), [])
+        commented = "labels: [no-such-label, P3]  # custom labels\nassignees: [someone-else] # owner\n"
+        self.assertEqual(check_issues.block_lists(commented, "labels"), [["no-such-label", "P3"]])
+        self.assertEqual(check_issues.block_lists(commented, "assignees"), [["someone-else"]])
+
     def test_flow_list(self) -> None:
-        text = 'name: x\nlabels: ["bug", "P2"]\nassignees: [danielep71]\n'
+        text = 'name: x\nlabels: ["bug", "P2"]\nassignees: [triage-person]\n'
         self.assertEqual(check_issues.flow_list(text, "labels"), ["bug", "P2"])
-        self.assertEqual(check_issues.flow_list(text, "assignees"), ["danielep71"])
+        self.assertEqual(check_issues.flow_list(text, "assignees"), ["triage-person"])
         self.assertEqual(check_issues.flow_list(text, "title"), [])
 
 
@@ -120,7 +203,7 @@ class MainTests(unittest.TestCase):
     def test_input_mode_reports_and_exits_nonzero_on_findings(self) -> None:
         items = [
             {"number": 1, "state": "open", "labels": [{"name": "P3"}],
-             "assignees": [{"login": "danielep71"}], "milestone": None,
+             "assignees": [{"login": "triage-person"}], "milestone": None,
              "body": READY + "Delivered in #2, a pull request.\n"},
             {"number": 2, "state": "open", "labels": [], "assignees": [],
              "milestone": None, "body": READY, "pull_request": {}},
@@ -129,14 +212,21 @@ class MainTests(unittest.TestCase):
             source = Path(directory) / "issues.json"
             source.write_text(json.dumps(items), encoding="utf-8")
             output = Path(directory) / "report.json"
-            with contextlib.redirect_stdout(io.StringIO()) as stdout:
+            with contextlib.redirect_stdout(io.StringIO()) as stdout, \
+                    unittest.mock.patch.object(check_issues, "configured_assignee",
+                                               return_value="triage-person"):
                 code = check_issues.main(["--root", str(ROOT), "--input", str(source),
-                                          "--output", str(output)])
+                                          "--output", str(output), "--repo-name", REPOSITORY])
             self.assertEqual(code, 1)
             report = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(report["status"], "fail")
             self.assertEqual([f["rule"] for f in report["findings"]], ["milestone"])
             self.assertIn("open issues audited: 1", stdout.getvalue())
+
+    def test_offline_mode_requires_explicit_repository(self) -> None:
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            check_issues.parse_args(["--input", "issues.json"])
+        self.assertEqual(error.exception.code, 2)
 
     def test_live_mode_requires_a_token(self) -> None:
         with contextlib.redirect_stderr(io.StringIO()), \
