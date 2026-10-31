@@ -38,7 +38,8 @@ provenance record rather than an assertion of byte-for-byte identity.
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee and links; Excel/VBA environment and area fields after the stack decision (#69). |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
 | `tools/check.py`, `tools/test_check.py`, `.github/workflows/repository-integrity.yml` | K-SFTs runner, tests and workflow structure at the source revision, adapted under #7 | K-LCR gates for current tooling, text fixtures, workflow lint and candidate report; no SFT calculation or Excel evidence. |
-| `pyproject.toml`, `tools/requirements-quality-ci.txt` | K-SFTs Ruff/mypy configuration and hash-locked pins at the source revision, adapted under #52 | Python 3.13 target matching the CI runtime; identical package pins and hashes; K-LCR installation reference. |
+| `tools/check_workflows.py`, `tools/test_check_workflows.py` | K-SFTs files at `dfed6bc`, adapted under #109 | Write allowlist limited to the label reconcile and PR milestone jobs. |
+| `pyproject.toml`, `tools/requirements-quality-ci.txt` | K-SFTs Ruff/mypy configuration and hash-locked pins at the source revision, adapted under #52; PyYAML pin added under #109 | Python 3.13 target matching the CI runtime; identical package pins and hashes; K-LCR installation reference. |
 | `tools/README.md` | K-SFTs `tools/README.md` structure at the source revision, adapted under #68 | K-LCR gates, tracked-text checker, tool versions and dependency-update procedure; no VBA, Excel-evidence or traffic tooling described before it exists. |
 | `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
@@ -100,7 +101,7 @@ are dependencies fetched by GitHub Actions, not vendored files in K-LCR. The
 Repository integrity workflow downloads the
 [actionlint](https://github.com/rhysd/actionlint) 1.7.12 release binary and
 verifies it against a pinned SHA-256 before use; it is not redistributed.
-It also installs Ruff, mypy and their dependencies from PyPI at the versions
+It also installs Ruff, mypy, PyYAML and their dependencies from PyPI at the versions
 and wheel hashes pinned in `tools/requirements-quality-ci.txt`; they are not
 vendored. Python and Node runtimes used for repository checks are not bundled. Verify
 upstream license/version metadata when adding or changing a dependency;
