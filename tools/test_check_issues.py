@@ -197,6 +197,26 @@ class ConfigTests(unittest.TestCase):
                               encoding="utf-8")
             self.assertIn(expected, check_issues.config_findings(root))
 
+    def test_dependabot_entries_are_counted_whatever_their_key_order(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            config = root / ".github/dependabot.yml"
+            text = config.read_text(encoding="utf-8")
+            reordered = text.replace("  - package-ecosystem: github-actions\n    directory: /\n",
+                                     "  - directory: /\n    package-ecosystem: github-actions\n", 1)
+            self.assertNotEqual(reordered, text)
+            config.write_text(reordered, encoding="utf-8")
+            self.assertEqual(check_issues.config_findings(root), [])
+
+    def test_update_entries(self) -> None:
+        text = ("version: 2\nupdates:\n  - directory: /\n    package-ecosystem: pip\n    labels:\n"
+                "      - ci\n  - package-ecosystem: npm\n- not: nested\nregistries: {}\n")
+        entries = check_issues.update_entries(text)
+        self.assertEqual(len(entries), 2)
+        self.assertIn("labels:\n      - ci", entries[0])
+        self.assertEqual(check_issues.update_entries("updates:\n- a: 1\n- b: 2\n"), ["- a: 1", "- b: 2"])
+
     def test_block_lists(self) -> None:
         text = ("updates:\n  - x: 1\n    labels:\n      - ci   # a comment\n\n      - \"P3\"\n"
                 "    assignees: [triage-person]\n    other: y\n  - x: 2\n    labels:\n    - tests\n")

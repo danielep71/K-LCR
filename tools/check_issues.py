@@ -277,14 +277,40 @@ def config_findings(root: Path) -> list[str]:
         problems += [f"{DEPENDABOT.as_posix()} assigns {person!r}, not {assignee!r}"
                      for found in block_lists(text, "assignees") for person in found if person != assignee]
         # Every update entry must assign the person, not merely avoid others.
-        updates = len(re.findall(r"^\s*-\s+package-ecosystem:", text, re.MULTILINE))
-        assigned = sum(1 for found in block_lists(text, "assignees") if found == [assignee])
-        if assigned != updates:
-            problems.append(f"{DEPENDABOT.as_posix()} must assign {assignee!r} in each of its {updates} "
-                            f"update entries, found {assigned}")
+        entries = update_entries(text)
+        assigned = sum(1 for entry in entries if block_lists(entry, "assignees") == [[assignee]])
+        if assigned != len(entries):
+            problems.append(f"{DEPENDABOT.as_posix()} must assign {assignee!r} in each of its "
+                            f"{len(entries)} update entries, found {assigned}")
     else:
         problems.append(f"{DEPENDABOT.as_posix()} is missing")
     return problems
+
+
+def update_entries(text: str) -> list[str]:
+    """The text of each item of the top-level ``updates:`` list, read line by line.
+
+    An item starts at a ``- `` line at the indentation of the list's first
+    item, whatever key it begins with, and runs until the next such line or
+    the next top-level key.
+    """
+    entries: list[list[str]] = []
+    inside, indent = False, -1
+    for line in text.splitlines():
+        if re.match(r"^updates:\s*(?:#.*)?$", line):
+            inside = True
+            continue
+        if not inside:
+            continue
+        if line.strip() and not line[0].isspace() and not line.startswith(("-", "#")):
+            break
+        item = re.match(r"^(\s*)-\s", line)
+        if item and (indent < 0 or len(item.group(1)) == indent):
+            indent = len(item.group(1))
+            entries.append([line])
+        elif entries:
+            entries[-1].append(line)
+    return ["\n".join(entry) for entry in entries]
 
 
 def flow_list(text: str, key: str) -> list[str]:
