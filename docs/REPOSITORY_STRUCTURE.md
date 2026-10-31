@@ -105,7 +105,7 @@ are not claims that those components exist today.
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
-| .github/ | Labels, issue forms, dependency configuration and workflows | Present |
+| .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
 | src/api/ | Public VBA entry points, validation orchestration and contracts | Planned |
