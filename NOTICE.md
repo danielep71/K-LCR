@@ -32,7 +32,7 @@ provenance record rather than an assertion of byte-for-byte identity.
 | K-LCR paths | Source and relationship | Local adaptation |
 | --- | --- | --- |
 | `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no regulatory-copy or workbook-template exception, Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
-| `.github/labels.json` | K-SFTs schema-2 catalogue at `dfed6bc`, adapted under #93 | Single `labels` list, no overlays; the separate selection policy file is removed. |
+| `.github/labels.json` | K-SFTs schema-2 catalogue at `dfed6bc`; same blob since #101 (#93) | Single `labels` list, no overlays, first-person descriptions; the separate selection policy file is removed. |
 | `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at `dfed6bc`; same blobs (#93) | Used with the K-LCR catalogue and repository variables. |
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee and links; Excel/VBA environment and area fields after the stack decision (#69). |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |

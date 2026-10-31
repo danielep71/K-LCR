@@ -111,7 +111,7 @@ Forms default bugs to P2 and enhancements/documentation to P3.
 
 - P1: confirmed calculation bug producing wrong results for valid inputs; requires bug.
 - P2: material correctness, robustness or maintainability defect.
-- P3: non-blocking quality, testing, documentation or setup work.
+- P3: non-blocking quality, testing, documentation, setup or technical-debt work.
 
 Every issue includes a Dependencies and blocking status section. Write None
 if ready, name prerequisite issues with #number, or use a line beginning
@@ -150,7 +150,7 @@ Type labels say what kind of work an issue or PR is. The forms set `bug`,
 | --- | --- |
 | `bug` | Confirmed defect in behavior, correctness, error handling, or a documented contract |
 | `enhancement` | New capability or meaningful improvement to supported behavior |
-| `documentation` | User-facing or maintainer-facing documentation |
+| `documentation` | Documentation for users or for my repository maintenance |
 | `tests` | Regression coverage, test harnesses, fixtures, or manual validation |
 | `refactor` | Internal restructuring intended to preserve supported behavior |
 | `behavior-change` | Intentional externally observable behavior change |
@@ -164,12 +164,12 @@ Status and triage labels:
 | Label | Use when |
 | --- | --- |
 | `blocked` | A named open prerequisite or an `External condition:` line prevents progress; remove it when none remains |
-| `question` | Further information or a maintainer decision is required |
-| `help wanted` | The maintainer welcomes external investigation, implementation, validation, or review |
+| `question` | I need further information or need to make a decision |
+| `help wanted` | I welcome external investigation, implementation, validation, or review |
 | `good first issue` | Well-scoped task suitable for a first contribution |
 | `duplicate` | An existing issue or pull request already covers this work |
 | `invalid` | The report is incomplete, unsupported, or not actionable as submitted |
-| `wontfix` | The maintainer has decided not to implement or continue this work |
+| `wontfix` | I have decided not to implement or continue this work |
 
 Labels do not assign priorities or milestones automatically.
 
