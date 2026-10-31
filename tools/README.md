@@ -47,6 +47,7 @@ versions; each gate also writes `<gate>.log`.
 | `mypy` | `mypy --strict` over `tools/`, tests included. |
 | `mypy-strict-probe` | Strict mode is active: an annotated function passes and the same function without annotations is rejected. |
 | `actionlint` | Syntax, expressions and shell scripts of every workflow. |
+| `workflow-invariants` | The project rules for the workflows and Dependabot (`check_workflows.py`, PyYAML): every `uses:` pinned to a 40-character SHA; checkouts with `persist-credentials: false`; workflow-level `permissions` without write access; `timeout-minutes` on every job; write permissions only for `labels-sync.yml`/`reconcile` (issues) and `pr-milestones.yml`/`reconcile` (pull-requests); the `Repository integrity` job matches the required check in `docs/GOVERNANCE.md` and `docs/REPOSITORY_SETTINGS.md`, with no `if`, `strategy` or extra trigger filter; the label reconcile job keeps its default-branch condition; `pr-milestones.yml` keeps its events, permissions, condition and single inline script; Dependabot covers GitHub Actions (`/`) and pip (`/tools`) once each, sets no milestone and exactly `P3`. Without PyYAML it fails on GitHub Actions and is NOT RUN locally. `test_check_workflows.py` mutates each rule and runs the milestone script against a fake API. |
 
 The label gates run on every pull request here, although the label workflows
 run on a pull request only when it changes label files. Live label
@@ -78,7 +79,7 @@ end dates are not validated yet (#8).
 | --- | --- | --- |
 | Python | 3.13 | `actions/setup-python` |
 | Node.js | 22 | `actions/setup-node` |
-| Ruff, mypy | 0.16.6, 2.3.1 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
+| Ruff, mypy, PyYAML | 0.16.6, 2.3.1, 6.0.3 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
 | actionlint | 1.7.12 | Release archive verified by SHA-256 in the workflow |
 
 Install the same quality tools locally, on CPython 3.13 and Linux x86_64:
@@ -88,7 +89,7 @@ python -m pip install --only-binary=:all: --require-hashes -r tools/requirements
 ```
 
 On another platform, install the same versions without the lock
-(`pip install ruff==0.16.6 mypy==2.3.1`); CI remains the reference run.
+(`pip install ruff==0.16.6 mypy==2.3.1 pyyaml==6.0.3`); CI remains the reference run.
 actionlint is available from its
 [1.7.12 release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12).
 
@@ -114,7 +115,7 @@ reports on every pull request and is the required check of both rulesets.
 ## 📦 Dependency updates
 
 `.github/dependabot.yml` proposes weekly updates to the pinned GitHub Actions
-and, separately, to the hash-locked Ruff/mypy requirements
+and, separately, to the hash-locked Ruff/mypy/PyYAML requirements
 (`tools/requirements-quality-ci.txt`, releases at least 14 days old). Each
 ecosystem's updates are grouped into one pull request against the active
 release branch, with the `ci` and `P3` labels and danielep71 as assignee. Dependabot reads this file

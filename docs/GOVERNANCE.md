@@ -220,10 +220,16 @@ evidence, whenever a setting is configured, verified or changed.
 
 Working rules that depend on those settings:
 
-- The Repository integrity check runs on every pull request and push to main
-  and release/** and is the required check of both PR rulesets. It produces
-  candidate-bound reports; it does not compile VBA, execute Excel or validate
-  LCR calculations ([tools/README.md](../tools/README.md)).
+Applies to `main` and every `release/**` branch:
+
+| Rule | Policy |
+| --- | --- |
+| Required status check | `Repository integrity`, the job of `.github/workflows/repository-integrity.yml`. The job has no `if` or `strategy`, and its pull request and push triggers filter only these branches, so it reports on every change. |
+
+- The Repository integrity check produces candidate-bound reports; it does
+  not compile VBA, execute Excel or validate LCR calculations
+  ([tools/README.md](../tools/README.md)). The workflow-invariants gate
+  fails if the job, its triggers or this row diverge from the rulesets.
 - Dependabot reads `.github/dependabot.yml` from the default branch. Version
   updates target the active release branch; update `target-branch` when a new
   release branch is opened.

@@ -34,7 +34,7 @@ python tools/check.py --ci
 ```
 
 The CI command requires Python 3.13, Node.js 22, actionlint 1.7.12 and the
-hash-locked Ruff and mypy versions in `tools/requirements-quality-ci.txt`,
+hash-locked Ruff, mypy and PyYAML versions in `tools/requirements-quality-ci.txt`,
 as configured in [the workflow](.github/workflows/repository-integrity.yml).
 Install the Python quality tools into a virtual environment with:
 
