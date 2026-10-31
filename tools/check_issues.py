@@ -276,6 +276,12 @@ def config_findings(root: Path) -> list[str]:
                      for found in block_lists(text, "labels") for label in found if label not in labels]
         problems += [f"{DEPENDABOT.as_posix()} assigns {person!r}, not {assignee!r}"
                      for found in block_lists(text, "assignees") for person in found if person != assignee]
+        # Every update entry must assign the person, not merely avoid others.
+        updates = len(re.findall(r"^\s*-\s+package-ecosystem:", text, re.MULTILINE))
+        assigned = sum(1 for found in block_lists(text, "assignees") if found == [assignee])
+        if assigned != updates:
+            problems.append(f"{DEPENDABOT.as_posix()} must assign {assignee!r} in each of its {updates} "
+                            f"update entries, found {assigned}")
     else:
         problems.append(f"{DEPENDABOT.as_posix()} is missing")
     return problems

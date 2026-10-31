@@ -182,6 +182,21 @@ class ConfigTests(unittest.TestCase):
             self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
                           check_issues.config_findings(root))
 
+    def test_dependabot_must_assign_the_person_in_every_update(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            config = root / ".github/dependabot.yml"
+            text = config.read_text(encoding="utf-8")
+            updates = text.count("package-ecosystem:")
+            expected = (f".github/dependabot.yml must assign 'danielep71' in each of its {updates} "
+                        f"update entries, found {updates - 1}")
+            config.write_text(text.replace("    assignees:\n      - danielep71\n", "", 1), encoding="utf-8")
+            self.assertIn(expected, check_issues.config_findings(root))
+            config.write_text(text.replace("    assignees:\n      - danielep71\n", "    assignees: []\n", 1),
+                              encoding="utf-8")
+            self.assertIn(expected, check_issues.config_findings(root))
+
     def test_block_lists(self) -> None:
         text = ("updates:\n  - x: 1\n    labels:\n      - ci   # a comment\n\n      - \"P3\"\n"
                 "    assignees: [triage-person]\n    other: y\n  - x: 2\n    labels:\n    - tests\n")
