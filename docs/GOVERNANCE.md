@@ -110,9 +110,11 @@ of its milestone. End-date validation, including this comparison, is planned
 in issue #8; it is not yet automated.
 Forms default bugs to P2 and enhancements/documentation to P3.
 
-- P1: confirmed calculation bug producing wrong results for valid inputs; requires bug.
-- P2: material correctness, robustness or maintainability defect.
-- P3: non-blocking quality, testing, documentation, setup or technical-debt work.
+| Priority | Use |
+| --- | --- |
+| `P1` | Confirmed calculation bug producing wrong results for valid inputs; requires `bug` |
+| `P2` | Material correctness, robustness or maintainability defect |
+| `P3` | Non-blocking quality, testing, documentation, setup or technical-debt work |
 
 Every issue includes a Dependencies and blocking status section. Write None
 if ready, name prerequisite issues with #number, or use a line beginning
@@ -137,9 +139,9 @@ explicitly. Issue completion on release does not imply integration into main.
 After closure, review dependent issues and remove blocked only when all named
 prerequisites are resolved.
 
-## 🏷️ Labels
+### 🏷️ Labels
 
-### When to use each label
+#### When to use each label
 
 Every issue carries exactly one priority label, defined under
 [Issues](#-issues): `P1` (confirmed calculation bug; requires `bug`), `P2` or
@@ -149,7 +151,7 @@ documentation; Dependabot update PRs get `P3`. Triage confirms or changes it.
 Type labels say what kind of work an issue or PR is. The forms set `bug`,
 `enhancement` or `documentation`; add others where they apply.
 
-| Label | Use for |
+| Label | Use |
 | --- | --- |
 | `bug` | Confirmed defect in behavior, correctness, error handling, or a documented contract |
 | `enhancement` | New capability or meaningful improvement to supported behavior |
@@ -164,7 +166,7 @@ Type labels say what kind of work an issue or PR is. The forms set `bug`,
 
 Status and triage labels:
 
-| Label | Use when |
+| Label | Use |
 | --- | --- |
 | `blocked` | A named open prerequisite or an `External condition:` line prevents progress; remove it when none remains |
 | `question` | I need further information or need to make a decision |
@@ -176,7 +178,7 @@ Status and triage labels:
 
 Labels do not assign priorities or milestones automatically.
 
-### Label workflows
+#### Label workflows
 
 - Sync issue labels validates and self-tests changes on pull requests into
   main and release/**. Relevant pushes to main, or manual dispatch on the
