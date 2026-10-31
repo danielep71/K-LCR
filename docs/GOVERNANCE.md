@@ -30,8 +30,9 @@ into main, tagging, publication or a visibility change.
 
 1. Read the issue, branch from the current release/0.1.0 head and keep the change
    within the authorized task.
-2. Open a PR explicitly targeting release/0.1.0. Link the issue, describe the
-   resulting behavior, validation and limitations. Assign the release
+2. Open a PR explicitly targeting release/0.1.0 and fill in
+   [the PR template](../.github/PULL_REQUEST_TEMPLATE.md). Link the issue,
+   describe the resulting behavior, validation and limitations. Assign the release
    milestone and the labels of the linked issue.
 3. Review the final diff and record the exact head SHA, reviewer identity,
    findings and their resolution in the PR description or review. Keep author
