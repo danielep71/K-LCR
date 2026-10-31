@@ -209,6 +209,25 @@ class ConfigTests(unittest.TestCase):
             config.write_text(reordered, encoding="utf-8")
             self.assertEqual(check_issues.config_findings(root), [])
 
+    def test_dependabot_keys_that_open_an_update_entry_are_read(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            config = root / ".github/dependabot.yml"
+            text = config.read_text(encoding="utf-8")
+            entry = "  - package-ecosystem: github-actions\n"
+            config.write_text(text.replace(entry, "  - assignees: [danielep71]\n    package-ecosystem: github-actions\n", 1)
+                              .replace("    assignees:\n      - danielep71\n", "", 1), encoding="utf-8")
+            self.assertEqual(check_issues.config_findings(root), [])
+            config.write_text(text.replace(entry, "  - labels: [no-such-label]\n    package-ecosystem: github-actions\n", 1)
+                              .replace("    labels:\n      - ci\n      - P3\n", "", 1), encoding="utf-8")
+            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
+                          check_issues.config_findings(root))
+            config.write_text(text.replace(entry, "  - labels:\n      - no-such-label\n    package-ecosystem: github-actions\n", 1)
+                              .replace("    labels:\n      - ci\n      - P3\n", "", 1), encoding="utf-8")
+            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
+                          check_issues.config_findings(root))
+
     def test_update_entries(self) -> None:
         text = ("version: 2\nupdates:\n  - directory: /\n    package-ecosystem: pip\n    labels:\n"
                 "      - ci\n  - package-ecosystem: npm\n- not: nested\nregistries: {}\n")

@@ -203,18 +203,19 @@ def block_lists(text: str, key: str) -> list[list[str]]:
     """Every list under ``key:`` in a simple YAML file, read line by line.
 
     A list is either written inline (``key: [a, b]``) or as the ``- item``
-    lines that follow ``key:``, indented at least as far as the key. Trailing
-    comments, comment lines and blank lines are skipped; quotes around items
-    are removed.
+    lines that follow ``key:``, indented at least as far as the key. The key
+    may open a sequence item (``- key: ...``), as the first key of a mapping
+    in a list. Trailing comments, comment lines and blank lines are skipped;
+    quotes around items are removed.
     """
     lists = []
     lines = text.splitlines()
     for index, line in enumerate(lines):
-        inline = re.match(rf"^\s*{re.escape(key)}:\s*\[(.*?)\]\s*(?:#.*)?$", line)
+        inline = re.match(rf"^\s*(?:-\s+)?{re.escape(key)}:\s*\[(.*?)\]\s*(?:#.*)?$", line)
         if inline:
             lists.append([item.strip().strip("\"'") for item in inline.group(1).split(",") if item.strip()])
             continue
-        start = re.match(rf"^(\s*){re.escape(key)}:\s*(?:#.*)?$", line)
+        start = re.match(rf"^(\s*(?:-\s+)?){re.escape(key)}:\s*(?:#.*)?$", line)
         if not start:
             continue
         indent, items = len(start.group(1)), []
