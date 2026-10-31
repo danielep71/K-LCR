@@ -104,6 +104,7 @@ are not claims that those components exist today.
 | Path | Purpose | Status |
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
+| AGENTS.md | Editorial and assistant rules | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
 | .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
