@@ -61,7 +61,10 @@ open issues with read-only issue and pull-request access. Label drift reads
 live labels; label sync writes labels only on trusted `main` events and is
 validation-only for pull requests. Actions are pinned to full commit SHAs,
 checkouts do not persist credentials, and the Python quality tools are
-installed from hash-locked requirements. CodeQL code scanning runs as
+installed from hash-locked requirements. Keep milestones issue-only runs on
+`pull_request_target` with `pull-requests: write` in its single job and no
+other permission; it executes only its inline script from the default branch
+and never checks out pull request contents. CodeQL code scanning runs as
 GitHub's default setup, with no workflow file in the repository. Dependabot
 security updates open pull requests against `main`, reviewed like any other
 change. No traffic credential or workbook execution workflow is configured.
