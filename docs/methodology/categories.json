@@ -1,0 +1,9 @@
+{
+  "schema": "klcr-categories",
+  "categories_version": 0,
+  "description": "Placeholder while the category lists of #10 are prepared: no category is defined yet, so every category is rejected.",
+  "profiles": {
+    "EU": {"assets": [], "outflows": [], "inflows": [], "excluded": []},
+    "BASEL": {"assets": [], "outflows": [], "inflows": [], "excluded": []}
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "description": "Expected findings, as [code, file, record, column], and reconciliation of each fixture run in tests/contract. No case is defined yet.",
+  "cases": {}
+}
