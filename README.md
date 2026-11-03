@@ -102,7 +102,7 @@ future calculations require source editions, reporting dates and parameter
 versions. All examples and test data must be synthetic.
 
 All development first targets `release/0.1.0`. Integration into `main`
-requires explicit owner authorization; see [governance](docs/GOVERNANCE.md).
+requires my explicit authorization; see [governance](docs/GOVERNANCE.md).
 
 ## 👤 Author
 

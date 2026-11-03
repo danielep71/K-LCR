@@ -10,7 +10,7 @@ for learning, research and independent validation. Intended users are risk
 analysts, validators, researchers and educators working with synthetic examples
 and independently sourced expected results.
 
-The owner selected Excel/VBA, separate EU and Basel profiles, and reference and
+I selected Excel/VBA, separate EU and Basel profiles, and reference and
 validation use on 2026-10-28 in issue #3. The repository currently contains setup
 tooling and documentation: it has no LCR calculation engine or validated workbook.
 This document defines the intended design, not functionality already delivered.
@@ -139,5 +139,5 @@ A neutral test scaffold or template proves infrastructure only.
 
 The [decision log and follow-on backlog](DECISIONS.md) records accepted direction,
 remaining decisions and the work to schedule after setup. Work moves through
-release/0.1.0 first; integration into main follows explicit owner authorization
+release/0.1.0 first; integration into main follows my explicit authorization
 under [governance](GOVERNANCE.md).

@@ -38,9 +38,9 @@ All rows below were verified on that date unless stated otherwise.
 | Delete merged head branches | Enabled | Enabled | Release and traffic branches remain protected by rulesets. Branches of closed, unmerged pull requests are not deleted. |
 | Update-branch suggestions | Enabled | Enabled | Governance prohibits using this on protected integration branches. |
 | Web commit sign-off | No change proposed | Not required | Separate from reviews and signed-commit requirements. |
-| Pages / homepage | Enabled / project URL | Pages enabled; https://danielep71.github.io/K-LCR/ | Owner-reported source: main, `/docs`, enabled 2026-10-29 (#63). Run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
+| Pages / homepage | Enabled / project URL | Pages enabled; https://danielep71.github.io/K-LCR/ | Source as I set it: main, `/docs`, enabled 2026-10-29 (#63). Run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
 | Topics | Relevant discovery terms | basel, basel-iii | Topic count is not a security measure. |
-| License | MPL-2.0 | MPL-2.0 detected | Selected by the owner on 2026-10-28 ([NOTICE](../NOTICE.md)). |
+| License | MPL-2.0 | MPL-2.0 detected | Selected by me on 2026-10-28 ([NOTICE](../NOTICE.md)). |
 
 ## Branch and tag rulesets
 
@@ -79,7 +79,7 @@ UI-only rows are historical or unverified.
 | Dependency graph | Enabled | Historical: enabled, 2026-10-28 alignment record | Reread in the Settings UI. |
 | Automatic dependency submission | Retain current choice | Historical: disabled, 2026-10-28 alignment record | Reassess when build ecosystems change. |
 | Dependabot alerts | Enabled | Historical: enabled, 2026-10-28 alignment record; the alerts API returns 403 without admin access | Alert inventory was not audited here. |
-| Dependabot security updates | Enabled | Verified enabled, API; enabled by the owner on 2026-10-29 (#85) | Pull requests target main; see [Governance](GOVERNANCE.md). No security-update PR has been opened yet. |
+| Dependabot security updates | Enabled | Verified enabled, API; enabled by me on 2026-10-29 (#85) | Pull requests target main; see [Governance](GOVERNANCE.md). No security-update PR has been opened yet. |
 | Grouped security updates | Retain current choice | Historical: disabled, 2026-10-28 alignment record | Does not disable individual security updates. |
 | Malware alerts | No change proposed | Unverified | Read in the Settings UI. |
 | Secret scanning | Enabled | Verified enabled, API | No secret-injection test performed. |
@@ -105,7 +105,7 @@ evidence of that workflow only, not of the repository-wide defaults.
 | Allowed Actions and reusable workflows | Explicit reviewed policy | Unverified | Record allowed publishers/patterns before declaring a standard. |
 | External-contributor workflow approval | Explicit reviewed policy | Unverified | Record the selected contributor category. |
 | Repository log/artifact retention | Explicit documented period | Historical: 90 days, 2026-10-28 | The integrity workflow uploads its report with 30-day retention ([tools/README.md](../tools/README.md)). |
-| Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, closed on 2026-10-29 to update K-LCR and K-SFTs together. |
+| Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, which I closed on 2026-10-29 to update the tool pins by hand. |
 | Integrity / labels / issue triage / PR milestones | Preserve installed gates and read-only audits | Repository integrity, label sync and drift, issue triage and Keep milestones issue-only workflows installed | [Tooling](../tools/README.md); this documentation change does not audit all workflow executions. |
 | Traffic analytics | Not configured | No traffic workflow, branch or credential | Activation is tracked in #17. |
 | Environments, collaborators, deploy keys | Not cloned from other projects | Unverified (environments API not available to this read-back) | 2026-10-28 alignment record: repository-specific credentials, collaborators, deployments and environments are not cloned. |
@@ -132,6 +132,6 @@ Do not treat pending items or disabled features below as current facts.
 | Date | Observation |
 | --- | --- |
 | 2026-10-28 | Settings aligned and recorded while K-LCR was private: five active rulesets, no bypass actors. Main required a pull request, resolved review conversations, an up-to-date branch and Repository integrity, with merge commits only. Projects disabled; merge, squash and rebase enabled; auto-merge disabled; update suggestions and head-branch deletion enabled. Actions required full-length SHA pins, used read-only default token permissions, could not create or approve pull requests and retained logs/artifacts for 90 days. Dependency graph and Dependabot alerts enabled; automatic dependency submission, security updates and grouped security updates disabled. Repository integrity's first main run passed: [40740544583](https://github.com/danielep71/K-LCR/actions/runs/40740544583). |
-| 2026-10-28 | The owner turned off the release-branch pull-request requirement after it refused a fast-forward synchronization (#59, #61). |
-| 2026-10-28 | The owner made K-LCR public and enabled private vulnerability reporting, secret scanning and push protection (#66). |
-| 2026-10-29 | The owner enabled GitHub Pages (main, `/docs`; #63), Dependabot security updates and CodeQL default setup (#85), and restored the release-branch pull-request requirement with squash or merge only (#88). |
+| 2026-10-28 | I turned off the release-branch pull-request requirement after it refused a fast-forward synchronization (#59, #61). |
+| 2026-10-28 | I made K-LCR public and enabled private vulnerability reporting, secret scanning and push protection (#66). |
+| 2026-10-29 | I enabled GitHub Pages (main, `/docs`; #63), Dependabot security updates and CodeQL default setup (#85), and restored the release-branch pull-request requirement with squash or merge only (#88). |
