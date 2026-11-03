@@ -78,7 +78,8 @@ applied only through a requirement that names it.
 ## 📄 Local copies
 
 Two EU copies are stored in [sources/](sources/README.md), with their
-provenance, reuse terms and hashes:
+provenance and hashes; their reuse terms are in
+[NOTICE.md](../../NOTICE.md#-eu-legal-texts):
 - `SRC-02`, byte for byte as retrieved;
 - an extract of `SRC-01` with the pages of the articles it cites.
 

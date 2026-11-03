@@ -97,20 +97,30 @@ That file is distributed under the MIT License, reproduced here:
 
 ## 🇪🇺 EU legal texts
 
-`docs/methodology/sources/` stores two EU documents, recorded in its
+`docs/methodology/sources/` stores two EU documents; their provenance,
+extraction method and SHA-256 are in its
 [README](docs/methodology/sources/README.md):
-- the consolidated text of Commission Delegated Regulation (EU) 2015/61,
-  stored unchanged;
-- an extract of the consolidated text of Regulation (EU) No 575/2013, a
-  selection of unchanged pages.
 
-Source: EUR-Lex, <https://eur-lex.europa.eu>, © European Union. They are
-reused under the EUR-Lex legal notice, which places consolidated texts under
-the Creative Commons Attribution 4.0 International licence (CC BY 4.0), and
-under Commission Decision 2011/833/EU on the reuse of Commission documents.
-The README of that folder states the source, the changes made and each file's
-SHA-256. These documents are **not** covered by the MPL-2.0 licence of
-K-LCR; that licence applies to K-LCR's own code and documentation.
+| File | Document | Changes |
+| --- | --- | --- |
+| `SRC-02_LCR-Delegated-Regulation-2015-61_consolidated-2022-07-08.pdf` | Commission Delegated Regulation (EU) 2015/61, consolidated text of 08.07.2022 | None: stored as retrieved |
+| `SRC-01_CRR-575-2013_consolidated-2026-06-26_extract.pdf` | Regulation (EU) No 575/2013, consolidated text of 26.06.2026 | Extract: 37 of 895 pages selected (page 1 and the pages of Articles 6, 8, 11, 411 to 426, 451a and 460); the selected pages are unchanged |
+
+- **Source and attribution:** EUR-Lex, <https://eur-lex.europa.eu>, and the
+  Publications Office of the European Union; © European Union. Each file keeps
+  its own notices, including the statement that a consolidated text is a
+  documentation tool without legal effect.
+- **Reuse terms:** I checked the EUR-Lex legal notice
+  (<https://eur-lex.europa.eu/content/legal-notice/legal-notice.html>) on
+  2026-11-03. It allows reuse, including commercial reuse, of the legal
+  documents published on EUR-Lex, unless a document states otherwise, and it
+  places consolidated texts under the Creative Commons Attribution 4.0
+  International licence (CC BY 4.0), which requires attribution of the source
+  and an indication of changes. The underlying rules are Commission Decision
+  2011/833/EU of 12 December 2011 on the reuse of Commission documents, which
+  also requires that reuse does not distort the original meaning.
+- **Licence:** these documents are **not** covered by the MPL-2.0 licence of
+  K-LCR, which applies to K-LCR's own code and documentation.
 
 ## 🧰 External tools
 

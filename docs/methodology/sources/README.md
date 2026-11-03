@@ -63,27 +63,13 @@ PDF. Checked on 2026-11-03:
 - rebuilding the extract with the same pages and version gives the same
   SHA-256.
 
-## ⚖️ Reuse terms and attribution
+## ⚖️ Reuse terms
 
-Source: EUR-Lex, <https://eur-lex.europa.eu>, © European Union.
+The reuse terms, the attribution of these documents and their licence, which
+is not K-LCR's MPL-2.0, are recorded in
+[NOTICE.md](../../../NOTICE.md#-eu-legal-texts).
 
-I checked the EUR-Lex legal notice
-(<https://eur-lex.europa.eu/content/legal-notice/legal-notice.html>) on
-2026-11-03. It allows reuse, including commercial reuse, of the legal documents
-published on EUR-Lex, unless a document states otherwise. It places
-consolidated texts under the Creative Commons Attribution 4.0 International
-licence (CC BY 4.0), which requires attribution of the source and an
-indication of changes. The underlying rules are Commission Decision
-2011/833/EU of 12 December 2011 on the reuse of Commission documents, which
-also requires that reuse does not distort the original meaning.
-
-- **Attribution:** EUR-Lex and the Publications Office of the European Union,
-  for each file as listed above. Each file keeps its own notices unchanged.
-- **Changes:** none to `SRC-02`. `SRC-01` is an extract, selected as described
-  above, with no change to the selected pages.
-- **Licence:** these documents are not covered by the MPL-2.0 licence of
-  K-LCR's code and documentation ([LICENSE](../../../LICENSE)); see
-  [NOTICE.md](../../../NOTICE.md).
+## ✅ Checking a file
 
 To check a file against its hash, from the repository root:
 
