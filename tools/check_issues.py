@@ -35,11 +35,12 @@ DEPENDABOT = Path(".github/dependabot.yml")
 # The tables of the Issues section of GOVERNANCE.md that explain the labels.
 LABEL_TABLES = {"| Priority | Use |", "| Label | Use |"}
 TABLE_LABEL = re.compile(r"^\|\s*`([^`]+)`\s*\|")
-# "Target end date: 2026-11-13 (Europe/Rome)", as a line or a list item.
-END_DATE_LINE = re.compile(r"^\s*(?:[-*]\s*)?\**target end date\**:\**\s*(.*?)\s*$", re.I)
-END_DATE_VALUE = re.compile(r"(\d{4}-\d{2}-\d{2})(?: \(Europe/Rome\))?")
-# Fields every issue form must have; end_date carries the target end date.
-FORM_FIELDS = ("acceptance", "validation", "dependencies", "end_date")
+# The Planning line triage writes, "- Target end date: 2026-11-13 (Europe/Rome)";
+# the list marker and bold are optional. It takes precedence over the form field.
+PLANNED_TARGET = re.compile(r"^\s*(?:[-*]\s*)?\**target end date\**:\**\s*(.*?)\s*$", re.I)
+ROME_SUFFIX = re.compile(r"\s*\(Europe/Rome\)$", re.I)
+# Fields every issue form must have; target_end_date carries the target end date.
+FORM_FIELDS = ("acceptance", "validation", "dependencies", "target_end_date")
 API = "https://api.github.com"
 
 
@@ -63,6 +64,11 @@ class Finding:
     message: str
 
 
+def normalized(body: str) -> str:
+    """Use LF line endings: issues edited in a browser are saved with CRLF."""
+    return body.replace("\r\n", "\n").replace("\r", "\n")
+
+
 def issue_from_api(item: Mapping[str, Any]) -> Issue:
     milestone = item.get("milestone")
     return Issue(
@@ -71,7 +77,7 @@ def issue_from_api(item: Mapping[str, Any]) -> Issue:
         labels=tuple(str(label["name"]) for label in item.get("labels", [])),
         assignees=tuple(str(user["login"]) for user in item.get("assignees", [])),
         milestone=str(milestone["title"]) if milestone else None,
-        body=str(item.get("body") or ""),
+        body=normalized(str(item.get("body") or "")),
         milestone_state=str(milestone.get("state") or "open").lower() if milestone else "open",
         milestone_due=str(milestone["due_on"])[:10] if milestone and milestone.get("due_on") else None,
     )
@@ -123,60 +129,66 @@ def metadata_findings(issue: Issue, assignee: str) -> list[Finding]:
     return findings
 
 
-def end_date_values(body: str) -> list[str]:
-    """Every target end date the body states, as written.
+def target_end_dates(body: str) -> list[str]:
+    """The target end dates the body states, without the "(Europe/Rome)" suffix.
 
-    A date is either a line "Target end date: ..." (the Planning list) or the
-    first non-empty line under a heading containing "Target end date" (the
-    issue forms); an empty form field yields "".
+    Every Planning line counts, and when there is one the form field is ignored:
+    triage may change the reporter's date. Otherwise the first non-empty line
+    under the form's "Target end date" heading counts; an empty field yields "".
     """
-    lines = body.splitlines()
-    values = []
-    for index, line in enumerate(lines):
-        if match := END_DATE_LINE.match(line):
-            values.append(match.group(1))
-            continue
-        heading = HEADING.match(line)
-        if heading and "target end date" in heading.group(1).lower():
-            value = ""
-            for following in lines[index + 1:]:
-                if HEADING.match(following):
-                    break
-                if following.strip():
-                    value = following.strip()
-                    break
-            values.append(value)
-    return values
+    lines = normalized(body).split("\n")
+    planned = [match.group(1) for line in lines if (match := PLANNED_TARGET.match(line))]
+    if not planned:
+        for index, line in enumerate(lines):
+            heading = HEADING.match(line)
+            if heading and "target end date" in heading.group(1).lower():
+                value = ""
+                for following in lines[index + 1:]:
+                    if HEADING.match(following):
+                        break
+                    if following.strip():
+                        value = following.strip()
+                        break
+                planned = [value]
+                break
+    return [ROME_SUFFIX.sub("", value) for value in planned]
 
 
-def end_date_findings(issue: Issue) -> list[Finding]:
-    """The target end date must be one valid date, earlier than the milestone's due date."""
-    values = end_date_values(issue.body)
-    if not values:
-        return [Finding(issue.number, "end-date",
-                        "has no line 'Target end date: YYYY-MM-DD (Europe/Rome)'")]
-    if len(set(values)) > 1:
-        listed = ", ".join(repr(value) for value in dict.fromkeys(values))
-        return [Finding(issue.number, "end-date", f"states different target end dates: {listed}")]
-    match = END_DATE_VALUE.fullmatch(values[0])
-    if not match:
-        return [Finding(issue.number, "end-date", f"has target end date {values[0]!r}, "
-                        "not 'YYYY-MM-DD (Europe/Rome)'")]
+def iso_date(text: str | None) -> date | None:
+    if text is None or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return None
     try:
-        end = date.fromisoformat(match.group(1))
+        return date.fromisoformat(text)
     except ValueError:
-        return [Finding(issue.number, "end-date",
-                        f"has target end date {match.group(1)!r}, which is not a calendar date")]
+        return None
+
+
+def target_date_findings(issue: Issue) -> list[Finding]:
+    """The target end date must be one real ISO date, before the milestone's due date."""
+    values = target_end_dates(issue.body)
+    if not values:
+        return [Finding(issue.number, "target-date",
+                        "has no line 'Target end date: YYYY-MM-DD (Europe/Rome)'")]
+    parsed = [(value, iso_date(value)) for value in values]
+    invalid = [value for value, day in parsed if day is None]
+    if invalid:
+        return [Finding(issue.number, "target-date", f"has target end date {invalid[0]!r}, "
+                        "not a real date written YYYY-MM-DD (Europe/Rome)")]
+    dates = sorted({day for _, day in parsed if day is not None})
+    if len(dates) > 1:
+        listed = ", ".join(day.isoformat() for day in dates)
+        return [Finding(issue.number, "target-date", f"states different target end dates: {listed}")]
+    target = dates[0]
     if not issue.milestone:
-        return []
-    if issue.milestone_due is None:
+        return []  # already reported by the milestone rule
+    due = iso_date(issue.milestone_due)
+    if due is None:
         return [Finding(issue.number, "milestone-due",
                         f"belongs to milestone {issue.milestone!r}, which has no due date: "
                         "the target end date cannot be checked")]
-    due = date.fromisoformat(issue.milestone_due)
-    if end >= due:
-        return [Finding(issue.number, "end-date",
-                        f"has target end date {end.isoformat()}, which is not earlier than "
+    if target >= due:
+        return [Finding(issue.number, "milestone-due",
+                        f"has target end date {target.isoformat()}, which is not earlier than "
                         f"{due.isoformat()}, the due date of milestone {issue.milestone!r}")]
     return []
 
@@ -218,7 +230,7 @@ def audit(issues: Sequence[Issue], states: Mapping[int, str], repository: str,
         if issue.state != "open":
             continue
         findings += metadata_findings(issue, assignee)
-        findings += end_date_findings(issue)
+        findings += target_date_findings(issue)
         findings += dependency_findings(issue, states, repository, pulls)
         if catalogue is not None:
             findings += [Finding(issue.number, "catalogue", f"has label {label!r}, "

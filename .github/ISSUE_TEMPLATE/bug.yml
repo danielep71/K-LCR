@@ -110,11 +110,11 @@ body:
       required: true
 
   - type: input
-    id: end_date
+    id: target_end_date
     attributes:
-      label: "📅 Target end date"
-      description: "The date by which the work should be complete, as YYYY-MM-DD (Europe/Rome). It must be earlier than the due date of the milestone set in triage; triage may change it."
-      placeholder: "2026-11-13"
+      label: "🗓️ Target end date (Europe/Rome)"
+      description: ISO calendar date YYYY-MM-DD, earlier than the due date of the milestone. Triage checks it against the milestone it assigns and may change it in a Planning line, which then takes precedence.
+      placeholder: "YYYY-MM-DD"
     validations:
       required: true
 

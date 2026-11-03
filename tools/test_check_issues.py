@@ -71,39 +71,61 @@ class MetadataTests(unittest.TestCase):
         self.assertEqual([(f.number, f.rule) for f in findings], [(1, "catalogue")])
 
 
-class EndDateTests(unittest.TestCase):
+FORM = "### 🗓️ Target end date (Europe/Rome)\n\n{}\n\n### 🔗 Dependencies and blocking status\n\nNone\n"
+
+
+class TargetDateTests(unittest.TestCase):
     def test_planning_line_form_field_and_bold_label_are_read(self) -> None:
-        form = "### 📅 Target end date\n\n2026-11-13\n\n### 🔗 Dependencies and blocking status\n\nNone\n"
         bold = "**Target end date:** 2026-11-13\n\n" + READY.replace(PLANNING, "")
-        for body in (READY, form, bold, dated("2026-11-13")):
+        for body in (READY, FORM.format("2026-11-13"), bold, dated("2026-11-13")):
             with self.subTest(body=body):
                 self.assertEqual(rules([issue(1, body=body)]), [])
 
-    def test_missing_end_date(self) -> None:
-        self.assertEqual(rules([issue(1, body=READY.replace(PLANNING, ""))]), [(1, "end-date")])
+    def test_crlf_bodies_are_read(self) -> None:
+        item = {"number": 1, "state": "open", "labels": [{"name": "P3"}],
+                "assignees": [{"login": "triage-person"}],
+                "milestone": {"title": "v0.1.0", "state": "open", "due_on": "2026-11-20T00:00:00Z"},
+                "body": FORM.format("2026-11-13").replace("\n", "\r\n")}
+        parsed = check_issues.issue_from_api(item)
+        self.assertNotIn("\r", parsed.body)
+        self.assertEqual(rules([parsed]), [])
+        self.assertEqual(check_issues.target_end_dates("- Target end date: 2026-11-13\r\n"),
+                         ["2026-11-13"])
+
+    def test_missing_target_date(self) -> None:
+        self.assertEqual(rules([issue(1, body=READY.replace(PLANNING, ""))]), [(1, "target-date")])
 
     def test_empty_form_field_is_not_a_date(self) -> None:
-        form = "### 📅 Target end date\n\n_No response_\n\n## Dependencies\n\nNone\n"
-        self.assertEqual(rules([issue(1, body=form)]), [(1, "end-date")])
-        heading_only = "### 📅 Target end date\n\n### 🔗 Dependencies\n\nNone\n"
-        self.assertEqual(rules([issue(1, body=heading_only)]), [(1, "end-date")])
+        self.assertEqual(rules([issue(1, body=FORM.format("_No response_"))]), [(1, "target-date")])
+        heading_only = "### 🗓️ Target end date\n\n### 🔗 Dependencies\n\nNone\n"
+        self.assertEqual(rules([issue(1, body=heading_only)]), [(1, "target-date")])
 
     def test_invalid_dates_are_reported(self) -> None:
         for value in ("2026/11/13", "13-11-2026", "2026-11-13 CET", "2026-11-13 (UTC)",
                       "2026-02-30", "2026-13-01", "next week", ""):
             with self.subTest(value=value):
-                self.assertEqual(rules([issue(1, body=dated(value))]), [(1, "end-date")])
+                self.assertEqual(rules([issue(1, body=dated(value))]), [(1, "target-date")])
 
-    def test_conflicting_dates_are_reported_and_repeated_ones_are_not(self) -> None:
-        twice = dated("2026-11-13") + "\n- Target end date: 2026-11-13\n"
+    def test_planning_line_takes_precedence_over_the_form_even_when_invalid(self) -> None:
+        changed = "- Target end date: 2026-11-16 (Europe/Rome)\n\n" + FORM.format("2026-11-13")
+        self.assertEqual(check_issues.target_end_dates(changed), ["2026-11-16"])
+        self.assertEqual(rules([issue(1, body=changed)]), [])
+        invalid = "- Target end date: soon\n\n" + FORM.format("2026-11-13")
+        self.assertEqual(rules([issue(1, body=invalid)]), [(1, "target-date")])
+
+    def test_same_date_written_two_ways_is_not_a_conflict(self) -> None:
+        # The form answer omits the zone; the Planning line triage adds states it.
+        both = dated("2026-11-13") + "- Target end date: 2026-11-13\n" + FORM.format("2026-11-13")
+        self.assertEqual(rules([issue(1, body=both)]), [])
+
+    def test_different_planning_dates_are_reported(self) -> None:
         conflicting = dated("2026-11-13") + "\n- Target end date: 2026-11-14\n"
-        self.assertEqual(rules([issue(1, body=twice)]), [])
-        self.assertEqual(rules([issue(1, body=conflicting)]), [(1, "end-date")])
+        self.assertEqual(rules([issue(1, body=conflicting)]), [(1, "target-date")])
 
-    def test_end_date_must_be_earlier_than_the_milestone_due_date(self) -> None:
+    def test_target_date_must_be_earlier_than_the_milestone_due_date(self) -> None:
         self.assertEqual(rules([issue(1, body=dated("2026-11-19"))]), [])
-        self.assertEqual(rules([issue(1, body=dated(DUE))]), [(1, "end-date")])
-        self.assertEqual(rules([issue(1, body=dated("2026-11-21"))]), [(1, "end-date")])
+        self.assertEqual(rules([issue(1, body=dated(DUE))]), [(1, "milestone-due")])
+        self.assertEqual(rules([issue(1, body=dated("2026-11-21"))]), [(1, "milestone-due")])
 
     def test_milestone_without_due_date_is_reported(self) -> None:
         self.assertEqual(rules([issue(1, milestone_due=None)]), [(1, "milestone-due")])
@@ -219,10 +241,10 @@ class ConfigTests(unittest.TestCase):
             self.copy_configuration(root)
             form = root / ".github/ISSUE_TEMPLATE/documentation.yml"
             text = form.read_text(encoding="utf-8")
-            self.assertIn("id: end_date", text)
-            form.write_text(text.replace("id: end_date", "id: target"), encoding="utf-8")
+            self.assertIn("id: target_end_date", text)
+            form.write_text(text.replace("id: target_end_date", "id: target"), encoding="utf-8")
             self.assertEqual(check_issues.config_findings(root),
-                             ["documentation.yml has no end_date field"])
+                             ["documentation.yml has no target_end_date field"])
 
     def test_label_guide_explains_every_catalogue_label_once(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

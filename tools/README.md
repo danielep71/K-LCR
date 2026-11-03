@@ -69,11 +69,12 @@ python tools/check_issues.py --input issues.json --repo-name danielep71/K-LCR   
 python tools/check_issues.py --check-config        # forms, catalogue, label guide and Dependabot
 ```
 
-The target end date is read from a line `Target end date: YYYY-MM-DD` (an
-optional ` (Europe/Rome)` may follow; a list marker and bold are allowed) or
-from the first line under the forms' "Target end date" heading. The issue must
-state exactly one such date, a real calendar date, and it must be earlier than
-the due date of the issue's milestone. The due date is the date part of the
+The target end date is read from the Planning lines `Target end date:
+YYYY-MM-DD` (an optional ` (Europe/Rome)` may follow; a list marker and bold
+are allowed). Only when there is none is it read from the first line under the
+forms' "Target end date" heading. Every date read must be a real calendar date,
+all must be the same date, and it must be earlier than the due date of the
+issue's milestone. The due date is the date part of the
 milestone's `due_on`, in UTC. A closed milestone and a milestone without a due
 date are findings. A target end date that has already passed is not.
 
