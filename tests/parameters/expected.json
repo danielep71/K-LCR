@@ -1,0 +1,4 @@
+{
+  "description": "Expected findings, as [code, path], of each parameter-set or result example in tests/parameters. No case is defined yet.",
+  "cases": {}
+}
