@@ -235,10 +235,21 @@ Applies to `main` and every `release/**` branch:
   updates target the active release branch; update `target-branch` when a new
   release branch is opened.
 - Dependabot security updates ignore `target-branch` and open pull requests
-  against `main`. Review them as described in
-  [tools/README.md](../tools/README.md#-dependency-updates); merging one into
-  main needs my approval, like any main integration. Then synchronize
-  the release branch with main through a sync PR, as for any integration.
+  against `main` without the labels and assignee set in
+  `.github/dependabot.yml`. I handle each one by hand:
+  1. In triage, add `security` and one priority (`P2` or `P3`, by the
+     advisory's severity), assign danielep71, and remove any default label
+     Dependabot added that is not in the catalogue.
+  2. Review it as described in
+     [tools/README.md](../tools/README.md#-dependency-updates). The automated
+     reviewer does not review bot-authored PRs, so I review the final head
+     myself and record that review in the PR.
+  3. Merge it into main with a merge commit only with my approval and with
+     Repository integrity passing, like any main integration.
+  4. Synchronize the release branch with main through a sync PR.
+
+  A label Dependabot creates outside the catalogue shows up in the daily drift
+  report until a manual run of Sync issue labels on main removes it.
 - GitHub Pages publishes main `/docs`; site changes follow
   [WEBSITE.md](WEBSITE.md).
 
