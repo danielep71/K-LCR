@@ -1,6 +1,6 @@
 # 🧭 LCR applicability and requirement map
 
-**Register version 1 · 2026-11-03 · No parameter values established here**
+**Register version 1 · Decisions of 2026-11-03 · No parameter values established here**
 
 This map links each LCR topic to its locators in the
 [source register](SOURCES.md), for the EU profile (`SRC-01`, `SRC-02`) and the
@@ -35,10 +35,10 @@ profile; it is not a claim that none exists.
 | `REQ-02` | Horizon of 30 calendar days | Art. 4(1); Art. 17(2) | LCR20.1; LCR20.5; LCR40.1 | Items maturing on the last day inside and the first day outside the horizon |
 | `REQ-03` | Minimum requirement, use of the buffer in stress, non-compliance | Art. 4(2) to (4); CRR Art. 412 and 414 | LCR20.5 to LCR20.8 | Reported status below and above the minimum; no automatic remedy |
 | `REQ-04` | Stress scenario | Art. 5 | LCR20.2 | None: scenario description only |
-| `REQ-05` | Entity scope: individual and consolidated application | Art. 2; CRR Art. 6(4), 8 and 11(3) | LCR10.1 to LCR10.8 | Rejection of an unsupported level of application |
-| `REQ-06` | Currencies: reporting currency and significant currencies | Art. 4(5); Art. 8(6); CRR Art. 415(2) | LCR10.9; LCR30.29 | Mixed-currency inputs; rejection of an unsupported currency calculation |
+| `REQ-05` | Entity scope: individual and consolidated application | Art. 2; CRR Art. 6(4), 8 and 11(3) | LCR10.1 to LCR10.8 | Declared perimeter type; no consolidation performed (A01) |
+| `REQ-06` | Currencies: reporting currency and significant currencies | Art. 4(5); Art. 8(6); CRR Art. 415(2) | LCR10.9; LCR30.29 | Converted amounts with their original currency; rejection of a significant-currency LCR (A02) |
 | `REQ-07` | Liquid assets: general and operational requirements, valuation | Art. 6 to 9 | LCR30.2 to LCR30.28 | Assets that fail one requirement are excluded, with a diagnostic |
-| `REQ-08` | Diversification of the buffer | Art. 8(1) | LCR30.29 | Diagnostic only, unless a rule is decided in #126 |
+| `REQ-08` | Diversification of the buffer | Art. 8(1) | LCR30.29 | Diagnostic only: no limit is computed |
 | `REQ-09` | Level 1 assets | Art. 10 | LCR30.40; LCR30.41 | Classification and valuation per category |
 | `REQ-10` | Level 2A assets | Art. 11 | LCR30.42; LCR30.43 | Classification, haircut from the parameter set |
 | `REQ-11` | Level 2B assets | Art. 12 | LCR30.44 to LCR30.46 | Classification; Basel inclusion only where the parameter set enables it |
@@ -74,22 +74,24 @@ Each resolution below was read in the located text on 2026-11-03.
 | `R05` | Several Basel parameters are set by national authorities, and Level 2B assets are included only at their discretion. | — | LCR40.2; LCR30.44 |
 | `R06` | Some EU treatments need the competent authority's prior approval or case-by-case authorisation. | Art. 26; Art. 29(1); Art. 33(2) to (4); Art. 34(1) | — |
 
-## ❓ Applicability decisions — mine, tracked in #126
+## ✅ My applicability decisions — 2026-11-03
 
-None of these positions is decided yet. Until one is, the profile rejects
-the item with a diagnostic, and never applies a silent default.
+I decided these positions on 2026-11-03 (#126). They set the perimeter of
+the contracts in #10 and the fixtures in #11; they implement no calculation.
+An item outside them is rejected with a diagnostic, never ignored and never
+given a default.
 
-| ID | Decision | EU locators | Basel locators |
-| --- | --- | --- | --- |
-| `A01` | Entity scope: one reporting entity per run, or also consolidated groups | Art. 2; CRR Art. 6(4), 8 and 11(3) | LCR10.1 to LCR10.8 |
-| `A02` | Currencies: the reporting-currency LCR only, or also the separate LCR in each significant currency | Art. 4(5)(a) and (b); Art. 8(6) | LCR10.9; LCR30.29 |
-| `A03` | Liquid assets: Level 1, 2A and 2B only, or also the special categories | Art. 13 to 16 | LCR30.47 |
-| `A04` | Alternative liquidity approaches | Art. 19 | LCR31 |
-| `A05` | Transitional and grandfathering provisions | Art. 35 to 38 | LCR90 |
-| `A06` | Treatments that need supervisory approval or authorisation (R06), and the inflow-cap exemptions | Art. 26, 29, 33(2) to (6) and 34 | — |
-| `A07` | How the Basel parameter set records each national discretion (R05): every one must be an explicit value, never a default | — | LCR10.4; LCR10.5; LCR30.44; LCR40.2; LCR40.93 |
-| `A08` | Which outflow and inflow categories v0.1 covers | Art. 22 to 34 | LCR40 |
-| `A09` | Whether to store local copies of the sources, and which (see [SOURCES.md](SOURCES.md#-local-copies)) | `SRC-01`, `SRC-02` | `SRC-06` |
+| ID | Decision | Consequence for #10 and #11 | EU locators | Basel locators |
+| --- | --- | --- | --- | --- |
+| `A01` | One perimeter per run, declared in the input as individual or already consolidated. K-LCR does not consolidate. | The input names its perimeter type. No group structure, third-country asset rule or liquidity transfer restriction is modelled. | Art. 2; CRR Art. 6(4), 8 and 11(3) | LCR10.1 to LCR10.8 |
+| `A02` | Only the LCR in the reporting currency. Every amount arrives converted, and keeps its original currency. The separate LCR in each significant currency is later work. | Amounts are in the reporting currency, with an original-currency field. A request for a significant-currency LCR is rejected. | Art. 4(5); Art. 8(6) | LCR10.9; LCR30.29 |
+| `A03` | Level 1, 2A and 2B assets only. | The special categories are rejected. | Art. 10 to 16 | LCR30.40 to LCR30.47 |
+| `A04` | Alternative liquidity approaches are out of scope. | Rejected. | Art. 19 | LCR31 |
+| `A05` | Transitional and grandfathering provisions are out of scope. | Rejected. | Art. 35 to 38 | LCR90 |
+| `A06` | Treatments that need supervisory approval or authorisation (R06) are out of scope. | Inputs claiming them are rejected. The inflow cap of Art. 33(1) and LCR40.77 always applies. | Art. 26, 29, 33(2) to (6) and 34 | — |
+| `A07` | Each Basel national discretion (R05) is a required parameter with no default. The parameter set records the choice, and fixtures use values labelled illustrative. | The Basel parameter schema makes every discretionary entry mandatory. | — | LCR10.4; LCR10.5; LCR30.44; LCR40.2; LCR40.93 |
+| `A08` | The contracts cover every standard outflow and inflow category, with the inflow cap. Implementation may come in stages. The treatments excluded by A06 stay out. | The category lists of the data contract are complete for both profiles. | Art. 22 to 25, 27, 28, 30, 31, 31a, 32 and 33(1) | LCR40 |
+| `A09` | No copy of BIS material is stored. EU copies (`SRC-02` in full and an extract of `SRC-01`) are stored only after I check the EUR-Lex legal notice on reuse. | Until then, the retrieval record and its hashes identify each edition. | `SRC-01`, `SRC-02` | `SRC-06` |
 
 ## 🔍 Unresolved interpretations
 

@@ -33,8 +33,8 @@ profile-specific classification, parameters and rules remain explicit.
 
 The [source register](methodology/SOURCES.md) records the authoritative
 editions, and the [applicability map](methodology/APPLICABILITY.md) links each
-LCR topic to them; my applicability decisions are tracked in #126 and come
-before formula work starts. Issue #10 defines schemas and issue #11
+LCR topic to them and records my applicability decisions, which come before
+formula work starts. Issue #10 defines schemas and issue #11
 defines independently derived validation fixtures. No percentages, thresholds,
 eligibility rules or effective-date claims are established by this architecture
 document. Compare profiles only on deliberately mapped inputs with explained

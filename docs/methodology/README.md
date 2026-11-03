@@ -9,7 +9,7 @@ contracts come in #10, and the independent fixtures in #11.
 | Document | Content |
 | --- | --- |
 | [SOURCES.md](SOURCES.md) | Source register: each regulatory text with its edition, retrieval record, status and the locators used |
-| [APPLICABILITY.md](APPLICABILITY.md) | Requirement map from LCR topics to EU and Basel locators, planned parameter sets and tests; what the sources resolve; my open decisions (#126) and unresolved interpretations |
+| [APPLICABILITY.md](APPLICABILITY.md) | Requirement map from LCR topics to EU and Basel locators, planned parameter sets and tests; what the sources resolve; my applicability decisions and the unresolved interpretations |
 
 Rules for every document, parameter set and fixture:
 
