@@ -39,7 +39,7 @@ versions; each gate also writes `<gate>.log`.
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
-| `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have a dependencies field; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). Without PyYAML it fails on GitHub Actions and is NOT RUN locally. |
+| `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have the acceptance, validation, dependencies and target end date fields; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). Without PyYAML it fails on GitHub Actions and is NOT RUN locally. |
 | `format-fixtures` | The tracked-text checker's own fixtures: valid samples pass, malformed ones fail (`check_files.py --self-test`). |
 | `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
 | `ruff` | Lint of `tools/` with the rules in `pyproject.toml`. |
@@ -69,9 +69,16 @@ python tools/check_issues.py --input issues.json --repo-name danielep71/K-LCR   
 python tools/check_issues.py --check-config        # forms, catalogue, label guide and Dependabot
 ```
 
+The target end date is read from a line `Target end date: YYYY-MM-DD` (an
+optional ` (Europe/Rome)` may follow; a list marker and bold are allowed) or
+from the first line under the forms' "Target end date" heading. The issue must
+state exactly one such date, a real calendar date, and it must be earlier than
+the due date of the issue's milestone. The due date is the date part of the
+milestone's `due_on`, in UTC. A closed milestone and a milestone without a due
+date are findings. A target end date that has already passed is not.
+
 Exit code 0 means no findings, 1 means findings, 2 means the audit could not
-run. Its rules are tested by `test_check_issues.py` in `tool-tests`. Target
-end dates are not validated yet (#8).
+run. Its rules are tested by `test_check_issues.py` in `tool-tests`.
 
 ## 🔧 Tool versions
 

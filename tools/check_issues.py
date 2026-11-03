@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check issue metadata and dependency status that issue forms cannot enforce.
+"""Check issue metadata, target end dates and dependency status that issue forms cannot enforce.
 
 Read-only: the check never changes an issue. It reports findings for
 me to resolve by hand (docs/GOVERNANCE.md, Issues).
@@ -18,6 +18,7 @@ import urllib.request
 from collections import Counter
 from collections.abc import Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,11 @@ DEPENDABOT = Path(".github/dependabot.yml")
 # The tables of the Issues section of GOVERNANCE.md that explain the labels.
 LABEL_TABLES = {"| Priority | Use |", "| Label | Use |"}
 TABLE_LABEL = re.compile(r"^\|\s*`([^`]+)`\s*\|")
+# "Target end date: 2026-11-13 (Europe/Rome)", as a line or a list item.
+END_DATE_LINE = re.compile(r"^\s*(?:[-*]\s*)?\**target end date\**:\**\s*(.*?)\s*$", re.I)
+END_DATE_VALUE = re.compile(r"(\d{4}-\d{2}-\d{2})(?: \(Europe/Rome\))?")
+# Fields every issue form must have; end_date carries the target end date.
+FORM_FIELDS = ("acceptance", "validation", "dependencies", "end_date")
 API = "https://api.github.com"
 
 
@@ -45,6 +51,9 @@ class Issue:
     assignees: tuple[str, ...]
     milestone: str | None
     body: str
+    milestone_state: str = "open"
+    # The date part of the milestone's due_on (UTC), or None without a due date.
+    milestone_due: str | None = None
 
 
 @dataclass(frozen=True)
@@ -63,6 +72,8 @@ def issue_from_api(item: Mapping[str, Any]) -> Issue:
         assignees=tuple(str(user["login"]) for user in item.get("assignees", [])),
         milestone=str(milestone["title"]) if milestone else None,
         body=str(item.get("body") or ""),
+        milestone_state=str(milestone.get("state") or "open").lower() if milestone else "open",
+        milestone_due=str(milestone["due_on"])[:10] if milestone and milestone.get("due_on") else None,
     )
 
 
@@ -105,7 +116,69 @@ def metadata_findings(issue: Issue, assignee: str) -> list[Finding]:
                                 "has P1 without bug: P1 is reserved for confirmed calculation bugs"))
     if not issue.milestone:
         findings.append(Finding(issue.number, "milestone", "has no milestone"))
+    elif issue.milestone_state != "open":
+        findings.append(Finding(issue.number, "milestone",
+                                f"belongs to the closed milestone {issue.milestone!r}: "
+                                "move it to an open milestone"))
     return findings
+
+
+def end_date_values(body: str) -> list[str]:
+    """Every target end date the body states, as written.
+
+    A date is either a line "Target end date: ..." (the Planning list) or the
+    first non-empty line under a heading containing "Target end date" (the
+    issue forms); an empty form field yields "".
+    """
+    lines = body.splitlines()
+    values = []
+    for index, line in enumerate(lines):
+        if match := END_DATE_LINE.match(line):
+            values.append(match.group(1))
+            continue
+        heading = HEADING.match(line)
+        if heading and "target end date" in heading.group(1).lower():
+            value = ""
+            for following in lines[index + 1:]:
+                if HEADING.match(following):
+                    break
+                if following.strip():
+                    value = following.strip()
+                    break
+            values.append(value)
+    return values
+
+
+def end_date_findings(issue: Issue) -> list[Finding]:
+    """The target end date must be one valid date, earlier than the milestone's due date."""
+    values = end_date_values(issue.body)
+    if not values:
+        return [Finding(issue.number, "end-date",
+                        "has no line 'Target end date: YYYY-MM-DD (Europe/Rome)'")]
+    if len(set(values)) > 1:
+        listed = ", ".join(repr(value) for value in dict.fromkeys(values))
+        return [Finding(issue.number, "end-date", f"states different target end dates: {listed}")]
+    match = END_DATE_VALUE.fullmatch(values[0])
+    if not match:
+        return [Finding(issue.number, "end-date", f"has target end date {values[0]!r}, "
+                        "not 'YYYY-MM-DD (Europe/Rome)'")]
+    try:
+        end = date.fromisoformat(match.group(1))
+    except ValueError:
+        return [Finding(issue.number, "end-date",
+                        f"has target end date {match.group(1)!r}, which is not a calendar date")]
+    if not issue.milestone:
+        return []
+    if issue.milestone_due is None:
+        return [Finding(issue.number, "milestone-due",
+                        f"belongs to milestone {issue.milestone!r}, which has no due date: "
+                        "the target end date cannot be checked")]
+    due = date.fromisoformat(issue.milestone_due)
+    if end >= due:
+        return [Finding(issue.number, "end-date",
+                        f"has target end date {end.isoformat()}, which is not earlier than "
+                        f"{due.isoformat()}, the due date of milestone {issue.milestone!r}")]
+    return []
 
 
 def dependency_findings(issue: Issue, states: Mapping[int, str], repository: str,
@@ -145,6 +218,7 @@ def audit(issues: Sequence[Issue], states: Mapping[int, str], repository: str,
         if issue.state != "open":
             continue
         findings += metadata_findings(issue, assignee)
+        findings += end_date_findings(issue)
         findings += dependency_findings(issue, states, repository, pulls)
         if catalogue is not None:
             findings += [Finding(issue.number, "catalogue", f"has label {label!r}, "
@@ -226,8 +300,8 @@ def config_findings(root: Path) -> list[str]:
                      for label in form_labels if label not in labels]
         if flow_list(text, "assignees") != [assignee]:
             problems.append(f"{name} must assign {assignee}")
-        if not re.search(r"^\s*id:\s*dependencies\s*$", text, re.M):
-            problems.append(f"{name} has no dependencies field")
+        problems += [f"{name} has no {field} field" for field in FORM_FIELDS
+                     if not re.search(rf"^\s*id:\s*{field}\s*$", text, re.M)]
     config = forms / "config.yml"
     if not config.is_file() or not re.search(r"^blank_issues_enabled:\s*false\s*$",
                                              config.read_text(encoding="utf-8"), re.M):

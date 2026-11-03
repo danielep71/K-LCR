@@ -428,6 +428,18 @@ async function runSelfTest(manifestPath) {
   caseDrift[0].name = desired[0].name.toUpperCase();
   assert.deepEqual(planChanges(desired, caseDrift)[0].fields, ["name"]);
 
+  // Descriptions reach the API verbatim: Markdown metacharacters in them are
+  // valid, cause no spurious update and are compared exactly.
+  const markup = structuredClone(baseline);
+  markup.labels[0].description = "Uses `code` | and a pipe";
+  const markupDesired = resolveDesired(validateManifest(markup));
+  assert.equal(planChanges(markupDesired, structuredClone(markupDesired)).length, 0,
+    "a description with backticks and pipes must be idempotent");
+  const markupPlan = planChanges(markupDesired, desired);
+  assert.deepEqual(markupPlan.map(change => change.action), ["update"]);
+  assert.deepEqual(markupPlan[0].fields, ["description"]);
+  assert.equal(markupPlan[0].target.description, "Uses `code` | and a pipe");
+
   const summary = renderSummary({
     mode: "plan",
     manifest,
