@@ -91,7 +91,7 @@ given a default.
 | `A06` | Treatments that need supervisory approval or authorisation (R06) are out of scope. | Inputs claiming them are rejected. The inflow cap of Art. 33(1) and LCR40.77 always applies. | Art. 26, 29, 33(2) to (6) and 34 | — |
 | `A07` | Each Basel national discretion (R05) is a required parameter with no default. The parameter set records the choice, and fixtures use values labelled illustrative. | The Basel parameter schema makes every discretionary entry mandatory. | — | LCR10.4; LCR10.5; LCR30.44; LCR40.2; LCR40.93 |
 | `A08` | The contracts cover every standard outflow and inflow category, with the inflow cap. Implementation may come in stages. The treatments excluded by A06 stay out. | The category lists of the data contract are complete for both profiles. | Art. 22 to 25, 27, 28, 30, 31, 31a, 32 and 33(1) | LCR40 |
-| `A09` | No copy of BIS material is stored. EU copies (`SRC-02` in full and an extract of `SRC-01`) are stored only after I check the EUR-Lex legal notice on reuse. | Until then, the retrieval record and its hashes identify each edition. | `SRC-01`, `SRC-02` | `SRC-06` |
+| `A09` | No copy of BIS material is stored. EU copies (`SRC-02` in full and an extract of `SRC-01`) are stored only after I check the EUR-Lex legal notice on reuse. | I checked the notice on 2026-11-03: the copies are in [sources/](sources/README.md) (#129). | `SRC-01`, `SRC-02` | `SRC-06` |
 
 ## 🔍 Unresolved interpretations
 

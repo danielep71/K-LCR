@@ -95,6 +95,23 @@ That file is distributed under the MIT License, reproduced here:
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 > SOFTWARE.
 
+## 🇪🇺 EU legal texts
+
+`docs/methodology/sources/` stores two EU documents, recorded in its
+[README](docs/methodology/sources/README.md):
+- the consolidated text of Commission Delegated Regulation (EU) 2015/61,
+  stored unchanged;
+- an extract of the consolidated text of Regulation (EU) No 575/2013, a
+  selection of unchanged pages.
+
+Source: EUR-Lex, <https://eur-lex.europa.eu>, © European Union. They are
+reused under the EUR-Lex legal notice, which places consolidated texts under
+the Creative Commons Attribution 4.0 International licence (CC BY 4.0), and
+under Commission Decision 2011/833/EU on the reuse of Commission documents.
+The README of that folder states the source, the changes made and each file's
+SHA-256. These documents are **not** covered by the MPL-2.0 licence of
+K-LCR; that licence applies to K-LCR's own code and documentation.
+
 ## 🧰 External tools
 
 The workflows use `actions/checkout`, `actions/setup-python`,
