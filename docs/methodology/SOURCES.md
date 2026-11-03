@@ -77,13 +77,18 @@ applied only through a requirement that names it.
 
 ## 📄 Local copies
 
-None are stored yet. bis.org permits users to reproduce only "a limited
-extract" of BIS material, with the BIS cited as the source
+Two EU copies are stored in [sources/](sources/README.md), with their
+provenance and hashes; their reuse terms are in
+[NOTICE.md](../../NOTICE.md#-eu-legal-texts):
+- `SRC-02`, byte for byte as retrieved;
+- an extract of `SRC-01` with the pages of the articles it cites.
+
+I checked the EUR-Lex legal notice on 2026-11-03 (#129). No BIS material is
+stored: bis.org permits users to reproduce only "a limited extract" of BIS
+material, with the BIS cited as the source
 (<https://www.bis.org/terms_conditions.htm>, read on 2026-11-03), so a full
-copy of `SRC-06` is not covered. The EUR-Lex legal notice could not be read
-from the environment used. By decision A09 in
-[APPLICABILITY.md](APPLICABILITY.md), no BIS material is stored, and the EU
-copies wait until I check the EUR-Lex reuse notice.
+copy of `SRC-06` is not covered (decision A09 in
+[APPLICABILITY.md](APPLICABILITY.md)).
 
 A stored copy goes under `docs/methodology/sources/`, byte for byte: Git does
 not normalize those files and the tracked-text check skips them. It is named
