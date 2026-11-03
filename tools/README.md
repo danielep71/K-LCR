@@ -124,8 +124,10 @@ integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
 Dependabot security updates ignore `target-branch`: their pull requests target
-`main`, and merging one needs my approval
-([docs/GOVERNANCE.md](../docs/GOVERNANCE.md)).
+`main` and arrive without the `ci`/`P3` labels and the assignee above. I label
+and assign them by hand during triage, review the final head myself and merge
+into `main` only with my approval, then sync the release branch
+([docs/GOVERNANCE.md](../docs/GOVERNANCE.md), Repository settings).
 
 Nothing merges automatically. Before merging an update:
 
