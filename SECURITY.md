@@ -61,7 +61,10 @@ open issues with read-only issue and pull-request access. Label drift reads
 live labels; label sync writes labels only on trusted `main` events and is
 validation-only for pull requests. Actions are pinned to full commit SHAs,
 checkouts do not persist credentials, and the Python quality tools are
-installed from hash-locked requirements. CodeQL code scanning runs as
+installed from hash-locked requirements. Keep milestones issue-only runs on
+`pull_request_target` with `pull-requests: write` in its single job and no
+other permission; it executes only its inline script from the default branch
+and never checks out pull request contents. CodeQL code scanning runs as
 GitHub's default setup, with no workflow file in the repository. Dependabot
 security updates open pull requests against `main`, reviewed like any other
 change. No traffic credential or workbook execution workflow is configured.
@@ -69,21 +72,12 @@ Update this inventory when workflows, tokens or security features change.
 
 ## 🛡️ Security features
 
-First recorded on **2026-10-28**, the day K-LCR became public (#66), and
-updated on **2026-10-29** (#85). The states marked *API* were read back from
-the public GitHub API on those dates.
-
-| Feature | Status |
-| --- | --- |
-| Private vulnerability reporting | Enabled (API). One of the two reporting channels above. |
-| Secret scanning | Enabled (API). Non-provider patterns and validity checks are not enabled (API). |
-| Push protection | Enabled (API). |
-| Dependabot alerts | Enabled, as recorded in [docs/GOVERNANCE.md](docs/GOVERNANCE.md); not readable through the public API. |
-| Dependabot security updates | Enabled on 2026-10-29 (API). Their pull requests target `main`; see [docs/GOVERNANCE.md](docs/GOVERNANCE.md). |
-| Dependabot version updates | Configured in `.github/dependabot.yml` for GitHub Actions and the hash-locked Python quality tools; updates arrive as pull requests for review. |
-| Code scanning | CodeQL default setup, configured on 2026-10-29 (API): Actions and Python, default query suite, weekly schedule; the first analysis on `main` passed. It covers the Python tools and workflows, not the VBA. Alerts are not readable through the public API. |
-
-Update this table, with its date, when a feature is enabled or changed.
+Current security-feature observations, verification dates, evidence and
+limitations are maintained in the [repository settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md#security-settings).
+Its 2026-10-29 observations supersede the tables recorded here on 2026-10-28
+(#66) and 2026-10-29 (#85). This policy remains authoritative for reporting and
+handling vulnerabilities; a settings record does not establish scan coverage
+or enforcement.
 
 ## 🔑 Data and secrets
 
@@ -93,7 +87,7 @@ Update this table, with its date, when a feature is enabled or changed.
   issue attachments.
 - Keep access tokens, credentials and environment files out of source,
   fixtures, GitHub issue bodies and build logs. Use GitHub secrets only after
-  an owner-approved access decision and limit their permissions and lifetime.
+  an access decision approved by me and limit their permissions and lifetime.
 - Review imported workbooks, formulas, macros and artifacts for external links,
   hidden sheets, connections, names, embedded files and metadata before any
   commit. A workbook extension or a clean text scan does not establish safety.
@@ -104,7 +98,7 @@ Update this table, with its date, when a feature is enabled or changed.
   portable check does not certify numerical correctness or host safety.
 
 If a secret or sensitive record is accidentally committed, stop sharing the
-content, revoke or rotate affected credentials through the owner, and
+content, revoke or rotate affected credentials through me, and
 coordinate remediation privately. Do not paste the sensitive value into a
 cleanup issue.
 

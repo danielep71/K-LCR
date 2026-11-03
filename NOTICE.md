@@ -24,26 +24,31 @@ The initial repository setup included files adapted from
 `e6bae6df272083ba596c9eb866b14e6f9152bc15` was inspected on
 2026-10-28. That repository carries MPL-2.0. Git blob identity was verified for `.github/labels.json`,
 `.github/label-policy.json`, `.github/scripts/labels-sync.mjs` and
-`.github/scripts/labels-drift.mjs` (rechecked on 2026-10-28). The other
-imported files were adapted and require this provenance record rather than
-an assertion of byte-for-byte identity.
+`.github/scripts/labels-drift.mjs` (rechecked on 2026-10-28). The label files
+were later replaced by the schema-2 versions from revision
+`dfed6bc079cb83f751a0778684e2d436378398b7` (#93). The other imported files were adapted and require this
+provenance record rather than an assertion of byte-for-byte identity.
 
 | K-LCR paths | Source and relationship | Local adaptation |
 | --- | --- | --- |
-| `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no regulatory-copy or workbook-template exception, Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
-| `.github/labels.json`, `.github/label-policy.json` | K-SFTs files at the source revision; same blobs | Selected application profile with no domain overlay. |
-| `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at the source revision; same blobs | Used with K-LCR repository variables and policy. |
+| `.editorconfig`, `.gitattributes`, `.gitignore` | K-SFTs at the source revision; adapted under #5 | K-LCR paths, no preselected VBA encoding, no workbook-template exception, the byte-for-byte rule for regulatory source copies taken from `dfed6bc` (#97), Markdown trailing whitespace trimmed to match the tracked-text gate; same normalization, binary and ignore policy. |
+| `.github/labels.json` | K-SFTs schema-2 catalogue at `dfed6bc`; same blob since #101 (#93) | Single `labels` list, no overlays, first-person descriptions; the separate selection policy file is removed. |
+| `.github/scripts/labels-sync.mjs`, `.github/scripts/labels-drift.mjs` | K-SFTs files at `dfed6bc`; same blobs (#93) | Used with the K-LCR catalogue and repository variables. |
+| `.github/PULL_REQUEST_TEMPLATE.md` | K-SFTs `.github/PULL_REQUEST_TEMPLATE.md` at `dfed6bc`, adapted under #95 | release/0.1.0 base, `python tools/check.py --ci`, review record matching this governance; no changelog step and no tool vendor named. |
 | `.github/ISSUE_TEMPLATE/` | K-SFTs issue forms/configuration, adapted | K-LCR descriptions, assignee and links; Excel/VBA environment and area fields after the stack decision (#69). |
 | `.github/workflows/labels-sync.yml`, `labels-drift.yml`, `issue-triage.yml` | K-SFTs workflow patterns, adapted | K-LCR triggers, permissions and current issue-triage script. |
 | `tools/check.py`, `tools/test_check.py`, `.github/workflows/repository-integrity.yml` | K-SFTs runner, tests and workflow structure at the source revision, adapted under #7 | K-LCR gates for current tooling, text fixtures, workflow lint and candidate report; no SFT calculation or Excel evidence. |
-| `pyproject.toml`, `tools/requirements-quality-ci.txt` | K-SFTs Ruff/mypy configuration and hash-locked pins at the source revision, adapted under #52 | Python 3.13 target matching the CI runtime; identical package pins and hashes; K-LCR installation reference. |
+| `tools/check_workflows.py`, `tools/test_check_workflows.py` | K-SFTs files at `dfed6bc`, adapted under #109 | Write allowlist limited to the label reconcile and PR milestone jobs. |
+| `pyproject.toml`, `tools/requirements-quality-ci.txt` | K-SFTs Ruff/mypy configuration and hash-locked pins at the source revision, adapted under #52; PyYAML pin added under #109 | Python 3.13 target matching the CI runtime; identical package pins and hashes; K-LCR installation reference. |
 | `tools/README.md` | K-SFTs `tools/README.md` structure at the source revision, adapted under #68 | K-LCR gates, tracked-text checker, tool versions and dependency-update procedure; no VBA, Excel-evidence or traffic tooling described before it exists. |
-| `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs triage logic/tests, adapted | K-LCR repository identity and relevant regression cases. |
+| `tools/check_issues.py`, `tools/test_check_issues.py` | K-SFTs files at `dfed6bc`, adapted under #105 | Assignee read from the issue forms; every Dependabot update entry must assign that person; K-LCR identity only in the forms and governance. |
 | `docs/VBA_HOUSE_STYLE.md`, `INSTALLATION.md` | K-SFTs style and installation structure at the source revision, adapted | K-LCR naming, EU/Basel profile boundary and untested host status; no copied SFT formulas, tested-host claims or workbook paths. |
 | Markdown presentation and badges in this documentation set | K-SFTs structure and glyph/badge vocabulary, adapted under the documentation polish PR | K-LCR-specific status and links; no borrowed execution or release claims. |
 | `docs/index.html`, `docs/assets/site.css` | K-SFTs `docs/index.html` structure and `docs/assets/site.css` at the source revision, adapted under #63; MPL-2.0 | K-LCR scope, profiles, setup status, public-repository links and static publishing; no copied product or validation claims. The architecture SVG is original K-LCR source. |
-| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub or by email (#79); same best-effort response targets and safe harbor; K-LCR's own dated security-features read-back; no published version. |
-| `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and configured controls. |
+| `SECURITY.md` | K-SFTs `SECURITY.md` structure at the source revision, adapted under #4 and #66 | K-LCR scope and automation surface; private reporting through GitHub or by email (#79); same best-effort response targets and safe harbor; current security-feature states kept in the settings evidence (#90); no published version. |
+| `docs/REPOSITORY_SETTINGS.md` | K-SFTs `docs/REPOSITORY_SETTINGS.md` at `3a6ed87388cd0f65c4665c84f2c41f59ff688715` (K-SFTs #163); same blob `a938d56`, adopted under #90 | Portable register without repository identifiers; every row checked against K-LCR's live settings on 2026-10-29. |
+| `docs/REPOSITORY_SETTINGS_EVIDENCE.md` | K-SFTs `docs/REPOSITORY_SETTINGS_EVIDENCE.md` structure at the same revision, adapted under #90 | K-LCR's own dated read-backs, rule IDs, run evidence and historical record; no K-SFTs observations. |
+| `docs/GOVERNANCE.md` | K-SFTs label/governance patterns, rewritten | K-LCR branch state, owner approval and working rules; settings are kept in the settings register and evidence (#90). |
 
 `.github/dependabot.yml`, `tools/check_files.py` and `docs/SOURCE_CONTROL.md`
 were written for this repository; Dependabot uses standard GitHub Actions
@@ -58,6 +63,36 @@ workbooks, regulatory document text, third-party code or imagery merely
 because they are accessible. A citation/link to an official regulatory source
 is preferable to redistributing its full text.
 
+## ⚖️ MIT-licensed material
+
+`.github/workflows/pr-milestones.yml` is copied unchanged (same Git blob
+`91f45e6`) from `.github/workflows/pr-milestones.yml` in
+[danielep71/K-FRTB-SA](https://github.com/danielep71/K-FRTB-SA) at revision
+`80495bebf4cf300660c2fdf386bee6bbad83eed6`, inspected on 2026-10-31 (#107).
+That file is distributed under the MIT License, reproduced here:
+
+> MIT License
+>
+> Copyright (c) 2026 Daniele Penza
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
 ## 🧰 External tools
 
 The workflows use `actions/checkout`, `actions/setup-python`,
@@ -66,7 +101,7 @@ are dependencies fetched by GitHub Actions, not vendored files in K-LCR. The
 Repository integrity workflow downloads the
 [actionlint](https://github.com/rhysd/actionlint) 1.7.12 release binary and
 verifies it against a pinned SHA-256 before use; it is not redistributed.
-It also installs Ruff, mypy and their dependencies from PyPI at the versions
+It also installs Ruff, mypy, PyYAML and their dependencies from PyPI at the versions
 and wheel hashes pinned in `tools/requirements-quality-ci.txt`; they are not
 vendored. Python and Node runtimes used for repository checks are not bundled. Verify
 upstream license/version metadata when adding or changing a dependency;

@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -14,9 +16,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text and "
-         "workflow syntax; no Excel execution.")
-LABEL_POLICY = ".github/label-policy.json"
+SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text, "
+         "workflow syntax and invariants; no Excel execution.")
 
 
 @dataclass(frozen=True)
@@ -89,12 +90,12 @@ def default_gates() -> list[Gate]:
         Gate("tool-tests", "python",
              (python, "-m", "unittest", "discover", "-s", "tools", "-p", "test_*.py")),
         Gate("labels-sync-self-test", "node",
-             ("node", ".github/scripts/labels-sync.mjs", "--policy", LABEL_POLICY, "--self-test")),
+             ("node", ".github/scripts/labels-sync.mjs", "--self-test")),
         Gate("labels-manifest", "node",
-             ("node", ".github/scripts/labels-sync.mjs", "--policy", LABEL_POLICY, "--mode", "validate")),
+             ("node", ".github/scripts/labels-sync.mjs", "--mode", "validate")),
         Gate("labels-drift-self-test", "node",
-             ("node", ".github/scripts/labels-drift.mjs", "--policy", LABEL_POLICY, "--self-test")),
-        Gate("issue-config", "python", (python, "tools/check_issues.py", "--check-config")),
+             ("node", ".github/scripts/labels-drift.mjs", "--self-test")),
+        Gate("issue-config", "pyyaml", (python, "tools/check_issues.py", "--check-config")),
         Gate("format-fixtures", "python", (python, "tools/check_files.py", "--self-test")),
         Gate("tracked-text", "python", (python, "tools/check_files.py")),
         Gate("ruff", "ruff", ("ruff", "check", "--no-cache", "tools")),
@@ -102,10 +103,14 @@ def default_gates() -> list[Gate]:
         Gate("mypy", "mypy", ("mypy", "--no-incremental")),
         Gate("mypy-strict-probe", "mypy", probe=mypy_strict_probe),
         Gate("actionlint", "actionlint", ("actionlint", "-no-color")),
+        Gate("workflow-invariants", "pyyaml", (python, "tools/check_workflows.py")),
     ]
 
 
 def available(tool: str) -> bool:
+    if tool == "pyyaml":
+        # On GitHub Actions the gate runs anyway, so a missing PyYAML fails it.
+        return importlib.util.find_spec("yaml") is not None or bool(os.environ.get("GITHUB_ACTIONS"))
     return tool == "python" or shutil.which(tool) is not None
 
 
@@ -117,8 +122,12 @@ def tool_versions(gates: Sequence[Gate], root: Path) -> dict[str, str]:
         if not available(tool):
             versions[tool] = "not installed"
             continue
-        executable = sys.executable if tool == "python" else tool
-        code, log = run([executable, flags.get(tool, "--version")], root)
+        if tool == "pyyaml":
+            code, log = run([sys.executable, "-c", "import yaml; print('PyYAML', yaml.__version__)"],
+                            root)
+        else:
+            executable = sys.executable if tool == "python" else tool
+            code, log = run([executable, flags.get(tool, "--version")], root)
         lines = log.strip().splitlines()
         versions[tool] = lines[0] if code == 0 and lines else f"unknown (exit {code})"
     return versions

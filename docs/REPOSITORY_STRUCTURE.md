@@ -10,7 +10,7 @@ for learning, research and independent validation. Intended users are risk
 analysts, validators, researchers and educators working with synthetic examples
 and independently sourced expected results.
 
-The owner selected Excel/VBA, separate EU and Basel profiles, and reference and
+I selected Excel/VBA, separate EU and Basel profiles, and reference and
 validation use on 2026-10-28 in issue #3. The repository currently contains setup
 tooling and documentation: it has no LCR calculation engine or validated workbook.
 This document defines the intended design, not functionality already delivered.
@@ -104,8 +104,9 @@ are not claims that those components exist today.
 | Path | Purpose | Status |
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
-| docs/ | Governance, scope, decisions, contracts and evidence guidance | Present |
-| .github/ | Labels, issue forms, dependency configuration and workflows | Present |
+| AGENTS.md | Editorial and assistant rules | Present |
+| docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
+| .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
 | src/api/ | Public VBA entry points, validation orchestration and contracts | Planned |
@@ -138,5 +139,5 @@ A neutral test scaffold or template proves infrastructure only.
 
 The [decision log and follow-on backlog](DECISIONS.md) records accepted direction,
 remaining decisions and the work to schedule after setup. Work moves through
-release/0.1.0 first; integration into main follows explicit owner authorization
+release/0.1.0 first; integration into main follows my explicit authorization
 under [governance](GOVERNANCE.md).

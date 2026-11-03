@@ -88,7 +88,8 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | Topic | Read |
 | --- | --- |
 | Scope, decisions and follow-on work | [Architecture](docs/REPOSITORY_STRUCTURE.md) · [Decisions](docs/DECISIONS.md) |
-| Development, review and checks | [Governance](docs/GOVERNANCE.md) · [Repository tooling](tools/README.md) |
+| Development, review and checks | [Governance](docs/GOVERNANCE.md) · [Repository tooling](tools/README.md) · [Working rules](AGENTS.md) |
+| Settings, evidence, verification gaps | [Repository settings](docs/REPOSITORY_SETTINGS.md) · [Settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md) |
 | Source files and generated artifacts | [Source control](docs/SOURCE_CONTROL.md) |
 | VBA and Excel target | [House style](docs/VBA_HOUSE_STYLE.md) · [Installation](INSTALLATION.md) |
 | License, provenance and safe examples | [Notice](NOTICE.md) · [Security](SECURITY.md) |
@@ -101,7 +102,7 @@ future calculations require source editions, reporting dates and parameter
 versions. All examples and test data must be synthetic.
 
 All development first targets `release/0.1.0`. Integration into `main`
-requires explicit owner authorization; see [governance](docs/GOVERNANCE.md).
+requires my explicit authorization; see [governance](docs/GOVERNANCE.md).
 
 ## 👤 Author
 

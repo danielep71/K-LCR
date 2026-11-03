@@ -36,17 +36,18 @@ versions; each gate also writes `<gate>.log`.
 | Gate | Checks |
 | --- | --- |
 | `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, and the issue-triage rules. |
-| `labels-sync-self-test` | The label synchronizer's validation, overlay and reconciliation fixtures. |
-| `labels-manifest` | `.github/labels.json` is valid under `.github/label-policy.json`. |
+| `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
+| `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
-| `issue-config` | The issue forms set the assignee and exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have a dependencies field; blank issues are disabled; `blocked` is the catalogue's only dependency status label (`check_issues.py --check-config`). |
+| `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have a dependencies field; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). Without PyYAML it fails on GitHub Actions and is NOT RUN locally. |
 | `format-fixtures` | The tracked-text checker's own fixtures: valid samples pass, malformed ones fail (`check_files.py --self-test`). |
-| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` is excluded. |
+| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
 | `ruff` | Lint of `tools/` with the rules in `pyproject.toml`. |
 | `ruff-complexity-probe` | The complexity ceiling is active: a synthetic complexity-15 function passes and one at 16 is rejected. |
 | `mypy` | `mypy --strict` over `tools/`, tests included. |
 | `mypy-strict-probe` | Strict mode is active: an annotated function passes and the same function without annotations is rejected. |
 | `actionlint` | Syntax, expressions and shell scripts of every workflow. |
+| `workflow-invariants` | The project rules for every workflow (`.yml` and `.yaml`) and Dependabot (`check_workflows.py`, PyYAML): every `uses:` pinned to a 40-character SHA; checkouts with `persist-credentials: false`; workflow-level `permissions` without write access; `timeout-minutes` on every job; write permissions only for `labels-sync.yml`/`reconcile` (issues) and `pr-milestones.yml`/`reconcile` (pull-requests); the `Repository integrity` job matches the required check in `docs/GOVERNANCE.md` and `docs/REPOSITORY_SETTINGS.md`, with no `if`, `strategy` or extra trigger filter; the label reconcile job keeps its exact condition (not a pull request and the default branch); `pr-milestones.yml` keeps its events, permissions, condition and single inline script; Dependabot covers GitHub Actions (`/`) and pip (`/tools`) once each, sets no milestone and exactly `P3`. Without PyYAML it fails on GitHub Actions and is NOT RUN locally. `test_check_workflows.py` mutates each rule and runs the milestone script against a fake API. |
 
 The label gates run on every pull request here, although the label workflows
 run on a pull request only when it changes label files. Live label
@@ -64,8 +65,8 @@ reference; it never counts as a prerequisite. The token therefore needs
 
 ```sh
 GITHUB_TOKEN=<token with issues:read and pull-requests:read> python tools/check_issues.py --repository danielep71/K-LCR
-python tools/check_issues.py --input issues.json   # issues exported as GitHub REST JSON
-python tools/check_issues.py --check-config        # forms and label catalogue only
+python tools/check_issues.py --input issues.json --repo-name danielep71/K-LCR   # issues exported as GitHub REST JSON
+python tools/check_issues.py --check-config        # forms, catalogue, label guide and Dependabot
 ```
 
 Exit code 0 means no findings, 1 means findings, 2 means the audit could not
@@ -78,7 +79,7 @@ end dates are not validated yet (#8).
 | --- | --- | --- |
 | Python | 3.13 | `actions/setup-python` |
 | Node.js | 22 | `actions/setup-node` |
-| Ruff, mypy | 0.16.6, 2.3.1 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
+| Ruff, mypy, PyYAML | 0.16.6, 2.3.1, 6.0.3 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
 | actionlint | 1.7.12 | Release archive verified by SHA-256 in the workflow |
 
 Install the same quality tools locally, on CPython 3.13 and Linux x86_64:
@@ -88,7 +89,7 @@ python -m pip install --only-binary=:all: --require-hashes -r tools/requirements
 ```
 
 On another platform, install the same versions without the lock
-(`pip install ruff==0.16.6 mypy==2.3.1`); CI remains the reference run.
+(`pip install ruff==0.16.6 mypy==2.3.1 pyyaml==6.0.3`); CI remains the reference run.
 actionlint is available from its
 [1.7.12 release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12).
 
@@ -114,7 +115,7 @@ reports on every pull request and is the required check of both rulesets.
 ## 📦 Dependency updates
 
 `.github/dependabot.yml` proposes weekly updates to the pinned GitHub Actions
-and, separately, to the hash-locked Ruff/mypy requirements
+and, separately, to the hash-locked Ruff/mypy/PyYAML requirements
 (`tools/requirements-quality-ci.txt`, releases at least 14 days old). Each
 ecosystem's updates are grouped into one pull request against the active
 release branch, with the `ci` and `P3` labels and danielep71 as assignee. Dependabot reads this file
@@ -122,8 +123,8 @@ from the default branch, `main`, so a change to it takes effect once it is
 integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
-Dependabot security updates, enabled on 2026-10-29, ignore `target-branch`:
-their pull requests target `main`, and merging one needs the owner's approval
+Dependabot security updates ignore `target-branch`: their pull requests target
+`main`, and merging one needs my approval
 ([docs/GOVERNANCE.md](../docs/GOVERNANCE.md)).
 
 Nothing merges automatically. Before merging an update:
