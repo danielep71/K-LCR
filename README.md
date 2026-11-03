@@ -54,7 +54,7 @@ K-LCR adds liquidity risk to the
 [K-Risk Engines](https://github.com/danielep71/K-Risk-Engines) portfolio of
 independent risk calculators, whose other projects cover counterparty credit,
 market, CVA and interest-rate risk. It is planned, not implemented: no LCR
-result exists yet, and the portfolio hub does not list K-LCR yet.
+result exists yet.
 
 ## 📥 Get started
 
