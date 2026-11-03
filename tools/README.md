@@ -124,7 +124,7 @@ integrated into `main`. When a new release branch is opened, update its
 `target-branch`.
 
 Dependabot security updates ignore `target-branch`: their pull requests target
-`main`, and merging one needs the owner's approval
+`main`, and merging one needs my approval
 ([docs/GOVERNANCE.md](../docs/GOVERNANCE.md)).
 
 Nothing merges automatically. Before merging an update:

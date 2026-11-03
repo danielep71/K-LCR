@@ -16,13 +16,13 @@ tooling, dependency updates and fixes.
 
 | Branch | Role |
 | --- | --- |
-| main | Integrated baseline; accepts only a release integration PR after explicit owner authorization for that candidate. |
+| main | Integrated baseline; accepts only a release integration PR after my explicit authorization for that candidate. |
 | release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
 | `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. Never `codex/` or `claude/` ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
 | traffic-history | Reserved data-only branch; not yet created. Never a task base or merged into source branches. |
 
-A new active release branch requires an owner decision. A release branch name,
+A new active release branch requires my decision. A release branch name,
 completed issue, green check or closed milestone does not authorize integration
 into main, tagging, publication or a visibility change.
 
@@ -36,24 +36,24 @@ into main, tagging, publication or a visibility change.
    of the linked issue; milestones belong to issues only.
 3. Review the final diff and record the exact head SHA, reviewer identity,
    findings and their resolution in the PR description or review. Keep author
-   attribution truthful; an agent review must not be described as owner approval.
+   attribution truthful; an agent review must not be described as my approval.
 4. Require a passing Repository integrity check for the current candidate and
    current base, an up-to-date task branch and resolved review conversations.
    Path-specific label checks supplement the universal required check.
-5. Squash-merge the task PR into release/0.1.0 within the owner's task
+5. Squash-merge the task PR into release/0.1.0 within my task
    authorization. Use a subject ending in the PR number and a body stating what
    changed, what was validated and what was not, ending with `Refs #<issue>`.
    Verify the release push check, then record issue completion evidence.
 
-The sole owner cannot approve their own PR, so the main and release-branch
+I cannot approve my own PR, so the main and release-branch
 rulesets require a PR with zero approving reviews
 ([settings](REPOSITORY_SETTINGS.md#rulesets)); this does not waive review or
-the separate owner authorization required for main. CI and review are
+my separate authorization required for main. CI and review are
 separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 The automated code reviewer reviews PRs opened by people, not bot-authored PRs,
 and does not re-run after a fix push. Wait for its review to complete before
-merging; requesting a re-run needs the owner's approval each time. Record
+merging; requesting a re-run needs my approval each time. Record
 whether a review actually completed for that SHA, including findings; do not
 infer coverage from a previous review.
 Automated code review was observed on 2026-10-28 for exact PR heads,
@@ -62,7 +62,7 @@ at `6063d866a9bec9bf89a02e4634dd726650ee5f6a` and
 [PR #40](https://github.com/danielep71/K-LCR/pull/40#issuecomment-6478923525)
 at `2815175929c60cd144fa172bd26517c88b58aec8`, with no reported findings.
 These receipts establish code-review completion for those commits only, not
-maintainer approval, security-review completion or guaranteed future coverage.
+my approval, security-review completion or guaranteed future coverage.
 An outstanding requested review or unresolved finding prevents task completion.
 
 ## 🌿 Release integration and synchronization
@@ -71,7 +71,7 @@ An outstanding requested review or unresolved finding prevents task completion.
    issues and PRs, validation evidence and known limitations.
 2. **Wait for explicit authorization from @danielep71 to merge this candidate
    into main.** General development approval, including permission to implement
-   an issue, is not authorization. Record the owner's decision and its source
+   an issue, is not authorization. Record my decision and its source
    in the PR; a changed candidate needs renewed authorization.
 3. With current required checks passing and review findings resolved, use a
    merge commit (never squash or rebase) for the authorized integration.
@@ -89,15 +89,15 @@ Do not push directly to main or a protected release branch, and never
 force-push or use Update branch on them. Do not
 rebase or amend shared history. If either protected branch moves unexpectedly
 during integration/sync, stop integration, record the divergence and obtain
-an owner decision on recovery; use reviewed PRs without weakening protections.
+my decision on recovery; use reviewed PRs without weakening protections.
 
 ## ⏳ Exceptions and deferred work
 
-Record any exception in the affected issue/PR with the reason, scope, owner
+Record any exception in the affected issue/PR with the reason, scope, my
 decision, residual risk and follow-on issue/milestone/date. Pending work stays
-open or is explicitly rescheduled by the owner; silence is not acceptance.
-Policy text is not proof of platform enforcement. In particular, the explicit
-owner authorization gate above is procedural: the zero-approval GitHub rule
+open or is explicitly rescheduled by me; silence is not acceptance.
+Policy text is not proof of platform enforcement. In particular, my explicit
+authorization gate above is procedural: the zero-approval GitHub rule
 does not mechanically enforce it.
 
 ## 🎫 Issues
@@ -123,9 +123,9 @@ named prerequisite is unresolved. Review dependent issues when a prerequisite
 closes. Pull-request references do not count as blocking prerequisites.
 
 The read-only Issue triage workflow audits open issues on issue events and
-manual dispatch. Findings require maintainer triage; the workflow never edits
+manual dispatch. Findings require my triage; the workflow never edits
 issues. Its mechanical P1 check requires bug; confirming a calculation defect
-remains a maintainer decision.
+remains my decision.
 
 PRs into the active release branch, bot PRs included, carry labels matching
 their tracking issue but no milestone: milestones belong to issues only, and
@@ -204,11 +204,10 @@ python tools/check.py --ci
 
 ## 📜 Provenance
 
-The initial label and issue-triage configuration was adapted from K-SFTs on
-2026-10-28. This historical source attribution is not an operational dependency
-or an instruction to follow another repository's current policy. K-LCR's branch
-and review policy is defined above: release first, main only with explicit
-owner authorization.
+Imported and adapted files, with their sources and licenses, are recorded only
+in [NOTICE.md](../NOTICE.md). That record is attribution, not an operational
+dependency. The branch and review policy is defined above: release first, main
+only with my explicit authorization.
 
 ## ⚙️ Repository settings
 
@@ -238,7 +237,7 @@ Applies to `main` and every `release/**` branch:
 - Dependabot security updates ignore `target-branch` and open pull requests
   against `main`. Review them as described in
   [tools/README.md](../tools/README.md#-dependency-updates); merging one into
-  main needs the owner's approval, like any main integration. Then synchronize
+  main needs my approval, like any main integration. Then synchronize
   the release branch with main through a sync PR, as for any integration.
 - GitHub Pages publishes main `/docs`; site changes follow
   [WEBSITE.md](WEBSITE.md).
@@ -261,9 +260,9 @@ execution or these future gates.
 
 ## 🔒 Licensing and data
 
-The owner selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
+I selected MPL-2.0 for K-LCR on 2026-10-28. See [LICENSE](../LICENSE)
 and [NOTICE.md](../NOTICE.md) for the license and imported-file provenance.
 Keep vulnerability details and confidential data out of ordinary issues and
 PRs; [SECURITY.md](../SECURITY.md) defines private vulnerability reporting
 through GitHub or by email, response targets and synthetic examples.
-Licensing and visibility are separate owner decisions.
+Licensing and visibility are separate decisions of mine.

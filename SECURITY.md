@@ -87,7 +87,7 @@ or enforcement.
   issue attachments.
 - Keep access tokens, credentials and environment files out of source,
   fixtures, GitHub issue bodies and build logs. Use GitHub secrets only after
-  an owner-approved access decision and limit their permissions and lifetime.
+  an access decision approved by me and limit their permissions and lifetime.
 - Review imported workbooks, formulas, macros and artifacts for external links,
   hidden sheets, connections, names, embedded files and metadata before any
   commit. A workbook extension or a clean text scan does not establish safety.
@@ -98,7 +98,7 @@ or enforcement.
   portable check does not certify numerical correctness or host safety.
 
 If a secret or sensitive record is accidentally committed, stop sharing the
-content, revoke or rotate affected credentials through the owner, and
+content, revoke or rotate affected credentials through me, and
 coordinate remediation privately. Do not paste the sensitive value into a
 cleanup issue.
 
