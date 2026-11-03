@@ -24,12 +24,13 @@ exact supported builds and tested configurations remain subject to #15.
 | Licensing, imported-code provenance and confidentiality policy | #4 | [NOTICE](../NOTICE.md), [LICENSE](../LICENSE) and [SECURITY](../SECURITY.md) |
 | Source layout, encoding and generated-file handling | #5 | [Source control](SOURCE_CONTROL.md), `.editorconfig`, `.gitattributes` and `.gitignore` |
 | General host, API, numeric-type and source-authoring conventions | #6 | [VBA house style](VBA_HOUSE_STYLE.md) and [Installation](../INSTALLATION.md); actual host execution remains #14/#15 |
+| EU/Basel source editions, requirement map, source-based resolutions and interpretation register | #9 | [Source register](methodology/SOURCES.md) and [applicability map](methodology/APPLICABILITY.md); my applicability decisions remain #126 |
 
 ## 📋 Remaining setup decisions
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
-| Exact EU/Basel source editions, applicability and interpretation register | #9 | Authoritative sources and resolved requirements |
+| EU and Basel applicability positions for v0.1 | #126 | Each decision recorded in the [applicability map](methodology/APPLICABILITY.md) with its date and locators |
 | Data, parameter and output schemas; units and reconciliation | #10 | Versioned contracts and synthetic examples |
 | Independent fixture schema and comparison/rounding rules | #11 | Independently derived examples and validation criteria |
 | Neutral scaffold, workbook synchronization and real host evidence | #13, #14, #15 | Executed evidence bound to the tested candidate |

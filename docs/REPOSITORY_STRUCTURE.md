@@ -31,8 +31,10 @@ fail validation rather than silently selecting a default or substituting the
 other profile. Shared code is permitted only where the documented semantics agree;
 profile-specific classification, parameters and rules remain explicit.
 
-Issue #9 establishes the authoritative source register and exact applicability
-decisions before formula work starts. Issue #10 defines schemas and issue #11
+The [source register](methodology/SOURCES.md) records the authoritative
+editions, and the [applicability map](methodology/APPLICABILITY.md) links each
+LCR topic to them; my applicability decisions are tracked in #126 and come
+before formula work starts. Issue #10 defines schemas and issue #11
 defines independently derived validation fixtures. No percentages, thresholds,
 eligibility rules or effective-date claims are established by this architecture
 document. Compare profiles only on deliberately mapped inputs with explained
@@ -106,6 +108,7 @@ are not claims that those components exist today.
 | README.md | Entry point, maturity and navigation | Present |
 | AGENTS.md | Editorial and assistant rules | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
+| docs/methodology/ | Source register, applicability map and, later, contracts and fixture rules | Present |
 | .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
