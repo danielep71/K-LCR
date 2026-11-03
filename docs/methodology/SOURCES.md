@@ -81,8 +81,9 @@ None are stored yet. bis.org permits users to reproduce only "a limited
 extract" of BIS material, with the BIS cited as the source
 (<https://www.bis.org/terms_conditions.htm>, read on 2026-11-03), so a full
 copy of `SRC-06` is not covered. The EUR-Lex legal notice could not be read
-from the environment used. Whether to store copies is decision A09 in
-[APPLICABILITY.md](APPLICABILITY.md).
+from the environment used. By decision A09 in
+[APPLICABILITY.md](APPLICABILITY.md), no BIS material is stored, and the EU
+copies wait until I check the EUR-Lex reuse notice.
 
 A stored copy goes under `docs/methodology/sources/`, byte for byte: Git does
 not normalize those files and the tracked-text check skips them. It is named
