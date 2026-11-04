@@ -1,0 +1,17 @@
+{
+ "schema": "klcr-test-case",
+ "case_version": 1,
+ "id": "illustrative-eu-rejected-input",
+ "synthetic": true,
+ "description": "Format example of an invalid case: holding A002 has a negative market value, which the input contract rejects with LCR-RANGE.",
+ "profile": "EU",
+ "category": "invalid-input",
+ "requirements": [],
+ "parameter_set": "tests/parameters/parameter-set-eu-illustrative.json",
+ "review": {
+  "derived_by": "Daniele Penza",
+  "reviewed_by": null,
+  "date": "2026-11-04",
+  "status": "unreviewed"
+ }
+}

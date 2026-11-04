@@ -108,7 +108,7 @@ design of the [input contract](DATA_CONTRACT.md), not by a source text.
 
 | ID | Question | Locators | Follow-up |
 | --- | --- | --- | --- |
-| `I03` | The EU text states its composition requirements as three limits on the buffer. Basel states two caps on Level 2 assets and gives an adjustment formula. The two are compared only on deliberately mapped inputs, with the difference explained. | Art. 17; Annex I; LCR30.31 to LCR30.39 | #11 |
+| `I03` | The EU text states its composition requirements as three limits on the buffer. Basel states two caps on Level 2 assets and gives an adjustment formula. The two are compared only on deliberately mapped inputs, with the difference explained. | Art. 17; Annex I; LCR30.31 to LCR30.39 | Planned case `PC-17` in [VALIDATION_PLAN.md](VALIDATION_PLAN.md) |
 
 A resolved interpretation moves to the resolutions table, citing the source
 or the decision that resolved it.
