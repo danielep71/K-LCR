@@ -93,14 +93,22 @@ given a default.
 | `A08` | The contracts cover every standard outflow and inflow category, with the inflow cap. Implementation may come in stages. The treatments excluded by A06 stay out. | The category lists of the data contract are complete for both profiles. | Art. 22 to 25, 27, 28, 30, 31, 31a, 32 and 33(1) | LCR40 |
 | `A09` | No copy of BIS material is stored. EU copies (`SRC-02` in full and an extract of `SRC-01`) are stored only after I check the EUR-Lex legal notice on reuse. | I checked the notice on 2026-11-03: the copies are in [sources/](sources/README.md) (#129). | `SRC-01`, `SRC-02` | `SRC-06` |
 
+## 🔧 Resolved by the contracts of #10
+
+These interpretations were open in register version 1 and are resolved by the
+design of the [input contract](DATA_CONTRACT.md), not by a source text.
+
+| ID | Resolution |
+| --- | --- |
+| `I01` | The input contract does not map reporting fields. Its categories follow the articles of `SRC-02` directly, so neither Implementing Regulation (EU) No 680/2014, cited in Art. 4(4), nor `SRC-05` governs its fields. |
+| `I02` | The EU profile calculates under `SRC-02` only. CRR Articles 416 to 425 define no category, parameter or rule of the contract. |
+| `I04` | The input contract does not follow the reporting templates of `SRC-05`. A mapping to them, if needed, is later work. |
+
 ## 🔍 Unresolved interpretations
 
 | ID | Question | Locators | Follow-up |
 | --- | --- | --- | --- |
-| `I01` | Article 4(4) of `SRC-02` refers to Implementing Regulation (EU) No 680/2014 for reporting below the minimum. The current reporting standard is `SRC-05`. Which text governs the reporting fields that #10 maps? | Art. 4(4); `SRC-05` | #10 |
-| `I02` | CRR Articles 416 to 425 are reporting provisions written "pending the specification of a liquidity requirement in accordance with Article 460" (Article 420(1)). The EU profile calculates under `SRC-02`. Which of those articles, if any, the profile also needs is open. | CRR Art. 416 to 425 and 460 | #10 |
 | `I03` | The EU text states its composition requirements as three limits on the buffer. Basel states two caps on Level 2 assets and gives an adjustment formula. The two are compared only on deliberately mapped inputs, with the difference explained. | Art. 17; Annex I; LCR30.31 to LCR30.39 | #11 |
-| `I04` | `SRC-05`'s annexes, with the reporting templates, were not retrieved. Whether the data contract follows those templates is open. | `SRC-05` | #10 |
 
 A resolved interpretation moves to the resolutions table, citing the source
 or the decision that resolved it.
