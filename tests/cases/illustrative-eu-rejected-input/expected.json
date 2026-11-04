@@ -1,0 +1,49 @@
+{
+ "schema": "klcr-test-expected",
+ "expected_version": 1,
+ "case": "illustrative-eu-rejected-input",
+ "outputs": [
+  {
+   "quantity": "input_status",
+   "text": "fail",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/data-contract.json",
+    "locator": "policy.any_finding",
+    "derivation": "Any finding rejects the run.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "input_findings",
+   "text": "LCR-RANGE",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/data-contract.json",
+    "locator": "findings.LCR-RANGE",
+    "derivation": "A negative amount is outside the range of the amount type.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "result_status",
+   "text": "rejected",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/parameter-result-contract.json",
+    "locator": "result.statuses.rejected",
+    "derivation": "Rejected input gives a rejected result with CALC-INPUT-REJECTED.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  }
+ ]
+}

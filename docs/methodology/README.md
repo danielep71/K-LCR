@@ -11,6 +11,8 @@ contracts come in #10, and the independent fixtures in #11.
 | [SOURCES.md](SOURCES.md) | Source register: each regulatory text with its edition, retrieval record, status and the locators used |
 | [DATA_CONTRACT.md](DATA_CONTRACT.md) | Input contract of a run: files, format, fields, findings, reconciliation and fingerprint; machine-readable in [data-contract.json](data-contract.json), with the categories of each profile in [categories.json](categories.json) |
 | [PARAMETERS_AND_RESULTS.md](PARAMETERS_AND_RESULTS.md) | Layout of parameter sets and results, and the diagnostic codes; machine-readable in [parameter-result-contract.json](parameter-result-contract.json) |
+| [TEST_CASES.md](TEST_CASES.md) | Format of a registered test case: metadata, expected outputs, reference classes, tolerance and comparison rules, registered versus executed |
+| [VALIDATION_PLAN.md](VALIDATION_PLAN.md) | The cases each profile needs, their oracles, and when a rule counts as validated |
 | [APPLICABILITY.md](APPLICABILITY.md) | Requirement map from LCR topics to EU and Basel locators, planned parameter sets and tests; what the sources resolve; my applicability decisions and the unresolved interpretations |
 
 Rules for every document, parameter set and fixture:
