@@ -39,20 +39,21 @@ Status: `registered` (in `tests/cases/`) or `planned`.
 | `PC-10` | nominal | REQ-06 | Amounts converted from several original currencies; totals in the reporting currency only (A02) | planned |
 | `PC-11` | nominal | REQ-05 | The same portfolio declared `INDIVIDUAL` and `CONSOLIDATED`: identical figures, since K-LCR does not consolidate (A01) | planned |
 | `PC-12` | nominal | REQ-01 | The records of `PC-01` in reverse order: identical figures | planned |
-| `PC-13` | invalid | REQ-12, REQ-15, REQ-21, REQ-24, REQ-25 | Each excluded category rejected with `LCR-OUT-OF-SCOPE` (A03 to A06) | planned |
-| `PC-14` | invalid | — | One case per input-contract finding group: structure, field, run and category rules | planned |
-| `PC-15` | invalid | — | A parameter set of the other profile, or an incomplete one: `CALC-PARAMETER-SET-PROFILE` or `CALC-PARAMETER-SET-INVALID` | planned |
+| `PC-13` | invalid-input | REQ-12, REQ-15, REQ-21, REQ-24, REQ-25 | Each excluded category rejected with `LCR-OUT-OF-SCOPE` (A03 to A06) | planned |
+| `PC-14` | invalid-input | — | One case per input-contract finding group: structure, field, run and category rules | planned |
+| `PC-15` | invalid-parameters | — | A parameter set of the other profile, or an incomplete one: `CALC-PARAMETER-SET-PROFILE` or `CALC-PARAMETER-SET-INVALID` | planned |
 | `PC-16` | nominal | REQ-11 | Basel only: Level 2B included or not by the parameter set's discretion choice (A07) | planned |
 | `PC-17` | nominal | REQ-13 | The same mapped inputs under both profiles, with the composition difference explained (I03) | planned |
 | `illustrative-eu-input-totals` | nominal | — | Format example: synthetic input totals from a derivation script | registered |
-| `illustrative-eu-rejected-input` | invalid | — | Format example: a negative amount rejected by the input contract | registered |
+| `illustrative-eu-rejected-input` | invalid-input | — | Format example: a negative amount rejected by the input contract | registered |
 
 ## 📊 Evidence for a validated rule
 
 A rule of a profile is validated when:
 1. at least one `published` or `independent` case covering it executes and
    passes against the implementation of the rule;
-2. its `boundary` and `invalid` cases from this plan are registered and pass;
+2. its `boundary`, `invalid-input` and `invalid-parameters` cases from this
+   plan are registered and pass;
 3. the case's `review.status` is `reviewed`.
 
 Each release lists which rules are validated, under which source edition and

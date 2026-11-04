@@ -57,6 +57,12 @@ class ComparisonTests(unittest.TestCase):
         self.assertTrue(ctc.matches("0.0009", "0", loose))
         self.assertFalse(ctc.matches("0.002", "0", loose))
 
+    def test_comparison_never_rounds(self) -> None:
+        self.assertFalse(ctc.matches("1.0000000000000000000000000001", "0", {"absolute": "1", "relative": "0"}))
+        self.assertTrue(ctc.matches("1.0000000000000000000000000000", "0", {"absolute": "1", "relative": "0"}))
+        self.assertFalse(ctc.matches("100.0000000000000000000000000001", "100",
+                                     {"absolute": "0", "relative": "0"}))
+
     def test_non_finite_and_non_decimal_values_never_match(self) -> None:
         loose = {"absolute": "1000", "relative": "1"}
         for actual in ("NaN", "inf", "-Infinity", "1e3", "", "None"):
@@ -111,6 +117,23 @@ class OutputTests(Workspace):
         expected["case"] = "eu-input-totals"
         self.save("eu-input-totals", "expected.json", expected)
         self.assertEqual([c[0] for c in self.codes()], ["CASE-OUTPUT", "CASE-OUTPUT"])
+
+    def test_invalid_parameters_case(self) -> None:
+        folder = self.root / ctc.CASES
+        shutil.copytree(folder / CASE, folder / "illustrative-eu-basel-parameters")
+        data = self.load("illustrative-eu-basel-parameters", "case.json")
+        data.update(id="illustrative-eu-basel-parameters", category="invalid-parameters",
+                    parameter_set="tests/parameters/parameter-set-basel-illustrative.json")
+        self.save("illustrative-eu-basel-parameters", "case.json", data)
+        expected = self.load("illustrative-eu-basel-parameters", "expected.json")
+        expected["case"] = "illustrative-eu-basel-parameters"
+        expected["outputs"] = [expected["outputs"][0], expected["outputs"][1],
+                               {**expected["outputs"][4], "text": "failed"}]
+        self.save("illustrative-eu-basel-parameters", "expected.json", expected)
+        self.assertEqual(self.codes(), [])
+        expected["outputs"][2]["text"] = "rejected"
+        self.save("illustrative-eu-basel-parameters", "expected.json", expected)
+        self.assertEqual(self.codes(), [["CASE-EXPECTED", "illustrative-eu-basel-parameters", "expected.json"]])
 
     def test_invalid_case_shape(self) -> None:
         data = self.load(INVALID, "expected.json")

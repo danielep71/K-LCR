@@ -19,7 +19,7 @@ import sys
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date
-from decimal import Decimal, InvalidOperation
+from decimal import Context, Decimal, Inexact, InvalidOperation, localcontext
 from pathlib import Path
 from typing import Any
 
@@ -34,7 +34,7 @@ CASE_KEYS = {"schema", "case_version", "id", "synthetic", "description", "profil
              "requirements", "parameter_set", "review"}
 REVIEW_KEYS = {"derived_by", "reviewed_by", "date", "status"}
 REFERENCE_KEYS = {"class", "source", "locator", "derivation", "script", "derived_by", "reviewed_by", "date"}
-CATEGORIES = ("nominal", "boundary", "invalid")
+CATEGORIES = ("nominal", "boundary", "invalid-input", "invalid-parameters")
 CASE_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 DECIMAL = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$")
 CONTRACT_TEXTS = ("input_status", "input_findings", "result_status")
@@ -121,6 +121,8 @@ def parameter_set_findings(case: str, data: Mapping[str, Any], root: Path) -> li
     path = data["parameter_set"]
     if not isinstance(path, str) or not path.startswith(f"{PARAMETERS.as_posix()}/") or not (root / path).is_file():
         return [Finding("CASE-METADATA", case, "case.json:parameter_set", "an existing file under tests/parameters")]
+    if data["category"] == "invalid-parameters":
+        return []  # The case deliberately names a set of another profile or an invalid one.
     try:
         profile = strict_json(root / path).get("profile")
     except (ValueError, AttributeError):
@@ -284,16 +286,20 @@ def expected_findings(case: str, data: Any, metadata: Mapping[str, Any], currenc
     quantities = [o.get("quantity") for o in outputs if isinstance(o, dict)]
     if len(quantities) != len(set(quantities)):
         found.append(Finding("CASE-EXPECTED", case, "expected.json", "each quantity appears once"))
-    if metadata.get("category") == "invalid":
-        found += invalid_case_findings(case, outputs)
+    if metadata.get("category") in ("invalid-input", "invalid-parameters"):
+        found += invalid_case_findings(case, outputs, str(metadata["category"]))
     return found
 
 
-def invalid_case_findings(case: str, outputs: Sequence[Any]) -> list[Finding]:
+def invalid_case_findings(case: str, outputs: Sequence[Any], category: str) -> list[Finding]:
+    """An invalid-input case is rejected by the input contract; an invalid-parameters case
+    passes it and fails on its parameter set."""
     texts = {o["quantity"]: o.get("text") for o in outputs if isinstance(o, dict) and "quantity" in o}
-    if texts.get("input_status") != "fail" or "input_findings" not in texts or texts.get("result_status") != "rejected":
+    expected = (("fail", "rejected") if category == "invalid-input" else ("pass", "failed"))
+    if (texts.get("input_status"), texts.get("result_status")) != expected or "input_findings" not in texts:
         return [Finding("CASE-EXPECTED", case, "expected.json",
-                        "an invalid case expects input_status fail, its input_findings and result_status rejected")]
+                        f"an {category} case expects input_status {expected[0]}, its input_findings and "
+                        f"result_status {expected[1]}")]
     if any(isinstance(o, dict) and "value" in o for o in outputs):
         return [Finding("CASE-EXPECTED", case, "expected.json", "an invalid case has no numeric output")]
     return []
@@ -305,10 +311,14 @@ def invalid_case_findings(case: str, outputs: Sequence[Any]) -> list[Finding]:
 def matches(actual: Any, expected: str, tolerance: Mapping[str, str]) -> bool:
     """|a - e| <= max(absolute, relative * |e|), with finite decimals only."""
     a, e = decimal_value(str(actual)), Decimal(expected)
+    absolute, relative = Decimal(tolerance["absolute"]), Decimal(tolerance["relative"])
     if a is None:
         return False
-    bound = max(Decimal(tolerance["absolute"]), Decimal(tolerance["relative"]) * abs(e))
-    return abs(a - e) <= bound
+    # A precision wide enough for every operand and product, trapping any rounding.
+    digits = sum(len(n.as_tuple().digits) + abs(int(n.as_tuple().exponent)) for n in (a, e, absolute, relative))
+    with localcontext(Context(prec=digits + 2, traps=[Inexact])):
+        bound = max(absolute, relative * abs(e))
+        return abs(a - e) <= bound
 
 
 def run_script(root: Path, script: str, folder: Path) -> tuple[dict[str, Any] | None, str]:
@@ -373,8 +383,8 @@ def check_case(root: Path, case: str, requirements: set[str], sources: set[str],
     currency = run.get("reporting_currency")
     if isinstance(metadata, dict) and run.get("profile") not in (None, metadata.get("profile")):
         found.append(Finding("CASE-METADATA", case, "case.json:profile", "run.csv names another profile"))
-    if isinstance(metadata, dict) and metadata.get("category") != "invalid" and report["status"] != "pass":
-        found.append(Finding("CASE-INPUT", case, "", "only an invalid case may break the input contract"))
+    if isinstance(metadata, dict) and metadata.get("category") != "invalid-input" and report["status"] != "pass":
+        found.append(Finding("CASE-INPUT", case, "", "only an invalid-input case may break the input contract"))
     found += expected_findings(case, expected, metadata if isinstance(metadata, dict) else {}, currency,
                                sources, root)
     summary.findings += found

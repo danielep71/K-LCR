@@ -33,15 +33,17 @@ values are all `illustrative` has an ID starting with `illustrative-`.
 | `schema`, `case_version` | `klcr-test-case`, `1` |
 | `id` | The folder name |
 | `synthetic` | `true`: every case holds synthetic data only |
-| `description` | What the case shows; for an `invalid` case, the input rule it breaks |
+| `description` | What the case shows; for an invalid case, the input or parameter rule it breaks |
 | `profile` | `EU` or `BASEL`, the same as `run.csv` (for a readable `run.csv`) |
-| `category` | `nominal`, `boundary` or `invalid` |
+| `category` | `nominal`, `boundary`, `invalid-input` or `invalid-parameters` |
 | `requirements` | The `REQ-` IDs of [APPLICABILITY.md](APPLICABILITY.md) the case covers |
 | `parameter_set` | The path of the parameter set the case uses, under `tests/parameters/` |
 | `review` | `derived_by`, `reviewed_by` (or `null`), `date`, and `status`: `unreviewed`, or `reviewed` when someone other than the author checked every expected value |
 
-The metadata is always valid, even in an `invalid` case; only the input files
-may break the input contract.
+The metadata is always valid, even in an invalid case. Only the input files of
+an `invalid-input` case may break the input contract, and only an
+`invalid-parameters` case may name a parameter set of another profile or one
+that breaks its contract.
 
 ## 🎯 Expected outputs — `expected.json`
 
@@ -73,8 +75,10 @@ An output is either **text**, compared exactly, or a **number**:
 | `lcr` | number, `1` | The ratio, as a decimal fraction | No: registered |
 | `illustrative_…` | number or text | A quantity that only shows the format; allowed only in an `illustrative-` case | Yes, by its derivation script |
 
-An `invalid` case expects `input_status` `fail`, its `input_findings` and
-`result_status` `rejected`. It has no numeric output.
+An `invalid-input` case expects `input_status` `fail`, its `input_findings`
+and `result_status` `rejected`. An `invalid-parameters` case expects
+`input_status` `pass`, empty `input_findings` and `result_status` `failed`.
+Neither has a numeric output.
 
 ## 🧭 Reference classes
 
@@ -119,7 +123,8 @@ An actual number `a` matches the expected value `e` when
 - **Domain rules come first:** a figure that may not be negative fails when it
   is negative, however small.
 - **No rounding before comparison,** unless the result contract rounds the
-  figure.
+  figure. The comparison itself runs at a precision wide enough for its
+  operands, so it never rounds.
 - **Deterministic aggregation:** sums are exact decimals, as in the input
   contract's reconciliation, and must not depend on the order of the input
   records. The plan includes cases with records in reverse order.
@@ -137,7 +142,8 @@ Default bounds, until an accuracy decision replaces them:
 | --- | --- |
 | `nominal` | Typical inputs within the perimeter |
 | `boundary` | A domain edge: a zero amount, a single record, a maturity on the last day of the horizon, a cap or limit exactly binding, zero net outflows |
-| `invalid` | Input that the input contract or a decision rejects |
+| `invalid-input` | Input that the input contract or a decision rejects |
+| `invalid-parameters` | Valid input with a parameter set of another profile or one that breaks its contract |
 
 ## 📋 Registered and executed
 

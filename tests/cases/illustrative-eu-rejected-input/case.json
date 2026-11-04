@@ -5,7 +5,7 @@
  "synthetic": true,
  "description": "Format example of an invalid case: holding A002 has a negative market value, which the input contract rejects with LCR-RANGE.",
  "profile": "EU",
- "category": "invalid",
+ "category": "invalid-input",
  "requirements": [],
  "parameter_set": "tests/parameters/parameter-set-eu-illustrative.json",
  "review": {
