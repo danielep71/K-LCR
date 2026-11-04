@@ -17,7 +17,8 @@ from pathlib import Path
 from typing import Any
 
 SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text, "
-         "workflow syntax and invariants; no Excel execution.")
+         "workflow syntax and invariants, input and parameter contracts; "
+         "no Excel execution and no LCR calculation.")
 
 
 @dataclass(frozen=True)
@@ -104,6 +105,8 @@ def default_gates() -> list[Gate]:
         Gate("mypy-strict-probe", "mypy", probe=mypy_strict_probe),
         Gate("actionlint", "actionlint", ("actionlint", "-no-color")),
         Gate("workflow-invariants", "pyyaml", (python, "tools/check_workflows.py")),
+        Gate("data-contract", "python", (python, "tools/check_contract.py", "--check-fixtures")),
+        Gate("parameter-result-contract", "python", (python, "tools/check_parameters.py", "--check-fixtures")),
     ]
 
 
