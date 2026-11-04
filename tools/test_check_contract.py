@@ -18,7 +18,9 @@ CATEGORIES: dict[str, Any] = {
     "profiles": {
         "EU": {
             "assets": [{"code": "EU-A-L1-CASH"}, {"code": "EU-A-L2A-BOND"}],
-            "outflows": [{"code": "EU-O-RETAIL"}, {"code": "EU-O-SECURED", "secured": True},
+            "outflows": [{"code": "EU-O-RETAIL"},
+                         {"code": "EU-O-SECURED", "collateral": {"rule": "required", "allowed": ["EU-A-L2A-BOND"]}},
+                         {"code": "EU-O-SWAP", "collateral": {"rule": "optional"}},
                          {"code": "EU-O-DERIVATIVES", "derivative": True}],
             "inflows": [{"code": "EU-I-LOANS"}],
             "excluded": [{"code": "EU-A-CIU"}, {"code": "EU-O-INTRAGROUP"}],
@@ -237,7 +239,9 @@ class CategoryTests(ContractTestCase):
     def test_collateral_netting_set_and_maturity(self) -> None:
         rows = ["G1;OUTFLOW;EU-O-SECURED;1;EUR;2026-07-01;;", "G2;OUTFLOW;EU-O-RETAIL;1;EUR;;EU-A-L1-CASH;",
                 "G3;OUTFLOW;EU-O-SECURED;1;EUR;2026-07-01;EU-A-CIU;", "G4;OUTFLOW;EU-O-RETAIL;1;EUR;;;NS-1",
-                "G5;INFLOW;EU-I-LOANS;1;EUR;;;", "G6;OUTFLOW;EU-O-RETAIL;1;EUR;2026-06-29;;"]
+                "G5;INFLOW;EU-I-LOANS;1;EUR;;;", "G6;OUTFLOW;EU-O-RETAIL;1;EUR;2026-06-29;;",
+                "G7;OUTFLOW;EU-O-SECURED;1;EUR;2026-07-01;EU-A-L1-CASH;", "G8;OUTFLOW;EU-O-SWAP;1;EUR;2026-07-01;;",
+                "G9;OUTFLOW;EU-O-SWAP;1;EUR;2026-07-01;EU-A-L1-CASH;", "G10;OUTFLOW;EU-O-SWAP;1;EUR;2026-07-01;EU-A-CIU;"]
         header = FLOWS.splitlines()[0]
         self.space.write(flows="\n".join([header, *rows]) + "\n")
         self.assertEqual(self.space.findings(), [["LCR-COLLATERAL", "flows", 1, "collateral_category"],
@@ -245,7 +249,9 @@ class CategoryTests(ContractTestCase):
                                                  ["LCR-COLLATERAL", "flows", 3, "collateral_category"],
                                                  ["LCR-NETTING-SET", "flows", 4, "netting_set_id"],
                                                  ["LCR-MATURITY", "flows", 5, "maturity_date"],
-                                                 ["LCR-MATURITY", "flows", 6, "maturity_date"]])
+                                                 ["LCR-MATURITY", "flows", 6, "maturity_date"],
+                                                 ["LCR-COLLATERAL", "flows", 7, "collateral_category"],
+                                                 ["LCR-COLLATERAL", "flows", 10, "collateral_category"]])
 
 
 class MainTests(unittest.TestCase):

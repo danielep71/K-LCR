@@ -322,7 +322,9 @@ class Profile:
     assets: frozenset[str]
     flows: Mapping[str, frozenset[str]]
     excluded: frozenset[str]
-    secured: frozenset[str]
+    # Flow category -> None (any liquid-asset category may be given, or none) or the
+    # categories one of which must be given; absent: no collateral may be given.
+    collateral: Mapping[str, frozenset[str] | None]
     derivative: frozenset[str]
 
 
@@ -333,13 +335,34 @@ def profile_from(categories: Mapping[str, Any], name: str) -> Profile:
         return frozenset(item["code"] for item in items if flag is None or item.get(flag))
 
     flows = data["outflows"] + data["inflows"]
+    collateral: dict[str, frozenset[str] | None] = {}
+    for item in flows:
+        rule = item.get("collateral")
+        if rule:
+            collateral[item["code"]] = frozenset(rule["allowed"]) if rule["rule"] == "required" else None
     return Profile(
         assets=codes(data["assets"]),
         flows={"OUTFLOW": codes(data["outflows"]), "INFLOW": codes(data["inflows"])},
         excluded=codes(data["excluded"]),
-        secured=codes(flows, "secured"),
+        collateral=collateral,
         derivative=codes(flows, "derivative"),
     )
+
+
+def collateral_problem(code: str, collateral: str, profile: Profile) -> str | None:
+    """Why the collateral_category of a flow breaks its category's rule, or None."""
+    if code not in profile.collateral:
+        return f"{code} takes no collateral category" if collateral else None
+    allowed = profile.collateral[code]
+    if allowed is None:
+        if collateral and collateral not in profile.assets:
+            return f"{collateral} is not a liquid-asset category of the profile"
+        return None
+    if not collateral:
+        return f"{code} needs the collateral's category"
+    if collateral not in allowed:
+        return f"{collateral} is not a collateral category of {code}"
+    return None
 
 
 def run_findings(run: Table, contract: Mapping[str, Any]) -> list[Finding]:
@@ -392,13 +415,9 @@ def flow_findings(flows: Table, bad: set[int], profile: Profile, reporting: str)
         if result:
             add(result[0], "category", result[1])
             continue
-        collateral = row["collateral_category"]
-        if code in profile.secured and not collateral:
-            add("LCR-COLLATERAL", "collateral_category", f"{code} is secured: give its collateral")
-        elif code not in profile.secured and collateral:
-            add("LCR-COLLATERAL", "collateral_category", f"{code} is not a secured category")
-        elif collateral and collateral not in profile.assets:
-            add("LCR-COLLATERAL", "collateral_category", f"{collateral} is not a liquid-asset category")
+        problem = collateral_problem(code, row["collateral_category"], profile)
+        if problem:
+            add("LCR-COLLATERAL", "collateral_category", problem)
         if row["netting_set_id"] and code not in profile.derivative:
             add("LCR-NETTING-SET", "netting_set_id", f"{code} is not a derivative category")
         maturity = row["maturity_date"]

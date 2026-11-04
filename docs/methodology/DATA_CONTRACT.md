@@ -97,12 +97,28 @@ that a spreadsheet does not read it as a formula.
 ## 🏷️ Categories
 
 [categories.json](categories.json) lists, for each profile, the liquid-asset,
-outflow and inflow categories in scope (A03, A08). Each category has its
-locator in the source register. It also lists the excluded categories
-(A03 to A06), so that input naming one is rejected rather than ignored. A
-category marks whether it is secured, and so needs `collateral_category`, and
-whether it is a derivative category, which may carry `netting_set_id`. The
-categories hold no parameter value.
+outflow and inflow categories in scope (A03, A08), at the granularity at which
+the source gives a distinct treatment: 23 liquid-asset, 67 outflow and 28
+inflow categories for the EU profile, and 12, 57 and 22 for Basel. Each
+category has its locator in `SRC-02` or `SRC-06`, a short description, and its
+treatment: a haircut, outflow rate or inflow rate, an inclusion rule, or an
+exclusion. An exclusion category, such as a retail term deposit outside the
+horizon, lets the provider classify an item that the source leaves out of
+the calculation. Basel categories also say whether they are a national
+discretion (A07). The categories hold no parameter value.
+
+A flow category also states its collateral rule:
+- **required:** `collateral_category` must be one of the categories it lists,
+  for example the Level 2A categories for funding secured by Level 2A assets;
+- **optional:** any liquid-asset category, or none, for example a collateral
+  swap;
+- **absent:** `collateral_category` must be blank.
+
+A derivative category may carry `netting_set_id`.
+
+The file also lists the excluded categories (A03 to A06), so that input naming
+one is rejected rather than ignored. This includes the secured flows whose
+collateral is an excluded asset class, such as securitisations or CIUs.
 
 ## 🚦 Findings
 

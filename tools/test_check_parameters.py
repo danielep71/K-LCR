@@ -18,7 +18,8 @@ CATEGORIES: dict[str, Any] = {
     "schema": "klcr-categories",
     "categories_version": 3,
     "profiles": {
-        "EU": {"assets": [{"code": "EU-A-L1"}], "outflows": [{"code": "EU-O-1"}],
+        "EU": {"assets": [{"code": "EU-A-L1"}],
+               "outflows": [{"code": "EU-O-1"}, {"code": "EU-O-EXCL", "treatment": "exclusion"}],
                "inflows": [{"code": "EU-I-1"}], "excluded": [{"code": "EU-A-CIU"}]},
         "BASEL": {"assets": [{"code": "BASEL-A-L1"}],
                   "outflows": [{"code": "BASEL-O-1", "national_discretion": True}],
@@ -68,7 +69,12 @@ class ParameterTestCase(unittest.TestCase):
 
 class ParameterSetTests(ParameterTestCase):
     def test_valid_illustrative_set(self) -> None:
+        # EU-O-EXCL is an exclusion category: it takes no factor.
         self.assertEqual(self.codes(EU_SET), [])
+        data = copy.deepcopy(EU_SET)
+        data["factors"].append({"category": "EU-O-EXCL", "kind": "outflow_rate", "value": "0", "source": "SRC-02",
+                                "locator": "Art. 25(4)"})
+        self.assertEqual(self.codes(data), [["PAR-FACTOR-CATEGORY", "factors[3]"]])
 
     def test_header_profile_and_verification_date(self) -> None:
         data = copy.deepcopy(EU_SET)

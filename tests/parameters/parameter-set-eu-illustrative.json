@@ -1,0 +1,820 @@
+{
+ "schema": "klcr-parameter-set",
+ "parameter_set_version": 1,
+ "parameter_set": "EU-LCR-DA-2022-07-08",
+ "profile": "EU",
+ "status": "illustrative",
+ "source_register_version": 1,
+ "categories_version": 1,
+ "factors": [
+  {
+   "category": "EU-A-L1-COINS-BANKNOTES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(a)"
+  },
+  {
+   "category": "EU-A-L1-CB-ECB-MS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(b)(i)"
+  },
+  {
+   "category": "EU-A-L1-CB-TC-TOPCQS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(b)(ii)"
+  },
+  {
+   "category": "EU-A-L1-CB-RESERVES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(b)(iii)"
+  },
+  {
+   "category": "EU-A-L1-CG-MS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(c)(i)"
+  },
+  {
+   "category": "EU-A-L1-CG-TC-TOPCQS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(c)(ii)"
+  },
+  {
+   "category": "EU-A-L1-RGLA-MS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(c)(iii)"
+  },
+  {
+   "category": "EU-A-L1-RGLA-TC",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(c)(iv)"
+  },
+  {
+   "category": "EU-A-L1-PSE",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(c)(v)"
+  },
+  {
+   "category": "EU-A-L1-CGCB-TC-LOWERCQS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(d)(i)"
+  },
+  {
+   "category": "EU-A-L1-CB-TC-LOWERCQS-RES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(d)(ii)"
+  },
+  {
+   "category": "EU-A-L1-PUBLIC-CI",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(e)(i)"
+  },
+  {
+   "category": "EU-A-L1-PROMO-LENDER",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(e)(ii)"
+  },
+  {
+   "category": "EU-A-L1-EHQ-COVERED-BOND",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(f)"
+  },
+  {
+   "category": "EU-A-L1-MDB-IO",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 10(1)(g)"
+  },
+  {
+   "category": "EU-A-L2A-RGLA-PSE-MS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 11(1)(a)"
+  },
+  {
+   "category": "EU-A-L2A-SOV-PSE-TC",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 11(1)(b)"
+  },
+  {
+   "category": "EU-A-L2A-HQ-COVERED-BOND",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 11(1)(c)"
+  },
+  {
+   "category": "EU-A-L2A-TC-COVERED-BOND",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 11(1)(d)"
+  },
+  {
+   "category": "EU-A-L2A-CORP-DEBT",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 11(1)(e)"
+  },
+  {
+   "category": "EU-A-L2B-CORP-DEBT",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 12(1)(b)"
+  },
+  {
+   "category": "EU-A-L2B-SHARES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 12(1)(c)"
+  },
+  {
+   "category": "EU-A-L2B-COVERED-BOND",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 12(1)(e)"
+  },
+  {
+   "category": "EU-O-ADD-OFF-BS-CONTINGENT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(a)"
+  },
+  {
+   "category": "EU-O-ADD-UNDRAWN-WHOLESALE-LOAN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(b)"
+  },
+  {
+   "category": "EU-O-ADD-MORTGAGE-UNDRAWN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(c)"
+  },
+  {
+   "category": "EU-O-ADD-CREDIT-CARDS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(d)"
+  },
+  {
+   "category": "EU-O-ADD-OVERDRAFTS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(e)"
+  },
+  {
+   "category": "EU-O-ADD-PLANNED-LOAN-RENEWAL",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(f)"
+  },
+  {
+   "category": "EU-O-ADD-DERIV-PAYABLES-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(g)"
+  },
+  {
+   "category": "EU-O-ADD-TRADE-FINANCE-OBS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)(h)"
+  },
+  {
+   "category": "EU-O-ADD-OTHER-PRODUCTS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 23(1)"
+  },
+  {
+   "category": "EU-O-RETAIL-STABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 24(1)"
+  },
+  {
+   "category": "EU-O-RETAIL-STABLE-DGS-REDUCED",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 24(4)"
+  },
+  {
+   "category": "EU-O-RETAIL-TC-DGS-REDUCED",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 24(6)"
+  },
+  {
+   "category": "EU-O-RETAIL-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 25(1)"
+  },
+  {
+   "category": "EU-O-RETAIL-HIGHER-RISK-BAND-A",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 25(3)(a)"
+  },
+  {
+   "category": "EU-O-RETAIL-HIGHER-RISK-BAND-B",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 25(3)(b)"
+  },
+  {
+   "category": "EU-O-RETAIL-CANCELLED-PAYOUT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 25(4), second subparagraph"
+  },
+  {
+   "category": "EU-O-RETAIL-TC-HIGHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 25(5)"
+  },
+  {
+   "category": "EU-O-OPDEP-SERVICES",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(1)(a)"
+  },
+  {
+   "category": "EU-O-OPDEP-SERVICES-DGS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(2)"
+  },
+  {
+   "category": "EU-O-OPDEP-IPS-COOP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(1)(b)"
+  },
+  {
+   "category": "EU-O-OPDEP-OTHER-RELATIONSHIP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(1)(c)"
+  },
+  {
+   "category": "EU-O-OPDEP-NETWORK-CLEARING",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(1)(d)"
+  },
+  {
+   "category": "EU-O-CENTRAL-INST-LIQ-DEP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(3)"
+  },
+  {
+   "category": "EU-O-CORRESP-PRIME-BROKER-DEP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 27(5)"
+  },
+  {
+   "category": "EU-O-NONOP-DEP-NFC",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(1), first subparagraph"
+  },
+  {
+   "category": "EU-O-NONOP-DEP-NFC-DGS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(1), second subparagraph"
+  },
+  {
+   "category": "EU-O-OPERATING-EXPENSES",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(2)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-L1-EXCL-EHQCB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(a)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-L1-EHQCB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(b)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-L2A",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(c)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-L2B-COVERED-BOND",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(e)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-L2B-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(g)"
+  },
+  {
+   "category": "EU-O-SFT-COLL-NON-LIQUID",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3)(i)"
+  },
+  {
+   "category": "EU-O-SFT-DOMESTIC-CB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3), second subparagraph"
+  },
+  {
+   "category": "EU-O-SFT-ELIGIBLE-CPTY",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(3), third subparagraph"
+  },
+  {
+   "category": "EU-O-COLL-SWAP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(4), first subparagraph"
+  },
+  {
+   "category": "EU-O-COLL-SWAP-DOMESTIC-CB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(4), second subparagraph"
+  },
+  {
+   "category": "EU-O-COLL-SWAP-ELIGIBLE-CPTY",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(4), third subparagraph"
+  },
+  {
+   "category": "EU-O-OWN-DEBT-SECURITIES",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(6)"
+  },
+  {
+   "category": "EU-O-UNSECURED-ASSET-BORROW",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 28(7)"
+  },
+  {
+   "category": "EU-O-DERIV-COLL-POSTED-NONL1",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(1), first subparagraph"
+  },
+  {
+   "category": "EU-O-DERIV-COLL-POSTED-EHQCB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(1), second subparagraph"
+  },
+  {
+   "category": "EU-O-DOWNGRADE-TRIGGER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(2)"
+  },
+  {
+   "category": "EU-O-DERIV-MKT-VALUATION",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(3)"
+  },
+  {
+   "category": "EU-O-DERIV-NET-OUTFLOW",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(4)"
+  },
+  {
+   "category": "EU-O-SHORT-UNSECURED-BORROW",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(5), first sentence"
+  },
+  {
+   "category": "EU-O-SHORT-SECURED-SFT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(5), second sentence"
+  },
+  {
+   "category": "EU-O-EXCESS-COLL-CALLABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(6)(a)"
+  },
+  {
+   "category": "EU-O-COLL-DUE-TO-POST",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(6)(b)"
+  },
+  {
+   "category": "EU-O-COLL-SUBSTITUTION",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(6)(c)"
+  },
+  {
+   "category": "EU-O-OWN-STRUCT-FIN-MATURING",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(8)"
+  },
+  {
+   "category": "EU-O-ABCP-CONDUIT-SIV",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(9)"
+  },
+  {
+   "category": "EU-O-PB-INTERNAL-MATCH",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 30(12)"
+  },
+  {
+   "category": "EU-O-FAC-RETAIL",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(3)"
+  },
+  {
+   "category": "EU-O-FAC-CREDIT-NONFIN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(4)"
+  },
+  {
+   "category": "EU-O-FAC-LIQ-NONFIN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(5)"
+  },
+  {
+   "category": "EU-O-FAC-LIQ-PIC",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(5)"
+  },
+  {
+   "category": "EU-O-FAC-LIQ-SSPE-NONSEC",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(6)"
+  },
+  {
+   "category": "EU-O-FAC-CENTRAL-INST-MEMBER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(7)"
+  },
+  {
+   "category": "EU-O-FAC-CI-REGULATED-FI",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(8)(a)"
+  },
+  {
+   "category": "EU-O-FAC-SSPE-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(8)(b)"
+  },
+  {
+   "category": "EU-O-FAC-FIN-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(8)(c)"
+  },
+  {
+   "category": "EU-O-FAC-PROMO-LENDER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(9), first subparagraph"
+  },
+  {
+   "category": "EU-O-FAC-PROMO-PASS-THROUGH",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(9), second subparagraph"
+  },
+  {
+   "category": "EU-O-OTHER-LIABILITIES",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31a(1)"
+  },
+  {
+   "category": "EU-O-NONFIN-FUNDING-COMMIT-EXCESS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31a(2)"
+  },
+  {
+   "category": "EU-I-CB-FIN-CUST",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(2)(a)"
+  },
+  {
+   "category": "EU-I-TRADE-FINANCE",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(2)(b)"
+  },
+  {
+   "category": "EU-I-SECURITIES-MATURING",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(2)(c)"
+  },
+  {
+   "category": "EU-I-MAJOR-INDEX-EQUITY",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(2)(d)"
+  },
+  {
+   "category": "EU-I-OTHER-CONTRACTUAL",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(2)"
+  },
+  {
+   "category": "EU-I-NONFIN-CUST",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(a)"
+  },
+  {
+   "category": "EU-I-PROMO-INTERMEDIARY",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(a), third sentence"
+  },
+  {
+   "category": "EU-I-SFT-COLL-L1-EXCL-EHQCB",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(i)"
+  },
+  {
+   "category": "EU-I-SFT-COLL-L1-EHQCB",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(ii)"
+  },
+  {
+   "category": "EU-I-SFT-COLL-L2A",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(iii)"
+  },
+  {
+   "category": "EU-I-SFT-COLL-L2B-COVERED-BOND",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(v)"
+  },
+  {
+   "category": "EU-I-SFT-COLL-L2B-OTHER",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(vii)"
+  },
+  {
+   "category": "EU-I-SFT-COLL-NON-LIQUID",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(b)(ix)"
+  },
+  {
+   "category": "EU-I-MARGIN-LOAN-NON-LIQUID",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(c)"
+  },
+  {
+   "category": "EU-I-OPDEP-SYMMETRIC",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(d), first sentence"
+  },
+  {
+   "category": "EU-I-OPDEP-FALLBACK",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(d), second sentence"
+  },
+  {
+   "category": "EU-I-COLL-SWAP",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(e)"
+  },
+  {
+   "category": "EU-I-OWN-OR-SSPE-SECURITIES",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(h)"
+  },
+  {
+   "category": "EU-I-OPEN-MATURITY-LOANS",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(3)(i)"
+  },
+  {
+   "category": "EU-I-PROMO-PASS-THROUGH-FAC",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 31(9), second subparagraph"
+  },
+  {
+   "category": "EU-I-SEGREGATED-RELEASE",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(4), second sentence"
+  },
+  {
+   "category": "EU-I-DERIV-NET-INFLOW",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 32(5)"
+  }
+ ],
+ "limits": [
+  {
+   "id": "LCR-MINIMUM",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 4(2)"
+  },
+  {
+   "id": "LEVEL1-MINIMUM-SHARE",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 17(1)(a)"
+  },
+  {
+   "id": "LEVEL1-EXCL-EHQCB-MINIMUM-SHARE",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 17(1)(b)"
+  },
+  {
+   "id": "LEVEL2B-MAXIMUM-SHARE",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 17(1)(c)"
+  },
+  {
+   "id": "INFLOW-CAP",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 33(1)"
+  }
+ ]
+}

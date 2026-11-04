@@ -1,9 +1,1889 @@
 {
-  "schema": "klcr-categories",
-  "categories_version": 0,
-  "description": "Placeholder while the category lists of #10 are prepared: no category is defined yet, so every category is rejected.",
-  "profiles": {
-    "EU": {"assets": [], "outflows": [], "inflows": [], "excluded": []},
-    "BASEL": {"assets": [], "outflows": [], "inflows": [], "excluded": []}
+ "schema": "klcr-categories",
+ "categories_version": 1,
+ "source_register_version": 1,
+ "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions.",
+ "profiles": {
+  "EU": {
+   "assets": [
+    {
+     "code": "EU-A-L1-COINS-BANKNOTES",
+     "level": "L1",
+     "locator": "Art. 10(1)(a)",
+     "description": "Physical coins and banknotes held by the institution.",
+     "treatment": "haircut",
+     "notes": "No haircut under Art. 10(2) (remaining level 1 assets)."
+    },
+    {
+     "code": "EU-A-L1-CB-ECB-MS",
+     "level": "L1",
+     "locator": "Art. 10(1)(b)(i)",
+     "description": "Claims on, or guaranteed by, the ECB or a Member State central bank.",
+     "treatment": "haircut",
+     "notes": "Counterparty/guarantor type; no haircut under Art. 10(2)."
+    },
+    {
+     "code": "EU-A-L1-CB-TC-TOPCQS",
+     "level": "L1",
+     "locator": "Art. 10(1)(b)(ii)",
+     "description": "Claims on, or guaranteed by, a third-country central bank whose exposures carry an ECAI assessment at the highest credit quality step.",
+     "treatment": "haircut",
+     "notes": "Counterparty country; issuer/guarantor credit quality step of the central bank or its central government (Art. 114(2) CRR)."
+    },
+    {
+     "code": "EU-A-L1-CB-RESERVES",
+     "level": "L1",
+     "locator": "Art. 10(1)(b)(iii)",
+     "description": "Reserves held at a central bank covered by Art. 10(1)(b)(i) or (ii) that may be withdrawn at any time during stress.",
+     "treatment": "haircut",
+     "notes": "Requires withdrawability in stress and withdrawal conditions set in an agreement or third-country rules; holder type (subsidiary or branch) determines which authority's agreement applies."
+    },
+    {
+     "code": "EU-A-L1-CG-MS",
+     "level": "L1",
+     "locator": "Art. 10(1)(c)(i)",
+     "description": "Claims on, or guaranteed by, the central government of a Member State.",
+     "treatment": "haircut",
+     "notes": "Counterparty/guarantor type and country."
+    },
+    {
+     "code": "EU-A-L1-CG-TC-TOPCQS",
+     "level": "L1",
+     "locator": "Art. 10(1)(c)(ii)",
+     "description": "Claims on, or guaranteed by, a third-country central government assessed at the highest credit quality step.",
+     "treatment": "haircut",
+     "notes": "issuer/guarantor credit quality step (Art. 114(2) CRR)."
+    },
+    {
+     "code": "EU-A-L1-RGLA-MS",
+     "level": "L1",
+     "locator": "Art. 10(1)(c)(iii)",
+     "description": "Claims on, or guaranteed by, Member State regional governments or local authorities treated as exposures to their central government.",
+     "treatment": "haircut",
+     "notes": "Requires treatment under Art. 115(2) CRR."
+    },
+    {
+     "code": "EU-A-L1-RGLA-TC",
+     "level": "L1",
+     "locator": "Art. 10(1)(c)(iv)",
+     "description": "Claims on, or guaranteed by, regional governments or local authorities of a qualifying third country treated as exposures to that central government.",
+     "treatment": "haircut",
+     "notes": "Third country must qualify under Art. 10(1)(c)(ii); requires treatment under Art. 115(4) CRR."
+    },
+    {
+     "code": "EU-A-L1-PSE",
+     "level": "L1",
+     "locator": "Art. 10(1)(c)(v)",
+     "description": "Claims on, or guaranteed by, public sector entities treated as exposures to a Member State central government or a qualifying regional or local authority.",
+     "treatment": "haircut",
+     "notes": "Requires treatment under Art. 116(4) CRR."
+    },
+    {
+     "code": "EU-A-L1-CGCB-TC-LOWERCQS",
+     "level": "L1",
+     "locator": "Art. 10(1)(d)(i)",
+     "description": "Claims on, or guaranteed by, a third-country central government or central bank not assessed at the highest credit quality step.",
+     "treatment": "haircut",
+     "notes": "Recognition capped per currency at stressed net outflows in that currency (Art. 10(1)(d), second and third subparagraphs); needs currency and whether it is the third country's domestic currency."
+    },
+    {
+     "code": "EU-A-L1-CB-TC-LOWERCQS-RES",
+     "level": "L1",
+     "locator": "Art. 10(1)(d)(ii)",
+     "description": "Reserves held at a third-country central bank covered by Art. 10(1)(d)(i), withdrawable during stress.",
+     "treatment": "haircut",
+     "notes": "Same currency cap as Art. 10(1)(d)(i) (aggregated with it); withdrawal conditions per agreement or third-country rules."
+    },
+    {
+     "code": "EU-A-L1-PUBLIC-CI",
+     "level": "L1",
+     "locator": "Art. 10(1)(e)(i)",
+     "description": "Assets issued by a credit institution set up by a Member State central, regional or local government that is legally bound to protect its viability.",
+     "treatment": "haircut",
+     "notes": "Issuer type and legal-obligation attribute; regional/local exposure treated as central government under Art. 115(2) CRR."
+    },
+    {
+     "code": "EU-A-L1-PROMO-LENDER",
+     "level": "L1",
+     "locator": "Art. 10(1)(e)(ii)",
+     "description": "Assets issued by a promotional lender whose loans are predominantly government-guaranteed promotional loans.",
+     "treatment": "haircut",
+     "notes": "Issuer type; share of guaranteed loans must meet the minimum set in the point."
+    },
+    {
+     "code": "EU-A-L1-EHQ-COVERED-BOND",
+     "level": "L1",
+     "locator": "Art. 10(1)(f)",
+     "description": "Extremely high quality covered bonds meeting the issue size, rating or risk weight, cover pool and overcollateralisation criteria.",
+     "treatment": "haircut",
+     "notes": "Subject to a distinct minimum haircut (Art. 10(2)); needs issue size, covered bond credit quality step or risk weight, overcollateralisation; point (iii) is deleted in the consolidated text."
+    },
+    {
+     "code": "EU-A-L1-MDB-IO",
+     "level": "L1",
+     "locator": "Art. 10(1)(g)",
+     "description": "Claims on, or guaranteed by, multilateral development banks and international organisations listed in Art. 117(2) and Art. 118 CRR.",
+     "treatment": "haircut",
+     "notes": "Counterparty must be on the CRR lists."
+    },
+    {
+     "code": "EU-A-L2A-RGLA-PSE-MS",
+     "level": "L2A",
+     "locator": "Art. 11(1)(a)",
+     "description": "Claims on, or guaranteed by, Member State regional governments, local authorities or PSEs that carry the risk weight specified in the point.",
+     "treatment": "haircut",
+     "notes": "Counterparty type and CRR risk weight; haircut per Art. 11(2)."
+    },
+    {
+     "code": "EU-A-L2A-SOV-PSE-TC",
+     "level": "L2A",
+     "locator": "Art. 11(1)(b)",
+     "description": "Claims on, or guaranteed by, a third-country central government, central bank, regional or local authority or PSE carrying the specified risk weight.",
+     "treatment": "haircut",
+     "notes": "Counterparty type, country and CRR risk weight; haircut per Art. 11(2)."
+    },
+    {
+     "code": "EU-A-L2A-HQ-COVERED-BOND",
+     "level": "L2A",
+     "locator": "Art. 11(1)(c)",
+     "description": "High quality covered bonds meeting the point's issue size, rating or risk weight and overcollateralisation criteria.",
+     "treatment": "haircut",
+     "notes": "Issue size, credit quality step or risk weight, overcollateralisation; point (iii) is deleted though (vi) still cites it; haircut per Art. 11(2)."
+    },
+    {
+     "code": "EU-A-L2A-TC-COVERED-BOND",
+     "level": "L2A",
+     "locator": "Art. 11(1)(d)",
+     "description": "Covered bonds issued by third-country credit institutions under equivalent supervision and meeting the point's pool, transparency and rating criteria.",
+     "treatment": "haircut",
+     "notes": "Issuer country, equivalence of supervision, credit quality step or risk weight, issue size (affects overcollateralisation); haircut per Art. 11(2)."
+    },
+    {
+     "code": "EU-A-L2A-CORP-DEBT",
+     "level": "L2A",
+     "locator": "Art. 11(1)(e)",
+     "description": "Corporate debt securities with the highest credit quality step, a minimum issue size and a capped original maturity.",
+     "treatment": "haircut",
+     "notes": "Credit quality step, issue size, original maturity; haircut per Art. 11(2)."
+    },
+    {
+     "code": "EU-A-L2B-CORP-DEBT",
+     "level": "L2B",
+     "locator": "Art. 12(1)(b)",
+     "description": "Corporate debt securities meeting a lower minimum credit quality step, a minimum issue size and a capped original maturity.",
+     "treatment": "haircut",
+     "notes": "Credit quality step, issue size, original maturity; haircut per Art. 12(2)(b); Art. 12(3) lets the authority waive size/maturity criteria for institutions barred from interest-bearing assets."
+    },
+    {
+     "code": "EU-A-L2B-SHARES",
+     "level": "L2B",
+     "locator": "Art. 12(1)(c)",
+     "description": "Shares in a major stock index with a proven record as a reliable liquidity source in stress.",
+     "treatment": "haircut",
+     "notes": "Index membership, currency vs home Member State currency (foreign-currency shares recognised only up to stressed net outflows in that currency), stress price record; haircut per Art. 12(2)(c)."
+    },
+    {
+     "code": "EU-A-L2B-COVERED-BOND",
+     "level": "L2B",
+     "locator": "Art. 12(1)(e)",
+     "description": "Covered bonds collateralised exclusively by specified CRR Art. 129(1) assets with a low risk-weight pool and the overcollateralisation and disclosure set in the point.",
+     "treatment": "haircut",
+     "notes": "Issue size, cover pool composition and risk weights, overcollateralisation, monthly disclosure; haircut per Art. 12(2)(d); points (ii) and (iii) are deleted."
+    }
+   ],
+   "outflows": [
+    {
+     "code": "EU-O-ADD-OFF-BS-CONTINGENT",
+     "locator": "Art. 23(1)(a)",
+     "description": "Other off-balance-sheet and contingent funding obligations, including uncommitted funding facilities.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority under Art. 23(2)."
+    },
+    {
+     "code": "EU-O-ADD-UNDRAWN-WHOLESALE-LOAN",
+     "locator": "Art. 23(1)(b)",
+     "description": "Undrawn loans and advances to wholesale counterparties.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority; counterparty type (wholesale)."
+    },
+    {
+     "code": "EU-O-ADD-MORTGAGE-UNDRAWN",
+     "locator": "Art. 23(1)(c)",
+     "description": "Mortgage loans agreed but not yet drawn down.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority."
+    },
+    {
+     "code": "EU-O-ADD-CREDIT-CARDS",
+     "locator": "Art. 23(1)(d)",
+     "description": "Credit card products.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority."
+    },
+    {
+     "code": "EU-O-ADD-OVERDRAFTS",
+     "locator": "Art. 23(1)(e)",
+     "description": "Overdraft products.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority."
+    },
+    {
+     "code": "EU-O-ADD-PLANNED-LOAN-RENEWAL",
+     "locator": "Art. 23(1)(f)",
+     "description": "Planned outflows from renewing existing or extending new retail or wholesale loans.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority."
+    },
+    {
+     "code": "EU-O-ADD-DERIV-PAYABLES-OTHER",
+     "locator": "Art. 23(1)(g)",
+     "description": "Derivative payables on contracts outside CRR Annex II and other than credit derivatives.",
+     "treatment": "outflow_rate",
+     "notes": "Rate determined by the competent authority; contract type; not netted under Art. 21."
+    },
+    {
+     "code": "EU-O-ADD-TRADE-FINANCE-OBS",
+     "locator": "Art. 23(1)(h)",
+     "description": "Off-balance-sheet trade finance related products.",
+     "treatment": "outflow_rate",
+     "notes": "Competent authority may apply a capped rate specific to trade finance (Art. 23(2))."
+    },
+    {
+     "code": "EU-O-ADD-OTHER-PRODUCTS",
+     "locator": "Art. 23(1)",
+     "description": "Other products or services offered, sponsored or associated with the institution not listed in Art. 23(1)(a)-(h) nor in Arts 27-31a.",
+     "treatment": "outflow_rate",
+     "notes": "Residual of the non-exhaustive list; rate determined by the competent authority."
+    },
+    {
+     "code": "EU-O-RETAIL-STABLE",
+     "locator": "Art. 24(1)",
+     "description": "DGS-covered retail deposits in an established relationship or a transactional account.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty retail; DGS coverage (covered amount only); established relationship (Art. 24(2)) or transactional account (Art. 24(3)); not if Art. 25(2), (3) or (5) higher-rate criteria are met."
+    },
+    {
+     "code": "EU-O-RETAIL-STABLE-DGS-REDUCED",
+     "locator": "Art. 24(4)",
+     "description": "Stable retail deposits covered by a Commission-approved DGS, up to the DGS coverage level, under authority permission.",
+     "treatment": "outflow_rate",
+     "notes": "Requires competent authority authorisation with Commission approval (Art. 24(5)); DGS identity; amount up to the Directive 2014/49/EU coverage level."
+    },
+    {
+     "code": "EU-O-RETAIL-TC-DGS-REDUCED",
+     "locator": "Art. 24(6)",
+     "description": "Retail deposits covered by an equivalent third-country DGS where the authority allows a reduced rate.",
+     "treatment": "outflow_rate",
+     "notes": "Requires competent authority authorisation and third-country permission; DGS coverage."
+    },
+    {
+     "code": "EU-O-RETAIL-OTHER",
+     "locator": "Art. 25(1)",
+     "description": "Retail deposits not treated as stable, including uncovered portions, without higher-risk features.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty retail; DGS coverage; absence of Art. 25(2) criteria (after assessment)."
+    },
+    {
+     "code": "EU-O-RETAIL-HIGHER-RISK-BAND-A",
+     "locator": "Art. 25(3)(a)",
+     "description": "Retail deposits meeting the large-balance criterion alone or two of the other Art. 25(2) risk criteria.",
+     "treatment": "outflow_rate",
+     "notes": "Rate set by institution within a band; needs total client balance, internet-only flag, rate features, fixed term/notice within 30 days, residence/currency."
+    },
+    {
+     "code": "EU-O-RETAIL-HIGHER-RISK-BAND-B",
+     "locator": "Art. 25(3)(b)",
+     "description": "Retail deposits meeting the large-balance criterion plus another, or three or more Art. 25(2) criteria, or not yet assessed.",
+     "treatment": "outflow_rate",
+     "notes": "Same inputs as band A; also applies where the Art. 25(2) assessment is missing or incomplete (Art. 25(3), second subparagraph)."
+    },
+    {
+     "code": "EU-O-RETAIL-TERM-EXCLUDED",
+     "locator": "Art. 25(4), first subparagraph",
+     "description": "Clearly circumscribed retail term deposits that cannot be withdrawn within 30 days or carry a qualifying early-withdrawal penalty.",
+     "treatment": "exclusion",
+     "notes": "Withdrawal restriction or penalty terms; penalty-free withdrawable portion is treated as a demand deposit instead (second subparagraph)."
+    },
+    {
+     "code": "EU-O-RETAIL-CANCELLED-PAYOUT",
+     "locator": "Art. 25(4), second subparagraph",
+     "description": "Cancelled retail deposits with residual maturity within 30 days where payout to another credit institution is agreed.",
+     "treatment": "outflow_rate",
+     "notes": "Cancellation status, residual maturity, payout destination."
+    },
+    {
+     "code": "EU-O-RETAIL-TC-HIGHER",
+     "locator": "Art. 25(5)",
+     "description": "Retail deposits taken in third countries where local liquidity law prescribes a higher outflow rate.",
+     "treatment": "outflow_rate",
+     "notes": "Booking jurisdiction; third-country law rate overrides Arts 24 and 25(1)-(4)."
+    },
+    {
+     "code": "EU-O-OPDEP-SERVICES",
+     "locator": "Art. 27(1)(a)",
+     "description": "Deposits maintained to obtain clearing, custody, cash management or similar services in an established operational relationship.",
+     "treatment": "outflow_rate",
+     "notes": "Uncovered portion only (covered portion: Art. 27(2)); relationship critically important; excess over operational needs goes to non-operational (Art. 27(4))."
+    },
+    {
+     "code": "EU-O-OPDEP-SERVICES-DGS",
+     "locator": "Art. 27(2)",
+     "description": "DGS-covered portion of operational deposits for clearing, custody, cash management or similar services.",
+     "treatment": "outflow_rate",
+     "notes": "DGS coverage; applies only to Art. 27(1)(a) deposits."
+    },
+    {
+     "code": "EU-O-OPDEP-IPS-COOP",
+     "locator": "Art. 27(1)(b)",
+     "description": "Deposits from common task sharing in an IPS or cooperative network, or legally/contractually required deposits from a member.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty membership in same IPS/network; not recognised as liquid assets by the depositor (Art. 27(3), Art. 16)."
+    },
+    {
+     "code": "EU-O-OPDEP-OTHER-RELATIONSHIP",
+     "locator": "Art. 27(1)(c)",
+     "description": "Deposits held in another established operational relationship, identified for non-financial customers via Art. 27(6).",
+     "treatment": "outflow_rate",
+     "notes": "Non-financial customer; excludes term, savings and brokered deposits; pricing, designated account, transaction frequency, relationship length or active services (Art. 27(6))."
+    },
+    {
+     "code": "EU-O-OPDEP-NETWORK-CLEARING",
+     "locator": "Art. 27(1)(d)",
+     "description": "Deposits held to obtain cash clearing and central institution services where the institution belongs to an Art. 16 network or scheme.",
+     "treatment": "outflow_rate",
+     "notes": "Network/scheme membership; established critically important relationship (Art. 27(4))."
+    },
+    {
+     "code": "EU-O-CENTRAL-INST-LIQ-DEP",
+     "locator": "Art. 27(3)",
+     "description": "Deposits placed at the central institution that the depositing member counts as liquid assets under Art. 16.",
+     "treatment": "outflow_rate",
+     "notes": "Applies to the central institution; amount is the depositor's liquid asset value after haircut; linked to excluded Art. 16."
+    },
+    {
+     "code": "EU-O-CORRESP-PRIME-BROKER-DEP",
+     "locator": "Art. 27(5)",
+     "description": "Deposits arising from correspondent banking or prime brokerage services, which cannot be operational.",
+     "treatment": "outflow_rate",
+     "notes": "Relationship type."
+    },
+    {
+     "code": "EU-O-NONOP-DEP-NFC",
+     "locator": "Art. 28(1), first subparagraph",
+     "description": "Non-operational deposits from non-financial customers, sovereigns, central banks, MDBs, PSEs, credit unions, PICs or deposit brokers.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty type; not under Art. 27; uncovered portion (covered portion: second subparagraph)."
+    },
+    {
+     "code": "EU-O-NONOP-DEP-NFC-DGS",
+     "locator": "Art. 28(1), second subparagraph",
+     "description": "DGS-covered portion of non-operational deposits from the counterparty types listed in Art. 28(1).",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty type; DGS coverage."
+    },
+    {
+     "code": "EU-O-OPERATING-EXPENSES",
+     "locator": "Art. 28(2)",
+     "description": "Liabilities arising from the institution's own operating expenses.",
+     "treatment": "outflow_rate"
+    },
+    {
+     "code": "EU-O-SFT-COLL-L1-EXCL-EHQCB",
+     "locator": "Art. 28(3)(a)",
+     "description": "Maturing secured funding or capital market-driven liabilities collateralised by level 1 assets other than extremely high quality covered bonds.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral asset category (level 1 except Art. 10(1)(f)); residual maturity within 30 days; counterparty (domestic CB / eligible counterparty derogations).",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L1-CB-ECB-MS",
+       "EU-A-L1-CB-RESERVES",
+       "EU-A-L1-CB-TC-LOWERCQS-RES",
+       "EU-A-L1-CB-TC-TOPCQS",
+       "EU-A-L1-CG-MS",
+       "EU-A-L1-CG-TC-TOPCQS",
+       "EU-A-L1-CGCB-TC-LOWERCQS",
+       "EU-A-L1-COINS-BANKNOTES",
+       "EU-A-L1-MDB-IO",
+       "EU-A-L1-PROMO-LENDER",
+       "EU-A-L1-PSE",
+       "EU-A-L1-PUBLIC-CI",
+       "EU-A-L1-RGLA-MS",
+       "EU-A-L1-RGLA-TC"
+      ]
+     }
+    },
+    {
+     "code": "EU-O-SFT-COLL-L1-EHQCB",
+     "locator": "Art. 28(3)(b)",
+     "description": "Maturing secured funding liabilities collateralised by extremely high quality covered bonds.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral asset category Art. 10(1)(f); residual maturity within 30 days.",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L1-EHQ-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-O-SFT-COLL-L2A",
+     "locator": "Art. 28(3)(c)",
+     "description": "Maturing secured funding liabilities collateralised by level 2A assets.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral asset category (Art. 11); residual maturity within 30 days.",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2A-CORP-DEBT",
+       "EU-A-L2A-HQ-COVERED-BOND",
+       "EU-A-L2A-RGLA-PSE-MS",
+       "EU-A-L2A-SOV-PSE-TC",
+       "EU-A-L2A-TC-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-O-SFT-COLL-L2B-COVERED-BOND",
+     "locator": "Art. 28(3)(e)",
+     "description": "Maturing secured funding liabilities collateralised by level 2B covered bonds.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral asset category Art. 12(1)(e); residual maturity within 30 days.",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2B-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-O-SFT-COLL-L2B-OTHER",
+     "locator": "Art. 28(3)(g)",
+     "description": "Maturing secured funding liabilities collateralised by level 2B corporate debt, shares or non-interest-bearing assets.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral asset category Art. 12(1)(b), (c) or (f); eligible counterparty derogation may apply.",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2B-CORP-DEBT",
+       "EU-A-L2B-SHARES"
+      ]
+     }
+    },
+    {
+     "code": "EU-O-SFT-COLL-NON-LIQUID",
+     "locator": "Art. 28(3)(i)",
+     "description": "Maturing secured funding liabilities collateralised by assets not falling in Art. 28(3)(a)-(h).",
+     "treatment": "outflow_rate",
+     "notes": "Collateral not a qualifying liquid asset; eligible counterparty derogation may apply."
+    },
+    {
+     "code": "EU-O-SFT-DOMESTIC-CB",
+     "locator": "Art. 28(3), second subparagraph",
+     "description": "Maturing secured funding or capital market-driven liabilities where the counterparty is the institution's domestic central bank.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty is domestic central bank (Art. 28(8)); for branches, requires equal access to central bank liquidity.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-O-SFT-ELIGIBLE-CPTY",
+     "locator": "Art. 28(3), third subparagraph",
+     "description": "Maturing secured funding liabilities with an eligible counterparty whose collateral would otherwise attract a higher rate than the derogation cap.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty is an eligible counterparty (Art. 28(9), risk weight condition for PSEs/RGLAs); collateral category determining the unadjusted rate.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-O-COLL-SWAP",
+     "locator": "Art. 28(4), first subparagraph",
+     "description": "Collateral swaps maturing within 30 days where the asset borrowed has a lower haircut than the asset lent.",
+     "treatment": "outflow_rate",
+     "notes": "Asset categories of both legs (lent and borrowed) and market value of asset borrowed; non-liquid assets take a full haircut.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-O-COLL-SWAP-DOMESTIC-CB",
+     "locator": "Art. 28(4), second subparagraph",
+     "description": "Collateral swaps maturing within 30 days with the institution's domestic central bank.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty is domestic central bank (Art. 28(8)); branch access condition.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-O-COLL-SWAP-ELIGIBLE-CPTY",
+     "locator": "Art. 28(4), third subparagraph",
+     "description": "Collateral swaps with an eligible counterparty that would otherwise attract a rate above the derogation cap.",
+     "treatment": "outflow_rate",
+     "notes": "Eligible counterparty (Art. 28(9)); asset categories of both legs.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-O-OWN-DEBT-SECURITIES",
+     "locator": "Art. 28(6)",
+     "description": "Notes, bonds and other debt securities issued by the institution, other than retail-only placements.",
+     "treatment": "outflow_rate",
+     "notes": "Maturity/callability within 30 days (via Art. 22(2)(b)); retail-only bonds held in retail accounts are classified as retail deposits instead."
+    },
+    {
+     "code": "EU-O-UNSECURED-ASSET-BORROW",
+     "locator": "Art. 28(7)",
+     "description": "Assets borrowed unsecured and maturing within 30 days, assumed to run off in full.",
+     "treatment": "outflow_rate",
+     "notes": "Not applicable where the institution owns the borrowed assets and they are outside the liquidity buffer."
+    },
+    {
+     "code": "EU-O-DERIV-COLL-POSTED-NONL1",
+     "locator": "Art. 30(1), first subparagraph",
+     "description": "Collateral other than cash and level 1 assets posted for CRR Annex II contracts and credit derivatives.",
+     "treatment": "outflow_rate",
+     "notes": "Posted collateral asset category; contract type; derivative-related additional outflow, not a net derivative flow."
+    },
+    {
+     "code": "EU-O-DERIV-COLL-POSTED-EHQCB",
+     "locator": "Art. 30(1), second subparagraph",
+     "description": "Extremely high quality covered bonds posted as collateral for CRR Annex II contracts and credit derivatives.",
+     "treatment": "outflow_rate",
+     "notes": "Posted collateral asset category Art. 10(1)(f); derivative-related additional outflow."
+    },
+    {
+     "code": "EU-O-DOWNGRADE-TRIGGER",
+     "locator": "Art. 30(2)",
+     "description": "Additional collateral or cash needs triggered by a material deterioration of the institution's credit quality.",
+     "treatment": "outflow_rate",
+     "notes": "Contracts with downgrade triggers; required where the competent authority deems the outflow material."
+    },
+    {
+     "code": "EU-O-DERIV-MKT-VALUATION",
+     "locator": "Art. 30(3)",
+     "description": "Collateral needs from an adverse market scenario on derivatives, computed per Delegated Regulation (EU) 2017/208.",
+     "treatment": "outflow_rate",
+     "notes": "Only if material; computed by the historical look-back approach of 2017/208."
+    },
+    {
+     "code": "EU-O-DERIV-NET-OUTFLOW",
+     "locator": "Art. 30(4)",
+     "description": "Net outflows expected within 30 days on CRR Annex II contracts and credit derivatives, netted per Art. 21.",
+     "treatment": "outflow_rate",
+     "derivative": true,
+     "notes": "Netting set/counterparty with bilateral netting agreement; FX full-principal exchange netted regardless (Art. 21(2)); excludes Art. 30(1)-(3) amounts."
+    },
+    {
+     "code": "EU-O-SHORT-UNSECURED-BORROW",
+     "locator": "Art. 30(5), first sentence",
+     "description": "Short positions covered by unsecured security borrowing, unless return is required only after 30 days.",
+     "treatment": "outflow_rate",
+     "notes": "Covering transaction type; borrowing return date; market value of securities sold short."
+    },
+    {
+     "code": "EU-O-SHORT-SECURED-SFT",
+     "locator": "Art. 30(5), second sentence",
+     "description": "Short positions covered by a collateralised securities financing transaction, assumed maintained over the horizon.",
+     "treatment": "outflow_rate",
+     "notes": "Covering transaction type; linked to inflow exclusion in Art. 32(3)(b), final subparagraph."
+    },
+    {
+     "code": "EU-O-EXCESS-COLL-CALLABLE",
+     "locator": "Art. 30(6)(a)",
+     "description": "Excess collateral held that the counterparty can contractually call at any time.",
+     "treatment": "outflow_rate"
+    },
+    {
+     "code": "EU-O-COLL-DUE-TO-POST",
+     "locator": "Art. 30(6)(b)",
+     "description": "Collateral due to be posted to a counterparty within 30 days.",
+     "treatment": "outflow_rate"
+    },
+    {
+     "code": "EU-O-COLL-SUBSTITUTION",
+     "locator": "Art. 30(6)(c)",
+     "description": "Liquid-asset collateral received that the counterparty may substitute with non-liquid assets without consent.",
+     "treatment": "outflow_rate",
+     "notes": "Collateral received asset category; substitution right without consent."
+    },
+    {
+     "code": "EU-O-OWN-STRUCT-FIN-MATURING",
+     "locator": "Art. 30(8)",
+     "description": "Loss of funding on ABS, covered bonds and other structured financing instruments maturing within 30 days issued by the institution or its sponsored conduits/SPVs.",
+     "treatment": "outflow_rate",
+     "notes": "Issuer is the institution or a sponsored conduit/SPV; no double counting with associated liquidity facilities (Art. 30(10))."
+    },
+    {
+     "code": "EU-O-ABCP-CONDUIT-SIV",
+     "locator": "Art. 30(9)",
+     "description": "Loss of funding on asset-backed commercial paper, conduits, securities investment vehicles and similar financing facilities.",
+     "treatment": "outflow_rate",
+     "notes": "Amount is maturing amount or assets that could be returned; no double counting (Art. 30(10))."
+    },
+    {
+     "code": "EU-O-PB-INTERNAL-MATCH",
+     "locator": "Art. 30(12)",
+     "description": "Prime brokerage contingent obligation where client short sales are covered internally by another client's non-liquid assets.",
+     "treatment": "outflow_rate",
+     "notes": "Prime brokerage flag; matched assets do not qualify as liquid assets."
+    },
+    {
+     "code": "EU-O-FAC-RETAIL",
+     "locator": "Art. 31(3)",
+     "description": "Undrawn committed credit and liquidity facilities qualifying for the retail deposit exposure class.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty retail; maximum drawable within 30 days net of eligible collateral (Art. 31(2))."
+    },
+    {
+     "code": "EU-O-FAC-CREDIT-NONFIN",
+     "locator": "Art. 31(4)",
+     "description": "Undrawn committed credit facilities to non-retail clients that are not financial customers, not for replacing market funding.",
+     "treatment": "outflow_rate",
+     "notes": "Facility type credit (incl. general working capital, Art. 31(1)); counterparty non-financial; purpose."
+    },
+    {
+     "code": "EU-O-FAC-LIQ-NONFIN",
+     "locator": "Art. 31(5)",
+     "description": "Undrawn committed liquidity facilities to non-retail clients that are not financial customers, other than PICs.",
+     "treatment": "outflow_rate",
+     "notes": "Facility type liquidity; amount limited to backstopped debt maturing within 30 days, excess treated as credit facility (Art. 31(1))."
+    },
+    {
+     "code": "EU-O-FAC-LIQ-PIC",
+     "locator": "Art. 31(5)",
+     "description": "Undrawn committed liquidity facilities provided to personal investment companies.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty PIC; same paragraph as EU-O-FAC-LIQ-NONFIN but a distinct rate."
+    },
+    {
+     "code": "EU-O-FAC-LIQ-SSPE-NONSEC",
+     "locator": "Art. 31(6)",
+     "description": "Undrawn liquidity facilities to an SSPE for purchasing non-securities assets from non-financial clients, beyond assets already purchased.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty SSPE; drawable amount contractually limited to assets currently purchased; only the excess portion."
+    },
+    {
+     "code": "EU-O-FAC-CENTRAL-INST-MEMBER",
+     "locator": "Art. 31(7)",
+     "description": "Liquidity funding committed by a network central institution to a member that counts it as a liquid asset under Art. 16(2).",
+     "treatment": "outflow_rate",
+     "notes": "Applies on committed principal; linked to excluded Art. 16."
+    },
+    {
+     "code": "EU-O-FAC-CI-REGULATED-FI",
+     "locator": "Art. 31(8)(a)",
+     "description": "Undrawn facilities to credit institutions, and credit facilities to other regulated financial institutions, CIUs or closed-ended schemes.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty type and facility type (liquidity facilities to non-bank regulated FIs fall to Art. 31(8)(c))."
+    },
+    {
+     "code": "EU-O-FAC-SSPE-OTHER",
+     "locator": "Art. 31(8)(b)",
+     "description": "Liquidity facilities to SSPEs not covered by Art. 31(6), and arrangements obliging the institution to buy or swap SSPE assets.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty SSPE."
+    },
+    {
+     "code": "EU-O-FAC-FIN-OTHER",
+     "locator": "Art. 31(8)(c)",
+     "description": "Undrawn credit and liquidity facilities to other financial customers not covered elsewhere in Art. 31.",
+     "treatment": "outflow_rate",
+     "notes": "Counterparty financial customer."
+    },
+    {
+     "code": "EU-O-FAC-PROMO-LENDER",
+     "locator": "Art. 31(9), first subparagraph",
+     "description": "Facilities from government-sponsored institutions to promotional lenders solely for funding qualifying promotional loans.",
+     "treatment": "outflow_rate",
+     "notes": "Provider is government-sponsored; rate follows Art. 31(3) or (4) per underlying loans; conditions in third subparagraph."
+    },
+    {
+     "code": "EU-O-FAC-PROMO-PASS-THROUGH",
+     "locator": "Art. 31(9), second subparagraph",
+     "description": "Facilities extended by an intermediary credit institution passing through promotional loans, with a symmetric inflow.",
+     "treatment": "outflow_rate",
+     "notes": "Intermediary role; paired with EU-I-PROMO-PASS-THROUGH-FAC."
+    },
+    {
+     "code": "EU-O-OTHER-LIABILITIES",
+     "locator": "Art. 31a(1)",
+     "description": "Any other liabilities becoming due within 30 days not covered by Arts 24 to 31.",
+     "treatment": "outflow_rate",
+     "notes": "Residual maturity/callability within 30 days; includes e.g. deposits from financial customers not under Art. 27."
+    },
+    {
+     "code": "EU-O-NONFIN-FUNDING-COMMIT-EXCESS",
+     "locator": "Art. 31a(2)",
+     "description": "Excess of contractual funding commitments to non-financial customers within 30 days over the related Art. 32(3)(a) inflows.",
+     "treatment": "outflow_rate",
+     "notes": "Aggregate computation; counterparty non-financial (excludes financial customers and central banks); commitments not under Arts 24-31."
+    }
+   ],
+   "inflows": [
+    {
+     "code": "EU-I-PAST-DUE-NONPERFORMING",
+     "locator": "Art. 32(1)",
+     "description": "Contractual inflows from exposures past due or expected not to perform within 30 days, which are not recognised.",
+     "treatment": "exclusion",
+     "notes": "Past-due status; expectation of non-performance."
+    },
+    {
+     "code": "EU-I-CB-FIN-CUST",
+     "locator": "Art. 32(2)(a)",
+     "description": "Monies due from central banks and financial customers with residual maturity within 30 days.",
+     "treatment": "inflow_rate",
+     "notes": "Counterparty type; residual maturity; secured transactions go to Art. 32(3)(b)."
+    },
+    {
+     "code": "EU-I-TRADE-FINANCE",
+     "locator": "Art. 32(2)(b)",
+     "description": "Monies due within 30 days from trade finance transactions under Art. 162(3) CRR.",
+     "treatment": "inflow_rate",
+     "notes": "Transaction type; residual maturity; applies regardless of counterparty."
+    },
+    {
+     "code": "EU-I-SECURITIES-MATURING",
+     "locator": "Art. 32(2)(c)",
+     "description": "Monies due from securities maturing within 30 days.",
+     "treatment": "inflow_rate",
+     "notes": "Not if the security is counted as a liquid asset (Art. 32(6))."
+    },
+    {
+     "code": "EU-I-MAJOR-INDEX-EQUITY",
+     "locator": "Art. 32(2)(d)",
+     "description": "Monies due within 30 days from major index equity positions, such as cash dividends and unsettled sales, without double counting liquid assets.",
+     "treatment": "inflow_rate",
+     "notes": "Equity index membership; not recognised as liquid assets."
+    },
+    {
+     "code": "EU-I-OTHER-CONTRACTUAL",
+     "locator": "Art. 32(2)",
+     "description": "Other performing contractual inflows within 30 days not specifically treated in Art. 32(3).",
+     "treatment": "inflow_rate",
+     "notes": "Residual of Art. 32(2) list ('including in particular')."
+    },
+    {
+     "code": "EU-I-NONFIN-CUST",
+     "locator": "Art. 32(3)(a)",
+     "description": "Monies due within 30 days from non-financial customers, excluding trade finance and maturing securities, with principal reduced.",
+     "treatment": "inflow_rate",
+     "notes": "Counterparty non-financial (Art. 31a(2) meaning); principal vs interest; does not apply to SFTs collateralised by liquid assets (Art. 32(4))."
+    },
+    {
+     "code": "EU-I-PROMO-INTERMEDIARY",
+     "locator": "Art. 32(3)(a), third sentence",
+     "description": "Inflows of an intermediary disbursing promotional loans under a commitment received, recognised up to the matching outflow.",
+     "treatment": "inclusion_rule",
+     "notes": "Intermediary role; commitment from government-sponsored CI, MDB or PSE; capped at corresponding outflow."
+    },
+    {
+     "code": "EU-I-SFT-COLL-L1-EXCL-EHQCB",
+     "locator": "Art. 32(3)(b)(i)",
+     "description": "Maturing reverse repo/secured lending and capital market-driven inflows collateralised by level 1 assets other than extremely high quality covered bonds.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral asset category regardless of reuse; residual maturity within 30 days.",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L1-CB-ECB-MS",
+       "EU-A-L1-CB-RESERVES",
+       "EU-A-L1-CB-TC-LOWERCQS-RES",
+       "EU-A-L1-CB-TC-TOPCQS",
+       "EU-A-L1-CG-MS",
+       "EU-A-L1-CG-TC-TOPCQS",
+       "EU-A-L1-CGCB-TC-LOWERCQS",
+       "EU-A-L1-COINS-BANKNOTES",
+       "EU-A-L1-MDB-IO",
+       "EU-A-L1-PROMO-LENDER",
+       "EU-A-L1-PSE",
+       "EU-A-L1-PUBLIC-CI",
+       "EU-A-L1-RGLA-MS",
+       "EU-A-L1-RGLA-TC"
+      ]
+     }
+    },
+    {
+     "code": "EU-I-SFT-COLL-L1-EHQCB",
+     "locator": "Art. 32(3)(b)(ii)",
+     "description": "Maturing secured lending inflows collateralised by extremely high quality covered bonds.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral asset category Art. 10(1)(f).",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L1-EHQ-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-I-SFT-COLL-L2A",
+     "locator": "Art. 32(3)(b)(iii)",
+     "description": "Maturing secured lending inflows collateralised by level 2A assets.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral asset category (Art. 11).",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2A-CORP-DEBT",
+       "EU-A-L2A-HQ-COVERED-BOND",
+       "EU-A-L2A-RGLA-PSE-MS",
+       "EU-A-L2A-SOV-PSE-TC",
+       "EU-A-L2A-TC-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-I-SFT-COLL-L2B-COVERED-BOND",
+     "locator": "Art. 32(3)(b)(v)",
+     "description": "Maturing secured lending inflows collateralised by level 2B covered bonds.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral asset category Art. 12(1)(e).",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2B-COVERED-BOND"
+      ]
+     }
+    },
+    {
+     "code": "EU-I-SFT-COLL-L2B-OTHER",
+     "locator": "Art. 32(3)(b)(vii)",
+     "description": "Maturing secured lending inflows collateralised by level 2B corporate debt, shares or non-interest-bearing assets.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral asset category Art. 12(1)(b), (c) or (f).",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "EU-A-L2B-CORP-DEBT",
+       "EU-A-L2B-SHARES"
+      ]
+     }
+    },
+    {
+     "code": "EU-I-SFT-COLL-NON-LIQUID",
+     "locator": "Art. 32(3)(b)(ix)",
+     "description": "Maturing secured lending inflows collateralised by assets not falling in Art. 32(3)(b)(i)-(viii).",
+     "treatment": "inflow_rate",
+     "notes": "Collateral not a qualifying liquid asset; non-financial counterparty reduction of Art. 32(3)(a) still applies to these per Art. 32(4)."
+    },
+    {
+     "code": "EU-I-SFT-COLL-COVERS-SHORT",
+     "locator": "Art. 32(3)(b), final subparagraph",
+     "description": "Secured lending where the collateral received covers a short position under Art. 30(5), second sentence; no inflow recognised.",
+     "treatment": "exclusion",
+     "notes": "Link between collateral received and short position.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-I-MARGIN-LOAN-NON-LIQUID",
+     "locator": "Art. 32(3)(c)",
+     "description": "Contractual margin loans maturing within 30 days made against non-liquid collateral not used to cover shorts.",
+     "treatment": "inflow_rate",
+     "notes": "Collateral non-liquid; collateral not reused for short positions; optional treatment ('may')."
+    },
+    {
+     "code": "EU-I-OPDEP-SYMMETRIC",
+     "locator": "Art. 32(3)(d), first sentence",
+     "description": "Monies due that the owing institution treats as operational deposits under Art. 27, at the corresponding symmetric rate.",
+     "treatment": "inflow_rate",
+     "notes": "Counterparty's Art. 27 treatment known; excludes Art. 27(3) central institution deposits."
+    },
+    {
+     "code": "EU-I-OPDEP-FALLBACK",
+     "locator": "Art. 32(3)(d), second sentence",
+     "description": "Operational deposits held at other institutions where the symmetric rate cannot be established.",
+     "treatment": "inflow_rate",
+     "notes": "Counterparty's treatment unknown."
+    },
+    {
+     "code": "EU-I-COLL-SWAP",
+     "locator": "Art. 32(3)(e)",
+     "description": "Collateral swaps maturing within 30 days where the asset lent has a lower haircut than the asset borrowed.",
+     "treatment": "inflow_rate",
+     "notes": "Asset categories of both legs and market value of asset lent; non-liquid assets take a full haircut.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-I-SHORT-COVER-ROLLOVER",
+     "locator": "Art. 32(3)(f)",
+     "description": "Reverse repos, borrowings or swaps maturing within 30 days whose collateral covers shorts extendable beyond 30 days; assumed rolled over, no inflow.",
+     "treatment": "exclusion",
+     "notes": "Link to short positions (including matched-book cases); overlaps with Art. 32(3)(b) final subparagraph.",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "EU-I-UNDRAWN-FAC-RECEIVED",
+     "locator": "Art. 32(3)(g)",
+     "description": "Undrawn credit or liquidity facilities and other commitments received, including from central banks, not recognised as inflows.",
+     "treatment": "exclusion",
+     "notes": "Except Art. 31(9) second-subparagraph pass-through facilities and Art. 34 (excluded)."
+    },
+    {
+     "code": "EU-I-OWN-OR-SSPE-SECURITIES",
+     "locator": "Art. 32(3)(h)",
+     "description": "Monies due from securities issued by the institution or a close-links SSPE, netted and rated by the underlying assets.",
+     "treatment": "inflow_rate",
+     "notes": "Issuer relationship (own or close links); underlying asset inflow category."
+    },
+    {
+     "code": "EU-I-OPEN-MATURITY-LOANS",
+     "locator": "Art. 32(3)(i)",
+     "description": "Loans with no defined contractual end date where the institution can demand payment within 30 days.",
+     "treatment": "inflow_rate",
+     "notes": "Contractual call right within 30 days."
+    },
+    {
+     "code": "EU-I-PROMO-PASS-THROUGH-FAC",
+     "locator": "Art. 31(9), second subparagraph",
+     "description": "Undrawn committed facility received by an intermediary passing through promotional loans, given a symmetric inflow.",
+     "treatment": "inflow_rate",
+     "notes": "Derogation from Art. 32(3)(g); paired with EU-O-FAC-PROMO-PASS-THROUGH."
+    },
+    {
+     "code": "EU-I-SEGREGATED-RELEASE",
+     "locator": "Art. 32(4), second sentence",
+     "description": "Release of balances in regulatory segregated accounts for customer trading assets, maintained in liquid assets.",
+     "treatment": "inflow_rate",
+     "notes": "Segregation held in liquid assets; such balances are excluded from the liquid asset stock (Art. 28(5))."
+    },
+    {
+     "code": "EU-I-DERIV-NET-INFLOW",
+     "locator": "Art. 32(5)",
+     "description": "Net inflows expected within 30 days on CRR Annex II contracts and credit derivatives, netted per Art. 21.",
+     "treatment": "inflow_rate",
+     "derivative": true,
+     "notes": "Netting set/counterparty with bilateral netting agreement; collateral to be received nets only if liquid and reusable (Art. 21(3))."
+    },
+    {
+     "code": "EU-I-LIQUID-ASSET-FLOWS",
+     "locator": "Art. 32(6)",
+     "description": "Inflows from liquid assets reflected in their market value, which are not recognised.",
+     "treatment": "exclusion",
+     "notes": "Payments not reflected in market value (e.g. coupons) are recognised under the relevant inflow category."
+    },
+    {
+     "code": "EU-I-NEW-OBLIGATIONS",
+     "locator": "Art. 32(7)",
+     "description": "Inflows from new obligations entered into, which are not recognised.",
+     "treatment": "exclusion",
+     "notes": "Contract start date relative to reporting date."
+    }
+   ],
+   "excluded": [
+    {
+     "code": "EU-A-L2B-SECURITISATION",
+     "locator": "Art. 12(1)(a); Art. 13",
+     "decision": "A03"
+    },
+    {
+     "code": "EU-A-RCLF",
+     "locator": "Art. 12(1)(d); Art. 14",
+     "decision": "A03"
+    },
+    {
+     "code": "EU-A-CIU",
+     "locator": "Art. 15",
+     "decision": "A03"
+    },
+    {
+     "code": "EU-A-COOP-IPS-DEPOSIT",
+     "locator": "Art. 16",
+     "decision": "A03"
+    },
+    {
+     "code": "EU-A-L2B-NON-INTEREST-BEARING",
+     "locator": "Art. 12(1)(f)",
+     "decision": "A03"
+    },
+    {
+     "code": "EU-O-SFT-COLL-L2B-SEC-A",
+     "locator": "Art. 28(3)(d)",
+     "decision": "A03: collateral of Art. 13"
+    },
+    {
+     "code": "EU-O-SFT-COLL-L2B-SEC-B",
+     "locator": "Art. 28(3)(f)",
+     "decision": "A03: collateral of Art. 13"
+    },
+    {
+     "code": "EU-O-SFT-COLL-CIU",
+     "locator": "Art. 28(3)(h)",
+     "decision": "A03: collateral of Art. 15"
+    },
+    {
+     "code": "EU-O-INTERDEPENDENT",
+     "locator": "Art. 26",
+     "decision": "A06"
+    },
+    {
+     "code": "EU-O-INTRAGROUP-FACILITY",
+     "locator": "Art. 29",
+     "decision": "A06"
+    },
+    {
+     "code": "EU-I-SFT-COLL-L2B-SEC-A",
+     "locator": "Art. 32(3)(b)(iv)",
+     "decision": "A03: collateral of Art. 13"
+    },
+    {
+     "code": "EU-I-SFT-COLL-L2B-SEC-B",
+     "locator": "Art. 32(3)(b)(vi)",
+     "decision": "A03: collateral of Art. 13"
+    },
+    {
+     "code": "EU-I-SFT-COLL-CIU",
+     "locator": "Art. 32(3)(b)(viii)",
+     "decision": "A03: collateral of Art. 15"
+    },
+    {
+     "code": "EU-I-INTRAGROUP-FACILITY",
+     "locator": "Art. 34",
+     "decision": "A06"
+    }
+   ]
+  },
+  "BASEL": {
+   "assets": [
+    {
+     "code": "BASEL-A-L1-COINS-BANKNOTES",
+     "level": "L1",
+     "locator": "LCR30.41(1)",
+     "description": "Coins and banknotes held by the bank, counted at full value without haircut.",
+     "treatment": "haircut",
+     "national_discretion": false,
+     "notes": "instrument type"
+    },
+    {
+     "code": "BASEL-A-L1-CB-RESERVES",
+     "level": "L1",
+     "locator": "LCR30.41(2)",
+     "description": "Central bank reserves, including required reserves and qualifying overnight or term deposits with the central bank, to the extent they can be drawn down in stress.",
+     "treatment": "inclusion_rule",
+     "national_discretion": true,
+     "notes": "central bank; drawdown-in-stress extent agreed locally (footnote 10); term deposit repayable on notice or usable as collateral for borrowing (footnote 9); other central bank term deposits are not HQLA"
+    },
+    {
+     "code": "BASEL-A-L1-SOV-ZERO-RW",
+     "level": "L1",
+     "locator": "LCR30.41(3)",
+     "description": "Marketable securities claimed on or guaranteed by sovereigns, central banks, PSEs, BIS, IMF, ECB/EC, ESM, EFSF or MDBs that meet the Level 1 risk-weight, market-depth, proven-liquidity and non-financial-issuer conditions.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "issuer/guarantor type; standardised risk weight per CRE20.7 (not via CRE20.8 discretion); repo/cash market depth; proven liquidity record; not a financial institution obligation; LCR30.40 lets supervisors impose a haircut on Level 1 securities"
+    },
+    {
+     "code": "BASEL-A-L1-SOV-DOM-CCY",
+     "level": "L1",
+     "locator": "LCR30.41(4)",
+     "description": "Debt securities of a sovereign or central bank whose risk weight is not the lowest, issued in domestic currency in the country where liquidity risk is taken or in the home country.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "issuer sovereign/central bank; sovereign risk weight; currency of issue equals issuer domestic currency; issuer country is home country or host country with subsidiary/branch presence (FAQ1); LCR30.40 haircut discretion"
+    },
+    {
+     "code": "BASEL-A-L1-SOV-FX-CCY",
+     "level": "L1",
+     "locator": "LCR30.41(5)",
+     "description": "Domestic sovereign or central bank debt in foreign currency, for a sovereign whose risk weight is not the lowest, eligible only up to stressed net outflows in that currency in that jurisdiction.",
+     "treatment": "inclusion_rule",
+     "national_discretion": true,
+     "notes": "issuer sovereign/central bank; currency; jurisdiction of operations; bank's stressed net cash outflows in that currency in the issuer's jurisdiction (FAQ2) to cap eligible amount; LCR30.40 haircut discretion"
+    },
+    {
+     "code": "BASEL-A-L2A-SOV-PSE-MDB",
+     "level": "L2A",
+     "locator": "LCR30.43(1)",
+     "description": "Marketable securities claimed on or guaranteed by sovereigns, central banks, PSEs or MDBs in the Level 2A risk-weight bucket that meet market-depth, price-stability and non-financial-issuer conditions.",
+     "treatment": "haircut",
+     "national_discretion": false,
+     "notes": "issuer/guarantor type; standardised risk weight; market depth; stressed price decline or haircut increase; not a financial institution obligation; if also eligible under LCR30.41(4)/(5) it may be assigned Level 1 (footnote 14)"
+    },
+    {
+     "code": "BASEL-A-L2A-CORP-DEBT",
+     "level": "L2A",
+     "locator": "LCR30.43(2)",
+     "description": "Plain-vanilla corporate debt securities, including commercial paper, from non-financial issuers with external or internal rating meeting the Level 2A minimum and proven stressed liquidity.",
+     "treatment": "haircut",
+     "national_discretion": false,
+     "notes": "issuer non-financial; external ECAI rating or internal PD-equivalent rating; plain-vanilla, not structured or subordinated (footnote 16); stressed price decline or haircut increase; securities meeting rating but failing the Level 2A price test may go to Level 2B (FAQ1)"
+    },
+    {
+     "code": "BASEL-A-L2A-COVERED-BOND",
+     "level": "L2A",
+     "locator": "LCR30.43(2)",
+     "description": "Covered bonds not issued by the bank itself or its affiliates, with rating meeting the Level 2A minimum and proven stressed liquidity.",
+     "treatment": "haircut",
+     "national_discretion": false,
+     "notes": "instrument type covered bond (footnote 17); issuer not the bank or affiliate; external or internal rating; market depth; stressed price decline or haircut increase"
+    },
+    {
+     "code": "BASEL-A-L2B-RMBS",
+     "level": "L2B",
+     "locator": "LCR30.45(1)",
+     "description": "Residential mortgage-backed securities meeting the Level 2B conditions on originator, rating, liquidity, pool composition, full recourse, average LTV and risk retention.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "not issued/originated by bank or affiliate; long-term or short-term rating; market depth; stressed price behaviour; pool restricted to residential mortgages, no structured products; full-recourse loans; weighted-average LTV at RMBS issuance (FAQ1, FAQ2); risk retention; inclusion of Level 2B at national discretion (LCR30.44)"
+    },
+    {
+     "code": "BASEL-A-L2B-CORP-DEBT",
+     "level": "L2B",
+     "locator": "LCR30.45(2)",
+     "description": "Plain-vanilla corporate debt securities, including commercial paper, of non-financial issuers rated within the Level 2B range and meeting liquidity conditions.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "issuer non-financial; external or internal rating; plain-vanilla (footnote 19); market depth; stressed price behaviour; also receives higher-rated corporates failing the Level 2A price test (LCR30.43 FAQ1); inclusion of Level 2B at national discretion (LCR30.44)"
+    },
+    {
+     "code": "BASEL-A-L2B-EQUITY",
+     "level": "L2B",
+     "locator": "LCR30.45(3)",
+     "description": "Exchange-traded, centrally cleared common equity shares of non-financial issuers that belong to a major index and meet currency and stressed price conditions.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "issuer non-financial; exchange-traded and centrally cleared; constituent of major index in home or risk-taking jurisdiction as decided by supervisor (FAQ5, FAQ8); currency; stressed price behaviour with nationally determined stress period (FAQ7); inclusion of Level 2B at national discretion (LCR30.44)"
+    },
+    {
+     "code": "BASEL-A-L2B-SOV-PSE-DEBT",
+     "level": "L2B",
+     "locator": "LCR30.45 FAQ3",
+     "description": "Sovereign, central bank and PSE debt securities within the Level 2B rating range that do not qualify as Level 1 or Level 2A, treated like Level 2B corporate debt.",
+     "treatment": "haircut",
+     "national_discretion": true,
+     "notes": "issuer sovereign/central bank/PSE; rating; not eligible under LCR30.41 or LCR30.43; PSE securities must meet the other LCR30.45(2) requirements (FAQ4); inclusion of Level 2B at national discretion (LCR30.44)"
+    }
+   ],
+   "outflows": [
+    {
+     "code": "BASEL-O-RET-STABLE-ENH",
+     "locator": "LCR40.11",
+     "description": "Stable retail deposits in jurisdictions that apply the reduced stable rate because the deposit insurance scheme meets the additional prefunding, backstop and payout criteria.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "counterparty natural person; fully insured portion; effective deposit insurance (LCR40.8-40.9); established relationship or transactional account; jurisdiction opts in (LCR40.11-40.12); not term deposit excluded under LCR40.16"
+    },
+    {
+     "code": "BASEL-O-RET-STABLE",
+     "locator": "LCR40.7",
+     "description": "Retail deposits fully insured by an effective deposit insurance scheme or equivalent public guarantee, held by depositors with established relationships or in transactional accounts.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty natural person; insured amount up to insurance limit (footnote 43); established relationship or transactional account; demand or term deposit callable within horizon; rate is a floor that jurisdictions may raise (LCR40.6); retail-only bank debt securities may be included (LCR40.43)"
+    },
+    {
+     "code": "BASEL-O-RET-LESS-STABLE",
+     "locator": "LCR40.13",
+     "description": "Retail deposits not qualifying as stable, allocated to supervisor-defined less stable buckets with jurisdiction-specific run-off rates subject to a floor.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "counterparty natural person; uninsured or partially insured portion, high-value, sophisticated/HNW, internet, or unidentifiable stability (LCR40.14); jurisdiction bucket identifier"
+    },
+    {
+     "code": "BASEL-O-RET-FX",
+     "locator": "LCR40.15",
+     "description": "Retail deposits denominated in a currency other than the domestic currency of the jurisdiction, with run-off rate set by supervisors.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "counterparty natural person; deposit currency vs domestic currency of jurisdiction; treat as less stable if more volatile"
+    },
+    {
+     "code": "BASEL-O-RET-TERM-BEYOND-HZN",
+     "locator": "LCR40.16",
+     "description": "Retail term deposits with residual maturity or notice beyond the LCR horizon whose early withdrawal is legally barred or carries a significant penalty, excluded unless supervisors set a run-off.",
+     "treatment": "exclusion",
+     "national_discretion": true,
+     "notes": "counterparty natural person; residual maturity or notice period; legal right to withdraw; early-withdrawal penalty vs interest loss; penalty-free portion goes to demand categories (footnote 47); bank practice of waiving penalty reclassifies whole category (LCR40.17); supervisors may apply a run-off (LCR40.18)"
+    },
+    {
+     "code": "BASEL-O-DEP-PLEDGED-EXCL",
+     "locator": "LCR40.5 FAQ1",
+     "description": "Deposits contractually pledged to secure a bank loan not maturing within the horizon, excluded up to the outstanding loan balance.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "pledge legally prevents withdrawal until loan repaid; loan maturity beyond horizon; excluded amount capped at drawn loan balance; deposits pledged against undrawn facilities take the higher of the two applicable rates; also applies to small business deposits (LCR40.23 FAQ1)"
+    },
+    {
+     "code": "BASEL-O-DEP-PRECIOUS-METAL",
+     "locator": "LCR40.5 FAQ2",
+     "description": "Unsecured precious metals deposits that a jurisdiction allows to be treated as having no outflow when physically settled from own inventory or at the bank's option.",
+     "treatment": "exclusion",
+     "national_discretion": true,
+     "notes": "liability denominated in precious metals; settlement type physical or bank option; bank holds inventory; otherwise classify by counterparty in retail or unsecured wholesale categories; supervisor must disclose use"
+    },
+    {
+     "code": "BASEL-O-SME-STABLE-ENH",
+     "locator": "LCR40.22",
+     "description": "Stable small business funding in jurisdictions applying the reduced stable rate under the enhanced deposit insurance criteria, by analogy with retail buckets.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-financial small business customer per CRE30.20-30.22 or managed as retail (LCR40.24); aggregated funding below the euro-denominated limit on consolidated basis (LCR40.23); insured portion; enhanced scheme criteria of LCR40.11"
+    },
+    {
+     "code": "BASEL-O-SME-STABLE",
+     "locator": "LCR40.22",
+     "description": "Stable portion of unsecured funding from small business customers, treated like stable retail deposits.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "non-financial small business customer; aggregated funding limit (LCR40.23-40.24); insured portion; established relationship or transactional account; floor that jurisdictions may raise (LCR40.6)"
+    },
+    {
+     "code": "BASEL-O-SME-LESS-STABLE",
+     "locator": "LCR40.22",
+     "description": "Less stable unsecured funding from small business customers, placed in the supervisor-defined less stable retail buckets.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-financial small business customer; aggregated funding limit; uninsured or otherwise less stable portion; jurisdiction bucket identifier"
+    },
+    {
+     "code": "BASEL-O-SME-FX",
+     "locator": "LCR40.22",
+     "description": "Foreign-currency funding from small business customers, receiving the supervisor-set foreign currency retail treatment by analogy.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-financial small business customer; currency vs domestic currency; LCR40.15 by reference"
+    },
+    {
+     "code": "BASEL-O-SME-TERM-BEYOND-HZN",
+     "locator": "LCR40.25",
+     "description": "Small business term deposits beyond the horizon meeting the retail term deposit exclusion conditions, excluded unless supervisors set a run-off.",
+     "treatment": "exclusion",
+     "national_discretion": true,
+     "notes": "non-financial small business customer; residual maturity or notice; withdrawal right; penalty; LCR40.16-40.18 by reference"
+    },
+    {
+     "code": "BASEL-O-OPER-DEP",
+     "locator": "LCR40.26",
+     "description": "Operational deposits required for qualifying clearing, custody or cash management services where the customer has substantive dependency on the bank, excluding the insured portion.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "counterparty financial or non-financial institutional customer; qualifying service (LCR40.27, LCR40.33-40.35); legally binding agreement with notice or switching costs; designated account with no pricing incentive (LCR40.28); operational portion only, excess balances go to non-operational categories (LCR40.29-40.30); not correspondent banking or prime brokerage (LCR40.32); supervisory approval and supervisor may disallow (concentration)"
+    },
+    {
+     "code": "BASEL-O-OPER-DEP-INSURED",
+     "locator": "LCR40.36",
+     "description": "Portion of qualifying operational deposits fully covered by deposit insurance, which may be treated like stable retail deposits.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "operational deposit criteria as for BASEL-O-OPER-DEP; insured portion; inherits supervisory permission of LCR40.26"
+    },
+    {
+     "code": "BASEL-O-COOP-NETWORK",
+     "locator": "LCR40.37",
+     "description": "Deposits of member institutions placed with the central institution of a cooperative network for statutory minimum deposit or common task-sharing reasons, under a mutual protection scheme.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "reporting bank is approved central institution or central service provider (LCR40.39); depositor is network member; same mutual protection scheme; purpose statutory minimum deposit or task sharing; correspondent banking and other placements go to BASEL-O-UNSEC-OTHER-LE"
+    },
+    {
+     "code": "BASEL-O-UNSEC-NFC-SOV-INS",
+     "locator": "LCR40.41",
+     "description": "Non-operational unsecured funding from non-financial corporates, sovereigns, central banks, MDBs and PSEs whose entire amount is covered by deposit insurance or equivalent guarantee.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty type; not small business; no operational relationship; entire deposit fully insured"
+    },
+    {
+     "code": "BASEL-O-UNSEC-NFC-SOV",
+     "locator": "LCR40.40",
+     "description": "Non-operational unsecured funding from non-financial corporates (not small business) and domestic or foreign sovereigns, central banks, MDBs and PSEs.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty type; not small business; no operational relationship or excess operational balances; non-financial corporate affiliates included (footnote 54)"
+    },
+    {
+     "code": "BASEL-O-UNSEC-OTHER-LE",
+     "locator": "LCR40.42",
+     "description": "Unsecured funding from banks, securities firms, insurers, fiduciaries, beneficiaries, conduits, SPVs, financial affiliates and other legal entities, plus bank-issued debt securities not restricted to retail holders.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty type; not operational, not cooperative-network qualifying; includes bank's own notes and bonds regardless of holder unless retail-only (LCR40.43); includes correspondent banking and non-qualifying placements at a cooperative central institution (LCR40.39)"
+    },
+    {
+     "code": "BASEL-O-WHOLESALE-NOT-DUE",
+     "locator": "LCR40.21",
+     "description": "Wholesale funding that is not callable and does not mature within the horizon, including funding callable only with binding notice beyond the horizon, which is not included.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "earliest contractual maturity or call date; investor options; bank options with reputational redemption expectation must be included (LCR40.20); binding notice period"
+    },
+    {
+     "code": "BASEL-O-SEC-L1-OR-CB",
+     "locator": "LCR40.47",
+     "description": "Maturing secured funding and collateral swaps backed by Level 1 collateral with any counterparty, or with the bank's domestic central bank, with no assumed loss of funding.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level (actually pledged at close of business, LCR40.48); counterparty domestic central bank; maturity within horizon; amount of funds raised; host central bank possible under LCR40.47 FAQ2",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "BASEL-O-SEC-L2A",
+     "locator": "LCR40.48",
+     "description": "Maturing secured funding and collateral swaps backed by Level 2A collateral with counterparties other than the domestic central bank.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level; counterparty; maturity within horizon; amount of funds raised; rate equals Level 2A haircut",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2A-CORP-DEBT",
+       "BASEL-A-L2A-COVERED-BOND",
+       "BASEL-A-L2A-SOV-PSE-MDB"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-O-SEC-DOM-SOV-PSE-MDB",
+     "locator": "LCR40.47",
+     "description": "Maturing secured funding with the domestic sovereign, MDBs or domestic PSEs in the lowest risk-weight buckets, backed by collateral other than Level 1 or Level 2A.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty domestic sovereign, MDB or domestic PSE with qualifying risk weight (footnote 55); domestic means place of incorporation, extension per FAQ2; collateral not Level 1 or Level 2A; outstanding transactions only, not unused capacity",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "BASEL-O-SEC-L2B-RMBS",
+     "locator": "LCR40.48",
+     "description": "Maturing secured funding and collateral swaps backed by RMBS eligible for Level 2B.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level and sub-type RMBS; counterparty not domestic central bank or qualifying domestic public entity; maturity within horizon",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2B-RMBS"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-O-SEC-L2B-OTHER",
+     "locator": "LCR40.48",
+     "description": "Maturing secured funding and collateral swaps backed by Level 2B assets other than eligible RMBS.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level and sub-type; counterparty; maturity within horizon",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2B-CORP-DEBT",
+       "BASEL-A-L2B-EQUITY",
+       "BASEL-A-L2B-SOV-PSE-DEBT"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-O-SEC-OTHER",
+     "locator": "LCR40.48",
+     "description": "All other maturing secured funding, including non-HQLA-backed transactions and customer short positions covered from the bank's own long inventory, assumed to run off fully.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral non-HQLA or not otherwise classified; counterparty; maturity within horizon or no contractual maturity for customer shorts (LCR40.46); collateral lent to customers for shorts counts as secured funding"
+    },
+    {
+     "code": "BASEL-O-DERIV-NET",
+     "locator": "LCR40.49",
+     "description": "Net derivative cash outflows calculated by counterparty under valid master netting agreements, fully counted as outflows.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "derivative": true,
+     "notes": "netting set / master netting agreement; in-the-money options exercisable within horizon; cheapest-to-deliver assumption; same-day FX principal exchanges may be netted; net of HQLA collateral inflows that can be re-used (LCR40.50); excludes valuation-driven collateral needs"
+    },
+    {
+     "code": "BASEL-O-DOWNGRADE-TRIGGER",
+     "locator": "LCR40.51",
+     "description": "Collateral postings, facility drawdowns or early repayments triggered by a downgrade of the bank's long-term rating within the scenario specified in the standard.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "contract contains rating trigger; trigger notch level vs scenario; short-term rating triggers mapped to long-term equivalent; applies to derivatives and other transactions not otherwise captured (FAQ2)"
+    },
+    {
+     "code": "BASEL-O-COLL-VALUATION",
+     "locator": "LCR40.52",
+     "description": "Potential loss of value on non-Level 1 collateral posted to secure mark-to-market exposures on derivatives and other transactions.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "posted collateral HQLA level (non-Level 1); amount net of reusable collateral received from same counterparty; segregated margin account offsets only within account; not secured funding or lending (FAQ2)"
+    },
+    {
+     "code": "BASEL-O-EXCESS-COLL-CALLABLE",
+     "locator": "LCR40.53",
+     "description": "Excess non-segregated collateral held by the bank that the counterparty could contractually recall at any time.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "collateral non-segregated; excess over counterparty's current requirement; included in HQLA or recall needs funding"
+    },
+    {
+     "code": "BASEL-O-COLL-DUE-NOT-CALLED",
+     "locator": "LCR40.54",
+     "description": "Collateral the bank is contractually obliged to post but which the counterparty has not yet demanded.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "contractually due collateral amount; not yet called"
+    },
+    {
+     "code": "BASEL-O-COLL-SUBSTITUTION",
+     "locator": "LCR40.55",
+     "description": "Non-segregated HQLA collateral received that the counterparty may substitute without consent with non-HQLA or lower-value HQLA.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "received collateral HQLA level and haircut; potential substitute lowest liquidity value; non-segregated; unencumbered collateral excluded from HQLA for operational reasons may be excluded; includes secured lending beyond horizon (FAQ1)"
+    },
+    {
+     "code": "BASEL-O-MTM-LOOKBACK",
+     "locator": "LCR40.56",
+     "description": "Liquidity needs from market valuation changes on derivative and other transactions, measured by the historical look-back of largest net collateral flows.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "portfolio-level historical net collateral flows over the look-back window (FAQ1); includes settled-to-market payments (FAQ2); supervisors may adjust the treatment"
+    },
+    {
+     "code": "BASEL-O-OWN-ABS-CB-MATURING",
+     "locator": "LCR40.57",
+     "description": "Bank-issued asset-backed securities, covered bonds and other structured financing instruments maturing within the horizon, assumed not refinanced.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "issuer is the bank; instrument type; maturity within horizon; may be offset by HQLA released on maturity, surplus recognised under LCR40.93"
+    },
+    {
+     "code": "BASEL-O-ABCP-SIV-MATURING",
+     "locator": "LCR40.58",
+     "description": "Debt maturing within the horizon issued by ABCP programmes, conduits, SIVs, SPEs and similar financing facilities of the bank, looked through regardless of consolidation.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "financing vehicle sponsored by bank; look-through maturity of vehicle debt; no double count with liquidity facilities for consolidated programmes (LCR40.63)"
+    },
+    {
+     "code": "BASEL-O-ABCP-SIV-RETURNABLE",
+     "locator": "LCR40.58",
+     "description": "Assets that could be returned, or liquidity that must be provided, under embedded options or liquidity puts in the bank's structured financing arrangements.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "embedded option or liquidity put exercisable within horizon; returnable asset amount or liquidity required"
+    },
+    {
+     "code": "BASEL-O-FAC-RETAIL-SME",
+     "locator": "LCR40.64(1)",
+     "description": "Undrawn committed credit and liquidity facilities to retail and small business customers.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty retail or small business; committed (irrevocable) or conditionally revocable; undrawn amount net of eligible HQLA collateral (LCR40.60)"
+    },
+    {
+     "code": "BASEL-O-FAC-NFC-SOV-CREDIT",
+     "locator": "LCR40.64(2)",
+     "description": "Undrawn committed credit facilities to non-financial corporates, sovereigns, central banks, PSEs and MDBs.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty type; facility type credit including general working capital and liquidity facility capacity beyond backstopped debt (LCR40.61); import/export financing (LCR40.72); undrawn amount net of HQLA collateral"
+    },
+    {
+     "code": "BASEL-O-FAC-NFC-SOV-LIQ",
+     "locator": "LCR40.64(3)",
+     "description": "Undrawn committed liquidity facilities to non-financial corporates, sovereigns, central banks, PSEs and MDBs.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty type; facility type liquidity; amount limited to customer debt maturing within horizon backstopped by facility (LCR40.61)"
+    },
+    {
+     "code": "BASEL-O-FAC-BANKS",
+     "locator": "LCR40.64(4)",
+     "description": "Undrawn committed credit and liquidity facilities to banks subject to prudential supervision.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty prudentially supervised bank; committed; undrawn amount"
+    },
+    {
+     "code": "BASEL-O-FAC-OFI-CREDIT",
+     "locator": "LCR40.64(5)",
+     "description": "Undrawn committed credit facilities to other financial institutions such as securities firms, insurers, fiduciaries and beneficiaries.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty other financial institution; facility type credit; undrawn amount"
+    },
+    {
+     "code": "BASEL-O-FAC-OFI-LIQ",
+     "locator": "LCR40.64(6)",
+     "description": "Undrawn committed liquidity facilities to other financial institutions such as securities firms, insurers, fiduciaries and beneficiaries.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty other financial institution; facility type liquidity; undrawn amount"
+    },
+    {
+     "code": "BASEL-O-FAC-OTHER-LE",
+     "locator": "LCR40.64(7)",
+     "description": "Undrawn committed credit and liquidity facilities to other legal entities, including SPEs, conduits, SPVs, hedge funds and money market funds.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty other legal entity; facilities to hedge funds, MMFs, SPEs, conduits and vehicles financing the bank's own assets captured entirely (LCR40.62)"
+    },
+    {
+     "code": "BASEL-O-CONTRACT-LEND-FI",
+     "locator": "LCR40.65",
+     "description": "Contractual obligations to extend funds within the horizon to financial institutions, including central banks, not captured elsewhere.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty financial institution or central bank; contractual; within horizon; not a committed facility"
+    },
+    {
+     "code": "BASEL-O-CONTRACT-LEND-NONFIN",
+     "locator": "LCR40.66",
+     "description": "Excess of contractual obligations to extend funds to retail and non-financial wholesale clients over the specified share of contractual inflows from those clients.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty retail or non-financial wholesale; contractual lending obligations within horizon; contractual inflows from same client group; aggregate comparison"
+    },
+    {
+     "code": "BASEL-O-CONT-JV-MINORITY",
+     "locator": "LCR40.70",
+     "description": "Non-contractual liquidity support expected for unconsolidated joint ventures or minority investments where the bank is the main liquidity provider.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "entity not consolidated per LCR10.1; bank expected main liquidity provider; amount per supervisor-agreed methodology"
+    },
+    {
+     "code": "BASEL-O-CONT-TRADE-FIN",
+     "locator": "LCR40.71",
+     "description": "Contingent obligations from trade finance instruments such as documentary letters of credit, collections, import/export bills and trade-related guarantees.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "instrument type trade finance; directly underpinned by movement of goods or services; lending commitments such as import/export financing excluded (LCR40.72)"
+    },
+    {
+     "code": "BASEL-O-CONT-UNCOMMITTED-FAC",
+     "locator": "LCR40.73(1)",
+     "description": "Unconditionally revocable uncommitted credit and liquidity facilities.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "facility unconditionally cancellable by bank (LCR40.59)"
+    },
+    {
+     "code": "BASEL-O-CONT-GUARANTEE-LC",
+     "locator": "LCR40.73(2)",
+     "description": "Guarantees and letters of credit not related to trade finance obligations.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "instrument type guarantee or letter of credit; not trade finance"
+    },
+    {
+     "code": "BASEL-O-CONT-DEBT-REPURCHASE",
+     "locator": "LCR40.73(3)(1)",
+     "description": "Non-contractual obligations from potential requests to repurchase the bank's own debt or that of related conduits, SIVs and similar vehicles.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-contractual; issuer bank or related vehicle"
+    },
+    {
+     "code": "BASEL-O-CONT-STRUCT-PRODUCTS",
+     "locator": "LCR40.73(3)(2)",
+     "description": "Non-contractual obligations from structured products where customers expect ready marketability, such as adjustable rate and variable-rate demand notes.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-contractual; product type"
+    },
+    {
+     "code": "BASEL-O-CONT-STABLE-VALUE-FUND",
+     "locator": "LCR40.73(3)(3)",
+     "description": "Non-contractual obligations from managed funds marketed to maintain a stable value, such as money market mutual funds.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "non-contractual; fund marketed as stable value; sponsored by bank"
+    },
+    {
+     "code": "BASEL-O-CONT-DEALER-DEBT",
+     "locator": "LCR40.73(4)",
+     "description": "Potential repurchase of outstanding secured or unsecured debt securities with maturities beyond the horizon, for issuers with an affiliated dealer or market maker.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "issuer has affiliated dealer/market maker; debt maturity beyond horizon"
+    },
+    {
+     "code": "BASEL-O-CONT-CUST-SHORT",
+     "locator": "LCR40.73(5)",
+     "description": "Non-contractual obligations where customer short positions are internally covered by other customers' collateral that is not Level 1 or Level 2, subject to a minimum run-off floor.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "customer short covered by other customers' collateral; collateral HQLA level (non-HQLA); symmetric with margin loan inflow (FAQ1)"
+    },
+    {
+     "code": "BASEL-O-CONT-OTHER",
+     "locator": "LCR40.67",
+     "description": "Other contractual or non-contractual contingent funding obligations not listed elsewhere, such as autocallable notes, with nationally determined run-off rates.",
+     "treatment": "outflow_rate",
+     "national_discretion": true,
+     "notes": "contingent liability type and trigger; contractual or non-contractual (LCR40.68-40.69); autocallable or market-triggered notes (LCR40.69 FAQ1)"
+    },
+    {
+     "code": "BASEL-O-OTHER-CONTRACTUAL",
+     "locator": "LCR40.74",
+     "description": "Any other contractual cash outflows within the horizon, such as unsecured collateral borrowings, uncovered and firm shorts covered by unsecured borrowing, dividends and contractual interest.",
+     "treatment": "outflow_rate",
+     "national_discretion": false,
+     "notes": "contractual; within horizon; includes firm shorts covered by unsecured security borrowing (LCR40.80), forward reverse repos starting within and maturing beyond horizon net of collateral value and unsettled non-HQLA purchases (FAQ1-FAQ2), re-used unsecured borrowed securities (FAQ4), collateral pool substitution needs (LCR40.88 FAQ1)"
+    },
+    {
+     "code": "BASEL-O-OPERATING-COSTS-EXCL",
+     "locator": "LCR40.74",
+     "description": "Outflows related to operating costs, which are not included in the LCR.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "outflow nature operating cost"
+    },
+    {
+     "code": "BASEL-O-FIRM-SHORT-SFT-EXCL",
+     "locator": "LCR40.80",
+     "description": "Bank short positions covered by a collateralised securities financing transaction, assumed to be maintained with no outflow.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "short position of the bank; covering transaction is collateralised SFT; symmetric with zero inflow under LCR40.79",
+     "collateral": {
+      "rule": "optional"
+     }
+    }
+   ],
+   "inflows": [
+    {
+     "code": "BASEL-I-SEC-L1",
+     "locator": "LCR40.78",
+     "description": "Maturing reverse repos and securities borrowing backed by Level 1 collateral not used to cover shorts, assumed rolled over with no inflow.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level; contractual maturity within horizon (FAQ1); collateral not rehypothecated to cover shorts",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L1-CB-RESERVES",
+       "BASEL-A-L1-COINS-BANKNOTES",
+       "BASEL-A-L1-SOV-DOM-CCY",
+       "BASEL-A-L1-SOV-FX-CCY",
+       "BASEL-A-L1-SOV-ZERO-RW"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-I-SEC-L2A",
+     "locator": "LCR40.78",
+     "description": "Maturing reverse repos, securities borrowing and collateral swaps backed by Level 2A collateral not used to cover shorts, with inflow equal to the Level 2A haircut.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level; maturity within horizon; collateral not used to cover shorts",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2A-CORP-DEBT",
+       "BASEL-A-L2A-COVERED-BOND",
+       "BASEL-A-L2A-SOV-PSE-MDB"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-I-SEC-L2B-RMBS",
+     "locator": "LCR40.79",
+     "description": "Maturing secured lending backed by Level 2B eligible RMBS not used to cover shorts, with inflow equal to the RMBS haircut.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level and sub-type RMBS; maturity within horizon; not used to cover shorts",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2B-RMBS"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-I-SEC-L2B-OTHER",
+     "locator": "LCR40.79",
+     "description": "Maturing secured lending backed by other Level 2B collateral not used to cover shorts, with inflow equal to the corresponding haircut.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral HQLA level and sub-type; maturity within horizon; not used to cover shorts",
+     "collateral": {
+      "rule": "required",
+      "allowed": [
+       "BASEL-A-L2B-CORP-DEBT",
+       "BASEL-A-L2B-EQUITY",
+       "BASEL-A-L2B-SOV-PSE-DEBT"
+      ]
+     }
+    },
+    {
+     "code": "BASEL-I-MARGIN-LOAN-NONHQLA",
+     "locator": "LCR40.78",
+     "description": "Maturing margin loans to customers for leveraged trading backed by non-HQLA collateral, recognised only partially.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "product margin loan; collateral non-HQLA; contractual maturity within horizon, term provisions allowing later repayment give no inflow (FAQ1); collateral not used to cover shorts"
+    },
+    {
+     "code": "BASEL-I-SEC-OTHER-COLL",
+     "locator": "LCR40.78",
+     "description": "Maturing reverse repos and securities borrowing backed by non-HQLA collateral, not rolled over, with full return of cash assumed.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral non-HQLA; not margin loan; maturity within horizon; collateral not used to cover shorts"
+    },
+    {
+     "code": "BASEL-I-SEC-SHORT-COVER",
+     "locator": "LCR40.79",
+     "description": "Maturing reverse repos, securities borrowing or collateral swaps whose collateral is rehypothecated to cover short positions, assumed rolled over with no inflow.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "collateral re-used to cover firm or customer short positions evaluated at calculation date (FAQ2); any collateral level; substitution rights ignored",
+     "collateral": {
+      "rule": "optional"
+     }
+    },
+    {
+     "code": "BASEL-I-FACILITIES-RECEIVED",
+     "locator": "LCR40.82",
+     "description": "Credit, liquidity or other contingent funding facilities the bank holds at other institutions, assumed not drawable.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "facility received by reporting bank; includes central bank facilities (LCR40.75)"
+    },
+    {
+     "code": "BASEL-I-RETAIL-SME",
+     "locator": "LCR40.86",
+     "description": "Fully performing contractual payments due within the horizon from retail and small business customers, partially recognised to reflect continued lending.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty retail or small business; fully performing; contractually due within horizon at latest possible date (LCR40.84); minimum payments on open-maturity loans included (LCR40.85)"
+    },
+    {
+     "code": "BASEL-I-WHOLESALE-FI-CB",
+     "locator": "LCR40.87(1)",
+     "description": "Fully performing contractual payments due within the horizon from financial institutions and central banks, fully recognised.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty financial institution or central bank; not operational deposit; includes non-operational placements and excess balances of operational/correspondent deposits (LCR40.83, LCR40.89); central bank term deposits maturing within horizon (LCR30.41 footnote 9)"
+    },
+    {
+     "code": "BASEL-I-WHOLESALE-NONFIN",
+     "locator": "LCR40.87(2)",
+     "description": "Fully performing contractual payments due within the horizon from non-financial wholesale counterparties such as corporates, sovereigns, MDBs and PSEs, partially recognised.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "counterparty non-financial wholesale; fully performing; due within horizon"
+    },
+    {
+     "code": "BASEL-I-SECURITIES-NONHQLA",
+     "locator": "LCR40.88",
+     "description": "Securities maturing within the horizon that are not in the stock of HQLA, treated like inflows from financial institutions.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "security not counted in HQLA (including Level 1/2 failing operational requirements or encumbered, FAQ1); maturity within horizon"
+    },
+    {
+     "code": "BASEL-I-SEGREGATED-RELEASE",
+     "locator": "LCR40.88",
+     "description": "Release of regulatory segregated balances for customer trading asset protection maintained in HQLA, treated like inflows from financial institutions.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "segregated account under client protection rules; maintained in HQLA; consistent with related outflows and inflows; excluded from HQLA (LCR40.44)"
+    },
+    {
+     "code": "BASEL-I-HQLA-MATURING-EXCL",
+     "locator": "LCR40.88",
+     "description": "Level 1 and Level 2 assets maturing within the horizon that meet HQLA requirements, counted in the stock and not as inflows.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "asset in stock of HQLA meeting LCR30.13-30.45; no double counting (LCR40.4)"
+    },
+    {
+     "code": "BASEL-I-OPER-DEP-PLACED",
+     "locator": "LCR40.89",
+     "description": "Operational deposits, including correspondent banking deposits, placed by the bank at other financial institutions, assumed to stay there with no inflow.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "deposit placed by reporting bank; operational per LCR40.26-40.36 methodology or correspondent banking; excess balances proven withdrawable go to BASEL-I-WHOLESALE-FI-CB"
+    },
+    {
+     "code": "BASEL-I-COOP-CENTRAL-DEP",
+     "locator": "LCR40.90",
+     "description": "Deposits held at the central institution of a cooperative banking network that are assumed to remain there, with no inflow.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "notes": "reporting bank network member; deposit qualifying under LCR40.37-40.39"
+    },
+    {
+     "code": "BASEL-I-DERIV-NET",
+     "locator": "LCR40.91",
+     "description": "Net derivative cash inflows calculated under the LCR40.49 methodology, fully recognised.",
+     "treatment": "inflow_rate",
+     "national_discretion": false,
+     "derivative": true,
+     "notes": "netting set / master netting agreement; in-the-money options (LCR40.49 FAQ1); net of collateral outflows for HQLA-collateralised derivatives (LCR40.92)"
+    },
+    {
+     "code": "BASEL-I-OTHER-CONTRACTUAL",
+     "locator": "LCR40.93",
+     "description": "Other contractual cash inflows, includable at national discretion with supervisor-set inflow rates.",
+     "treatment": "inflow_rate",
+     "national_discretion": true,
+     "notes": "inflow type; includes forward repos starting within and maturing beyond horizon, unsettled non-HQLA sales (FAQ1-FAQ2), unsecured lent HQLA returnable within horizon (LCR40.74 FAQ3), surplus HQLA released by own ABS/covered bond maturity (LCR40.57)"
+    },
+    {
+     "code": "BASEL-I-NONFIN-REVENUE-EXCL",
+     "locator": "LCR40.93",
+     "description": "Cash inflows related to non-financial revenues, not taken into account.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "inflow nature non-financial revenue"
+    },
+    {
+     "code": "BASEL-I-CONTINGENT-EXCL",
+     "locator": "LCR40.75",
+     "description": "Contingent inflows and inflows from exposures not fully performing or with expected default within the horizon, excluded.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "performing status; default expectation; contingent nature; contractual right to substitute collateral is contingent (FAQ1)"
+    },
+    {
+     "code": "BASEL-I-OPEN-MATURITY-EXCL",
+     "locator": "LCR40.85",
+     "description": "Inflows from loans with no specific maturity or contractually terminable within the horizon beyond regular amortisation, excluded except contractually due minimum payments.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "loan maturity defined or open; termination right; minimum payments due within horizon go to counterparty categories"
+    },
+    {
+     "code": "BASEL-I-REVOLVER-ROLLOVER-EXCL",
+     "locator": "LCR40.84",
+     "description": "Existing drawn amounts under revolving credit facilities, assumed rolled over and not giving rise to inflows.",
+     "treatment": "exclusion",
+     "national_discretion": false,
+     "notes": "product revolving credit facility; undrawn balance treated as committed facility outflow under LCR40.64"
+    }
+   ],
+   "excluded": [
+    {
+     "code": "BASEL-A-L2B-RCLF",
+     "locator": "LCR30.46",
+     "decision": "A03"
+    },
+    {
+     "code": "BASEL-A-SHARIAH",
+     "locator": "LCR30.47",
+     "decision": "A03"
+    },
+    {
+     "code": "BASEL-A-ALTERNATIVE-APPROACH",
+     "locator": "LCR31",
+     "decision": "A04"
+    }
+   ]
   }
+ }
 }

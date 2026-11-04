@@ -1,0 +1,8 @@
+asset_id;category;market_value;original_currency;requirements_met
+A1;EU-A-L1-CG-MS;NaN;EUR;Y
+A2;EU-A-L1-CG-MS;-5;EUR;Y
+A3;EU-A-L1-CG-MS;1.234.5;EUR;Y
+a1;EU-A-L1-CG-MS;10;eur;Y
+A5;;10;EUR;maybe
+@A6;EU-A-L1-CG-MS;10;EUR;Y
+;;;;

@@ -1,4 +1,290 @@
 {
-  "description": "Expected findings, as [code, file, record, column], and reconciliation of each fixture run in tests/contract. No case is defined yet.",
-  "cases": {}
+ "description": "Expected findings, as [code, file, record, column], of each synthetic fixture run in tests/contract, and the reconciliation of the runs that pass. Each list was checked by hand against the intent of its case.",
+ "cases": {
+  "basel-valid": {
+   "findings": [],
+   "reconciliation": {
+    "assets": {
+     "records": 4,
+     "records_with_findings": 0,
+     "market_value_by_category": {
+      "BASEL-A-L1-COINS-BANKNOTES": "900",
+      "BASEL-A-L1-SOV-ZERO-RW": "30000",
+      "BASEL-A-L2A-COVERED-BOND": "4000",
+      "BASEL-A-L2B-RMBS": "1500"
+     },
+     "market_value_total": "36400"
+    },
+    "flows": {
+     "records": 6,
+     "records_with_findings": 0,
+     "amount_by_direction_and_category": {
+      "INFLOW/BASEL-I-SEC-L1": "1000",
+      "INFLOW/BASEL-I-WHOLESALE-NONFIN": "6000",
+      "OUTFLOW/BASEL-O-DERIV-NET": "300",
+      "OUTFLOW/BASEL-O-RET-STABLE": "50000",
+      "OUTFLOW/BASEL-O-SEC-L2B-RMBS": "800",
+      "OUTFLOW/BASEL-O-UNSEC-OTHER-LE": "12000"
+     },
+     "amount_by_direction": {
+      "INFLOW": "7000",
+      "OUTFLOW": "63100"
+     }
+    },
+    "run": {
+     "records": 1,
+     "records_with_findings": 0
+    }
+   }
+  },
+  "eu-empty-portfolio": {
+   "findings": [],
+   "reconciliation": {
+    "assets": {
+     "records": 0,
+     "records_with_findings": 0,
+     "market_value_by_category": {},
+     "market_value_total": "0"
+    },
+    "flows": {
+     "records": 0,
+     "records_with_findings": 0,
+     "amount_by_direction_and_category": {},
+     "amount_by_direction": {}
+    },
+    "run": {
+     "records": 1,
+     "records_with_findings": 0
+    }
+   }
+  },
+  "eu-valid": {
+   "findings": [],
+   "reconciliation": {
+    "assets": {
+     "records": 5,
+     "records_with_findings": 0,
+     "market_value_by_category": {
+      "EU-A-L1-CG-MS": "40000",
+      "EU-A-L1-COINS-BANKNOTES": "1250.00",
+      "EU-A-L1-EHQ-COVERED-BOND": "8000.5",
+      "EU-A-L2A-CORP-DEBT": "5000",
+      "EU-A-L2B-SHARES": "2500"
+     },
+     "market_value_total": "56750.50"
+    },
+    "flows": {
+     "records": 9,
+     "records_with_findings": 0,
+     "amount_by_direction_and_category": {
+      "INFLOW/EU-I-DERIV-NET-INFLOW": "150",
+      "INFLOW/EU-I-NONFIN-CUST": "9000",
+      "INFLOW/EU-I-SFT-COLL-L1-EXCL-EHQCB": "2000",
+      "OUTFLOW/EU-O-COLL-SWAP": "1000",
+      "OUTFLOW/EU-O-DERIV-NET-OUTFLOW": "400",
+      "OUTFLOW/EU-O-RETAIL-OTHER": "25000.25",
+      "OUTFLOW/EU-O-RETAIL-STABLE": "60000",
+      "OUTFLOW/EU-O-RETAIL-TERM-EXCLUDED": "7000",
+      "OUTFLOW/EU-O-SFT-COLL-L2A": "3000"
+     },
+     "amount_by_direction": {
+      "INFLOW": "11150",
+      "OUTFLOW": "96400.25"
+     }
+    },
+    "run": {
+     "records": 1,
+     "records_with_findings": 0
+    }
+   }
+  },
+  "invalid-categories": {
+   "findings": [
+    [
+     "LCR-OUT-OF-SCOPE",
+     "assets",
+     1,
+     "category"
+    ],
+    [
+     "LCR-CATEGORY-UNKNOWN",
+     "assets",
+     2,
+     "category"
+    ],
+    [
+     "LCR-OUT-OF-SCOPE",
+     "assets",
+     3,
+     "category"
+    ],
+    [
+     "LCR-OUT-OF-SCOPE",
+     "flows",
+     1,
+     "category"
+    ],
+    [
+     "LCR-CATEGORY-UNKNOWN",
+     "flows",
+     2,
+     "category"
+    ],
+    [
+     "LCR-COLLATERAL",
+     "flows",
+     3,
+     "collateral_category"
+    ],
+    [
+     "LCR-COLLATERAL",
+     "flows",
+     4,
+     "collateral_category"
+    ],
+    [
+     "LCR-COLLATERAL",
+     "flows",
+     5,
+     "collateral_category"
+    ],
+    [
+     "LCR-NETTING-SET",
+     "flows",
+     6,
+     "netting_set_id"
+    ],
+    [
+     "LCR-MATURITY",
+     "flows",
+     7,
+     "maturity_date"
+    ],
+    [
+     "LCR-MATURITY",
+     "flows",
+     8,
+     "maturity_date"
+    ]
+   ]
+  },
+  "invalid-fields": {
+   "findings": [
+    [
+     "LCR-TYPE",
+     "run",
+     1,
+     "reporting_date"
+    ],
+    [
+     "LCR-NON-FINITE",
+     "assets",
+     1,
+     "market_value"
+    ],
+    [
+     "LCR-RANGE",
+     "assets",
+     2,
+     "market_value"
+    ],
+    [
+     "LCR-TYPE",
+     "assets",
+     3,
+     "market_value"
+    ],
+    [
+     "LCR-DUPLICATE-KEY",
+     "assets",
+     4,
+     "asset_id"
+    ],
+    [
+     "LCR-TYPE",
+     "assets",
+     4,
+     "original_currency"
+    ],
+    [
+     "LCR-REQUIRED",
+     "assets",
+     5,
+     "category"
+    ],
+    [
+     "LCR-ALLOWED",
+     "assets",
+     5,
+     "requirements_met"
+    ],
+    [
+     "LCR-FORMULA",
+     "assets",
+     6,
+     "asset_id"
+    ],
+    [
+     "LCR-BLANK-RECORD",
+     "assets",
+     7,
+     ""
+    ],
+    [
+     "LCR-ALLOWED",
+     "flows",
+     1,
+     "direction"
+    ],
+    [
+     "LCR-PRECISION",
+     "flows",
+     2,
+     "amount"
+    ]
+   ]
+  },
+  "invalid-rules": {
+   "findings": [
+    [
+     "LCR-PARAMETER-SET",
+     "run",
+     1,
+     "parameter_set"
+    ]
+   ]
+  },
+  "invalid-structure": {
+   "findings": [
+    [
+     "LCR-DELIMITER",
+     "assets",
+     0,
+     ""
+    ],
+    [
+     "LCR-HEADER-UNKNOWN",
+     "flows",
+     0,
+     "netting_set"
+    ],
+    [
+     "LCR-HEADER-MISSING",
+     "flows",
+     0,
+     "netting_set_id"
+    ]
+   ]
+  },
+  "missing-file": {
+   "findings": [
+    [
+     "LCR-FILE-MISSING",
+     "flows",
+     0,
+     ""
+    ]
+   ]
+  }
+ }
 }

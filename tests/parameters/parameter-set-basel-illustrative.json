@@ -1,0 +1,618 @@
+{
+ "schema": "klcr-parameter-set",
+ "parameter_set_version": 1,
+ "parameter_set": "BASEL-LCR-2019-12-15",
+ "profile": "BASEL",
+ "status": "illustrative",
+ "source_register_version": 1,
+ "categories_version": 1,
+ "factors": [
+  {
+   "category": "BASEL-A-L1-COINS-BANKNOTES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.41(1)"
+  },
+  {
+   "category": "BASEL-A-L1-CB-RESERVES",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.41(2)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L1-SOV-ZERO-RW",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.41(3)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L1-SOV-DOM-CCY",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.41(4)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L1-SOV-FX-CCY",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.41(5)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L2A-SOV-PSE-MDB",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.43(1)"
+  },
+  {
+   "category": "BASEL-A-L2A-CORP-DEBT",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.43(2)"
+  },
+  {
+   "category": "BASEL-A-L2A-COVERED-BOND",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.43(2)"
+  },
+  {
+   "category": "BASEL-A-L2B-RMBS",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.45(1)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L2B-CORP-DEBT",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.45(2)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L2B-EQUITY",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.45(3)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-A-L2B-SOV-PSE-DEBT",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.45 FAQ3",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-RET-STABLE-ENH",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.11",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-RET-STABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.7"
+  },
+  {
+   "category": "BASEL-O-RET-LESS-STABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.13",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-RET-FX",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.15",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-SME-STABLE-ENH",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.22",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-SME-STABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.22"
+  },
+  {
+   "category": "BASEL-O-SME-LESS-STABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.22",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-SME-FX",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.22",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-OPER-DEP",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.26",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-OPER-DEP-INSURED",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.36",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-COOP-NETWORK",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.37"
+  },
+  {
+   "category": "BASEL-O-UNSEC-NFC-SOV-INS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.41"
+  },
+  {
+   "category": "BASEL-O-UNSEC-NFC-SOV",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.40"
+  },
+  {
+   "category": "BASEL-O-UNSEC-OTHER-LE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.42"
+  },
+  {
+   "category": "BASEL-O-SEC-L1-OR-CB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.47"
+  },
+  {
+   "category": "BASEL-O-SEC-L2A",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.48"
+  },
+  {
+   "category": "BASEL-O-SEC-DOM-SOV-PSE-MDB",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.47"
+  },
+  {
+   "category": "BASEL-O-SEC-L2B-RMBS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.48"
+  },
+  {
+   "category": "BASEL-O-SEC-L2B-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.48"
+  },
+  {
+   "category": "BASEL-O-SEC-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.48"
+  },
+  {
+   "category": "BASEL-O-DERIV-NET",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.49"
+  },
+  {
+   "category": "BASEL-O-DOWNGRADE-TRIGGER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.51"
+  },
+  {
+   "category": "BASEL-O-COLL-VALUATION",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.52"
+  },
+  {
+   "category": "BASEL-O-EXCESS-COLL-CALLABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.53"
+  },
+  {
+   "category": "BASEL-O-COLL-DUE-NOT-CALLED",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.54"
+  },
+  {
+   "category": "BASEL-O-COLL-SUBSTITUTION",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.55"
+  },
+  {
+   "category": "BASEL-O-MTM-LOOKBACK",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.56",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-OWN-ABS-CB-MATURING",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.57"
+  },
+  {
+   "category": "BASEL-O-ABCP-SIV-MATURING",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.58"
+  },
+  {
+   "category": "BASEL-O-ABCP-SIV-RETURNABLE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.58"
+  },
+  {
+   "category": "BASEL-O-FAC-RETAIL-SME",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(1)"
+  },
+  {
+   "category": "BASEL-O-FAC-NFC-SOV-CREDIT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(2)"
+  },
+  {
+   "category": "BASEL-O-FAC-NFC-SOV-LIQ",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(3)"
+  },
+  {
+   "category": "BASEL-O-FAC-BANKS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(4)"
+  },
+  {
+   "category": "BASEL-O-FAC-OFI-CREDIT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(5)"
+  },
+  {
+   "category": "BASEL-O-FAC-OFI-LIQ",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(6)"
+  },
+  {
+   "category": "BASEL-O-FAC-OTHER-LE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.64(7)"
+  },
+  {
+   "category": "BASEL-O-CONTRACT-LEND-FI",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.65"
+  },
+  {
+   "category": "BASEL-O-CONTRACT-LEND-NONFIN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.66"
+  },
+  {
+   "category": "BASEL-O-CONT-JV-MINORITY",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.70",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-TRADE-FIN",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.71",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-UNCOMMITTED-FAC",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(1)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-GUARANTEE-LC",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(2)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-DEBT-REPURCHASE",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(3)(1)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-STRUCT-PRODUCTS",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(3)(2)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-STABLE-VALUE-FUND",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(3)(3)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-DEALER-DEBT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(4)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-CUST-SHORT",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.73(5)",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-CONT-OTHER",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.67",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  },
+  {
+   "category": "BASEL-O-OTHER-CONTRACTUAL",
+   "kind": "outflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.74"
+  },
+  {
+   "category": "BASEL-I-SEC-L1",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.78"
+  },
+  {
+   "category": "BASEL-I-SEC-L2A",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.78"
+  },
+  {
+   "category": "BASEL-I-SEC-L2B-RMBS",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.79"
+  },
+  {
+   "category": "BASEL-I-SEC-L2B-OTHER",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.79"
+  },
+  {
+   "category": "BASEL-I-MARGIN-LOAN-NONHQLA",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.78"
+  },
+  {
+   "category": "BASEL-I-SEC-OTHER-COLL",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.78"
+  },
+  {
+   "category": "BASEL-I-SEC-SHORT-COVER",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.79"
+  },
+  {
+   "category": "BASEL-I-FACILITIES-RECEIVED",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.82"
+  },
+  {
+   "category": "BASEL-I-RETAIL-SME",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.86"
+  },
+  {
+   "category": "BASEL-I-WHOLESALE-FI-CB",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.87(1)"
+  },
+  {
+   "category": "BASEL-I-WHOLESALE-NONFIN",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.87(2)"
+  },
+  {
+   "category": "BASEL-I-SECURITIES-NONHQLA",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.88"
+  },
+  {
+   "category": "BASEL-I-SEGREGATED-RELEASE",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.88"
+  },
+  {
+   "category": "BASEL-I-OPER-DEP-PLACED",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.89"
+  },
+  {
+   "category": "BASEL-I-COOP-CENTRAL-DEP",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.90"
+  },
+  {
+   "category": "BASEL-I-DERIV-NET",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.91"
+  },
+  {
+   "category": "BASEL-I-OTHER-CONTRACTUAL",
+   "kind": "inflow_rate",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.93",
+   "discretion_choice": "Illustrative only: no jurisdiction's choice is recorded."
+  }
+ ],
+ "limits": [
+  {
+   "id": "LCR-MINIMUM",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR20.5"
+  },
+  {
+   "id": "LEVEL2-MAXIMUM-SHARE",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.34"
+  },
+  {
+   "id": "LEVEL2B-MAXIMUM-SHARE",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR30.33"
+  },
+  {
+   "id": "INFLOW-CAP",
+   "value": "0.5",
+   "source": "SRC-06",
+   "locator": "LCR40.77"
+  }
+ ]
+}

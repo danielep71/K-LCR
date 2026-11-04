@@ -1,0 +1,3 @@
+flow_id;direction;category;amount;original_currency;maturity_date;collateral_category;netting_set_id
+F1;SIDEWAYS;EU-O-RETAIL-STABLE;1;EUR;;;
+F2;OUTFLOW;EU-O-RETAIL-STABLE;12345678901234567;EUR;;;

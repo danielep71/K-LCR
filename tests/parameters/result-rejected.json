@@ -1,0 +1,31 @@
+{
+ "schema": "klcr-result",
+ "result_version": 1,
+ "status": "rejected",
+ "illustrative": true,
+ "lineage": {
+  "run_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "input_contract_version": 1,
+  "parameter_set": "EU-LCR-DA-2022-07-08",
+  "parameter_set_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "categories_version": 1,
+  "source_register_version": 1,
+  "code_commit": "2222222222222222222222222222222222222222"
+ },
+ "diagnostics": [
+  {
+   "code": "CALC-INPUT-REJECTED",
+   "severity": "error",
+   "message": "The input contract reported findings.",
+   "refs": [
+    "LCR-TYPE"
+   ]
+  },
+  {
+   "code": "CALC-ILLUSTRATIVE",
+   "severity": "warning",
+   "message": "Illustrative parameter set.",
+   "refs": []
+  }
+ ]
+}

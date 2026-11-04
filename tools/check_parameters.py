@@ -92,11 +92,13 @@ def verified_findings(data: Mapping[str, Any], status: Any) -> list[Finding]:
 
 
 def category_kinds(profile: Mapping[str, Any]) -> dict[str, tuple[str, bool]]:
-    """Each in-scope category of the profile, with its kind and whether it is a national discretion."""
+    """Each in-scope category that takes a factor, with its kind and whether it is a national discretion."""
     kinds = {}
     for group, kind in (("assets", "asset"), ("outflows", "outflow"), ("inflows", "inflow")):
         for item in profile[group]:
-            kinds[item["code"]] = (kind, bool(item.get("national_discretion")))
+            # An exclusion category keeps its items out of the calculation: it has no factor.
+            if item.get("treatment") != "exclusion":
+                kinds[item["code"]] = (kind, bool(item.get("national_discretion")))
     return kinds
 
 
@@ -125,7 +127,7 @@ def one_factor(factor: Any, path: str, kinds: Mapping[str, tuple[str, bool]], se
         return [Finding("PAR-FACTOR", path, "a factor must be an object")]
     code = str(factor.get("category"))
     if code not in kinds:
-        return [Finding("PAR-FACTOR-CATEGORY", path, f"{code!r} is not an in-scope category of {profile}")]
+        return [Finding("PAR-FACTOR-CATEGORY", path, f"{code!r} is not a category of {profile} that takes a factor")]
     if code in seen:
         return [Finding("PAR-FACTOR-DUPLICATE", path, f"{code} has more than one factor")]
     seen.add(code)
