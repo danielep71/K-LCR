@@ -3,9 +3,9 @@
 `check.py` is the single entry point for the repository's checks. The same
 command runs locally and in the `Repository integrity` workflow. It checks the
 repository tooling, the label and issue-form configuration, the format of
-tracked text and the workflows. It never compiles or runs VBA in Excel and
-never validates an LCR calculation: there is no VBA source yet, and VBA static
-checks are planned in #12.
+tracked text, the workflows, the contracts, the registered test cases and the
+static VBA rules. It never compiles or runs VBA in Excel and never validates an
+LCR calculation.
 
 ## ▶️ Running the checks
 
@@ -35,7 +35,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, and the issue-triage rules. |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the contract and case checkers, and the VBA checks' valid and invalid fixtures (`test_check_vba.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
@@ -51,6 +51,9 @@ versions; each gate also writes `<gate>.log`.
 | `data-contract` | Every synthetic run in `tests/contract/` gives exactly the findings, and the passing runs exactly the reconciliation, recorded in `tests/contract/expected.json`; each run is validated twice and must give the same report (`check_contract.py --check-fixtures`). The input contract is [docs/methodology/DATA_CONTRACT.md](../docs/methodology/DATA_CONTRACT.md). |
 | `test-cases` | Every registered case in `tests/cases/` follows [TEST_CASES.md](../docs/methodology/TEST_CASES.md): metadata, expected outputs, reference classes, tolerances and derivation scripts, which may import the standard library only. It executes the input-contract assertions and the derivation scripts, and reports the result figures as registered, not executed (`check_test_cases.py`). |
 | `parameter-result-contract` | Every parameter-set and result example in `tests/parameters/` gives exactly the findings recorded in `tests/parameters/expected.json` (`check_parameters.py --check-fixtures`). The contract is [docs/methodology/PARAMETERS_AND_RESULTS.md](../docs/methodology/PARAMETERS_AND_RESULTS.md). |
+| `vba-conditionals` | Every `#If` block of the tracked VBA components evaluates in each compilation environment (VBA6 Win32, VBA7 Win32, VBA7 Win64); every `Declare` reachable under VBA7 is `PtrSafe` and none reachable under VBA6 uses `PtrSafe` or `LongPtr` (`check_vba_conditionals.py`). |
+| `vba-jumps` | Every jump target is a label of the same procedure, in each environment; jumps serve one error/cleanup handler: no `GoSub`, computed `On ... GoTo`, `On Error GoTo -1` or backward `GoTo` (`check_vba_jumps.py`). |
+| `vba-dynamic` | No `Declare`, `CreateObject`, `GetObject`, `New` automation object, `CallByName`, `Run`, `Evaluate` or other dynamic call outside the host homes; there, each use needs a reviewed entry in `tools/vba-exceptions.json`, and stale entries fail (`check_vba_dynamic.py`). |
 
 The label gates run on every pull request here, although the label workflows
 run on a pull request only when it changes label files. Live label

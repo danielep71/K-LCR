@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Any
 
 SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text, "
-         "workflow syntax and invariants, input and parameter contracts, registered test cases; "
-         "no Excel execution and no LCR calculation.")
+         "workflow syntax and invariants, input and parameter contracts, registered test cases, "
+         "VBA static checks; no VBA compilation, no Excel execution and no LCR calculation.")
 
 
 @dataclass(frozen=True)
@@ -108,6 +108,9 @@ def default_gates() -> list[Gate]:
         Gate("data-contract", "python", (python, "tools/check_contract.py", "--check-fixtures")),
         Gate("parameter-result-contract", "python", (python, "tools/check_parameters.py", "--check-fixtures")),
         Gate("test-cases", "python", (python, "tools/check_test_cases.py")),
+        Gate("vba-conditionals", "python", (python, "tools/check_vba_conditionals.py")),
+        Gate("vba-jumps", "python", (python, "tools/check_vba_jumps.py")),
+        Gate("vba-dynamic", "python", (python, "tools/check_vba_dynamic.py")),
     ]
 
 
