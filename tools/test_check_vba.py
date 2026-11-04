@@ -133,6 +133,14 @@ class LexerTest(unittest.TestCase):
             "x = [A1:B2]: y = 2": ["x = [A1:B2]", "y = 2"],
             "x = #12:30:00 PM#: y = 2": ["x = #12:30:00 PM#", "y = 2"],
             "Print #1, x: y = 2": ["Print #1, x", "y = 2"],
+            'Print #1, "#": y = 2': ['Print #1, "#"', "y = 2"],
+            "Print #1, x: Print #2, y": ["Print #1, x", "Print #2, y"],
+            "Close #f: y = 2": ["Close #f", "y = 2"],
+            "Close #1, #2: y = #1/2/2026#": ["Close #1, #2", "y = #1/2/2026#"],
+            'Open p For Output As #1 Len = 5: y = "#"': ["Open p For Output As #1 Len = 5",
+                                                         'y = "#"'],
+            "x = #January 1, 2026#: y = 2": ["x = #January 1, 2026#", "y = 2"],
+            "x = Total#: y = 2": ["x = Total#", "y = 2"],
             "x = 1: Rem y = 2": ["x = 1"],
         }
         for code, expected in cases.items():
@@ -612,6 +620,10 @@ DYNAMIC_INVALID: dict[str, tuple[dict[str, str | bytes], str]] = {
                                f"CreateObject (procedure Work): {OUTSIDE}"),
     "create-object-after-colon": (core_use('        X = 1: Set D = CreateObject("A.B")'),
                                   "CreateObject A.B"),
+    "run-after-file-output-with-a-quoted-hash": (core_use(
+        '        Print #1, "#": Application.Run "Unsafe"'), "Run (procedure Work)"),
+    "run-after-a-file-statement-and-a-string": (core_use(
+        '        Close #1: Debug.Print "a#b": Run "Unsafe"'), "Run (procedure Work)"),
     "create-object-continued": (core_use('        Set D = _\n            CreateObject("A.B")'),
                                 "CreateObject A.B"),
     "create-object-single-line-if": (core_use('        If X Then Set D = CreateObject("A.B")'),

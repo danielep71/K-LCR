@@ -18,6 +18,12 @@ VBA_SUFFIXES = frozenset({".bas", ".cls", ".frm"})
 REM = re.compile(r"Rem(?=\s|$)", re.IGNORECASE)
 CONTINUATION = re.compile(r"\s_\s*$")
 LINE_NUMBER = re.compile(r"\s*\d+(?=\s)")
+# A file number, as in Print #1, x or Close #f: a name or number followed by
+# a comma, a parenthesis, the end, or a colon that is not part of a time.
+FILE_HANDLE = re.compile(r"#\s*\w+\s*(?:,|\)|$|:(?!\d))")
+# A date literal, as in #1/2/2026#, #12:30:00 PM# or #January 1, 2026#: no
+# quote, operator or other # inside.
+DATE_LITERAL = re.compile(r"#[\w/\-:,. ]*#")
 
 
 @dataclass(frozen=True)
@@ -117,7 +123,9 @@ def date_delimiter(code: str, index: int, in_date: bool) -> bool:
     previous = code[index - 1] if index else ""
     if previous and (previous.isalnum() or previous in "_.)]"):
         return False  # a type suffix, as in Total#
-    return "#" in code[index + 1:]  # a literal needs its closing #; Print #1 has none
+    if FILE_HANDLE.match(code, index):
+        return False
+    return bool(DATE_LITERAL.match(code, index))
 
 
 def split_statements(code: str) -> list[str]:

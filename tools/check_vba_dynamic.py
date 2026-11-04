@@ -41,6 +41,7 @@ from vba_lexer import (
     read_component,
     report,
     split_statements,
+    strip_code,
     tracked_components,
 )
 
@@ -113,16 +114,14 @@ def normalize(statement: str) -> str:
 
 def statements(text: str) -> list[tuple[int, str, str]]:
     """``(line, code, raw)`` per statement, code with strings blanked; directives
-    are skipped, so every #If branch is read."""
-    lines = text.split("\n")
-    blanked = logical_units(lines, blank_strings=True)
-    kept = logical_units(lines)
+    are skipped, so every #If branch is read. Each statement is split once,
+    with its strings, and then blanked, so code and raw always pair up."""
     result: list[tuple[int, str, str]] = []
-    for (line, _, kind, code), (_, _, _, raw) in zip(blanked, kept, strict=True):
-        if kind == "directive" or code.lstrip().startswith(("Attribute ", "Option ")):
+    for line, _, kind, raw in logical_units(text.split("\n")):
+        if kind == "directive" or raw.lstrip().startswith(("Attribute ", "Option ")):
             continue
-        result.extend((line, normalize(part), normalize(raw_part)) for part, raw_part
-                      in zip(split_statements(code), split_statements(raw), strict=False))
+        result.extend((line, normalize(strip_code(part, blank_strings=True)), normalize(part))
+                      for part in split_statements(raw))
     return result
 
 
