@@ -158,6 +158,32 @@ class ResultTests(ParameterTestCase):
                                             ["RES-ILLUSTRATIVE", "illustrative"]])
 
 
+class MalformedInputTests(ParameterTestCase):
+    def test_non_scalar_values_give_findings_not_errors(self) -> None:
+        values: list[Any] = [[], {}, 1.5, None]
+        for bad in values:
+            for key in ("profile", "status", "parameter_set", "factors", "limits"):
+                with self.subTest(key=key, bad=bad):
+                    self.assertTrue(self.codes({**copy.deepcopy(EU_SET), key: bad}))
+            for key in ("status", "lineage", "figures", "components", "diagnostics", "illustrative"):
+                with self.subTest(key=key, bad=bad):
+                    self.assertTrue(self.codes({**copy.deepcopy(RESULT), key: bad}))
+        data = copy.deepcopy(EU_SET)
+        data["limits"][0]["id"] = ["LCR-MINIMUM"]
+        self.assertIn(["PAR-LIMIT", "limits[0]"], self.codes(data))
+        result = copy.deepcopy(RESULT)
+        result["diagnostics"][0]["code"] = {"x": 1}
+        self.assertIn(["RES-DIAGNOSTIC", "diagnostics[0]"], self.codes(result))
+
+    def test_every_component_is_checked(self) -> None:
+        data = copy.deepcopy(RESULT)
+        data["components"] = [None, {"category": "EU-A-L1", "amount": "1", "factor": "1.5", "weighted": "x"},
+                              {"category": "", "amount": "1", "factor": "0", "weighted": "1"}]
+        self.assertEqual(self.codes(data), [["RES-FIGURES", "components[0]"], ["RES-FIGURES", "components[1].factor"],
+                                            ["RES-FIGURES", "components[1].weighted"],
+                                            ["RES-FIGURES", "components[2].category"]])
+
+
 class FixtureTests(unittest.TestCase):
     def test_repository_fixtures_match_expected(self) -> None:
         self.assertEqual(check_parameters.check_fixtures(ROOT), [])

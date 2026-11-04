@@ -57,7 +57,7 @@
       "illustrative": "true when the parameter set is illustrative.",
       "lineage": "run_fingerprint, input_contract_version, parameter_set, parameter_set_sha256, categories_version, source_register_version and code_commit.",
       "figures": "Only when calculated: liquidity_buffer, outflows, inflows, inflows_after_cap, net_outflows and lcr, each a decimal string in the reporting currency except lcr, a decimal fraction.",
-      "components": "Only when calculated: per category, the input amount, the factor applied and the weighted amount, so that every figure reconciles with the input totals.",
+      "components": "Only when calculated: one object per category with exactly category, amount, factor (at most 1) and weighted, each a decimal string except category, so that every figure reconciles with the input totals.",
       "diagnostics": "Every diagnostic, with code, severity, message and the records or limits it refers to."
     },
     "lineage_fields": ["run_fingerprint", "input_contract_version", "parameter_set", "parameter_set_sha256",

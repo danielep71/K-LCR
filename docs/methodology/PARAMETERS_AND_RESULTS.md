@@ -72,7 +72,7 @@ them carries the `CALC-ILLUSTRATIVE` diagnostic.
 | `illustrative` | `true` when the parameter set is illustrative |
 | `lineage` | The run's fingerprint, the input contract version, the parameter set and its SHA-256, the categories and register versions, and the commit of the code |
 | `figures` | Only when `calculated`: `liquidity_buffer`, `outflows`, `inflows`, `inflows_after_cap`, `net_outflows`, in the reporting currency, and `lcr`, a decimal fraction |
-| `components` | Only when `calculated`: per category, the input amount, the factor applied and the weighted amount, so that every figure reconciles with the input totals |
+| `components` | Only when `calculated`: one object per category with exactly `category`, `amount`, `factor` (at most `1`) and `weighted`, decimal strings, so that every figure reconciles with the input totals |
 | `diagnostics` | Every diagnostic, each with `code`, `severity`, `message` and `refs`, the records or limits it concerns |
 
 A result that is `rejected` or `failed` has no figures and no components, and

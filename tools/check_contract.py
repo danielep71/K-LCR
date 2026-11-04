@@ -17,7 +17,7 @@ import sys
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
 from datetime import date
-from decimal import Decimal
+from decimal import Context, Decimal, Inexact, localcontext
 from pathlib import Path
 from typing import Any
 
@@ -431,16 +431,26 @@ def flow_findings(flows: Table, bad: set[int], profile: Profile, reporting: str)
 # --- Reconciliation, fingerprint and report -----------------------------------
 
 
+def exact_sum(values: Sequence[str]) -> str:
+    """The exact decimal sum of the values, with a precision wide enough that nothing is rounded."""
+    # The values passed the amount pattern: digits, an optional point, no exponent.
+    numbers = [Decimal(value) for value in values]
+    integer = max((len(value.lstrip("-").partition(".")[0]) for value in values), default=1)
+    fraction = max((len(value.partition(".")[2]) for value in values), default=0)
+    precision = integer + fraction + len(str(len(numbers))) + 1
+    with localcontext(Context(prec=precision, traps=[Inexact])):
+        return format(sum(numbers, Decimal(0)), "f")
+
+
 def total(rows: Iterable[Mapping[str, str]], column: str, by: Sequence[str]) -> dict[str, str]:
-    sums: dict[str, Decimal] = {}
+    groups: dict[str, list[str]] = {}
     for row in rows:
-        group = "/".join(row[name] for name in by)
-        sums[group] = sums.get(group, Decimal(0)) + Decimal(row[column])
-    return {group: format(value, "f") for group, value in sorted(sums.items())}
+        groups.setdefault("/".join(row[name] for name in by), []).append(row[column])
+    return {group: exact_sum(values) for group, values in sorted(groups.items())}
 
 
 def reconciliation(tables: Mapping[str, Table], bad: Mapping[str, set[int]]) -> dict[str, Any]:
-    """Counts of every readable file and exact totals over its records without field findings."""
+    """Counts of every readable file and exact totals over its records without any finding."""
     summary: dict[str, Any] = {}
     for name, table in sorted(tables.items()):
         if not table.readable:
@@ -449,7 +459,7 @@ def reconciliation(tables: Mapping[str, Table], bad: Mapping[str, set[int]]) -> 
         entry: dict[str, Any] = {"records": len(table.rows), "records_with_findings": len(table.rows) - len(clean)}
         if name == "assets":
             entry["market_value_by_category"] = total(clean, "market_value", ["category"])
-            entry["market_value_total"] = format(sum((Decimal(r["market_value"]) for r in clean), Decimal(0)), "f")
+            entry["market_value_total"] = exact_sum([row["market_value"] for row in clean])
         if name == "flows":
             entry["amount_by_direction_and_category"] = total(clean, "amount", ["direction", "category"])
             entry["amount_by_direction"] = total(clean, "amount", ["direction"])
@@ -489,6 +499,10 @@ def validate_run(root: Path, folder: Path) -> dict[str, Any]:
         if tables["flows"].readable:
             findings += flow_findings(tables["flows"], bad["flows"], profile, run.rows[0]["reporting_date"])
     findings.sort(key=lambda f: (list(contract["files"]).index(f.file), f.record, f.line, f.column, f.code))
+    # Reconciliation covers only records without any finding, field or cross-record.
+    for finding in findings:
+        if finding.record and finding.file in bad:
+            bad[finding.file].add(finding.record)
     return {
         "schema": REPORT_SCHEMA,
         "report_version": REPORT_VERSION,

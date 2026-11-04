@@ -154,7 +154,8 @@ Treatment:
 
 The report gives, for every readable file:
 - the number of records, and the number with findings;
-- exact decimal totals over the records without findings: market value by
+- exact decimal totals over the records without any finding, field or
+  cross-record: market value by
   asset category and in total, and flow amounts by direction and category,
   and by direction.
 

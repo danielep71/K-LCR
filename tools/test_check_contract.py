@@ -131,6 +131,28 @@ class ValidRunTests(ContractTestCase):
         self.assertNotEqual(check_contract.validate_run(self.space.root, self.space.run)["fingerprint"], base)
 
 
+class ReconciliationTests(ContractTestCase):
+    def test_records_with_cross_record_findings_are_left_out(self) -> None:
+        self.space.write(assets=ASSETS + "A4;EU-A-CIU;1000;EUR;Y\n",
+                         flows=FLOWS + "F5;OUTFLOW;EU-O-RETAIL;7;EUR;;EU-A-L1-CASH;\n")
+        report = check_contract.validate_run(self.space.root, self.space.run)
+        assets, flows = report["reconciliation"]["assets"], report["reconciliation"]["flows"]
+        self.assertEqual((assets["records"], assets["records_with_findings"]), (4, 1))
+        self.assertEqual(assets["market_value_total"], "120.75")
+        self.assertEqual((flows["records"], flows["records_with_findings"]), (5, 1))
+        self.assertEqual(flows["amount_by_direction"]["OUTFLOW"], "1055")
+
+    def test_totals_are_exact_whatever_the_scales(self) -> None:
+        self.assertEqual(check_contract.exact_sum(["999999999999999", "0.00000000000001"]),
+                         "999999999999999.00000000000001")
+        self.assertEqual(check_contract.exact_sum(["0.1"] * 3), "0.3")
+        self.assertEqual(check_contract.exact_sum([]), "0")
+        self.space.write(assets=ASSETS.splitlines()[0] + "\nA1;EU-A-L1-CASH;999999999999999;EUR;Y\n"
+                                                         "A2;EU-A-L1-CASH;0.00000000000001;EUR;Y\n")
+        report = check_contract.validate_run(self.space.root, self.space.run)
+        self.assertEqual(report["reconciliation"]["assets"]["market_value_total"], "999999999999999.00000000000001")
+
+
 class FileTests(ContractTestCase):
     def test_missing_file_and_empty_file(self) -> None:
         (self.space.run / "flows.csv").unlink()

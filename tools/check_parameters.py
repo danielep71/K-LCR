@@ -27,6 +27,7 @@ FIXTURES = Path("tests/parameters")
 EXPECTED = FIXTURES / "expected.json"
 FACTOR_KEYS = {"category", "kind", "value", "source", "locator"}
 LIMIT_KEYS = {"id", "value", "source", "locator"}
+COMPONENT_KEYS = {"category", "amount", "factor", "weighted"}
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,11 @@ def load(root: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     return (check_contract.load_json(root / CONTRACT),
             check_contract.load_json(root / check_contract.CONTRACT),
             check_contract.load_json(root / check_contract.CATEGORIES))
+
+
+def text(value: Any) -> str | None:
+    """value when it is a string; None for anything else, so that a lookup never fails on it."""
+    return value if isinstance(value, str) else None
 
 
 def decimal_problem(value: Any, rules: Mapping[str, Any], maximum: Decimal | None) -> str | None:
@@ -66,13 +72,13 @@ def header_findings(data: Mapping[str, Any], contract: Mapping[str, Any], inputs
     for key, value in expected.items():
         if data.get(key) != value:
             found.append(Finding("PAR-HEADER", key, f"expected {value!r}, found {data.get(key)!r}"))
-    profile = data.get("profile")
+    profile = text(data.get("profile"))
     if profile not in inputs["profiles"]:
         found.append(Finding("PAR-HEADER", "profile", f"{profile!r} is not EU or BASEL"))
     elif data.get("parameter_set") != inputs["profiles"][profile]["parameter_set"]:
         found.append(Finding("PAR-HEADER", "parameter_set",
                              f"profile {profile} uses {inputs['profiles'][profile]['parameter_set']}"))
-    status = data.get("status")
+    status = text(data.get("status"))
     if status not in spec["statuses"]:
         found.append(Finding("PAR-HEADER", "status", f"{status!r} is not one of {', '.join(spec['statuses'])}"))
     found += verified_findings(data, status)
@@ -157,7 +163,7 @@ def source_findings(entry: Mapping[str, Any], path: str, sources: Sequence[str])
 
 
 def limit_findings(data: Mapping[str, Any], contract: Mapping[str, Any]) -> list[Finding]:
-    profile = data.get("profile")
+    profile = text(data.get("profile"))
     spec = contract["parameter_set"]
     if profile not in spec["limits"]:
         return []
@@ -169,7 +175,7 @@ def limit_findings(data: Mapping[str, Any], contract: Mapping[str, Any]) -> list
     seen: set[str] = set()
     for index, limit in enumerate(limits):
         path = f"limits[{index}]"
-        if not isinstance(limit, dict) or limit.get("id") not in expected or limit["id"] in seen:
+        if not isinstance(limit, dict) or text(limit.get("id")) not in expected or limit["id"] in seen:
             found.append(Finding("PAR-LIMIT", path, "unknown, malformed or repeated limit"))
             continue
         seen.add(limit["id"])
@@ -216,6 +222,23 @@ def figure_findings(data: Mapping[str, Any], spec: Mapping[str, Any], rules: Map
              if (problem := decimal_problem(figures[name], rules, None))]
     if not isinstance(components, list) or not components:
         found.append(Finding("RES-FIGURES", "components", "a calculated result lists its components"))
+        return found
+    for index, component in enumerate(components):
+        found += component_findings(component, f"components[{index}]", rules)
+    return found
+
+
+def component_findings(component: Any, path: str, rules: Mapping[str, Any]) -> list[Finding]:
+    """A component names its category and gives its amount, factor and weighted amount."""
+    if not isinstance(component, dict) or set(component) != COMPONENT_KEYS:
+        return [Finding("RES-FIGURES", path, f"a component has exactly {', '.join(sorted(COMPONENT_KEYS))}")]
+    found = []
+    if not text(component["category"]):
+        found.append(Finding("RES-FIGURES", f"{path}.category", "a component names its category"))
+    for name, maximum in (("amount", None), ("factor", Decimal(1)), ("weighted", None)):
+        problem = decimal_problem(component[name], rules, maximum)
+        if problem:
+            found.append(Finding("RES-FIGURES", f"{path}.{name}", problem))
     return found
 
 
@@ -226,7 +249,7 @@ def diagnostic_findings(data: Mapping[str, Any], spec: Mapping[str, Any]) -> lis
     found, codes = [], set()
     for index, item in enumerate(diagnostics):
         path = f"diagnostics[{index}]"
-        known = spec["diagnostics"].get(item.get("code")) if isinstance(item, dict) else None
+        known = spec["diagnostics"].get(text(item.get("code"))) if isinstance(item, dict) else None
         if known is None or set(item) != {"code", "severity", "message", "refs"}:
             found.append(Finding("RES-DIAGNOSTIC", path, "unknown code or keys other than code, severity, message, refs"))
             continue
@@ -239,9 +262,9 @@ def diagnostic_findings(data: Mapping[str, Any], spec: Mapping[str, Any]) -> lis
 def consistency_findings(data: Mapping[str, Any], spec: Mapping[str, Any], codes: set[str],
                          diagnostics: Iterable[Any]) -> list[Finding]:
     found = []
-    status = data.get("status")
+    status = text(data.get("status"))
     errors = {str(item.get("code")) for item in diagnostics if isinstance(item, dict)
-              and spec["diagnostics"].get(item.get("code"), {}).get("severity") == "error"}
+              and spec["diagnostics"].get(text(item.get("code")), {}).get("severity") == "error"}
     if status == "calculated" and errors:
         found.append(Finding("RES-STATUS", "status", f"a calculated result has error diagnostics {sorted(errors)}"))
     if status in ("rejected", "failed") and not errors:
@@ -261,7 +284,7 @@ def check_result(data: Any, root: Path) -> list[Finding]:
     found = []
     if data.get("schema") != spec["schema"] or data.get("result_version") != 1:
         found.append(Finding("RES-HEADER", "schema", "expected klcr-result, version 1"))
-    if data.get("status") not in spec["statuses"]:
+    if text(data.get("status")) not in spec["statuses"]:
         found.append(Finding("RES-HEADER", "status", f"{data.get('status')!r} is not a result status"))
     if not isinstance(data.get("illustrative"), bool):
         found.append(Finding("RES-HEADER", "illustrative", "must be true or false"))
