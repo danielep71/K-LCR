@@ -23,6 +23,14 @@
 
 ---
 
+<p align="center">
+  <img width="100%"
+       alt="K-LCR: Liquidity Coverage Ratio in Excel VBA, with EU and Basel profiles. The ratio is the liquidity buffer over net liquidity outflows over 30 calendar days, at least 100 %; inflows are recognised up to 75 % of outflows; Level 2 assets are at most 40 % and Level 2B at most 15 % of the buffer. Status: v0.1.0, repository setup, no LCR calculation yet."
+       src="docs/assets/K-LCR_social_preview.png">
+</p>
+
+---
+
 </div>
 
 ## 📍 Status
@@ -35,9 +43,12 @@
 > validation, not operational reporting or production use.
 
 The selected implementation is Excel/VBA with separate planned EU and Basel
-profiles. The current portable **Repository integrity** check covers
-repository tooling, tracked text and workflow syntax. It does not validate
-regulatory calculations or execute Excel.
+profiles. The portable **Repository integrity** check covers repository
+tooling, tracked text, workflows, the input and parameter contracts, the
+registered test cases and static VBA rules. It does not validate regulatory
+calculations or execute Excel. The figures in the image above are regulatory
+requirements, with their sources in [docs/assets](docs/assets/README.md#-social-preview),
+not results.
 
 ## ✨ What this project is
 
@@ -78,7 +89,7 @@ available to install. Do not treat a static PASS as Excel or LCR evidence.
 | Pure VBA core | Deterministic calculation, with explicit profile and parameter versions | Contract only |
 | Public API | Request validation, named errors and results | Contract only |
 | Excel adapter | Host I/O and state restoration | Contract only |
-| Validation | Independent fixtures and real host evidence | Planned under #11 and #15 |
+| Validation | Independent fixtures and real host evidence | Case format and plan defined (#11); host evidence planned under #15 |
 
 See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 [VBA house style](docs/VBA_HOUSE_STYLE.md) for the boundaries.
