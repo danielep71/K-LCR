@@ -81,9 +81,21 @@ and divergence rules in [Release integration](GOVERNANCE.md#-release-integration
 
 ## Enforcement demonstration
 
-In progress (#16): this line ends with a deliberate trailing space, which the
-tracked-text gate rejects, so that the required check fails on this commit. 
-The corrective commit replaces this paragraph with the recorded result.
+Pull request #135 into `release/0.1.0` (#16) showed on 2026-11-05 that the
+required check blocks a merge and that a passing run then permits it. The
+rulesets were not changed for the demonstration.
+
+| Step | Commit | Observation |
+| --- | --- | --- |
+| 1. Deliberate defect | `f798a0f` | A trailing space in this section. `Repository integrity` [failed](https://github.com/danielep71/K-LCR/actions/runs/41985309189): only `tracked-text`, on that line; every other gate passed. |
+| 2. Merge attempt | `f798a0f` | The pull request's merge state was `blocked`. A squash merge through the REST API at 07:11 UTC, with the expected head SHA, was refused: HTTP 405, "Repository rule violations found. Required status check "Repository integrity" is failing." Nothing reached `release/0.1.0`. |
+| 3. Correction | the next commit | Removes the trailing space and records steps 1 and 2. |
+| 4. Merge | the final head | Permitted only once `Repository integrity` passes on the final head and the review threads are resolved; the run and the merge commit are recorded in the resolution of #16. |
+
+The demonstration covers the release-branch ruleset (26063663). The `main`
+ruleset (26063609) requires the same check with the same strict policy; it
+was not exercised with a failing commit, since a change to `main` needs my
+approval of an integration.
 
 ## Required-check coverage and branch cleanup
 
