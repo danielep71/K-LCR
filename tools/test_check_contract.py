@@ -254,6 +254,11 @@ class RunTests(ContractTestCase):
         self.assertEqual(self.space.findings(), [["LCR-PARAMETER-SET", "run", 1, "parameter_set"],
                                                  ["LCR-REGISTER-VERSION", "run", 1, "source_register_version"]])
 
+    def test_an_overlong_integer_is_out_of_range_without_conversion(self) -> None:
+        # Python refuses to convert a decimal string of more than 4,300 digits to int.
+        self.space.write(run=RUN.replace("EU-LCR-DA-2022-07-08;1", "EU-LCR-DA-2022-07-08;" + "9" * 4301))
+        self.assertEqual(self.space.findings(), [["LCR-RANGE", "run", 1, "source_register_version"]])
+
     def test_invalid_run_skips_rules_against_the_run(self) -> None:
         self.space.write(run=RUN.replace(";EU;", ";XX;"),
                          assets=ASSETS + "A9;NO-SUCH-CATEGORY;1;EUR;Y\n")
