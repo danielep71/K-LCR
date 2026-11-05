@@ -349,6 +349,29 @@ class FrozenSectionTest(unittest.TestCase):
         found, _ = self.frozen(RELEASED, tagged=UNRELEASED_ONLY)
         self.assertIn("CHANGELOG.md: [0.2.0] is not in CHANGELOG.md at its tag v0.2.0", found)
 
+    def test_a_shallow_checkout_fails_once_a_release_exists(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="changelog-") as temporary:
+            origin, clone = Path(temporary) / "origin", Path(temporary) / "clone"
+            origin.mkdir()
+            git(origin, "init", "-q")
+            for text, version in ((UNRELEASED_ONLY, None), (RELEASED, "0.2.0")):
+                (origin / "CHANGELOG.md").write_text(text, encoding="utf-8")
+                if version:
+                    (origin / "VERSION").write_text(f"{version}\n", encoding="utf-8")
+                git(origin, "add", "-A")
+                git(origin, "commit", "-qm", f"Commit {version}")
+                if version:
+                    for tag in ("v0.1.0", "v0.2.0"):
+                        git(origin, "tag", "-a", tag, "-m", tag)
+            subprocess.run(["git", "clone", "-q", "--depth", "1", "--no-tags",
+                            origin.resolve().as_uri(), str(clone)], capture_output=True, check=True)
+            shallow = ("CHANGELOG.md: shallow checkout, so released sections cannot be compared "
+                       "with their tags; check out the full history and tags (fetch-depth: 0)")
+            self.assertEqual(check_changelog.frozen_problems(clone, RELEASED, ["0.2.0", "0.1.0"]),
+                             ([shallow], []))
+            # Before the first release there is nothing to compare.
+            self.assertEqual(check_changelog.frozen_problems(clone, UNRELEASED_ONLY, []), ([], []))
+
     def test_without_git_nothing_is_compared(self) -> None:
         with tempfile.TemporaryDirectory(prefix="changelog-") as temporary:
             root = Path(temporary)

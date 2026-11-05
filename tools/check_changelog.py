@@ -27,7 +27,8 @@ real calendar date, may differ, and the difference is reported as a note, so
 a reviewed correction stays visible. A
 release whose tag does not exist yet is a note, since the tag is created
 after the changelog is dated; so is a directory that is not a Git checkout,
-where nothing can be compared. A vX.Y.Z tag on a commit that HEAD contains,
+where nothing can be compared. A shallow clone fails once a dated release
+exists, since it lacks the tags and ancestry to compare. A vX.Y.Z tag on a commit that HEAD contains,
 whose CHANGELOG.md released [X.Y.Z], fails when the section is no longer in
 the changelog, so a released section cannot be deleted or renamed; a newer
 tag does not apply to an older revision.
@@ -270,6 +271,12 @@ def frozen_problems(root: Path, text: str, released: list[str]) -> tuple[list[st
     if git(root, "rev-parse", "--git-dir") is None:
         return [], [f"{CHANGELOG}: not a Git checkout, so released sections were not compared "
                     "with their tags"] if released else []
+    if released and (git(root, "rev-parse", "--is-shallow-repository") or "").strip() == "true":
+        # A shallow clone, such as a CI checkout with fetch-depth 1, has
+        # neither the tags nor the ancestry the comparison needs; passing
+        # there would hide an edited or deleted released section.
+        return [f"{CHANGELOG}: shallow checkout, so released sections cannot be compared with "
+                "their tags; check out the full history and tags (fetch-depth: 0)"], []
     findings: list[str] = []
     notes: list[str] = []
     current = sections(text)
