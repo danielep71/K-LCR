@@ -83,6 +83,12 @@ class MetadataTests(Workspace):
             ["CASE-METADATA", CASE, "case.json:requirements"], ["CASE-METADATA", CASE, "case.json:parameter_set"],
             ["CASE-METADATA", CASE, "case.json:review"], ["CASE-METADATA", CASE, "case.json:profile"]])
 
+    def test_a_normal_case_needs_a_valid_parameter_set(self) -> None:
+        data = self.load(CASE, "case.json")
+        data["parameter_set"] = "tests/parameters/parameter-set-invalid.json"
+        self.save(CASE, "case.json", data)
+        self.assertEqual(self.codes(), [["CASE-METADATA", CASE, "case.json:parameter_set"]])
+
     def test_strict_json(self) -> None:
         (self.root / ctc.CASES / CASE / "case.json").write_text('{"id": 1, "id": 2}', encoding="utf-8")
         (self.root / ctc.CASES / INVALID / "expected.json").write_text('{"value": NaN}', encoding="utf-8")
@@ -106,6 +112,12 @@ class OutputTests(Workspace):
                                         ["CASE-OUTPUT", CASE, "expected.json:outputs[2]"],
                                         ["CASE-OUTPUT", CASE, "expected.json:outputs[3]"],
                                         ["CASE-OUTPUT", CASE, "expected.json:outputs[5]"]])
+
+    def test_a_trailing_newline_never_passes_a_pattern(self) -> None:
+        data = self.load(CASE, "expected.json")
+        data["outputs"][2]["value"] += "\n"
+        self.save(CASE, "expected.json", data)
+        self.assertEqual(self.codes(), [["CASE-OUTPUT", CASE, "expected.json:outputs[2]"]])
 
     def test_illustrative_quantities_only_in_illustrative_cases(self) -> None:
         folder = self.root / ctc.CASES

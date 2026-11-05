@@ -104,6 +104,12 @@ class ParameterSetTests(ParameterTestCase):
                                             ["PAR-VALUE", "factors[1]"], ["PAR-SOURCE", "factors[1]"],
                                             ["PAR-SOURCE", "factors[1]"], ["PAR-VALUE", "factors[2]"]])
 
+    def test_a_trailing_newline_never_passes_a_pattern(self) -> None:
+        data = copy.deepcopy(EU_SET)
+        data["factors"][1]["value"] = "0.1\n"
+        data["limits"][0]["value"] = "1\n"
+        self.assertEqual(self.codes(data), [["PAR-VALUE", "factors[1]"], ["PAR-VALUE", "limits[0]"]])
+
     def test_limits_are_complete_and_cite_their_locator(self) -> None:
         data = copy.deepcopy(EU_SET)
         data["limits"] = data["limits"][1:] + [data["limits"][1]]

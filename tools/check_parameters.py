@@ -50,7 +50,7 @@ def text(value: Any) -> str | None:
 
 def decimal_problem(value: Any, rules: Mapping[str, Any], maximum: Decimal | None) -> str | None:
     """Why value is not an admissible decimal string, or None."""
-    if not isinstance(value, str) or not re.match(rules["pattern"], value):
+    if not isinstance(value, str) or not re.fullmatch(rules["pattern"], value):
         return f"{value!r} is not a decimal string such as \"0.25\""
     if check_contract.significant_digits(value) > rules["max_significant_digits"]:
         return f"{value} has more than {rules['max_significant_digits']} significant digits"

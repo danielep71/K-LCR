@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 import check_contract
+import check_parameters
 
 CASES = Path("tests/cases")
 DERIVATIONS = Path("tests/derivations")
@@ -99,7 +100,7 @@ def metadata_findings(case: str, data: Any, root: Path, requirements: set[str]) 
 
     if (data["schema"], data["case_version"]) != ("klcr-test-case", 1):
         bad("schema", "expected klcr-test-case, version 1")
-    if data["id"] != case or not CASE_ID.match(case):
+    if data["id"] != case or not CASE_ID.fullmatch(case):
         bad("id", "must equal the folder name: lower case, digits and hyphens")
     if data["synthetic"] is not True:
         bad("synthetic", "every case is synthetic")
@@ -124,11 +125,14 @@ def parameter_set_findings(case: str, data: Mapping[str, Any], root: Path) -> li
     if data["category"] == "invalid-parameters":
         return []  # The case deliberately names a set of another profile or an invalid one.
     try:
-        profile = strict_json(root / path).get("profile")
-    except (ValueError, AttributeError):
-        profile = None
-    if profile != data["profile"]:
+        parameters = strict_json(root / path)
+    except ValueError:
+        parameters = None
+    if not isinstance(parameters, dict) or parameters.get("profile") != data["profile"]:
         return [Finding("CASE-METADATA", case, "case.json:parameter_set", "the parameter set is of another profile")]
+    if check_parameters.check_parameter_set(parameters, root):
+        return [Finding("CASE-METADATA", case, "case.json:parameter_set",
+                        "the parameter set has findings of tools/check_parameters.py")]
     return []
 
 
@@ -159,7 +163,7 @@ def valid_date(value: Any) -> bool:
 
 
 def decimal_value(value: Any) -> Decimal | None:
-    if not isinstance(value, str) or not DECIMAL.match(value):
+    if not isinstance(value, str) or not DECIMAL.fullmatch(value):
         return None
     try:
         return Decimal(value)
@@ -202,7 +206,7 @@ def text_output_findings(case: str, path: str, output: Mapping[str, Any], illust
     allowed = {"input_status": ("pass", "fail"), "result_status": RESULT_STATUSES}
     if quantity in allowed and text not in allowed[quantity]:
         return [Finding("CASE-OUTPUT", case, path, f"{quantity} is one of {', '.join(allowed[quantity])}")]
-    if quantity == "input_findings" and not re.match(r"^(?:LCR-[A-Z-]+(?:,LCR-[A-Z-]+)*)?$", text):
+    if quantity == "input_findings" and not re.fullmatch(r"^(?:LCR-[A-Z-]+(?:,LCR-[A-Z-]+)*)?$", text):
         return [Finding("CASE-OUTPUT", case, path, "input_findings lists finding codes joined by ',', or is empty")]
     if quantity not in CONTRACT_TEXTS and not illustrative:
         return [Finding("CASE-OUTPUT", case, path, f"unknown text quantity {quantity!r}")]
@@ -245,7 +249,7 @@ def reference_findings(case: str, index: int, output: Mapping[str, Any], sources
 def script_findings(case: str, path: str, script: Any, root: Path) -> list[Finding]:
     if script is None:
         return []
-    if not isinstance(script, str) or not re.match(rf"^{DERIVATIONS.as_posix()}/[a-z0-9_]+\.py$", script) \
+    if not isinstance(script, str) or not re.fullmatch(rf"^{DERIVATIONS.as_posix()}/[a-z0-9_]+\.py$", script) \
             or not (root / script).is_file():
         return [Finding("CASE-SCRIPT", case, path, "script names an existing file in tests/derivations")]
     problem = oracle_problem(root / script)

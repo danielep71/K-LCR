@@ -211,9 +211,9 @@ def significant_digits(value: str) -> int:
 
 
 def amount_finding(value: str, rules: Mapping[str, Any]) -> tuple[str, str] | None:
-    if NON_FINITE.match(value):
+    if NON_FINITE.fullmatch(value):
         return "LCR-NON-FINITE", f"{value!r} is not a finite number"
-    if not AMOUNT.match(value):
+    if not AMOUNT.fullmatch(value):
         return "LCR-TYPE", f"{value!r} is not a decimal number with '.' as separator"
     if significant_digits(value) > rules["max_significant_digits"]:
         return "LCR-PRECISION", f"{value!r} has more than {rules['max_significant_digits']} significant digits"
@@ -223,7 +223,7 @@ def amount_finding(value: str, rules: Mapping[str, Any]) -> tuple[str, str] | No
 
 
 def date_finding(value: str, rules: Mapping[str, Any]) -> tuple[str, str] | None:
-    if not DATE.match(value):
+    if not DATE.fullmatch(value):
         return "LCR-TYPE", f"{value!r} is not a date YYYY-MM-DD"
     try:
         day = date.fromisoformat(value)
@@ -245,13 +245,13 @@ def value_finding(value: str, column: Mapping[str, Any],
     if kind == "date":
         return date_finding(value, rules)
     if kind == "integer":
-        if not INTEGER.match(value):
+        if not INTEGER.fullmatch(value):
             return "LCR-TYPE", f"{value!r} is not an integer"
         if not rules["integer_min"] <= int(value) <= rules["integer_max"]:
             return "LCR-RANGE", f"{value} is outside {rules['integer_min']} to {rules['integer_max']}"
         return None
     pattern = rules["patterns"].get(kind)
-    if pattern and not re.match(pattern, value):
+    if pattern and not re.fullmatch(pattern, value):
         return "LCR-TYPE", f"{value!r} does not have the form of a {kind}"
     if kind == "text" and len(value) > rules["text_max"]:
         return "LCR-LENGTH", f"{len(value)} characters"

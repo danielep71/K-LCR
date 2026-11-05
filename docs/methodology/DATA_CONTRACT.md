@@ -54,6 +54,10 @@ A run is one folder holding three files:
 | `amount` | A decimal number, zero or more, in the reporting currency |
 | `date` | `YYYY-MM-DD`, a real calendar date |
 
+The forms of `id`, `currency`, `integer`, `amount` and `date` describe the
+whole value: any other character, such as a space or a line break inside
+quotes, gets `LCR-TYPE`.
+
 Text never starts with `=`, `+`, `-`, `@`, a tab or a carriage return, so
 that a spreadsheet does not read it as a formula.
 
