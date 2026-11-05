@@ -61,7 +61,8 @@ Verified on Linux. The repository checks need:
 `tools/check.py` itself needs only the Python standard library.
 
 1. Create a virtual environment and install the Python quality tools. The
-   hashes cover CPython 3.13 on Linux x86_64, as in CI:
+   hashes cover CPython 3.13 on Linux x86_64, as in CI. Git ignores `.venv/`,
+   so it does not make the working tree dirty:
 
    ```sh
    python3 -m venv .venv
@@ -69,18 +70,21 @@ Verified on Linux. The repository checks need:
    python -m pip install --only-binary=:all: --require-hashes -r tools/requirements-quality-ci.txt
    ```
 
-2. Install actionlint 1.7.12 and check its archive against the SHA-256 that
-   `.github/workflows/repository-integrity.yml` pins. On Linux x86_64:
+2. Install actionlint 1.7.12 in a folder next to the repository, never inside
+   it: an archive or binary left in the checkout makes the working tree dirty
+   and `--ci` fails. Check the archive against the SHA-256 that
+   `.github/workflows/repository-integrity.yml` pins. On Linux x86_64, from
+   the repository root:
 
    ```sh
-   curl -fsSL -o actionlint.tar.gz \
+   mkdir -p ../klcr-tools
+   curl -fsSL -o ../klcr-tools/actionlint.tar.gz \
      https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
    printf '%s  %s\n' 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8 \
-     actionlint.tar.gz | sha256sum --check --strict
-   tar --no-same-owner -xzf actionlint.tar.gz actionlint
+     ../klcr-tools/actionlint.tar.gz | sha256sum --check --strict
+   tar --no-same-owner -xzf ../klcr-tools/actionlint.tar.gz -C ../klcr-tools actionlint
+   export PATH="$(cd ../klcr-tools && pwd):$PATH"
    ```
-
-   Put the extracted `actionlint` on your `PATH`, outside the repository.
 
 3. Check that `node --version` prints `v22`.
 
@@ -106,14 +110,14 @@ demonstrate no VBA behaviour and no LCR calculation.
 
 ## ✅ Verified setup
 
-I ran the steps above from a fresh clone on 2026-11-05 (#19):
+On 2026-11-05 (#19) I ran the shell blocks of *Get the source* and *Developer setup*, extracted verbatim from this page, in a new empty folder:
 
 | Item | Value |
 | --- | --- |
 | Commit | `a8784cb0319b8f3f5a9962a5194c801275f2f535` on `release/0.1.0` |
 | System | Ubuntu 24.04.5 LTS, Linux x86_64 |
 | Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.16.6, mypy 2.3.1, PyYAML 6.0.3 |
-| Fresh clone | `git status --short` printed nothing |
+| Fresh clone | `git status --short` printed nothing, before and after the setup; the virtual environment is ignored and actionlint sits in `../klcr-tools` |
 | actionlint archive | `sha256sum --check --strict` printed `OK` |
 | `python tools/check.py --ci` | All 20 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |
 | Without actionlint on `PATH` | `actionlint: NOT RUN`, overall FAIL, exit code 1; with `--allow-missing`, INCOMPLETE and exit code 0 |
@@ -129,7 +133,7 @@ step below.
 | `pip` refuses a package with "hashes are required" or finds no matching distribution | The hashes cover CPython 3.13 on Linux x86_64 only. Use Linux, WSL or a Linux container. Installing the same versions without `--require-hashes` works elsewhere, but is not hash-verified: never use it to produce evidence. |
 | A gate reports **NOT RUN** | Its tool is missing or not on `PATH` (Ruff, mypy, Node.js or actionlint). Install it as above. Without PyYAML, `issue-config` and `workflow-invariants` are NOT RUN locally and fail in CI. |
 | The run ends **INCOMPLETE** | It ran with `--allow-missing`. Install the missing tools and run again without it: INCOMPLETE is never a pass. |
-| "working tree is dirty" with `--ci` | A file is modified or untracked. Commit, stash or remove it; generated reports belong in the ignored `test-results/`. |
+| "working tree is dirty" with `--ci` | A file is modified or untracked, such as a downloaded tool archive. Commit, stash or remove it, and keep tools outside the checkout; generated reports belong in the ignored `test-results/`. |
 | `tracked-text` fails on CR, trailing white space or a missing final newline | Fix the file named in the finding. VBA exports are stored with LF and checked out with CRLF by `.gitattributes`: do not change the line-ending settings. |
 | `changelog` fails on a shallow checkout | Clone with full history, or run `git fetch --unshallow --tags`. |
 
