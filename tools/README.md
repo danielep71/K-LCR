@@ -47,7 +47,7 @@ versions; each gate also writes `<gate>.log`.
 | `mypy` | `mypy --strict` over `tools/`, tests included. |
 | `mypy-strict-probe` | Strict mode is active: an annotated function passes and the same function without annotations is rejected. |
 | `actionlint` | Syntax, expressions and shell scripts of every workflow. |
-| `workflow-invariants` | The project rules for every workflow (`.yml` and `.yaml`) and Dependabot (`check_workflows.py`, PyYAML): every `uses:` pinned to a 40-character SHA; checkouts with `persist-credentials: false`; workflow-level `permissions` without write access; `timeout-minutes` on every job; write permissions only for `labels-sync.yml`/`reconcile` (issues) and `pr-milestones.yml`/`reconcile` (pull-requests); the `Repository integrity` job matches the required check in `docs/GOVERNANCE.md` and `docs/REPOSITORY_SETTINGS.md`, with no `if`, `strategy` or extra trigger filter; the label reconcile job keeps its exact condition (not a pull request and the default branch); `pr-milestones.yml` keeps its events, permissions, condition and single inline script; Dependabot covers GitHub Actions (`/`) and pip (`/tools`) once each, sets no milestone and exactly `P3`. Without PyYAML it fails on GitHub Actions and is NOT RUN locally. `test_check_workflows.py` mutates each rule and runs the milestone script against a fake API. |
+| `workflow-invariants` | The project rules for every workflow (`.yml` and `.yaml`) and Dependabot (`check_workflows.py`, PyYAML): every `uses:` pinned to a 40-character SHA; checkouts with `persist-credentials: false`; workflow-level `permissions` without write access; `timeout-minutes` on every job; write permissions only for `labels-sync.yml`/`reconcile` (issues), `pr-milestones.yml`/`reconcile` (pull-requests), `traffic-history.yml`/`collect` (contents) and `traffic-history.yml`/`alert` (issues); the `Repository integrity` job matches the required check in `docs/GOVERNANCE.md` and `docs/REPOSITORY_SETTINGS.md`, with no `if`, `strategy` or extra trigger filter; the label reconcile job keeps its exact condition (not a pull request and the default branch); `pr-milestones.yml` keeps its events, permissions, condition and single inline script; `traffic-history.yml` keeps its two jobs, the `analytics` environment and opt-in default-branch condition of `collect`, the App key in its two steps and the App token in the fetch step only, which runs no repository code, and an `alert` job with no environment or secret that reads the commit its collection wrote; Dependabot covers GitHub Actions (`/`) and pip (`/tools`) once each, sets no milestone and exactly `P3`. Without PyYAML it fails on GitHub Actions and is NOT RUN locally. `test_check_workflows.py` mutates each rule and runs the milestone script against a fake API. |
 | `data-contract` | Every synthetic run in `tests/contract/` gives exactly the findings, and the passing runs exactly the reconciliation, recorded in `tests/contract/expected.json`; each run is validated twice and must give the same report (`check_contract.py --check-fixtures`). The input contract is [docs/methodology/DATA_CONTRACT.md](../docs/methodology/DATA_CONTRACT.md). |
 | `test-cases` | Every registered case in `tests/cases/` follows [TEST_CASES.md](../docs/methodology/TEST_CASES.md): metadata, expected outputs, reference classes, tolerances and derivation scripts, which may import the standard library only. It executes the input-contract assertions and the derivation scripts, and reports the result figures as registered, not executed (`check_test_cases.py`). |
 | `parameter-result-contract` | Every parameter-set and result example in `tests/parameters/` gives exactly the findings recorded in `tests/parameters/expected.json` (`check_parameters.py --check-fixtures`). The contract is [docs/methodology/PARAMETERS_AND_RESULTS.md](../docs/methodology/PARAMETERS_AND_RESULTS.md). |
@@ -87,6 +87,26 @@ date are findings. A target end date that has already passed is not.
 
 Exit code 0 means no findings, 1 means findings, 2 means the audit could not
 run. Its rules are tested by `test_check_issues.py` in `tool-tests`.
+
+## 📈 Traffic history
+
+`traffic_history.py` keeps the repository's traffic beyond GitHub's 14-day
+window, on the data-only `traffic-history` branch. The opt-in **Traffic
+history** workflow runs it; operation, credentials and recovery are in
+[docs/TRAFFIC.md](../docs/TRAFFIC.md). It reads only local files and needs no
+token:
+
+```sh
+python tools/traffic_history.py init --data data
+python tools/traffic_history.py merge --raw RAW --data data --collected-at 2026-11-05T06:17:00Z
+python tools/traffic_history.py alert --data data --milestone-due 2026-11-20 --output alert.json
+```
+
+`init` creates missing history files with their headers; `merge` validates the
+API responses and the stored files, then merges one collection idempotently
+and rewrites the badge files; `alert` writes one alert issue when traffic
+stands out. `test_traffic_history.py` covers the merge rules, refusals,
+badges and alerts, and checks that an alert issue passes Issue triage.
 
 ## 🔧 Tool versions
 

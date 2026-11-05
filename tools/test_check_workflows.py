@@ -206,6 +206,74 @@ class WorkflowInvariantTests(unittest.TestCase):
         step["run"] = step["run"].replace("import json", "import json  # ${{ github.head_ref }}")
         self.assertFinding("the inline code contains `${{`")
 
+    # The traffic collection
+    def traffic_step(self, job: str, name: str) -> dict[str, Any]:
+        steps = self.repo.job("traffic-history.yml", job)["steps"]
+        return next(step for step in steps if step.get("name") == name)
+
+    def test_traffic_jobs(self) -> None:
+        self.repo.workflows["traffic-history.yml"]["jobs"]["report"] = {"runs-on": "x"}
+        self.assertFinding("traffic-history.yml: jobs must be exactly [collect, alert]")
+
+    def test_traffic_environment(self) -> None:
+        del self.repo.job("traffic-history.yml", "collect")["environment"]
+        self.assertFinding("collect must run in the analytics environment")
+
+    def test_traffic_condition(self) -> None:
+        for condition in ("github.event_name == 'schedule'",
+                          "vars.TRAFFIC_HISTORY == 'enabled' || github.event_name == 'schedule'"):
+            with self.subTest(condition=condition):
+                self.repo.job("traffic-history.yml", "collect")["if"] = condition
+                self.assertFinding("collect's condition must be")
+
+    def test_traffic_permissions(self) -> None:
+        self.repo.job("traffic-history.yml", "collect")["permissions"]["issues"] = "write"
+        self.assertFinding("job collect has write permission ['issues']")
+        self.assertFinding("collect's permissions must be contents: write")
+        self.repo = Repository()
+        self.repo.job("traffic-history.yml", "alert")["permissions"]["contents"] = "write"
+        self.assertFinding("alert's permissions must be contents: read and issues: write")
+
+    def test_traffic_key_stays_in_its_steps(self) -> None:
+        step = self.traffic_step("collect", "Merge into the history")
+        step["env"]["KEY"] = "${{ secrets.TRAFFIC_APP_PRIVATE_KEY }}"
+        self.assertFinding("may name TRAFFIC_APP_PRIVATE_KEY")
+
+    def test_traffic_configuration_check_reads_no_key(self) -> None:
+        step = self.traffic_step("collect", "Check the traffic App configuration")
+        step["env"]["HAS_KEY"] = "${{ secrets.TRAFFIC_APP_PRIVATE_KEY }}"
+        self.assertFinding("may only test whether the key is set")
+
+    def test_traffic_token_permissions(self) -> None:
+        step = self.traffic_step("collect", "Create the traffic App token")
+        step["with"]["permission-contents"] = "write"
+        self.assertFinding("Administration: read only")
+
+    def test_traffic_token_stays_in_the_fetch_step(self) -> None:
+        step = self.traffic_step("collect", "Merge into the history")
+        step["env"]["TOKEN"] = "${{ steps.app-token.outputs.token }}"
+        self.assertFinding("may receive the App token")
+        self.repo = Repository()
+        step = self.traffic_step("collect", "Fetch traffic from the GitHub API")
+        step["run"] += "\npython source/tools/traffic_history.py init --data x\n"
+        self.assertFinding("the step holding the App token runs repository code")
+
+    def test_traffic_alert_holds_no_credential(self) -> None:
+        self.repo.job("traffic-history.yml", "alert")["environment"] = "analytics"
+        self.assertFinding("the alert job may use no environment or secret")
+
+    def test_traffic_alert_reads_the_collected_commit(self) -> None:
+        step = self.traffic_step("alert", "Check out the collected traffic-history commit")
+        step["with"]["ref"] = "traffic-history"
+        self.assertFinding("the alert job must check out")
+        self.repo = Repository()
+        guard = self.traffic_step("alert", "Check the collected history commit")
+        guard["run"] = "true"
+        self.assertFinding("an empty history-sha must stop the alert job")
+        self.repo = Repository()
+        del self.repo.job("traffic-history.yml", "collect")["outputs"]
+        self.assertFinding("the alert job must read collect's history-sha output")
+
     # Dependabot
     def test_dependabot_duplicate_ecosystem(self) -> None:
         self.repo.dependabot["updates"].append(copy.deepcopy(self.repo.dependabot["updates"][1]))

@@ -1,95 +1,180 @@
 # 📈 Repository traffic history
 
-[![Scope](https://img.shields.io/badge/Scope-Repository_analytics-00338D?style=flat-square)](#-stored-data)
-[![Activation](https://img.shields.io/badge/Activation-Pending-BF8700?style=flat-square)](#-activation-and-evidence)
-
-GitHub keeps repository traffic for 14 days. The **Traffic history** workflow
-([.github/workflows/traffic-history.yml](../.github/workflows/traffic-history.yml))
-collects it once a day and merges it into CSV files on the data-only
-`traffic-history` branch, so the history outlives that window. It is
+GitHub keeps repository traffic for 14 days. The optional **Traffic history**
+workflow ([traffic-history.yml](../.github/workflows/traffic-history.yml))
+collects it once a day, with the repository's stars, forks, watchers and open
+issues, and merges it into CSV files on the data-only `traffic-history`
+branch, so the history outlives that window. It also writes badge files there
+and opens an issue when traffic stands out (*Traffic alert* below). It is
 repository analytics, not CI: it builds and tests nothing.
+
+## 🔌 Enabling
+
+The workflow does nothing until the repository variable `TRAFFIC_HISTORY` is
+`enabled`; until then its scheduled runs are skipped. It runs only from the
+default branch, `main`, so it is active only after an integration of
+`release/0.1.0` into `main` that I authorize
+([GOVERNANCE.md](GOVERNANCE.md#-release-integration-and-synchronization)).
+Enable it in this order; *Activation state* below records where K-LCR stands.
+
+1. **Create the branch** from a clone of the default branch:
+
+   ```sh
+   data="$(mktemp -d)/data"
+   python tools/traffic_history.py init --data "$data"
+   git switch --orphan traffic-history
+   mv "$data" data
+   git add data
+   git commit -m "chore: start the traffic history"
+   git push origin traffic-history
+   git switch -
+   ```
+
+   `git switch --orphan` starts the branch with no files and no history in
+   common with the default branch. It is never merged and never used as a
+   task base. The **Protect traffic history** ruleset
+   ([settings](REPOSITORY_SETTINGS.md#rulesets)) blocks its deletion and
+   force pushes.
+2. **Settings → Environments → New environment** `analytics`. Under
+   *Deployment branches and tags*, select *Selected branches and tags* and
+   allow the default branch only. Do this before adding the App's credentials:
+   a run that names a missing environment creates it without that restriction.
+3. **Create the App:** under **Settings → Developer settings → GitHub Apps**
+   of the account that owns the repository, create a GitHub App for traffic
+   collection only. Disable its webhook, grant only the repository permission
+   **Administration: Read-only** (GitHub adds *Metadata: Read-only*) and allow
+   installation only on this account. The traffic API needs that permission,
+   and the workflow token cannot have it. If you already have such an App for
+   another repository, reuse it and skip this step.
+4. **Install the App** on this repository: on a new installation select only
+   this repository; on an existing one add this repository to it. Each run's
+   token is limited to the repository it runs in.
+5. In the `analytics` environment, add the App's **Client ID** as the
+   environment variable **TRAFFIC_APP_CLIENT_ID**. Generate a private key for
+   this repository (an App can hold several, so one leaked key can be revoked
+   without affecting other repositories) and add the whole `.pem` content as
+   the environment secret **TRAFFIC_APP_PRIVATE_KEY**, then delete the
+   downloaded file. Never put the key in a file, issue, comment or chat.
+6. **Settings → Secrets and variables → Actions → Variables**: add the
+   repository variable `TRAFFIC_HISTORY` with the value `enabled`.
+7. Run **Actions → Traffic history → Run workflow** on the default branch and
+   check that it passes and that `traffic-history` gains a commit. Run it
+   again the same day: the second run changes no value and records only its
+   observation time.
+
+To pause collection, delete the variable or change its value; the history
+stays on the branch.
+
+<a id="activation-state"></a>
+
+### Activation state
+
+| Step | State |
+| --- | --- |
+| 1. Branch | Done on 2026-11-05: orphan commit `6c7a9ea` with the four history files, headers only (#17) |
+| 2. `analytics` environment | Done on 2026-10-29, deployment limited to `main`; no secret or variable (2026-11-05) |
+| 3 to 5. App, installation and credentials | Not done |
+| 6. `TRAFFIC_HISTORY` variable | Not set |
+| Workflow on `main` | Not yet: it reaches `main` with the next integration, after my approval |
+| 7. First collection and same-day rerun | Not run: no collection has happened |
 
 ## ⏱️ Schedule
 
-The workflow is scheduled daily at **06:17 UTC** and can be started from
-**Actions → Traffic history → Run workflow** on `main`. GitHub may start
-scheduled runs late; each collection records the time it was actually taken.
-A manual run on any other branch is skipped.
+The workflow is scheduled daily at **06:17 UTC** and can be started manually
+on the default branch; a manual run on any other branch is skipped. GitHub may
+start scheduled runs late; each collection records the time it was actually
+taken.
 
-## 🔑 Credential setup and renewal
+## 🔑 Credentials
 
-The traffic API needs a token with **Administration: read** on the
-repository. The workflow token cannot be given that permission, so a
-fine-grained personal access token is used.
+Each run asks the App for an installation token limited to this repository
+and to *Administration: read*. The token expires after an hour and is revoked
+when the job ends, so there is nothing to renew. Only the token step receives
+the private key, and only the fetch step, which runs `curl` and no repository
+code, receives the token. The merge script runs without either; the push uses
+the workflow token with `contents: write`.
 
-1. **Settings → Environments → New environment** `analytics`. Under
-   *Deployment branches and tags*, select *Selected branches and tags* and
-   allow `main` only. Do this before adding the secret: a run that names a
-   missing environment creates it without that restriction.
-2. **Settings → Developer settings → Fine-grained tokens → Generate new
-   token**: resource owner `danielep71`, *Only select repositories*:
-   `K-LCR`, repository permission **Administration: Read-only**, nothing
-   else. Set an expiry of at most 90 days.
-3. In the `analytics` environment, add the secret **TRAFFIC_TOKEN** with that
-   token. Never put the token in a file, issue, comment or chat.
-4. Run the workflow manually on `main` and check that it passes and that
-   `traffic-history` gains a commit.
+### Rotating the private key
 
-**Renewal:** before the token expires, and at least every 90 days, generate a
-new token with the same settings, replace the secret, and repeat step 4.
-Revoke the token at once if it may have been exposed, or if the workflow is
-changed by anyone but the maintainer. Collections missed while the token is
-invalid are lost once they fall outside the 14-day window.
+Rotate the key if it may have been exposed, or if anyone but me changes the
+workflow:
 
-Only the fetch step receives `TRAFFIC_TOKEN`, and it runs `curl` only. The
-merge script runs without it, and the push uses the workflow token with
-`contents: write`.
+1. Generate a new private key for this repository in the App's settings.
+2. Replace `TRAFFIC_APP_PRIVATE_KEY` in **Settings → Environments →
+   `analytics`**. A repository secret with the same name does not take
+   effect: the environment secret takes precedence.
+3. Run the workflow manually on the default branch and check that **Fetch
+   traffic from the GitHub API** passes and `traffic-history` gains a commit.
+4. Only then delete the old key in the App's settings, checking its
+   fingerprint first.
+
+Collections missed while the App cannot issue tokens are lost once they fall
+outside the 14-day window.
 
 ## 🗄️ Stored data
 
-The `traffic-history` branch holds `README.md` and these files under `data/`.
-On the first successful collection, the workflow creates an orphan commit
-containing only this README and the four CSV files. It has no history in
-common with main, must
-never be merged into a source branch, and must never be force-pushed.
+The `traffic-history` branch holds these files under `data/`:
 
 | File | Key | Contents |
 | --- | --- | --- |
-| `daily.csv` | `date` | Views and unique views, clones and unique clones per UTC day. `views_collected_at` and `clones_collected_at` give the collection that last changed each pair; `views_observed_at` and `clones_observed_at` record the latest observation. |
-| `snapshots.csv` | `snapshot_date` | One row per collection day: the first and last day the API reported, the 14-day totals, and `collected_at`, the collection that last changed that day's snapshot, referrers or paths. `observed_at` records the latest observation of that unit. |
+| `daily.csv` | `date` | Views and unique views, clones and unique clones per UTC day. For each pair, `*_collected_at` gives the collection that last changed it and `*_observed_at` the newest collection that reported it. |
+| `snapshots.csv` | `snapshot_date` | One row per collection day: the first and last day the API reported, the 14-day totals, the repository's `stars`, `forks`, `watchers` and `open_issues` at collection time, `collected_at`, the collection that last changed that day's snapshot, referrers or paths, and `observed_at`, the newest collection of that day. |
 | `referrers.csv` | `snapshot_date`, `rank` | The top 10 referrers over the 14 days before each collection. |
 | `paths.csv` | `snapshot_date`, `rank` | The top 10 repository paths over the same window. |
+| `badges/*.json` | — | Badge files, rewritten from the stored data after each merge (*Badges* below). |
 
-Referrers and paths are retained per collection day, because the API gives
-them only as 14-day totals, never per day.
+Referrers and paths are kept per collection day, because the API reports them
+only as 14-day totals. `open_issues` is GitHub's count, which includes open
+pull requests.
+
+### Badges
+
+`data/badges/` holds three files in the shields.io *endpoint* format:
+
+| File | Label | Counts |
+| --- | --- | --- |
+| `clones.json` | `clones` | Every clone in `daily.csv`, summed since tracking began. |
+| `visitors.json` | `visitors (14d)` | Unique visitors over the API's 14-day window, from the latest snapshot. Daily unique counts cannot be summed into a unique count. |
+| `visits.json` | `visits` | Daily unique visitors summed since tracking began: a visitor counts once per day they visit. |
+
+On a public repository, a README can show one with
+`https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/OWNER/REPOSITORY/traffic-history/data/badges/clones.json`.
+Large numbers are shortened (`1.2k`, `11k`). A badge file changes only when its
+value does. Clones include those made by workflow checkouts, so CI activity
+raises the count; for the same reason they never raise a
+[traffic alert](#-traffic-alert).
+
+The README shows no traffic badge yet: the badge files are written by the
+first collection. Once it has run, add the three badges for
+`danielep71/K-LCR` at the top of the README, in the same pull request that
+records the first collection in #17.
 
 ### Merge rules
 
-`tools/traffic_history.py` merges each collection idempotently:
+`tools/traffic_history.py` merges each collection idempotently: merging the
+same collection again changes nothing.
 
 - **Overlapping windows:** for every date the collection reports, its values
-  replace the stored ones. The newest collection wins, so a day that was
-  incomplete when first collected is corrected later. Views and clones are
-  merged separately, each with its own collection time, which stays unchanged
-  when its values do not change. Separate observed-at watermarks advance on
-  every newer observation, even if counts are identical.
+  replace the stored ones, so a day that was incomplete when first collected
+  is corrected later. Views and clones are merged separately, each with its
+  own collection and observation times.
 - **Older history:** dates the collection does not report keep their values.
   Nothing is deleted.
 - **No double counting:** values are replaced, never added. Unique counts are
-  never summed across days or windows; a 14-day unique count is only in
+  never summed across days or windows; a 14-day unique count exists only in
   `snapshots.csv`.
 - **Same-day runs:** a collection day's snapshot, referrers and paths are one
-  unit. A second collection on the same UTC day replaces the unit only if any
-  of the three changed. An unchanged later collection advances the observation
-  watermarks only. Replaying identical data with the same collection timestamp
-  changes nothing.
-- **Order:** "newest" means the latest collection time. Merging an older
-  collection after a newer one, when a saved collection is replayed or a run
-  is rebuilt on a newer branch tip, never replaces what the newer one stored;
-  it can only fill a date or metric that nothing newer reported. Freshness uses
-  the latest-observed watermark, separately from the last-change time; this
-  remains correct when counts or rankings are corrected or return to an
-  earlier value.
+  unit, replaced only if any of the three changed. A newer collection with the
+  same data changes no value or collection time; it records only its
+  observation time, so each successful run adds a commit to the branch.
+- **Order:** the newest collection that reported a value wins, even when it
+  left the value unchanged or reported a lower count. An older collection
+  merged after a newer one, for example when a saved collection is replayed,
+  never replaces what the newer one reported; it can only fill a date or
+  metric that nothing newer reported.
+- **Earlier layouts:** a history file written before the observation times
+  existed is read with each observation time equal to its collection time and
+  rewritten with the current header on the next merge.
 
 ### Zero or unavailable
 
@@ -97,8 +182,8 @@ The API reports each day of its window, days without activity included, as
 `0`. So:
 
 - **`0`**: the day was collected and had no activity;
-- **no row**: no collection covered the day, either because it is before
-  tracking began or because collections stopped for more than 14 days;
+- **no row**: no collection covered the day, because it is before tracking
+  began or because collections stopped for more than 14 days;
 - **a blank metric**: one of the two series was not reported for that day.
 
 The step summary of each run lists the dates between the first and the last
@@ -106,49 +191,57 @@ stored day that have no row.
 
 ### Visibility
 
-K-LCR is public, so a traffic-history branch in this repository is public too.
-The planned retained data is aggregate counts, top referrer names and repository
-paths/titles, with no visitor identifiers. Retention is indefinite on the
-data branch; raw API responses stay in the runner's temporary directory and
-are not uploaded as artifacts. No traffic badge or Pages report is published.
-Counts include the maintainer's visits and CI clones. This is repository
-traffic, not website analytics. Do not add personal or client data.
+The branch has the repository's visibility: on a public repository anyone can
+read its CSV files. The data is aggregate (counts, referrers and paths) and
+identifies no visitor. The counts include my own visits and every clone made
+by CI checkouts.
 
-## 🚦 Activation and evidence
+GitHub shows top referrers and popular paths only to repository
+administrators. I publish them on purpose, public repositories included,
+because they are aggregate and show which sites and pages draw visitors. A
+repository that prefers not to publish them can stop collecting them: in the
+workflow's *Fetch traffic from the GitHub API* step, remove
+`traffic/popular/referrers` and `traffic/popular/paths` from the request loop
+and write an empty list instead, for example `echo '[]' > "$RAW/referrers.json"`
+and the same for `paths.json`. The merge accepts empty lists and records no
+rankings for new collection days, so the *New referrer* alert can no longer
+fire. The opt-out stops future collection only: rows from earlier days stay in
+`referrers.csv` and `paths.csv`, because the merge never removes other dates.
+To clear them from the current files, commit both files with only their header
+lines to `traffic-history`; earlier commits keep them in the branch history,
+which the **Protect traffic history** ruleset preserves.
 
-Implementation is staged under #17. No successful live collection is claimed.
-The `analytics` environment was created on 2026-10-29 and permits only `main`;
-it has no secrets or variables. The first successful collection bootstraps the
-protected data-only branch. Before activation: provision its dedicated credential
-and obtain
-owner authorization to integrate the workflow into main. A manual run from
-a release branch is deliberately skipped.
+## 🚨 Traffic alert
 
-After activation, record the main commit and workflow run URLs in #17:
+After each collection the **Traffic alert** job compares the latest snapshot
+with the one before (`traffic_history.py alert`) and opens one issue, titled
+`Traffic alert: <snapshot date>`, when any of these holds:
 
-1. Run the first collection and inspect all four CSV files and the step summary.
-2. Rerun on the same day: identical payloads with a newer collection time
-   advance observation watermarks only; changed payloads replace the day's
-   values without duplicates. An exact replay including its timestamp must
-   produce no commit (covered by offline tests).
-3. Confirm previous dates remain intact and failed fetches leave the data
-   branch unchanged. Offline regression tests cover replay, overlap and
-   malformed or missing responses; those tests are not live-run evidence.
-4. Keep #17 open until the first run and rerun are verified. Missing credentials
-   or main integration are explicit external blockers, not completed controls.
+- **Views spike:** the 14-day view total at least doubles and grows by at
+  least 100 views;
+- **Stars or forks increase;**
+- **New referrer:** a referrer never stored before brings at least 5 views.
 
-## 🛡️ Branch protection
+Clones never raise an alert. GitHub counts every workflow checkout as a clone,
+so a day of pull requests raises the clone count far more than outside
+interest does, and a clone alert would fire on the repository's own CI. Clones
+are still recorded in `daily.csv` and `snapshots.csv`, shown in the alert
+issue's table and summed in the clones badge.
 
-The workflow pushes to `traffic-history` directly, so its rules differ from
-those of `main` and `release/**` ([GOVERNANCE.md](GOVERNANCE.md#-release-integration-and-synchronization)):
+At most one issue is opened per snapshot date: the job skips a date whose
+issue exists, open or closed. The issue is assigned to the issue-form account,
+labelled `P3` and `repository`, filed under the open milestone with the
+earliest due date after the collection day, and carries a dependency section
+and a target end date (seven days after the snapshot, or the day before the
+milestone's due date if that is earlier), so it passes **Issue triage**. The
+job needs at least one open milestone due after the collection day.
 
-| Rule | `traffic-history` |
-| --- | --- |
-| Deletion | Blocked. |
-| Force pushes | Blocked. |
-| Pull request required | No: the workflow commits directly. |
-| Required status checks | None. |
-| Bypass | None. |
+The job uses the workflow token with `issues: write` and `contents: read`. It
+has no environment, so it never receives the App's key or token, and it runs
+only after a successful collection. It reads the `traffic-history` commit that
+its collection pushed, or merged onto when nothing changed, not the branch's
+current tip, so a re-run of the job reads the same data even after the branch
+has moved.
 
 ## 🩺 Failure diagnosis and recovery
 
@@ -157,18 +250,19 @@ invalid, and leaves the history unchanged. Read the failing step:
 
 | Step and message | Cause | Action |
 | --- | --- | --- |
-| *Fetch*: `TRAFFIC_TOKEN is not set` | Secret missing, or the run is not in the `analytics` environment. | Follow the credential setup. |
-| *Fetch*: HTTP 401 | Token expired or revoked. | Renew the token. |
-| *Fetch*: HTTP 403 or 404 | Token lacks *Administration: read* on this repository. | Regenerate it with the settings above. |
+| *Check the traffic App configuration*: `TRAFFIC_APP_CLIENT_ID or TRAFFIC_APP_PRIVATE_KEY is not set` | Variable or secret missing, or the run is not in the `analytics` environment. | Follow *Enabling*, steps 2–5. |
+| *Create the traffic App token* fails | Wrong client ID or key, the key was deleted, or the App is not installed on this repository. | Check the App's installation, then rotate the key as above. |
+| *Fetch*: HTTP 401 | The installation token was rejected, for example because the App was uninstalled during the run. | Check the App's installation and run the workflow again. |
+| *Fetch*: HTTP 403 or 404 | The App lacks *Administration: read*, or is not installed on this repository. | Grant the permission (the account must accept the change) or install the App, then run again. |
 | *Fetch*: HTTP 429 or 5xx after retries | Rate limit or GitHub outage. | Run it again later; the next run collects the same 14 days. |
 | *Merge*: `ERROR: ...; the history was not changed` | The API returned an unexpected shape, or a history file no longer has the expected layout. | Inspect the response or the named file; a file edited by hand must keep its header and columns. |
 | *Commit and push*: `Could not push the history` | `traffic-history` kept moving, or a rule rejected the push. | Check the branch's rules and recent commits, then run again. |
-| *Check out or initialize traffic-history* fails | Remote query or checkout failed. | Inspect the error; a failed query never triggers empty initialization. If history was deleted, restore the last known commit before running again. |
+| *Check out traffic-history* fails | The branch does not exist or was deleted. | Create it as in *Enabling*, or restore it from the last known commit; never recreate it empty over existing history. |
+| *Traffic alert*: `No open milestone due after today` | Every open milestone is overdue or has no due date, or none is open. | Open the next milestone with a later due date, or move the current one's due date, then run the workflow again. |
+| *Traffic alert*: `gh issue create` fails | A label, the assignee or the milestone no longer exists. | Restore it, then run the workflow again; the history is already saved. |
 
 A failed run can always be repeated: the merge is idempotent, and each
-collection covers the last 14 days.
-
-If the branch must be repaired, change it with a new commit made with
-`python tools/traffic_history.py merge` or by hand, keeping every header.
-`python tools/traffic_history.py init --data data` recreates missing files
-with their headers and never overwrites an existing one.
+collection covers the last 14 days. To repair the branch, change it with a new
+commit made with `python tools/traffic_history.py merge` or by hand, keeping
+every header. `python tools/traffic_history.py init --data data` recreates
+missing files with their headers and never overwrites an existing one.

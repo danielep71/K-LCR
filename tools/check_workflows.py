@@ -34,7 +34,21 @@ LABELS_IF = "github.event_name != 'pull_request' && " + DEFAULT_BRANCH_REF
 ALLOWED_WRITES: dict[tuple[str, str], frozenset[str]] = {
     ("labels-sync.yml", "reconcile"): frozenset({"issues"}),
     ("pr-milestones.yml", "reconcile"): frozenset({"pull-requests"}),
+    ("traffic-history.yml", "collect"): frozenset({"contents"}),
+    ("traffic-history.yml", "alert"): frozenset({"issues"}),
 }
+
+TRAFFIC_FILE = "traffic-history.yml"
+# Opt-in, and only the default branch's reviewed copy runs.
+TRAFFIC_IF = ("vars.TRAFFIC_HISTORY == 'enabled' && (github.event_name == 'schedule' || "
+              + DEFAULT_BRANCH_REF + ")")
+TRAFFIC_KEY_STEPS = ["Check the traffic App configuration", "Create the traffic App token"]
+TRAFFIC_TOKEN_STEPS = ["Fetch traffic from the GitHub API"]
+TRAFFIC_HAS_KEY = "${{ secrets.TRAFFIC_APP_PRIVATE_KEY != '' }}"
+TRAFFIC_APP_WITH = {"client-id": "${{ vars.TRAFFIC_APP_CLIENT_ID }}",
+                    "private-key": "${{ secrets.TRAFFIC_APP_PRIVATE_KEY }}",
+                    "permission-administration": "read"}
+HISTORY_SHA = "${{ needs.collect.outputs.history-sha }}"
 
 MILESTONES_FILE = "pr-milestones.yml"
 MILESTONES_EVENTS: dict[str, Any] = {
@@ -191,6 +205,74 @@ def labels_sync_findings(workflows: Mapping[str, Workflow]) -> list[str]:
     return []
 
 
+def traffic_credential_findings(collect: Mapping[str, Any]) -> list[str]:
+    """The App key reaches two steps and its token one, which runs no repository code."""
+    findings = []
+    steps = [step for step in collect.get("steps") or [] if isinstance(step, Mapping)]
+    with_key = [step for step in steps if "TRAFFIC_APP_PRIVATE_KEY" in str(step)]
+    if [step.get("name") for step in with_key] != TRAFFIC_KEY_STEPS:
+        findings.append(f"{TRAFFIC_FILE}: only the steps {TRAFFIC_KEY_STEPS} may name "
+                        "TRAFFIC_APP_PRIVATE_KEY")
+    else:
+        if (with_key[0].get("env") or {}).get("HAS_KEY") != TRAFFIC_HAS_KEY:
+            findings.append(f"{TRAFFIC_FILE}: the configuration check may only test whether "
+                            "the key is set")
+        token = with_key[1]
+        if not str(token.get("uses", "")).startswith("actions/create-github-app-token@") or \
+                token.get("with") != TRAFFIC_APP_WITH:
+            findings.append(f"{TRAFFIC_FILE}: the App token step must use "
+                            "actions/create-github-app-token with Administration: read only")
+    with_token = [step for step in steps if "steps.app-token.outputs.token" in str(step)]
+    if [step.get("name") for step in with_token] != TRAFFIC_TOKEN_STEPS:
+        findings.append(f"{TRAFFIC_FILE}: only the step {TRAFFIC_TOKEN_STEPS} may receive the "
+                        "App token")
+    elif re.search(r"\bpython|\.py\b|source/", str(with_token[0].get("run", ""))):
+        findings.append(f"{TRAFFIC_FILE}: the step holding the App token runs repository code")
+    return findings
+
+
+def traffic_alert_findings(collect: Mapping[str, Any], alert: Mapping[str, Any]) -> list[str]:
+    """The alert job holds no credential and reads the commit its collection wrote."""
+    findings = []
+    if "environment" in alert or "secrets." in str(alert):
+        findings.append(f"{TRAFFIC_FILE}: the alert job may use no environment or secret")
+    if alert.get("needs") != "collect" or \
+            collect.get("outputs") != {"history-sha": "${{ steps.push.outputs.sha }}"}:
+        findings.append(f"{TRAFFIC_FILE}: the alert job must read collect's history-sha output")
+    steps = [step for step in alert.get("steps") or [] if isinstance(step, Mapping)]
+    history = [index for index, step in enumerate(steps)
+               if str(step.get("uses", "")).startswith("actions/checkout@")
+               and (step.get("with") or {}).get("path") == "history"]
+    if len(history) != 1 or (steps[history[0]].get("with") or {}).get("ref") != HISTORY_SHA:
+        findings.append(f"{TRAFFIC_FILE}: the alert job must check out {HISTORY_SHA} only")
+    elif history[0] == 0 or (steps[history[0] - 1].get("env") or {}) != {"HISTORY_SHA": HISTORY_SHA} \
+            or "^[0-9a-f]{40}$" not in str(steps[history[0] - 1].get("run", "")):
+        findings.append(f"{TRAFFIC_FILE}: an empty history-sha must stop the alert job before "
+                        "its checkout")
+    return findings
+
+
+def traffic_findings(workflows: Mapping[str, Workflow]) -> list[str]:
+    """The opt-in traffic collection: environment, condition, credentials and alert."""
+    if TRAFFIC_FILE not in workflows:
+        return []
+    all_jobs = dict(jobs(workflows[TRAFFIC_FILE]))
+    if sorted(all_jobs) != ["alert", "collect"]:
+        return [f"{TRAFFIC_FILE}: jobs must be exactly [collect, alert], not {sorted(all_jobs)}"]
+    collect, alert = all_jobs["collect"], all_jobs["alert"]
+    findings = []
+    if collect.get("environment") != "analytics":
+        findings.append(f"{TRAFFIC_FILE}: collect must run in the analytics environment")
+    if squash(collect.get("if", "")) != TRAFFIC_IF:
+        findings.append(f"{TRAFFIC_FILE}: collect's condition must be: {TRAFFIC_IF}")
+    if collect.get("permissions") != {"contents": "write"}:
+        findings.append(f"{TRAFFIC_FILE}: collect's permissions must be contents: write")
+    if alert.get("permissions") != {"contents": "read", "issues": "write"}:
+        findings.append(f"{TRAFFIC_FILE}: alert's permissions must be contents: read and "
+                        "issues: write")
+    return findings + traffic_credential_findings(collect) + traffic_alert_findings(collect, alert)
+
+
 def milestone_script(workflow: Workflow) -> str | None:
     """The inline Python of pr-milestones.yml's only step, or None."""
     reconcile = dict(jobs(workflow)).get("reconcile") or {}
@@ -261,6 +343,7 @@ def findings_for(workflows: Mapping[str, Workflow], dependabot: Any, governance:
         findings += action_findings(name, workflow) + permission_findings(name, workflow)
     findings += integrity_findings(workflows, governance, settings)
     findings += labels_sync_findings(workflows) + milestone_findings(workflows)
+    findings += traffic_findings(workflows)
     findings += dependabot_findings(dependabot)
     return findings
 
