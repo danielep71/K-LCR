@@ -78,9 +78,10 @@ behavior; fixture or workbook state is not evidence of a regulatory source.
   are explicit inputs; configuration is caller-owned and never mutated.
   Validate missing, non-finite or out-of-domain values before calculation.
   Do not silently choose a default profile or substitute an invalid input.
-- Issue #10 defines field-level schemas, currency conversion, date semantics
-  and missing-value representation. Issue #11 defines rounding and comparison
-  tolerances. Neither issue changes these general type rules implicitly.
+- The [input contract](methodology/DATA_CONTRACT.md) (#10) defines
+  field-level schemas, currencies, dates and missing values; the
+  [test-case rules](methodology/TEST_CASES.md) (#11) define comparison
+  tolerances. Neither changes these general type rules implicitly.
   Do not conflate EU and Basel sources or infer a profile from workbook names.
 
 The public API exposes a deliberate inventory of named entry points. It
@@ -137,12 +138,14 @@ component.
 | Check | Enforces |
 | --- | --- |
 | `tools/check_vba_conditionals.py` | Well-formed `#If`, `#ElseIf`, `#Else` and `#End If` blocks over `VBA6`, `VBA7`, `Win32`, `Win64`, `True`, `False`, `-1` and `0`, evaluated in each compilation environment (`vba6-win32`, `vba7-win32`, `vba7-win64`); no project `#Const`. Every `Declare` reachable under VBA7 is `PtrSafe`; one reachable under VBA6 uses neither `PtrSafe` nor `LongPtr`, so a declaration sits in `#If VBA7` branches. |
-| `tools/check_vba_jumps.py` | In each environment: every `GoTo`, `Resume` and `On Error GoTo` target is a label of the same procedure; no label is defined twice in a procedure; every procedure is closed. Jumps serve one error/cleanup handler: no `GoSub`, no computed `On <expression> GoTo`, no `On Error GoTo -1`, at most one `On Error GoTo` label and one other label per procedure, and no backward `GoTo`. |
+| `tools/check_vba_jumps.py` | In each environment: every `GoTo`, `Resume` and `On Error GoTo` target is a label of the same procedure; no label is defined twice in a procedure; every procedure is closed. Jumps serve one error/cleanup handler: no `GoSub`, no computed `On <expression> GoTo`, no `On Error GoTo -1`, at most one `On Error GoTo` target and one other jump target per procedure, and no backward `GoTo`. |
 | `tools/check_vba_dynamic.py` | Native, dynamic and COM constructs: `Declare`; `CreateObject` and `GetObject`, with or without parentheses; `New` of a type that is neither a component of this project nor `Collection` (as in `New Scripting.Dictionary`); `CallByName`, `AddressOf`, `Run`, `Evaluate`, `ExecuteExcel4Macro`, `OnTime`, `OnKey` and `MacroOptions`, unqualified or as a member; `[...]` expressions. None is allowed in `src/core/`, `src/api/`, `tests/unit/` or elsewhere. In `src/host/excel/` and `tests/host/` each needs a reviewed exception; a `Declare` only in `src/host/excel/`. |
 
 ### Reviewed exceptions
 
-`tools/vba-exceptions.json` lists the host-boundary uses I reviewed:
+`tools/vba-exceptions.json` lists the host-boundary uses I reviewed. It lists
+none yet, since no VBA source exists. An entry has this form; the values below
+are illustrative, not a recorded review:
 
 ```json
 {
@@ -150,9 +153,9 @@ component.
   "version": 1,
   "exceptions": [
     {"path": "src/host/excel/LCR_Excel_Output.bas", "procedure": "OpenFolder",
-     "construct": "CreateObject", "target": "Shell.Application", "issue": 42,
+     "construct": "CreateObject", "target": "Shell.Application", "issue": 123,
      "reason": "Opens the output folder for the user.", "reviewed_by": "danielep71",
-     "date": "2026-11-04"}
+     "date": "2026-11-05"}
   ]
 }
 ```

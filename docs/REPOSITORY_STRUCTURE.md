@@ -42,8 +42,10 @@ differences.
 
 Planned analytical scope includes asset/liquidity-buffer classification, inflow
 and outflow treatment, intermediate reconciliations, diagnostics and ratio
-outputs. The precise perimeter, currency and entity aggregation rules are
-requirements to resolve through those source and data-contract issues.
+outputs. My decisions A01 (the declared perimeter, no consolidation) and A02
+(one reporting currency) in the [applicability map](methodology/APPLICABILITY.md)
+fix the perimeter and currency rules, and the
+[input contract](methodology/DATA_CONTRACT.md) implements them.
 
 ## 🖥️ Implementation and host profile
 
@@ -110,14 +112,15 @@ are not claims that those components exist today.
 | CONTRIBUTING.md, CODE_OF_CONDUCT.md, INSTALLATION.md | Contributor workflow, conduct policy, host matrix and developer setup | Present |
 | CHANGELOG.md, RELEASING.md | Notable changes; versioning, milestone closeout and release procedure | Present |
 | VERSION | The newest released version | Created with the first release |
-| docs/release/ | Milestone closeout template and the v0.1.0 file audit | Present |
+| docs/release/ | Milestone closeout template and the v0.1.0 file and documentation audits | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
-| docs/methodology/ | Source register, applicability map and, later, contracts and fixture rules | Present |
+| docs/methodology/ | Source register, applicability map, stored EU sources, input, parameter and result contracts, test-case rules and validation plan | Present |
 | .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
 | src/api/ | Public VBA entry points, validation orchestration and contracts | Planned |
 | src/host/excel/ | Workbook input/output and user-interface adapters | Planned |
+| tests/contract/, tests/parameters/, tests/cases/, tests/derivations/ | Synthetic contract fixtures, parameter and result examples, registered test cases and their derivation scripts | Present |
 | tests/unit/ | Core/API tests independent of workbook layout | Planned |
 | tests/fixtures/eu/ | EU fixtures with independent expected results | Planned |
 | tests/fixtures/basel/ | Basel fixtures with independent expected results | Planned |

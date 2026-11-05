@@ -176,9 +176,9 @@ trim_trailing_whitespace = true
 #------------------------------------------------------------------------------
 # REGULATORY SOURCE COPIES
 #------------------------------------------------------------------------------
-# Convention: byte-for-byte copies with recorded hashes. Editors must not
-# change line endings, final newlines, white space or encoding. No copy is
-# committed yet.
+# Convention: files stored byte for byte with recorded hashes (README beside
+# them). Editors must not change line endings, final newlines, white space or
+# encoding.
 [docs/methodology/sources/**]
 charset = unset
 end_of_line = unset

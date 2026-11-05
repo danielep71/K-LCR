@@ -51,8 +51,9 @@
 
 The selected implementation is Excel/VBA with separate planned EU and Basel
 profiles. The portable **Repository integrity** check covers repository
-tooling, tracked text, workflows, the input and parameter contracts, the
-registered test cases and static VBA rules. It does not validate regulatory
+tooling, Python lint and types, tracked text, workflows, the input and
+parameter contracts, the registered test cases, static VBA rules, binary files
+and the changelog. It does not validate regulatory
 calculations or execute Excel. The figures in the image above are regulatory
 requirements, with their sources in [docs/assets](docs/assets/README.md#-social-preview),
 not results.

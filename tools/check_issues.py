@@ -253,7 +253,7 @@ def catalogue_labels(root: Path) -> set[str]:
 
 
 def configured_assignee(root: Path) -> str:
-    """Read the required person from the issue form, not the repository owner."""
+    """Read the required person from the issue form, not from repository metadata."""
     text = (root / ".github/ISSUE_TEMPLATE/bug.yml").read_text(encoding="utf-8")
     assignees = flow_list(text, "assignees")
     if len(assignees) != 1:
@@ -439,7 +439,8 @@ def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     source.add_argument("--repository", help="owner/name; reads GITHUB_TOKEN")
     source.add_argument("--input", type=Path, help="issues exported as GitHub REST JSON")
     source.add_argument("--check-config", action="store_true",
-                        help="check the issue forms and label catalogue only (offline)")
+                        help="check the issue forms, label catalogue, label guide and "
+                             "Dependabot only (offline)")
     parser.add_argument("--repo-name",
                         help="repository used to resolve issue URLs with --input")
     parser.add_argument("--output", type=Path, help="write the findings as JSON")
