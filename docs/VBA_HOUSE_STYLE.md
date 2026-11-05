@@ -1,8 +1,8 @@
 # ✍️ VBA house style and contracts
 
-[![Scope: VBA exports](https://img.shields.io/badge/Scope-VBA_exports-217346?style=flat-square)](#-module-rules)
+[![Scope: VBA exports](https://img.shields.io/badge/Scope-VBA_exports-217346?style=flat-square)](#%EF%B8%8F-module-rules)
 [![Contracts: Explicit](https://img.shields.io/badge/Contracts-Explicit-6f42c1?style=flat-square)](#-procedure-contracts)
-[![Host: Untested](https://img.shields.io/badge/Host-Untested-BF8700?style=flat-square)](../INSTALLATION.md#-host-matrix)
+[![Host: Untested](https://img.shields.io/badge/Host-Untested-BF8700?style=flat-square)](../INSTALLATION.md#host-matrix)
 
 This is the K-LCR adaptation of the established VBA style structure: naming,
 module rules, procedure contracts, cleanup, layout, export compatibility and
