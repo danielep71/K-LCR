@@ -93,9 +93,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 - The opt-in **Traffic history** workflow and `tools/traffic_history.py`:
   daily traffic, stars, forks, watchers and open issues merged into CSV files
   on the data-only `traffic-history` branch, badge files and a traffic alert
-  issue ([TRAFFIC.md](docs/TRAFFIC.md)). It is not active: it needs the App
-  credentials, the `TRAFFIC_HISTORY` variable and the workflow on `main`
-  (#17).
+  issue ([TRAFFIC.md](docs/TRAFFIC.md)), with three traffic badges in the
+  README. It is active on `main` since 2026-11-05 (#17).
 - The `binaries` gate: every tracked binary is a byte-preserved regulatory
   source, a UserForm `.frx` or listed with its SHA-256 in
   `.github/binary-allowlist.json`; and the
@@ -111,6 +110,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 - `python tools/check.py --ci` and the hosted Repository integrity check
   pass on each merged change. They are static checks: they neither compile
   nor run VBA, and they calculate no LCR.
+- The Traffic history workflow made its first collection on `main` on
+  2026-11-05, and a same-day rerun changed no value (#17).
 
 ### Known limitations
 
