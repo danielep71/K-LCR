@@ -1,0 +1,87 @@
+{
+ "schema": "klcr-test-expected",
+ "expected_version": 1,
+ "case": "illustrative-eu-input-totals",
+ "outputs": [
+  {
+   "quantity": "input_status",
+   "text": "pass",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/data-contract.json",
+    "locator": "findings",
+    "derivation": "The inputs follow every rule of the input contract.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "input_findings",
+   "text": "",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/data-contract.json",
+    "locator": "findings",
+    "derivation": "No finding is expected.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "illustrative_total_market_value",
+   "value": "56750.50",
+   "unit": "EUR",
+   "tolerance": {
+    "absolute": "0",
+    "relative": "0"
+   },
+   "reference": {
+    "class": "illustrative",
+    "source": null,
+    "locator": null,
+    "derivation": "Sum of the five market values, 1250.00 + 40000 + 8000.5 + 5000 + 2500, computed by hand and by the script. Not a regulatory quantity.",
+    "script": "tests/derivations/illustrative_input_totals.py",
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "illustrative_total_outflow_amount",
+   "value": "96400.25",
+   "unit": "EUR",
+   "tolerance": {
+    "absolute": "0",
+    "relative": "0"
+   },
+   "reference": {
+    "class": "illustrative",
+    "source": null,
+    "locator": null,
+    "derivation": "Sum of the six outflow amounts, 60000 + 25000.25 + 3000 + 1000 + 400 + 7000, computed by hand and by the script. Not a regulatory quantity.",
+    "script": "tests/derivations/illustrative_input_totals.py",
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  },
+  {
+   "quantity": "result_status",
+   "text": "calculated",
+   "reference": {
+    "class": "contract",
+    "source": "docs/methodology/parameter-result-contract.json",
+    "locator": "result.statuses.calculated",
+    "derivation": "Valid inputs and a complete parameter set give a calculated result.",
+    "script": null,
+    "derived_by": "Daniele Penza",
+    "reviewed_by": null,
+    "date": "2026-11-04"
+   }
+  }
+ ]
+}

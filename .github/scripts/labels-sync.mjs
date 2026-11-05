@@ -3,6 +3,7 @@
 import assert from "node:assert/strict";
 import { appendFile, readFile } from "node:fs/promises";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 
 const EXPECTED_SCHEMA_VERSION = 2;
 const DEFAULT_MANIFEST = ".github/labels.json";
@@ -10,9 +11,9 @@ const API_VERSION = "2022-11-28";
 const LABELS_PER_PAGE = 100;
 const MAX_LABEL_PAGES = 100;
 const MAX_RATE_LIMIT_RETRIES = 2;
-const MAX_RETRY_DELAY_MS = 5000;
+export const MAX_RETRY_DELAY_MS = 5000;
 
-function compareNames(left, right) {
+export function compareNames(left, right) {
   const leftKey = left.toLowerCase();
   const rightKey = right.toLowerCase();
   if (leftKey < rightKey) return -1;
@@ -25,7 +26,7 @@ function sameKeys(value, expected) {
   return JSON.stringify(actual) === JSON.stringify([...expected].sort());
 }
 
-function normalizedLiveLabel(label) {
+export function normalizedLiveLabel(label) {
   return {
     name: String(label.name ?? ""),
     color: String(label.color ?? "").toUpperCase(),
@@ -173,7 +174,7 @@ function parseArguments(argv) {
   return parsed;
 }
 
-async function loadJson(path) {
+export async function loadJson(path) {
   let text;
   try {
     text = await readFile(path, "utf8");
@@ -197,7 +198,9 @@ function splitRepository(repository) {
 
 function apiUrl(repository, suffix) {
   const [owner, repo] = splitRepository(repository);
-  return `https://api.github.com/repos/${owner}/${repo}${suffix}`;
+  // The runner sets GITHUB_API_URL, which differs from api.github.com on GitHub Enterprise.
+  const base = (process.env.GITHUB_API_URL || "https://api.github.com").replace(/\/+$/, "");
+  return `${base}/repos/${owner}/${repo}${suffix}`;
 }
 
 function sleep(milliseconds) {
@@ -215,7 +218,7 @@ function isRateLimited(response) {
     );
 }
 
-function retryDelayMs(response, attempt) {
+export function retryDelayMs(response, attempt) {
   const header = response.headers.get("retry-after");
   const retryAfter = header !== null && header.trim() !== "" ? Number(header) : NaN;
   if (Number.isFinite(retryAfter) && retryAfter >= 0) {
@@ -250,7 +253,7 @@ async function githubRequest(repository, token, method, suffix, body) {
   }
 }
 
-async function listLiveLabels(repository, token) {
+export async function listLiveLabels(repository, token) {
   const labels = [];
   for (let page = 1; page <= MAX_LABEL_PAGES; page += 1) {
     const batch = await githubRequest(
@@ -264,6 +267,47 @@ async function listLiveLabels(repository, token) {
     if (batch.length < LABELS_PER_PAGE) return labels;
   }
   throw new Error(`GitHub label pagination exceeded ${MAX_LABEL_PAGES} pages`);
+}
+
+// The issues endpoint covers pull requests; state=all adds closed items.
+async function labelInUse(repository, token, name) {
+  const batch = await githubRequest(
+    repository,
+    token,
+    "GET",
+    `/issues?state=all&per_page=1&labels=${encodeURIComponent(name)}`
+  );
+  if (!Array.isArray(batch)) throw new Error("GitHub issues response is not an array");
+  return batch.length > 0;
+}
+
+// Deleting a label removes it from every issue and pull request, closed ones
+// included, and cannot be undone: refuse before any change is applied.
+export async function assertSafeDeletions(changes, isInUse) {
+  const ambiguous = [];
+  const inUse = [];
+  for (const change of changes) {
+    if (change.action !== "delete") continue;
+    // The labels filter is a comma-separated list, so such a name cannot be queried.
+    if (change.currentName.includes(",")) {
+      ambiguous.push(change.currentName);
+    } else if (await isInUse(change.currentName)) {
+      inUse.push(change.currentName);
+    }
+  }
+  const problems = [];
+  if (inUse.length > 0) {
+    problems.push(`still used by an issue or pull request: ${inUse.map(name => JSON.stringify(name)).join(", ")}`);
+  }
+  if (ambiguous.length > 0) {
+    problems.push(`named with a comma, so their use cannot be checked: ${ambiguous.map(name => JSON.stringify(name)).join(", ")}`);
+  }
+  if (problems.length > 0) {
+    throw new Error(
+      `Refusing to prune labels ${problems.join("; ")}. No change was applied. `
+      + "Remove each label from its issues and pull requests, or add it to the manifest."
+    );
+  }
 }
 
 async function applyChanges(repository, token, changes) {
@@ -282,13 +326,29 @@ async function applyChanges(repository, token, changes) {
   }
 }
 
-function markdownEscape(value) {
-  return String(value).replaceAll("|", "\\|").replaceAll("\n", " ");
+function singleLine(value) {
+  return String(value).replace(/\r\n?|\n/g, " ");
+}
+
+// Plain text in a table cell: one line, with pipes escaped.
+export function markdownEscape(value) {
+  return singleLine(value).replaceAll("|", "\\|");
+}
+
+// A code span that the value cannot close: its delimiter is longer than any
+// run of backticks in the value. In a table cell, pipes are escaped as well.
+export function inlineCode(value, { table = false } = {}) {
+  let text = singleLine(value);
+  if (table) text = text.replaceAll("|", "\\|");
+  const longest = Math.max(0, ...(text.match(/`+/g) ?? []).map(run => run.length));
+  const fence = "`".repeat(longest + 1);
+  const padding = /^[` ]|[` ]$/.test(text) ? " " : "";
+  return `${fence}${padding}${text}${padding}${fence}`;
 }
 
 function renderLabelNames(labels) {
   if (labels.length === 0) return "none";
-  return labels.map(label => markdownEscape(JSON.stringify(label.name))).join(", ");
+  return labels.map(label => inlineCode(label.name)).join(", ");
 }
 
 function renderSummary({
@@ -311,8 +371,8 @@ function renderSummary({
   const lines = [
     "# Repository label synchronization",
     "",
-    `- Mode: \`${mode}\`${dryRun ? " (dry run)" : ""}`,
-    `- Label manifest: \`${manifestPath ?? "unavailable"}\``,
+    `- Mode: ${inlineCode(mode)}${dryRun ? " (dry run)" : ""}`,
+    `- Label manifest: ${inlineCode(manifestPath ?? "unavailable")}`,
     `- Schema: **${manifest?.schema_version ?? "unavailable"}**`,
     `- Labels: **${resolvedLabels.length}**`,
     `- Prune: **${manifest ? (manifest.prune ? "enabled" : "disabled") : "unavailable"}**`,
@@ -327,7 +387,7 @@ function renderSummary({
     `- Labels (${resolvedLabels.length}): ${renderLabelNames(resolvedLabels)}`
   );
   if (error) {
-    lines.push("", "## Failure", "", `\`${markdownEscape(error)}\``);
+    lines.push("", "## Failure", "", inlineCode(error));
     if (partial) {
       lines.push("", "The failure happened during or after reconciliation: some changes may already be applied. Compare the live labels with the manifest.");
     }
@@ -339,7 +399,7 @@ function renderSummary({
     lines.push("", "| Action | Label | Detail |", "|---|---|---|");
     for (const change of changes) {
       const detail = change.action === "update" ? change.fields.join(", ") : change.action === "delete" ? "outside the manifest" : "missing live label";
-      lines.push(`| ${change.action} | \`${markdownEscape(change.name)}\` | ${markdownEscape(detail)} |`);
+      lines.push(`| ${change.action} | ${inlineCode(change.name, { table: true })} | ${markdownEscape(detail)} |`);
     }
   }
   return `${lines.join("\n")}\n`;
@@ -459,23 +519,76 @@ async function runSelfTest(manifestPath) {
   assert.match(failureSummary, /Prune: \*\*unavailable\*\*/);
   assert.match(failureSummary, /Planned changes: \*\*1\*\*/);
   assert.match(failureSummary, /some changes may already be applied/);
-  assert.doesNotMatch(failureSummary, /Post-run exact match/);
-  const unverifiedSummary = renderSummary({
+  assert.match(summary, new RegExp(`Labels \\(${desired.length}\\):`));
+  for (const label of desired) assert.ok(summary.includes(inlineCode(label.name)), label.name);
+
+  // Values are data: no backtick, pipe or line break may close the code span or split the row.
+  assert.equal(inlineCode("plain"), "`plain`");
+  assert.equal(inlineCode("wip `x`"), "`` wip `x` ``");
+  assert.equal(inlineCode("a ``b`` c"), "```a ``b`` c```");
+  assert.equal(inlineCode("`edge"), "`` `edge ``");
+  assert.equal(inlineCode("a|b"), "`a|b`");
+  assert.equal(inlineCode("a|b", { table: true }), "`a\\|b`");
+  assert.equal(inlineCode("one\r\ntwo\rthree\nfour"), "`one two three four`");
+  assert.equal(markdownEscape("x|y\r\nz"), "x\\|y z");
+  const special = [{ name: "wip `x`", color: "ABCDEF", description: "d" },
+    { name: "needs|triage", color: "ABCDEF", description: "d" }];
+  const specialSummary = renderSummary({
+    mode: "plan",
+    manifest,
+    manifestPath: "fixture-labels.json",
+    desiredLabels: desired,
+    changes: planChanges(desired, [...structuredClone(desired), ...special])
+  });
+  assert.ok(specialSummary.includes("| delete | `` wip `x` `` | outside the manifest |"), specialSummary);
+  assert.ok(specialSummary.includes("| delete | `needs\\|triage` | outside the manifest |"), specialSummary);
+  const errorSummary = renderSummary({
     mode: "failed",
     manifest,
     manifestPath: "fixture-labels.json",
     desiredLabels: desired,
-    changes: [{ action: "create", name: "new" }],
-    verified: false,
-    partial: true,
-    error: "Post-run verification found 1 remaining difference(s)"
+    changes: null,
+    error: "HTTP 422: {\"message\":\"`bad`\"}\r\nnext line"
   });
-  assert.match(unverifiedSummary, /Mode: `failed`/);
-  assert.match(unverifiedSummary, /Post-run exact match: \*\*no\*\*/);
-  assert.match(summary, new RegExp(`Labels \\(${desired.length}\\):`));
-  for (const label of desired) assert.match(summary, new RegExp(`"${label.name}"`));
+  assert.ok(errorSummary.includes("``HTTP 422: {\"message\":\"`bad`\"} next line``"), errorSummary);
+  assert.doesNotMatch(errorSummary, /\r/);
 
-  process.stdout.write("SELF-TEST PASS: retry delays, validation and reconciliation fixtures\n");
+  // Descriptions reach the API verbatim: Markdown metacharacters in them are
+  // valid, cause no spurious update and are compared exactly.
+  const markup = structuredClone(baseline);
+  markup.labels[0].description = "Uses `code` | and a pipe";
+  const markupDesired = resolveDesired(validateManifest(markup));
+  assert.equal(planChanges(markupDesired, structuredClone(markupDesired)).length, 0,
+    "a description with backticks and pipes must be idempotent");
+  const markupPlan = planChanges(markupDesired, desired);
+  assert.deepEqual(markupPlan.map(change => change.action), ["update"]);
+  assert.deepEqual(markupPlan[0].fields, ["description"]);
+  assert.equal(markupPlan[0].target.description, "Uses `code` | and a pipe");
+
+  // Pruning refuses labels in use, and names it cannot query, before any change.
+  const asked = [];
+  const usage = used => async name => {
+    asked.push(name);
+    return used.includes(name);
+  };
+  const pruned = planChanges(desired, [...structuredClone(desired),
+    { name: "unused", color: "ABCDEF", description: "d" },
+    { name: "in-use", color: "ABCDEF", description: "d" },
+    { name: "a,b", color: "ABCDEF", description: "d" }]);
+  await assert.rejects(assertSafeDeletions(pruned, usage(["in-use"])),
+    error => /still used by an issue or pull request: "in-use"/.test(error.message)
+      && /named with a comma, so their use cannot be checked: "a,b"/.test(error.message)
+      && /No change was applied/.test(error.message));
+  assert.deepEqual(asked, ["in-use", "unused"], "a comma name is never queried");
+  asked.length = 0;
+  await assertSafeDeletions(planChanges(desired, [...structuredClone(desired),
+    { name: "unused", color: "ABCDEF", description: "d" }]), usage([]));
+  assert.deepEqual(asked, ["unused"]);
+  asked.length = 0;
+  await assertSafeDeletions(planChanges(desired, desired.slice(1)), usage(["anything"]));
+  assert.deepEqual(asked, [], "a plan without deletions makes no query");
+
+  process.stdout.write("SELF-TEST PASS: retry delays, validation, reconciliation, safe pruning and summary fixtures\n");
 }
 
 // What the run knew before a failure, so that the failure summary reports it.
@@ -518,6 +631,9 @@ async function main() {
 
   const changes = planChanges(desired, live, { prune: manifest.prune });
   runState.changes = changes;
+  if (options.mode === "reconcile") {
+    await assertSafeDeletions(changes, name => labelInUse(options.repository, process.env.GITHUB_TOKEN, name));
+  }
   if (options.mode === "plan" || options.dryRun) {
     await publishSummary(renderSummary({ mode: options.mode, ...summaryBase, changes, dryRun: options.dryRun }));
     return;
@@ -535,23 +651,26 @@ async function main() {
   await publishSummary(renderSummary({ mode: "reconcile", ...summaryBase, changes, verified }));
 }
 
-main().catch(async error => {
-  const message = error instanceof Error ? error.message : String(error);
-  try {
-    await publishSummary(renderSummary({
-      mode: "failed",
-      ...(runState.summaryBase ?? {
-        manifest: null,
-        manifestPath: null,
-        desiredLabels: []
-      }),
-      changes: runState.changes,
-      verified: runState.verified,
-      partial: runState.applying,
-      error: message
-    }));
-  } finally {
-    process.stderr.write(`${message}\n`);
-    process.exitCode = 1;
-  }
-});
+// Run only when executed directly, so that labels-drift.mjs can import the planner.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(async error => {
+    const message = error instanceof Error ? error.message : String(error);
+    try {
+      await publishSummary(renderSummary({
+        mode: "failed",
+        ...(runState.summaryBase ?? {
+          manifest: null,
+          manifestPath: null,
+          desiredLabels: []
+        }),
+        changes: runState.changes,
+        verified: runState.verified,
+        partial: runState.applying,
+        error: message
+      }));
+    } finally {
+      process.stderr.write(`${message}\n`);
+      process.exitCode = 1;
+    }
+  });
+}

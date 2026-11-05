@@ -1,0 +1,113 @@
+{
+  "schema": "klcr-data-contract",
+  "contract_version": 1,
+  "description": "Input contract of K-LCR, version 1: three CSV files describe one run. DATA_CONTRACT.md explains it; tools/check_contract.py is its reference validator.",
+  "format": {
+    "encoding": "UTF-8, with or without a byte-order mark",
+    "delimiter": ";",
+    "quote": "\"",
+    "record_separator": "LF or CRLF",
+    "decimal_separator": ".",
+    "date_format": "YYYY-MM-DD",
+    "header": "required; column order is free",
+    "blank": "an empty field is missing, never zero",
+    "max_significant_digits": 15,
+    "max_bytes": 67108864,
+    "max_records": 1000000
+  },
+  "types": {
+    "id": {"pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"},
+    "text": {"max_length": 200},
+    "code": {},
+    "flag": {"allowed": ["Y", "N"]},
+    "currency": {"pattern": "^[A-Z]{3}$"},
+    "integer": {"min": 1, "max": 999},
+    "amount": {"min": "0"},
+    "date": {"min": "2000-01-01", "max": "2199-12-31"}
+  },
+  "profiles": {
+    "EU": {"parameter_set": "EU-LCR-DA-2022-07-08"},
+    "BASEL": {"parameter_set": "BASEL-LCR-2019-12-15"}
+  },
+  "source_register_version": 1,
+  "files": {
+    "run": {
+      "file": "run.csv",
+      "records": "exactly one",
+      "key": null,
+      "columns": [
+        {"name": "run_id", "type": "id", "required": true, "description": "Identifier of the run, chosen by the provider."},
+        {"name": "profile", "type": "code", "required": true, "allowed": ["EU", "BASEL"], "description": "Regulatory profile (D002). There is no default."},
+        {"name": "parameter_set", "type": "code", "required": true, "description": "Parameter set of the profile, named after its source edition (APPLICABILITY.md)."},
+        {"name": "source_register_version", "type": "integer", "required": true, "description": "Version of the source register the run cites."},
+        {"name": "reporting_date", "type": "date", "required": true, "description": "Date at which the LCR is measured; the 30-day horizon starts after it."},
+        {"name": "reporting_currency", "type": "currency", "required": true, "description": "ISO 4217 code of the currency of every amount (A02)."},
+        {"name": "perimeter_type", "type": "code", "required": true, "allowed": ["INDIVIDUAL", "CONSOLIDATED"], "description": "Level of application of the perimeter, declared by the provider; K-LCR does not consolidate (A01)."},
+        {"name": "perimeter_id", "type": "id", "required": true, "description": "Identifier of the institution or group the data describe."},
+        {"name": "synthetic", "type": "flag", "required": true, "allowed": ["Y"], "description": "Y: the repository holds synthetic data only."}
+      ]
+    },
+    "assets": {
+      "file": "assets.csv",
+      "records": "zero or more",
+      "key": "asset_id",
+      "columns": [
+        {"name": "asset_id", "type": "id", "required": true, "description": "Unique identifier of the holding, compared case-insensitively."},
+        {"name": "category", "type": "code", "required": true, "description": "Liquid-asset category of the run's profile (categories.json)."},
+        {"name": "market_value", "type": "amount", "required": true, "description": "Market value before haircuts, in the reporting currency."},
+        {"name": "original_currency", "type": "currency", "required": true, "description": "Currency in which the asset is denominated (A02)."},
+        {"name": "requirements_met", "type": "flag", "required": true, "description": "Y when the holding meets the general and operational requirements of its profile (Art. 7 and 8; LCR30.13 to LCR30.28), as asserted by the provider."}
+      ]
+    },
+    "flows": {
+      "file": "flows.csv",
+      "records": "zero or more",
+      "key": "flow_id",
+      "columns": [
+        {"name": "flow_id", "type": "id", "required": true, "description": "Unique identifier of the outflow or inflow item, compared case-insensitively."},
+        {"name": "direction", "type": "code", "required": true, "allowed": ["OUTFLOW", "INFLOW"], "description": "Whether the item is an outflow or an inflow."},
+        {"name": "category", "type": "code", "required": true, "description": "Outflow or inflow category of the run's profile, matching the direction (categories.json)."},
+        {"name": "amount", "type": "amount", "required": true, "description": "Outstanding balance, committed amount or contractual amount, in the reporting currency; the direction gives the sign."},
+        {"name": "original_currency", "type": "currency", "required": true, "description": "Currency in which the item is denominated (A02)."},
+        {"name": "maturity_date", "type": "date", "required": false, "description": "Contractual maturity or next payment date; required for inflows. Blank for an outflow without a contractual maturity."},
+        {"name": "collateral_category", "type": "code", "required": false, "description": "Liquid-asset category of the collateral of a secured transaction or collateral swap; blank otherwise."},
+        {"name": "netting_set_id", "type": "id", "required": false, "description": "Netting set of a derivative item; blank otherwise."}
+      ]
+    }
+  },
+  "findings": {
+    "LCR-ENCODING": "The file is not valid UTF-8 or contains a NUL character.",
+    "LCR-SYNTAX": "The record is not valid CSV: a quote inside an unquoted field, text after a closing quote, or a quoted field left open.",
+    "LCR-EMPTY": "The file has no header record.",
+    "LCR-DELIMITER": "The header is a single field containing a comma or a tab: the file uses another delimiter than ';'.",
+    "LCR-HEADER-DUPLICATE": "A column name appears more than once in the header.",
+    "LCR-HEADER-MISSING": "A column of the contract is missing from the header.",
+    "LCR-HEADER-UNKNOWN": "The header names a column that is not in the contract.",
+    "LCR-FIELD-COUNT": "The record has a different number of fields from the header.",
+    "LCR-BLANK-RECORD": "Every field of the record is blank.",
+    "LCR-TOO-LARGE": "The file has more bytes or records than the contract allows.",
+    "LCR-RECORD-COUNT": "run.csv does not have exactly one record.",
+    "LCR-REQUIRED": "A required field is blank.",
+    "LCR-TYPE": "The field does not have the form its type requires.",
+    "LCR-NON-FINITE": "A number is written as NaN or an infinity.",
+    "LCR-FILE-MISSING": "A file of the run is missing from its folder.",
+    "LCR-PRECISION": "A number has more significant digits than the contract allows.",
+    "LCR-RANGE": "The value is outside the range the contract allows, such as a negative amount.",
+    "LCR-ALLOWED": "The value is not one of the allowed values.",
+    "LCR-LENGTH": "The text is longer than its type allows.",
+    "LCR-FORMULA": "A text field starts with =, +, -, @, a tab or a carriage return.",
+    "LCR-DUPLICATE-KEY": "The key repeats an earlier record of the file, compared case-insensitively.",
+    "LCR-PARAMETER-SET": "The parameter set is not the one of the run's profile.",
+    "LCR-REGISTER-VERSION": "The run cites another source register version than the contract.",
+    "LCR-CATEGORY-UNKNOWN": "The category is not a category of the run's profile for this file and direction.",
+    "LCR-OUT-OF-SCOPE": "The category is one the v0.1 decisions exclude (A03 to A06): it is rejected, never ignored.",
+    "LCR-COLLATERAL": "A secured category has no collateral category, a category that is not secured has one, or the collateral category is not a liquid-asset category of the profile.",
+    "LCR-MATURITY": "An inflow has no maturity date, or a maturity date is before the reporting date.",
+    "LCR-NETTING-SET": "A netting set is given for a category that is not a derivative category."
+  },
+  "policy": {
+    "any_finding": "The run is rejected as a whole; no figure is calculated and no earlier result is shown as current.",
+    "correction": "Invalid input is reported, never corrected, rounded or given a default.",
+    "inputs": "Input files are never modified; the report records the SHA-256 of each file as read."
+  }
+}

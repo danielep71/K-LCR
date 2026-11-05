@@ -8,7 +8,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".toml", ".txt",
+TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".toml", ".txt", ".csv",
                  ".bas", ".cls", ".frm"}
 TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore"}
 EXCLUDED = {"LICENSE"}

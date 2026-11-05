@@ -1,0 +1,17 @@
+{
+ "schema": "klcr-test-case",
+ "case_version": 1,
+ "id": "illustrative-eu-input-totals",
+ "synthetic": true,
+ "description": "Format example: the synthetic EU run of tests/contract/eu-valid, with the totals of its inputs derived by a script. It holds no regulatory value and validates nothing.",
+ "profile": "EU",
+ "category": "nominal",
+ "requirements": [],
+ "parameter_set": "tests/parameters/parameter-set-eu-illustrative.json",
+ "review": {
+  "derived_by": "Daniele Penza",
+  "reviewed_by": null,
+  "date": "2026-11-04",
+  "status": "unreviewed"
+ }
+}

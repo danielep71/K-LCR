@@ -1,6 +1,6 @@
 # 🔒 Security and confidential data
 
-[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#-security-features)
+[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#%EF%B8%8F-security-features)
 [![Reporting: Private](https://img.shields.io/badge/Reporting-Private-1f3a5f?style=flat-square)](#-report-a-vulnerability)
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-secrets)
 
@@ -67,7 +67,12 @@ other permission; it executes only its inline script from the default branch
 and never checks out pull request contents. CodeQL code scanning runs as
 GitHub's default setup, with no workflow file in the repository. Dependabot
 security updates open pull requests against `main`, reviewed like any other
-change. No traffic credential or workbook execution workflow is configured.
+change. The Traffic history workflow ([TRAFFIC.md](docs/TRAFFIC.md)) is opt-in
+and runs only from `main`: its collect job, in the `analytics` environment,
+uses a GitHub App installation token with Administration: read for the fetch
+step only and pushes to `traffic-history` with `contents: write`; its alert
+job has `issues: write` and no secret. No App credential is configured yet,
+and no workbook execution workflow exists.
 Update this inventory when workflows, tokens or security features change.
 
 ## 🛡️ Security features

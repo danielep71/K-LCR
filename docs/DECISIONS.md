@@ -24,14 +24,19 @@ exact supported builds and tested configurations remain subject to #15.
 | Licensing, imported-code provenance and confidentiality policy | #4 | [NOTICE](../NOTICE.md), [LICENSE](../LICENSE) and [SECURITY](../SECURITY.md) |
 | Source layout, encoding and generated-file handling | #5 | [Source control](SOURCE_CONTROL.md), `.editorconfig`, `.gitattributes` and `.gitignore` |
 | General host, API, numeric-type and source-authoring conventions | #6 | [VBA house style](VBA_HOUSE_STYLE.md) and [Installation](../INSTALLATION.md); actual host execution remains #14/#15 |
+| EU/Basel source editions, requirement map, source-based resolutions and interpretation register | #9 | [Source register](methodology/SOURCES.md) and [applicability map](methodology/APPLICABILITY.md) |
+| EU and Basel applicability positions for v0.1 | #126 | My decisions A01 to A09 of 2026-11-03 in the [applicability map](methodology/APPLICABILITY.md#-my-applicability-decisions--2026-11-03) |
+| Input, parameter-set and result contracts; units, reconciliation, fingerprints and diagnostics | #10 | [Input contract](methodology/DATA_CONTRACT.md), [parameter sets and results](methodology/PARAMETERS_AND_RESULTS.md), their validators and synthetic fixtures |
+| Test-case format, oracle and comparison rules, validation plan | #11 | [Test cases](methodology/TEST_CASES.md), [validation plan](methodology/VALIDATION_PLAN.md), `tools/check_test_cases.py` and two neutral examples |
+| File audit of every tracked file; exact binary allowlist | #21 | [File audit](release/FILE_AUDIT_v0.1.0.md) and the `binaries` gate |
+| README, contributor guide, conduct policy and installation guidance, verified from a fresh clone | #19 | [README](../README.md), [CONTRIBUTING.md](../CONTRIBUTING.md), [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) and [INSTALLATION.md](../INSTALLATION.md#verified-setup) |
+| Changelog, versioning, milestone closeout and release procedure | #20 | [CHANGELOG.md](../CHANGELOG.md), [RELEASING.md](../RELEASING.md), the [closeout template](release/CLOSEOUT.md) and the `changelog` gate |
+| VBA static checks: conditional compilation, jumps, native, dynamic and COM constructs, reviewed host exceptions | #12 | [Static checks](VBA_HOUSE_STYLE.md#-static-checks), the `vba-conditionals`, `vba-jumps` and `vba-dynamic` gates and their fixtures in `tools/test_check_vba.py` |
 
 ## 📋 Remaining setup decisions
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
-| Exact EU/Basel source editions, applicability and interpretation register | #9 | Authoritative sources and resolved requirements |
-| Data, parameter and output schemas; units and reconciliation | #10 | Versioned contracts and synthetic examples |
-| Independent fixture schema and comparison/rounding rules | #11 | Independently derived examples and validation criteria |
 | Neutral scaffold, workbook synchronization and real host evidence | #13, #14, #15 | Executed evidence bound to the tested candidate |
 
 Do not silently turn an unresolved item into a default. Record my decision

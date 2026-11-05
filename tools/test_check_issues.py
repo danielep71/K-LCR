@@ -19,17 +19,26 @@ from check_issues import Issue
 ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY = "example-org/sample-project"
 BLOCKED_LABEL = check_issues.BLOCKED
-READY = "## Dependencies and blocking status\n\n**Ready to start**: none.\n"
+PLANNING = "## Planning\n\n- Target end date: 2026-11-13 (Europe/Rome)\n\n"
+READY = PLANNING + "## Dependencies and blocking status\n\n**Ready to start**: none.\n"
+DUE = "2026-11-20"
 
 
 def issue(number: int, *labels: str, state: str = "open", body: str = READY,
-          assignees: tuple[str, ...] = ("triage-person",), milestone: str | None = "v0.1.0") -> Issue:
-    return Issue(number, state, labels or ("P3",), assignees, milestone, body)
+          assignees: tuple[str, ...] = ("triage-person",), milestone: str | None = "v0.1.0",
+          milestone_state: str = "open", milestone_due: str | None = DUE) -> Issue:
+    return Issue(number, state, labels or ("P3",), assignees, milestone, body,
+                 milestone_state, milestone_due)
+
+
+def dated(value: str) -> str:
+    """A ready issue body whose Planning list states the given target end date."""
+    return READY.replace("2026-11-13 (Europe/Rome)", value)
 
 
 def blocked_by(*numbers: int, heading: str = "## Dependencies and blocking status") -> str:
     lines = "\n".join(f"- #{n} — prerequisite" for n in numbers)
-    return f"## Objective\n\nx\n\n{heading}\n\n**blocked**:\n\n{lines}\n\n## Tracking\n\n#99\n"
+    return f"## Objective\n\nx\n\n{PLANNING}{heading}\n\n**blocked**:\n\n{lines}\n\n## Tracking\n\n#99\n"
 
 
 def rules(issues: list[Issue], states: dict[int, str] | None = None,
@@ -62,6 +71,81 @@ class MetadataTests(unittest.TestCase):
         self.assertEqual([(f.number, f.rule) for f in findings], [(1, "catalogue")])
 
 
+FORM = "### 🗓️ Target end date (Europe/Rome)\n\n{}\n\n### 🔗 Dependencies and blocking status\n\nNone\n"
+
+
+class TargetDateTests(unittest.TestCase):
+    def test_planning_line_form_field_and_bold_label_are_read(self) -> None:
+        bold = "**Target end date:** 2026-11-13\n\n" + READY.replace(PLANNING, "")
+        for body in (READY, FORM.format("2026-11-13"), bold, dated("2026-11-13")):
+            with self.subTest(body=body):
+                self.assertEqual(rules([issue(1, body=body)]), [])
+
+    def test_crlf_bodies_are_read(self) -> None:
+        item = {"number": 1, "state": "open", "labels": [{"name": "P3"}],
+                "assignees": [{"login": "triage-person"}],
+                "milestone": {"title": "v0.1.0", "state": "open", "due_on": "2026-11-20T00:00:00Z"},
+                "body": FORM.format("2026-11-13").replace("\n", "\r\n")}
+        parsed = check_issues.issue_from_api(item)
+        self.assertNotIn("\r", parsed.body)
+        self.assertEqual(rules([parsed]), [])
+        self.assertEqual(check_issues.target_end_dates("- Target end date: 2026-11-13\r\n"),
+                         ["2026-11-13"])
+
+    def test_missing_target_date(self) -> None:
+        self.assertEqual(rules([issue(1, body=READY.replace(PLANNING, ""))]), [(1, "target-date")])
+
+    def test_empty_form_field_is_not_a_date(self) -> None:
+        self.assertEqual(rules([issue(1, body=FORM.format("_No response_"))]), [(1, "target-date")])
+        heading_only = "### 🗓️ Target end date\n\n### 🔗 Dependencies\n\nNone\n"
+        self.assertEqual(rules([issue(1, body=heading_only)]), [(1, "target-date")])
+
+    def test_invalid_dates_are_reported(self) -> None:
+        for value in ("2026/11/13", "13-11-2026", "2026-11-13 CET", "2026-11-13 (UTC)",
+                      "2026-02-30", "2026-13-01", "next week", ""):
+            with self.subTest(value=value):
+                self.assertEqual(rules([issue(1, body=dated(value))]), [(1, "target-date")])
+
+    def test_planning_line_takes_precedence_over_the_form_even_when_invalid(self) -> None:
+        changed = "- Target end date: 2026-11-16 (Europe/Rome)\n\n" + FORM.format("2026-11-13")
+        self.assertEqual(check_issues.target_end_dates(changed), ["2026-11-16"])
+        self.assertEqual(rules([issue(1, body=changed)]), [])
+        invalid = "- Target end date: soon\n\n" + FORM.format("2026-11-13")
+        self.assertEqual(rules([issue(1, body=invalid)]), [(1, "target-date")])
+
+    def test_same_date_written_two_ways_is_not_a_conflict(self) -> None:
+        # The form answer omits the zone; the Planning line triage adds states it.
+        both = dated("2026-11-13") + "- Target end date: 2026-11-13\n" + FORM.format("2026-11-13")
+        self.assertEqual(rules([issue(1, body=both)]), [])
+
+    def test_different_planning_dates_are_reported(self) -> None:
+        conflicting = dated("2026-11-13") + "\n- Target end date: 2026-11-14\n"
+        self.assertEqual(rules([issue(1, body=conflicting)]), [(1, "target-date")])
+
+    def test_target_date_must_be_earlier_than_the_milestone_due_date(self) -> None:
+        self.assertEqual(rules([issue(1, body=dated("2026-11-19"))]), [])
+        self.assertEqual(rules([issue(1, body=dated(DUE))]), [(1, "milestone-due")])
+        self.assertEqual(rules([issue(1, body=dated("2026-11-21"))]), [(1, "milestone-due")])
+
+    def test_milestone_without_due_date_is_reported(self) -> None:
+        self.assertEqual(rules([issue(1, milestone_due=None)]), [(1, "milestone-due")])
+
+    def test_closed_milestone_is_reported(self) -> None:
+        self.assertEqual(rules([issue(1, milestone_state="closed")]), [(1, "milestone")])
+
+    def test_no_milestone_reports_only_the_missing_milestone(self) -> None:
+        self.assertEqual(rules([issue(1, milestone=None, body=dated("2026-12-31"))]),
+                         [(1, "milestone")])
+
+    def test_api_milestone_state_and_due_date_are_read(self) -> None:
+        item = {"number": 1, "state": "open", "labels": [], "assignees": [], "body": None,
+                "milestone": {"title": "v0.1.0", "state": "closed", "due_on": "2026-11-20T00:00:00Z"}}
+        parsed = check_issues.issue_from_api(item)
+        self.assertEqual((parsed.milestone_state, parsed.milestone_due), ("closed", DUE))
+        item["milestone"] = {"title": "v0.1.0", "state": "open", "due_on": None}
+        self.assertIsNone(check_issues.issue_from_api(item).milestone_due)
+
+
 class DependencyTests(unittest.TestCase):
     def test_blocked_by_an_open_prerequisite(self) -> None:
         self.assertEqual(rules([issue(2, "P3", BLOCKED_LABEL, body=blocked_by(1)), issue(1)]), [])
@@ -75,7 +159,7 @@ class DependencyTests(unittest.TestCase):
         self.assertEqual(rules([issue(2, "P3", body=blocked_by(1)), issue(1)]), [(2, "blocked")])
 
     def test_external_condition_counts_as_a_blocker(self) -> None:
-        body = "### 🔗 Dependencies and blocking status\n\nExternal condition: Excel host access\n"
+        body = PLANNING + "### 🔗 Dependencies and blocking status\n\nExternal condition: Excel host access\n"
         self.assertEqual(rules([issue(2, "P3", BLOCKED_LABEL, body=body)]), [])
         self.assertEqual(rules([issue(2, "P3", body=body)]), [(2, "blocked")])
 
@@ -85,12 +169,12 @@ class DependencyTests(unittest.TestCase):
                                {1: "open", 2: "open"}), [])
 
     def test_issue_urls_and_form_headings_are_recognised(self) -> None:
-        body = ("### 🔗 Dependencies and blocking status\n\n"
+        body = (PLANNING + "### 🔗 Dependencies and blocking status\n\n"
                 f"- https://github.com/{REPOSITORY}/issues/1\n")
         self.assertEqual(rules([issue(2, "P3", BLOCKED_LABEL, body=body), issue(1)]), [])
 
     def test_missing_section_and_unknown_reference(self) -> None:
-        self.assertEqual(rules([issue(1, body="## Objective\n\nx\n")]), [(1, "dependencies")])
+        self.assertEqual(rules([issue(1, body=PLANNING + "## Objective\n\nx\n")]), [(1, "dependencies")])
         self.assertEqual(rules([issue(2, "P3", BLOCKED_LABEL, body=blocked_by(7))]),
                          [(2, "dependencies"), (2, "blocked")])
 
@@ -98,7 +182,7 @@ class DependencyTests(unittest.TestCase):
         self.assertEqual(rules([issue(2, "P3", body=blocked_by(2))]), [])
 
     def test_named_pull_request_is_a_reference_not_a_prerequisite(self) -> None:
-        body = "## Dependencies and blocking status\n\nNone. #1 was delivered in #22.\n"
+        body = PLANNING + "## Dependencies and blocking status\n\nNone. #1 was delivered in #22.\n"
         closed = issue(1, state="closed")
         self.assertEqual(rules([issue(2, "P3", body=body), closed], pulls=frozenset({22})), [])
         # A pull request never justifies blocked, and unknown numbers are still reported.
@@ -150,6 +234,17 @@ class ConfigTests(unittest.TestCase):
         for name in (".github/labels.json", ".github/dependabot.yml", "docs/GOVERNANCE.md"):
             (root / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(ROOT / name, root / name)
+
+    def test_every_form_needs_the_required_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_configuration(root)
+            form = root / ".github/ISSUE_TEMPLATE/documentation.yml"
+            text = form.read_text(encoding="utf-8")
+            self.assertIn("id: target_end_date", text)
+            form.write_text(text.replace("id: target_end_date", "id: target"), encoding="utf-8")
+            self.assertEqual(check_issues.config_findings(root),
+                             ["documentation.yml has no target_end_date field"])
 
     def test_label_guide_explains_every_catalogue_label_once(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

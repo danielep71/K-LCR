@@ -20,7 +20,7 @@ tooling, dependency updates and fixes.
 | release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
 | `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. Never `codex/` or `claude/` ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
-| traffic-history | Reserved data-only branch; not yet created. Never a task base or merged into source branches. |
+| traffic-history | Data-only branch of the traffic history, created on 2026-11-05 as an orphan commit; the Traffic history workflow pushes to it directly ([TRAFFIC.md](TRAFFIC.md)). Never a task base or merged into source branches. |
 
 A new active release branch requires my decision. A release branch name,
 completed issue, green check or closed milestone does not authorize integration
@@ -67,6 +67,10 @@ An outstanding requested review or unresolved finding prevents task completion.
 
 ## 🌿 Release integration and synchronization
 
+Versioning, the changelog, milestone closeout, tagging and recovery after a
+release are in [RELEASING.md](../RELEASING.md); the steps below are the
+integration and synchronization it relies on.
+
 1. Prepare a release/0.1.0 -> main PR with candidate head/base SHAs, carried
    issues and PRs, validation evidence and known limitations.
 2. **Wait for explicit authorization from @danielep71 to merge this candidate
@@ -95,7 +99,9 @@ my decision on recovery; use reviewed PRs without weakening protections.
 
 Record any exception in the affected issue/PR with the reason, scope, my
 decision, residual risk and follow-on issue/milestone/date. Pending work stays
-open or is explicitly rescheduled by me; silence is not acceptance.
+open or is explicitly rescheduled by me; silence is not acceptance. Overdue
+and deferred issues, and milestone closure, follow
+[Milestones](../RELEASING.md#milestones) in RELEASING.md.
 Policy text is not proof of platform enforcement. In particular, my explicit
 authorization gate above is procedural: the zero-approval GitHub rule
 does not mechanically enforce it.
@@ -105,9 +111,13 @@ does not mechanically enforce it.
 Use the Bug report, Enhancement or Documentation form. Each issue is assigned
 to danielep71, has exactly one priority and belongs to a milestone selected
 during triage, and an explicit Target end date: YYYY-MM-DD (Europe/Rome) in
-its body. The target end date of a new issue must be earlier than the due date
-of its milestone. End-date validation, including this comparison, is planned
-in issue #8; it is not yet automated.
+its body: the forms ask for it, and a Planning list states it as a line
+`- Target end date: YYYY-MM-DD (Europe/Rome)`. In triage I may change the
+reporter's date by writing that line, which then takes precedence over the
+form answer. The target end date must be earlier than the due date of its
+milestone, and the milestone must be open and have a due date. Issue triage
+checks all three on every open issue; it does not report a target end date
+that has passed.
 Forms default bugs to P2 and enhancements/documentation to P3.
 
 | Priority | Use |
@@ -183,12 +193,15 @@ Labels do not assign priorities or milestones automatically.
 - Sync issue labels validates and self-tests changes on pull requests into
   main and release/**. Relevant pushes to main, or manual dispatch on the
   default branch, reconcile the live catalogue and verify an exact match.
-  Labels outside the selected catalogue are removed (prune is enabled).
+  Labels outside the selected catalogue are removed (prune is enabled), but
+  only unused ones: before any change, the run checks each label it would
+  delete against every issue and pull request, closed ones included, and
+  stops without changing anything if one still carries it.
 - Detect issue-label drift runs offline fixtures on relevant pull requests
   and compares live labels daily at 05:17 UTC or on manual dispatch.
   It reports differences without changing labels and retains evidence for 30 days.
-- Issue triage checks assignee, priority, milestone, catalogue membership
-  and dependency status.
+- Issue triage checks assignee, priority, an open milestone with a due
+  date, the target end date, catalogue membership and dependency status.
 - Keep milestones issue-only removes a milestone from any pull request. It
   runs on pull request events through `pull_request_target`, which always
   uses the default-branch copy of the workflow, daily at 03:17 UTC, and on
@@ -249,7 +262,9 @@ Applies to `main` and every `release/**` branch:
   4. Synchronize the release branch with main through a sync PR.
 
   A label Dependabot creates outside the catalogue shows up in the daily drift
-  report until a manual run of Sync issue labels on main removes it.
+  report until a manual run of Sync issue labels on main deletes it. That run
+  refuses while any issue or pull request, closed ones included, still carries
+  the label, so step 1 removes it first.
 - GitHub Pages publishes main `/docs`; site changes follow
   [WEBSITE.md](WEBSITE.md).
 
@@ -262,10 +277,11 @@ do not bypass that boundary to activate them early.
 
 Settings observations, their dates and the controls still to verify are kept
 in the [evidence snapshot](REPOSITORY_SETTINGS_EVIDENCE.md).
-Controlled fail/pass protection demonstrations and fresh settings verification
-remain in issue #16. Expanded portable CI and dependency retargeting were
+The required check's controlled fail/pass demonstration on a release-branch
+pull request and the settings read-back of 2026-11-05 are recorded there
+(#16). Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;
-release procedure in #20; final baseline certification in #23. Existing green
+release procedure in [RELEASING.md](../RELEASING.md) (#20); final baseline certification in #23. Existing green
 checks cover only the installed portable gates, not LCR calculations, host
 execution or these future gates.
 

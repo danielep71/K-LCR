@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "files": {
+    "docs/assets/K-LCR_social_preview.png": {
+      "sha256": "ff128d636b9059f5d999736ebfabd33e213c36dcee6f9ffd0fda3bac6cddc5ef",
+      "reason": "Social preview image rendered from docs/assets/K-LCR_social_preview.html (#18); provenance in docs/assets/README.md"
+    }
+  }
+}
