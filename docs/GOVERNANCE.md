@@ -67,6 +67,10 @@ An outstanding requested review or unresolved finding prevents task completion.
 
 ## 🌿 Release integration and synchronization
 
+Versioning, the changelog, milestone closeout, tagging and recovery after a
+release are in [RELEASING.md](../RELEASING.md); the steps below are the
+integration and synchronization it relies on.
+
 1. Prepare a release/0.1.0 -> main PR with candidate head/base SHAs, carried
    issues and PRs, validation evidence and known limitations.
 2. **Wait for explicit authorization from @danielep71 to merge this candidate
@@ -95,7 +99,9 @@ my decision on recovery; use reviewed PRs without weakening protections.
 
 Record any exception in the affected issue/PR with the reason, scope, my
 decision, residual risk and follow-on issue/milestone/date. Pending work stays
-open or is explicitly rescheduled by me; silence is not acceptance.
+open or is explicitly rescheduled by me; silence is not acceptance. Overdue
+and deferred issues, and milestone closure, follow
+[Milestones](../RELEASING.md#milestones) in RELEASING.md.
 Policy text is not proof of platform enforcement. In particular, my explicit
 authorization gate above is procedural: the zero-approval GitHub rule
 does not mechanically enforce it.
@@ -275,7 +281,7 @@ The required check's controlled fail/pass demonstration on a release-branch
 pull request and the settings read-back of 2026-11-05 are recorded there
 (#16). Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;
-release procedure in #20; final baseline certification in #23. Existing green
+release procedure in [RELEASING.md](../RELEASING.md) (#20); final baseline certification in #23. Existing green
 checks cover only the installed portable gates, not LCR calculations, host
 execution or these future gates.
 
