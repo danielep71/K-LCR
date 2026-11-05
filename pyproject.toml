@@ -1,5 +1,6 @@
 # Quality settings for the repository's Python tooling (tools/). The tooling
-# needs only the standard library; Ruff and mypy are CI and development tools,
+# needs only the standard library, except PyYAML for check_workflows.py and
+# check_issues.py --check-config; Ruff and mypy are CI and development tools,
 # installed from tools/requirements-quality-ci.txt (see INSTALLATION.md).
 
 [tool.ruff]

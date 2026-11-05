@@ -22,7 +22,7 @@
       "source_register_version": "Version of SOURCES.md the set cites.",
       "categories_version": "Version of categories.json the set covers.",
       "verified_on": "Date of the verification, YYYY-MM-DD; required when status is sourced, absent otherwise.",
-      "factors": "One entry per in-scope category of the profile: category, kind, value, source, locator; Basel discretionary categories add discretion_choice.",
+      "factors": "One entry per in-scope category of the profile except exclusion categories: category, kind, value, source, locator; Basel discretionary categories add discretion_choice.",
       "limits": "One entry per limit of the profile: id, value, source, locator."
     },
     "factor_kinds": {"asset": "haircut", "outflow": "outflow_rate", "inflow": "inflow_rate"},

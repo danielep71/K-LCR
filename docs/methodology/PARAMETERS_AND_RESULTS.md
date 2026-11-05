@@ -10,8 +10,8 @@ validator. Inputs follow the [input contract](DATA_CONTRACT.md).
 
 Passing this contract means that a file is complete and well formed. It does
 not mean that a value is the right regulatory value, or that a result is
-correct: that is for the calculation contracts and the independent fixtures
-(#11).
+correct: that is for the calculation contracts and the independent cases
+planned in [VALIDATION_PLAN.md](VALIDATION_PLAN.md).
 
 ## 🧩 Parameter sets
 
@@ -28,7 +28,7 @@ in the result's lineage.
 | `status` | `illustrative`: values chosen for synthetic fixtures only; `sourced`: every value read in its source and verified against its locator |
 | `verified_on` | The verification date; required when `sourced`, absent otherwise |
 | `source_register_version`, `categories_version` | The versions of [SOURCES.md](SOURCES.md) and [categories.json](categories.json) the set covers |
-| `factors` | Exactly one entry per in-scope category of the profile |
+| `factors` | Exactly one entry per in-scope category of the profile, except the categories whose treatment is `exclusion`, which have none |
 | `limits` | Exactly one entry per limit of the profile |
 
 Each **factor** has a `category`, a `kind` (`haircut` for liquid assets,
@@ -123,4 +123,5 @@ must give in [expected.json](../../tests/parameters/expected.json). The
 - Whether a value is the one its locator states: that is the verification a
   `sourced` set records.
 - Whether a result's figures are arithmetically right, or whether its
-  components add up: that belongs to the calculation contracts and #11.
+  components add up: that belongs to the calculation contracts and the planned
+  cases of [VALIDATION_PLAN.md](VALIDATION_PLAN.md).

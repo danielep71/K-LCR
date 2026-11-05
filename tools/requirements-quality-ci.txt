@@ -1,5 +1,5 @@
 # Hash-locked CPython 3.13 / Linux x86_64 CI requirements for Ruff, mypy and
-# PyYAML (the workflow-invariants gate).
+# PyYAML (the workflow-invariants and issue-config gates).
 # Every hash was checked against PyPI. Regenerate only after reviewing package
 # provenance and wheel hashes; see INSTALLATION.md.
 # CI installs with --only-binary=:all: --require-hashes.

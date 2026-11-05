@@ -2,9 +2,10 @@
 
 `check.py` is the single entry point for the repository's checks. The same
 command runs locally and in the `Repository integrity` workflow. It checks the
-repository tooling, the label and issue-form configuration, the format of
-tracked text, the workflows, the contracts, the registered test cases and the
-static VBA rules and the changelog. It never compiles or runs VBA in Excel and never validates an
+repository tooling, Python lint and types, the label and issue-form
+configuration, the format of tracked text, the workflows, the contracts, the
+registered test cases, the static VBA rules, the binary files and the
+changelog. It never compiles or runs VBA in Excel and never validates an
 LCR calculation.
 
 ## ▶️ Running the checks
@@ -35,13 +36,13 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the contract and case checkers, and the VBA checks' valid and invalid fixtures (`test_check_vba.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, and the VBA checks' valid and invalid fixtures (`test_check_vba.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
 | `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have the acceptance, validation, dependencies and target end date fields; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). Without PyYAML it fails on GitHub Actions and is NOT RUN locally. |
 | `format-fixtures` | The tracked-text checker's own fixtures: valid samples pass, malformed ones fail (`check_files.py --self-test`). |
-| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript, TOML, CSV, plain text, VBA exports and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
+| `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript modules (`.mjs`), TOML, CSV, plain text, HTML, CSS, SVG, XML, VBA exports and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
 | `ruff` | Lint of `tools/` with the rules in `pyproject.toml`. |
 | `ruff-complexity-probe` | The complexity ceiling is active: a synthetic complexity-15 function passes and one at 16 is rejected. |
 | `mypy` | `mypy --strict` over `tools/`, tests included. |
@@ -53,7 +54,7 @@ versions; each gate also writes `<gate>.log`.
 | `parameter-result-contract` | Every parameter-set and result example in `tests/parameters/` gives exactly the findings recorded in `tests/parameters/expected.json` (`check_parameters.py --check-fixtures`). The contract is [docs/methodology/PARAMETERS_AND_RESULTS.md](../docs/methodology/PARAMETERS_AND_RESULTS.md). |
 | `vba-conditionals` | Every `#If` block of the tracked VBA components evaluates in each compilation environment (VBA6 Win32, VBA7 Win32, VBA7 Win64); every `Declare` reachable under VBA7 is `PtrSafe` and none reachable under VBA6 uses `PtrSafe` or `LongPtr` (`check_vba_conditionals.py`). |
 | `vba-jumps` | Every jump target is a label of the same procedure, in each environment; jumps serve one error/cleanup handler: no `GoSub`, computed `On ... GoTo`, `On Error GoTo -1` or backward `GoTo` (`check_vba_jumps.py`). |
-| `vba-dynamic` | No `Declare`, `CreateObject`, `GetObject`, `New` automation object, `CallByName`, `Run`, `Evaluate` or other dynamic call outside the host homes; there, each use needs a reviewed entry in `tools/vba-exceptions.json`, and stale entries fail (`check_vba_dynamic.py`). |
+| `vba-dynamic` | No `Declare`, `CreateObject`, `GetObject`, `New` automation object, `CallByName`, `Run`, `Evaluate` or other dynamic call outside the host homes; there, each use needs a reviewed entry in `tools/vba-exceptions.json` (a `Declare` only in `src/host/excel/`, a `CreateObject` only with a literal ProgID), and stale entries fail (`check_vba_dynamic.py`). |
 | `binaries` | Every tracked binary file, by `.gitattributes` or by a NUL byte anywhere in it, is a byte-preserved regulatory source under `docs/methodology/sources/`, a UserForm `.frx` beside its `.frm`, or listed in `.github/binary-allowlist.json` with its current SHA-256 and a reason; an allowlisted file whose content changed fails, and so does an Office package with macros or personal metadata (`check_binaries.py`). |
 | `changelog` | `CHANGELOG.md` and `VERSION` follow the [date and version rules](../CHANGELOG.md#date-and-version-rules): headings, real dates, order, link references into this repository, no `VERSION` before the first dated release and the newest release afterwards; the changelog introduction, the *Current status* of [RELEASING.md](../RELEASING.md#current-status) and the README agree on the release state, with no placeholder line, "Release Candidate" or unchecked task item; a released section equals its content at its tag, and a shallow checkout fails once a release exists, which is why the workflow checks out the full history and tags (`check_changelog.py --repository danielep71/K-LCR`). It never tags or publishes. |
 

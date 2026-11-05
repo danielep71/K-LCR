@@ -100,6 +100,10 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   `.github/binary-allowlist.json`; and the
   [file audit](docs/release/FILE_AUDIT_v0.1.0.md) of every tracked file, with
   its findings and their disposition (#21).
+- The [documentation audit](docs/release/DOC_AUDIT_v0.1.0.md): every
+  document, comment and docstring compared with the implemented behaviour, its
+  findings fixed or recorded; the tracked-text check now also covers HTML,
+  CSS, SVG and XML (#22).
 - [CONTRIBUTING.md](CONTRIBUTING.md), a [code of conduct](CODE_OF_CONDUCT.md)
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel

@@ -1,7 +1,9 @@
 """Valid and invalid CHANGELOG.md and VERSION fixtures for tools/check_changelog.py.
 
-Each fixture is a temporary directory holding only the two files. The
-versions and dates are synthetic; no release of this repository is implied.
+Each fixture is a temporary directory holding CHANGELOG.md, VERSION and, where
+a test needs them, RELEASING.md and README.md; FrozenSectionTest builds
+temporary Git repositories with tags. The versions and dates are synthetic; no
+release of this repository is implied.
 """
 
 from __future__ import annotations

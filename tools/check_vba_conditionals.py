@@ -7,8 +7,8 @@ symbol, a project ``#Const``, an unbalanced block. A ``Declare`` reachable
 under VBA7 must be ``PtrSafe``, and one reachable under VBA6 must not use
 ``PtrSafe`` or ``LongPtr``, which VBA6 does not know: a declaration therefore
 sits in ``#If VBA7`` branches (docs/VBA_HOUSE_STYLE.md, Module rules). The
-reachable-source model is shared with check_vba_jumps.py and
-check_vba_dynamic.py.
+reachable-source model is shared with check_vba_jumps.py; check_vba_dynamic.py
+reads every branch at once.
 """
 
 from __future__ import annotations

@@ -54,7 +54,7 @@ Verified on Linux. The repository checks need:
 | --- | --- | --- |
 | Git | Any recent version | Every check reads the Git index |
 | Python | 3.13 | `tools/check.py` and its gates |
-| Ruff, mypy, PyYAML | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `mypy`, `issue-config`, `workflow-invariants` |
+| Ruff, mypy, PyYAML | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `ruff-complexity-probe`, `mypy`, `mypy-strict-probe`, `issue-config`, `workflow-invariants` |
 | Node.js | 22 | The label scripts in `.github/scripts/` |
 | actionlint | 1.7.12 | Workflow syntax |
 
@@ -110,17 +110,17 @@ demonstrate no VBA behaviour and no LCR calculation.
 
 ## ✅ Verified setup
 
-On 2026-11-05 (#19) I ran the shell blocks of *Get the source* and *Developer setup*, extracted verbatim from this page, in a new empty folder:
+On 2026-11-05 I ran the shell blocks of *Get the source* and *Developer setup*, extracted verbatim from this page, in a new empty folder: first for #19, then again for the documentation audit (#22), after the `binaries` gate was added. The table records the second run:
 
 | Item | Value |
 | --- | --- |
-| Commit | `a8784cb0319b8f3f5a9962a5194c801275f2f535` on `release/0.1.0` |
+| Commit | `fc98b1756115cec0c8a873e7feb6a83edba2bf81` on `release/0.1.0` (first run: `a8784cb`, 20 gates) |
 | System | Ubuntu 24.04.5 LTS, Linux x86_64 |
 | Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.16.6, mypy 2.3.1, PyYAML 6.0.3 |
 | Fresh clone | `git status --short` printed nothing, before and after the setup; the virtual environment is ignored and actionlint sits in `../klcr-tools` |
-| actionlint archive | `sha256sum --check --strict` printed `OK` |
-| `python tools/check.py --ci` | All 20 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |
-| Without actionlint on `PATH` | `actionlint: NOT RUN`, overall FAIL, exit code 1; with `--allow-missing`, INCOMPLETE and exit code 0 |
+| actionlint archive | `sha256sum --check --strict` printed `OK`; a first attempt stopped at the download with HTTP 504, and the repeated run passed |
+| `python tools/check.py --ci` | All 21 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |
+| Without actionlint on `PATH` | With `--ci`: `actionlint: NOT RUN`, overall FAIL, exit code 1; with `--allow-missing` instead (the two options exclude each other), INCOMPLETE and exit code 0 |
 | With an untracked file and `--ci` | "working tree is dirty: --ci requires a clean checkout", FAIL, exit code 1 |
 
 **Not executed:** the developer setup on Windows or macOS, and every Excel

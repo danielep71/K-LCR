@@ -33,4 +33,5 @@ of site maintenance.
 - Preserve source attribution and the MPL-2.0 record in [NOTICE](../NOTICE.md).
 - Run repository integrity, check HTML anchors and assets, parse SVG/sitemap,
   inspect desktop and narrow layouts and keyboard navigation, and verify the
-  deployed page. Record candidate, deployment and live URL in #63.
+  deployed page. Record candidate, deployment and live URL in the pull request
+  that changes the site.

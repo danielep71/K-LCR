@@ -71,15 +71,16 @@ change. The Traffic history workflow ([TRAFFIC.md](docs/TRAFFIC.md)) is opt-in
 and runs only from `main`: its collect job, in the `analytics` environment,
 uses a GitHub App installation token with Administration: read for the fetch
 step only and pushes to `traffic-history` with `contents: write`; its alert
-job has `issues: write` and no secret. No App credential is configured yet,
-and no workbook execution workflow exists.
+job has `issues: write` and no secret. The App's client ID and private key
+are in the `analytics` environment since 2026-11-05 (#17); no workbook
+execution workflow exists.
 Update this inventory when workflows, tokens or security features change.
 
 ## 🛡️ Security features
 
 Current security-feature observations, verification dates, evidence and
 limitations are maintained in the [repository settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md#security-settings).
-Its 2026-10-29 observations supersede the tables recorded here on 2026-10-28
+Its dated observations (read-back of 2026-11-05, #16) supersede the tables recorded here on 2026-10-28
 (#66) and 2026-10-29 (#85). This policy remains authoritative for reporting and
 handling vulnerabilities; a settings record does not establish scan coverage
 or enforcement.

@@ -10,7 +10,7 @@
     {
       "name": "blocked",
       "color": "B60205",
-      "description": "Cannot proceed until a named dependency is complete"
+      "description": "A named open prerequisite or an External condition: line prevents progress"
     },
     {
       "name": "bug",
