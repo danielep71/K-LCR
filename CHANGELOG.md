@@ -81,7 +81,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).
 - The input, parameter-set and result contracts, with validators and
-  synthetic fixtures (#10).
+  synthetic fixtures (#10); Art. 12(1)(f) assets are a Level 2B category in
+  scope (#148).
 - The test-case format, the oracle and tolerance rules and the validation
   plan, with two illustrative cases (#11).
 - The project website, README branding and the social preview (#63, #18).

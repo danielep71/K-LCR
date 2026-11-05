@@ -69,8 +69,8 @@ on a fresh clone of `fc98b17`, because the recorded run predated the
 | M7 | `VALIDATION_PLAN.md` said every `contract` value is executed; `result_status` is registered only. Its EU-only rows did not say so | Fixed |
 | M8 | `TEST_CASES.md`: `input_findings` holds distinct codes; the domain rule is not part of today's comparison; the checker's `CASE-*` codes were undocumented | Fixed |
 | M9 | `SOURCES.md` called every stored file a byte-for-byte copy with its hash in the retrieval record; the SRC-01 file is an extract with its hash in `sources/README.md` | Fixed |
-| M10 | `categories.json` places Art. 12(1)(f) under A03, which names Art. 13 to 16 | Open: my decision, #148 |
-| M11 | `categories.json` notes cite CRR articles that are not registered locators of `SRC-01` | Open: #148 |
+| M10 | `categories.json` places Art. 12(1)(f) under A03, which names Art. 13 to 16 | Resolved after this audit by my decision in #148: a Level 2B category in scope |
+| M11 | `categories.json` notes cite CRR articles that are not registered locators of `SRC-01` | Resolved after this audit in #148: marked as cross-references that `SRC-02` makes |
 
 ### Tooling
 
@@ -194,7 +194,7 @@ without naming any tool (#151).
 | `docs/methodology/SOURCES.md` | Methodology | Fixed |
 | `docs/methodology/TEST_CASES.md` | Methodology | Fixed |
 | `docs/methodology/VALIDATION_PLAN.md` | Methodology | Fixed |
-| `docs/methodology/categories.json` | Methodology | Structure, counts and spot checks; findings open in #148 |
+| `docs/methodology/categories.json` | Methodology | Structure, counts and spot checks; two findings, resolved in #148 |
 | `docs/methodology/data-contract.json` | Methodology | Fixed |
 | `docs/methodology/parameter-result-contract.json` | Methodology | Fixed |
 | `docs/methodology/sources/README.md` | Methodology | No finding |

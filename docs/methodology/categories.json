@@ -1,8 +1,8 @@
 {
  "schema": "klcr-categories",
- "categories_version": 1,
+ "categories_version": 2,
  "source_register_version": 1,
- "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions.",
+ "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions. A CRR article named in a description or a note is a cross-reference that the SRC-02 point of the category's locator makes; it is not a locator of SRC-01.",
  "profiles": {
   "EU": {
    "assets": [
@@ -189,6 +189,14 @@
      "description": "Covered bonds collateralised exclusively by specified CRR Art. 129(1) assets with a low risk-weight pool and the overcollateralisation and disclosure set in the point.",
      "treatment": "haircut",
      "notes": "Issue size, cover pool composition and risk weights, overcollateralisation, monthly disclosure; haircut per Art. 12(2)(d); points (ii) and (iii) are deleted."
+    },
+    {
+     "code": "EU-A-L2B-NON-INTEREST-BEARING",
+     "level": "L2B",
+     "locator": "Art. 12(1)(f)",
+     "description": "Non-interest bearing assets held by a credit institution that cannot hold interest bearing assets for reasons of religious observance: claims on or guaranteed by central banks, central governments, or third-country regional governments, local authorities or public sector entities, with at least credit quality step 5.",
+     "treatment": "haircut",
+     "notes": "Holder's statutory restriction; issuer/guarantor type and credit quality step (Art. 114 CRR); haircut per Art. 12(2)(e); Art. 12(3) lets the authority waive criteria of Art. 12(1)(b) for such institutions."
     }
    ],
    "outflows": [
@@ -998,11 +1006,6 @@
     {
      "code": "EU-A-COOP-IPS-DEPOSIT",
      "locator": "Art. 16",
-     "decision": "A03"
-    },
-    {
-     "code": "EU-A-L2B-NON-INTEREST-BEARING",
-     "locator": "Art. 12(1)(f)",
      "decision": "A03"
     },
     {
