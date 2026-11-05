@@ -55,5 +55,5 @@ review. -->
 - [ ] The base follows docs/GOVERNANCE.md: release/0.1.0 for tasks; main only for an approved integration.
 - [ ] Each linked issue has the assignee, exactly one priority label and a milestone; this PR has no milestone and carries the labels of its issue.
 - [ ] Scope is focused: no unrelated changes, local artifacts or generated output.
-- [ ] Documentation affected by the change is updated.
+- [ ] Documentation affected by the change is updated, and `CHANGELOG.md` has an `[Unreleased]` entry for a material change (or none is needed).
 - [ ] No tokens, credentials, real portfolio or client data.

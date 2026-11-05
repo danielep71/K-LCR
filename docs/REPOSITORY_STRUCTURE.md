@@ -107,6 +107,9 @@ are not claims that those components exist today.
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
 | AGENTS.md | Editorial and assistant rules | Present |
+| CHANGELOG.md, RELEASING.md | Notable changes; versioning, milestone closeout and release procedure | Present |
+| VERSION | The newest released version | Created with the first release |
+| docs/release/ | Milestone closeout template | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
 | docs/methodology/ | Source register, applicability map and, later, contracts and fixture rules | Present |
 | .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |

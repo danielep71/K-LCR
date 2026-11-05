@@ -18,7 +18,8 @@ from typing import Any
 
 SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text, "
          "workflow syntax and invariants, input and parameter contracts, registered test cases, "
-         "VBA static checks; no VBA compilation, no Excel execution and no LCR calculation.")
+         "VBA static checks, changelog and release state; no VBA compilation, no Excel execution "
+         "and no LCR calculation.")
 
 
 @dataclass(frozen=True)
@@ -111,6 +112,8 @@ def default_gates() -> list[Gate]:
         Gate("vba-conditionals", "python", (python, "tools/check_vba_conditionals.py")),
         Gate("vba-jumps", "python", (python, "tools/check_vba_jumps.py")),
         Gate("vba-dynamic", "python", (python, "tools/check_vba_dynamic.py")),
+        Gate("changelog", "python",
+             (python, "tools/check_changelog.py", "--repository", "danielep71/K-LCR")),
     ]
 
 

@@ -4,7 +4,7 @@
 command runs locally and in the `Repository integrity` workflow. It checks the
 repository tooling, the label and issue-form configuration, the format of
 tracked text, the workflows, the contracts, the registered test cases and the
-static VBA rules. It never compiles or runs VBA in Excel and never validates an
+static VBA rules and the changelog. It never compiles or runs VBA in Excel and never validates an
 LCR calculation.
 
 ## ▶️ Running the checks
@@ -54,6 +54,7 @@ versions; each gate also writes `<gate>.log`.
 | `vba-conditionals` | Every `#If` block of the tracked VBA components evaluates in each compilation environment (VBA6 Win32, VBA7 Win32, VBA7 Win64); every `Declare` reachable under VBA7 is `PtrSafe` and none reachable under VBA6 uses `PtrSafe` or `LongPtr` (`check_vba_conditionals.py`). |
 | `vba-jumps` | Every jump target is a label of the same procedure, in each environment; jumps serve one error/cleanup handler: no `GoSub`, computed `On ... GoTo`, `On Error GoTo -1` or backward `GoTo` (`check_vba_jumps.py`). |
 | `vba-dynamic` | No `Declare`, `CreateObject`, `GetObject`, `New` automation object, `CallByName`, `Run`, `Evaluate` or other dynamic call outside the host homes; there, each use needs a reviewed entry in `tools/vba-exceptions.json`, and stale entries fail (`check_vba_dynamic.py`). |
+| `changelog` | `CHANGELOG.md` and `VERSION` follow the [date and version rules](../CHANGELOG.md#date-and-version-rules): headings, real dates, order, link references into this repository, no `VERSION` before the first dated release and the newest release afterwards; the changelog introduction, the *Current status* of [RELEASING.md](../RELEASING.md#current-status) and the README agree on the release state, with no placeholder line, "Release Candidate" or unchecked task item; a released section equals its content at its tag (`check_changelog.py --repository danielep71/K-LCR`). It never tags or publishes. |
 
 The label gates run on every pull request here, although the label workflows
 run on a pull request only when it changes label files. Live label
