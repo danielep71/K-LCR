@@ -110,8 +110,9 @@ Accepted as they are:
 - `TEST_CASES.md` keeps its default tolerance bounds; the illustrative cases
   state an exact comparison, which the rules allow.
 
-Open: `AGENTS.md` and `CONTRIBUTING.md` forbid two branch prefixes by naming
-the tools that propose them. Whether to rephrase that is my decision.
+After the audit: `AGENTS.md`, `CONTRIBUTING.md` and `docs/GOVERNANCE.md`
+forbade two branch prefixes by naming the tools that propose them. I decided to reword the rule
+without naming any tool (#151).
 
 ## 🧪 Checks after the fixes
 

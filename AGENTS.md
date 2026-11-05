@@ -29,7 +29,7 @@ Branching, review and integration procedures are in
   the issue number and a descriptive slug, for example
   `fix/42-empty-input-report`.
 - Release branches are `release/X.Y.Z`, without a `v`.
-- Never use `codex/` or `claude/`, whatever a tool proposes.
+- No other prefix is allowed, whatever prefix a tool proposes.
 
 ## 🧱 Intended defaults
 
