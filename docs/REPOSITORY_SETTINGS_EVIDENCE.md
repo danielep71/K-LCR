@@ -9,7 +9,8 @@ for another repository.
 GitHub's live settings remain authoritative. This file records observations,
 not automatic enforcement or authorization to change a setting.
 
-Snapshot date: **2026-10-29 (Europe/Rome)**. Tracking: [#90](https://github.com/danielep71/K-LCR/issues/90).
+Snapshot date: **2026-11-05 (Europe/Rome)**. Tracking: [#16](https://github.com/danielep71/K-LCR/issues/16);
+the first snapshot of 2026-10-29 was made under [#90](https://github.com/danielep71/K-LCR/issues/90).
 
 ## Reading the register
 
@@ -25,8 +26,10 @@ numerical validation.
 
 ## General settings
 
-Evidence: [repository API](https://api.github.com/repos/danielep71/K-LCR), read 2026-10-29.
-All rows below were verified on that date unless stated otherwise.
+Evidence: [repository API](https://api.github.com/repos/danielep71/K-LCR), read 2026-11-05.
+All rows below were verified on that date unless stated otherwise. They match
+the general rows of the [portable register](REPOSITORY_SETTINGS.md#general),
+including the legacy downloads flag (off).
 
 | Setting | Desired baseline | Observed setting | Exceptions / interpretation |
 | --- | --- | --- | --- |
@@ -38,15 +41,18 @@ All rows below were verified on that date unless stated otherwise.
 | Delete merged head branches | Enabled | Enabled | Release and traffic branches remain protected by rulesets. Branches of closed, unmerged pull requests are not deleted. |
 | Update-branch suggestions | Enabled | Enabled | Governance prohibits using this on protected integration branches. |
 | Web commit sign-off | No change proposed | Not required | Separate from reviews and signed-commit requirements. |
-| Pages / homepage | Enabled / project URL | Pages enabled; https://danielep71.github.io/K-LCR/ | Source as I set it: main, `/docs`, enabled 2026-10-29 (#63). Run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
-| Topics | Relevant discovery terms | basel, basel-iii | Topic count is not a security measure. |
+| Pages / homepage | Enabled / project URL | Homepage https://danielep71.github.io/K-LCR/ | The Pages API returns 403 to this read-back. Historical: source main, `/docs`, enabled 2026-10-29 (#63); run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
+| Description / topics | LCR-specific | Description and 12 topics set by me on 2026-11-04 (#18): basel, basel-iii, crr, crr3, excel, excel-vba, lcr, liquidity-coverage-ratio, liquidity-risk, model-validation, risk, risk-management | The social preview is the PNG of `docs/assets/`; its served copy matched the recorded SHA-256 on 2026-11-04. Topic count is not a security measure. |
 | License | MPL-2.0 | MPL-2.0 detected | Selected by me on 2026-10-28 ([NOTICE](../NOTICE.md)). |
 
 ## Branch and tag rulesets
 
-All five rulesets were read in full through the API on **2026-10-29**:
-active enforcement, empty bypass lists, and no ref exclusions. This confirms
-configuration, not destructive enforcement tests.
+All five rulesets were read in full through the API on **2026-11-05**:
+active enforcement, empty bypass lists (`current_user_can_bypass`: never), no
+ref exclusions, and no change since 2026-10-29 (their `updated_at`). They
+match the [portable register](REPOSITORY_SETTINGS.md#rulesets). The
+[enforcement demonstration](#enforcement-demonstration) below tests the
+required check on a pull request.
 
 | Rule / target | Desired and observed setting | Evidence | Exceptions |
 | --- | --- | --- | --- |
@@ -57,21 +63,67 @@ configuration, not destructive enforcement tests.
 | Protect traffic history: traffic-history | Deletion and force pushes blocked | [26063762](https://github.com/danielep71/K-LCR/rules/26063762) | No PR or CI requirement. No traffic-history branch exists yet (#17). |
 
 Both PR rules disable stale-review dismissal, code-owner review and last-push
-approval; no required reviewers are configured. Zero approvals accommodates
+approval; no required reviewers are configured. Both also carry
+`require_extra_approval_for_unattributed_changes: true`, a parameter the
+portable register does not describe; with zero required approvals it adds no
+approval in practice. The rules API, read 2026-11-05, confirms what applies
+to each branch: on `main`, ruleset 26063609 only; on `release/0.1.0`,
+26063663 and the separate deletion rule 26063689; on `traffic-history`,
+26063762. Zero approvals accommodates
 the sole-owner model; it does not establish independent approval. The rulesets
 require only Repository integrity, not a separate CodeQL check or code-scanning rule.
 
 Release synchronization uses a **main-to-release PR with a merge commit**,
 not a direct fast-forward or an administrator exception. Follow the ordering
 and divergence rules in [Release integration](GOVERNANCE.md#-release-integration-and-synchronization).
-Controlled fail/pass enforcement demonstrations remain open in #16.
+
+<a id="enforcement-demonstration"></a>
+
+## Enforcement demonstration
+
+Pull request #135 into `release/0.1.0` (#16) showed on 2026-11-05 that the
+required check blocks a merge and that a passing run then permits it. The
+rulesets were not changed for the demonstration.
+
+| Step | Commit | Observation |
+| --- | --- | --- |
+| 1. Deliberate defect | `f798a0f` | A trailing space in this section. `Repository integrity` [failed](https://github.com/danielep71/K-LCR/actions/runs/41985309189): only `tracked-text`, on that line; every other gate passed. |
+| 2. Merge attempt | `f798a0f` | The pull request's merge state was `blocked`. A squash merge through the REST API at 07:11 UTC, with the expected head SHA, was refused: HTTP 405, "Repository rule violations found. Required status check "Repository integrity" is failing." Nothing reached `release/0.1.0`. |
+| 3. Correction | the next commit | Removes the trailing space and records steps 1 and 2. |
+| 4. Merge | the final head | Permitted only once `Repository integrity` passes on the final head and the review threads are resolved; the run and the merge commit are recorded in the resolution of #16. |
+
+The demonstration covers the release-branch ruleset (26063663). The `main`
+ruleset (26063609) requires the same check with the same strict policy; it
+was not exercised with a failing commit, since a change to `main` needs my
+approval of an integration.
+
+## Required-check coverage and branch cleanup
+
+The workflow runs on every pull request into `main` and `release/**`, with no
+path filter, so documentation-only and synchronization pull requests are
+covered; `workflow-invariants` rejects a trigger filter. Run evidence:
+
+| Pull request kind | Example | `Repository integrity` |
+| --- | --- | --- |
+| Task, code | #133 into release/0.1.0 | [passed on `ca6c9a2`](https://github.com/danielep71/K-LCR/actions/runs/41849521520) |
+| Task, documentation and image only | #134 into release/0.1.0 | [passed on `b1c5e49`](https://github.com/danielep71/K-LCR/actions/runs/41897453637) |
+| Release integration, release/0.1.0 into main | #123 | [passed on `05d72eb`](https://github.com/danielep71/K-LCR/actions/runs/41705368390) |
+| Synchronization, main into release/0.1.0 | #124 | [passed on `12269d9`](https://github.com/danielep71/K-LCR/actions/runs/41705938716) |
+| Dependabot version update | #118 into release/0.1.0, open | [passed on `3d1b981`](https://github.com/danielep71/K-LCR/actions/runs/41701226141) |
+
+**Head-branch deletion,** read 2026-11-05: the head branches of the merged
+#133 and #134 no longer exist. Branches of closed, unmerged pull requests
+stay: `dependabot/pip/tools/release/0.1.0/python-quality-tools-67e7a4b5de`
+(#82, closed) remains. CodeQL analyses `main` on push and on its weekly
+schedule; it did not report on #133 or #134, so it does not cover pull requests
+into `release/0.1.0`.
 
 ## Security settings
 
-API rows were read from the public GitHub API on **2026-10-29**; private
+API rows were read from the public GitHub API on **2026-11-05**; private
 vulnerability reporting, secret scanning and push protection were first read
-back on 2026-10-28 (#66). The Settings UI was not read for this snapshot, so
-UI-only rows are historical or unverified.
+back on 2026-10-28 (#66). UI-only rows are historical or unverified unless
+they name a read date.
 
 | Setting | Desired baseline | Observed state / evidence | Exception or remaining verification |
 | --- | --- | --- | --- |
@@ -85,7 +137,7 @@ UI-only rows are historical or unverified.
 | Secret scanning | Enabled | Verified enabled, API | No secret-injection test performed. |
 | Push protection | Enabled | Verified enabled, API | No blocked-push demonstration performed. |
 | Non-provider patterns / validity checks | Retain current choice | Verified disabled / disabled, API | Optional controls to evaluate separately. |
-| CodeQL | Configured; validate coverage | Verified default setup, API: Actions and Python, default query suite, remote threat model, weekly. Run evidence: [CodeQL Setup](https://github.com/danielep71/K-LCR/actions/runs/40829870792) on `4176184`, [push analysis](https://github.com/danielep71/K-LCR/actions/runs/40836157419) on `0547772` and analysis on PR #87 | Not observed on PRs into release/0.1.0 (#86). Not a required check. No claim of VBA analysis. Alerts return 403 without admin access. |
+| CodeQL | Configured; validate coverage | Verified default setup, API 2026-11-05: Actions and Python, default query suite, remote threat model, weekly, last updated 2026-10-29. Run evidence: [CodeQL Setup](https://github.com/danielep71/K-LCR/actions/runs/40829870792) on `4176184`, [push analysis](https://github.com/danielep71/K-LCR/actions/runs/40836157419) on `0547772` and analysis on PR #87 | Not observed on PRs into release/0.1.0 (#86; again absent on #133 and #134). Not a required check. No claim of VBA analysis. Alerts return 403 without admin access. |
 | Code scanning thresholds | Retain current choice | Unverified | A failure threshold alone does not make the scan a required merge gate. |
 | Dependabot auto-triage | Review before standardizing | Unverified | Do not assume low-impact alerts stay visible. |
 | AI scans / Copilot Autofix | No change proposed | Unverified | Read in the Settings UI. |

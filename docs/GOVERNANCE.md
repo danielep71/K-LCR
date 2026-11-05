@@ -271,8 +271,9 @@ do not bypass that boundary to activate them early.
 
 Settings observations, their dates and the controls still to verify are kept
 in the [evidence snapshot](REPOSITORY_SETTINGS_EVIDENCE.md).
-Controlled fail/pass protection demonstrations and fresh settings verification
-remain in issue #16. Expanded portable CI and dependency retargeting were
+The required check's controlled fail/pass demonstration on a release-branch
+pull request and the settings read-back of 2026-11-05 are recorded there
+(#16). Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;
 release procedure in #20; final baseline certification in #23. Existing green
 checks cover only the installed portable gates, not LCR calculations, host
