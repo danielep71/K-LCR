@@ -5,7 +5,7 @@
  "profile": "EU",
  "status": "sourced",
  "source_register_version": 1,
- "categories_version": 1,
+ "categories_version": 2,
  "factors": [
   {
    "category": "EU-A-L1-CB-ECB-MS",
@@ -783,6 +783,13 @@
    "value": "15%",
    "source": "SRC-02",
    "locator": "Art. 10(1)(b)(i)"
+  },
+  {
+   "category": "EU-A-L2B-NON-INTEREST-BEARING",
+   "kind": "haircut",
+   "value": "0.5",
+   "source": "SRC-02",
+   "locator": "Art. 12(1)(f)"
   }
  ],
  "limits": [
