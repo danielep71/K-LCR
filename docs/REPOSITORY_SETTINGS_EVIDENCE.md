@@ -41,7 +41,7 @@ including the legacy downloads flag (off).
 | Delete merged head branches | Enabled | Enabled | Release and traffic branches remain protected by rulesets. Branches of closed, unmerged pull requests are not deleted. |
 | Update-branch suggestions | Enabled | Enabled | Governance prohibits using this on protected integration branches. |
 | Web commit sign-off | No change proposed | Not required | Separate from reviews and signed-commit requirements. |
-| Pages / homepage | Enabled / project URL | Homepage https://danielep71.github.io/K-LCR/ | The Pages API returns 403 to this read-back. Historical: source main, `/docs`, enabled 2026-10-29 (#63); run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
+| Pages / homepage | Enabled / project URL | Homepage https://danielep71.github.io/K-LCR/; Pages verified, UI, read by me 2026-11-05: deploy from branch main, folder `/docs`, HTTPS enforced | The Pages API returns 403 to the API read-back. Enabled 2026-10-29 (#63); run evidence: [pages build and deployment](https://github.com/danielep71/K-LCR/actions/runs/40836157499) of `0547772`. Environment controls not verified. |
 | Description / topics | LCR-specific | Description and 12 topics set by me on 2026-11-04 (#18): basel, basel-iii, crr, crr3, excel, excel-vba, lcr, liquidity-coverage-ratio, liquidity-risk, model-validation, risk, risk-management | The social preview is the PNG of `docs/assets/`; its served copy matched the recorded SHA-256 on 2026-11-04. Topic count is not a security measure. |
 | License | MPL-2.0 | MPL-2.0 detected | Selected by me on 2026-10-28 ([NOTICE](../NOTICE.md)). |
 
@@ -122,53 +122,57 @@ into `release/0.1.0`.
 
 API rows were read from the public GitHub API on **2026-11-05**; private
 vulnerability reporting, secret scanning and push protection were first read
-back on 2026-10-28 (#66). UI-only rows are historical or unverified unless
-they name a read date.
+back on 2026-10-28 (#66). I read the UI-only rows in **Settings > Advanced
+Security** on 2026-11-05.
 
 | Setting | Desired baseline | Observed state / evidence | Exception or remaining verification |
 | --- | --- | --- | --- |
 | Private vulnerability reporting | Enabled | Verified enabled, API | Reporting procedure remains in SECURITY.md, with an email channel (#79). |
-| Dependency graph | Enabled | Historical: enabled, 2026-10-28 alignment record | Reread in the Settings UI. |
-| Automatic dependency submission | Retain current choice | Historical: disabled, 2026-10-28 alignment record | Reassess when build ecosystems change. |
-| Dependabot alerts | Enabled | Historical: enabled, 2026-10-28 alignment record; the alerts API returns 403 without admin access | Alert inventory was not audited here. |
-| Dependabot security updates | Enabled | Verified enabled, API; enabled by me on 2026-10-29 (#85) | Pull requests target main; see [Governance](GOVERNANCE.md). No security-update PR has been opened yet. |
-| Grouped security updates | Retain current choice | Historical: disabled, 2026-10-28 alignment record | Does not disable individual security updates. |
-| Malware alerts | No change proposed | Unverified | Read in the Settings UI. |
+| Dependency graph | Enabled | Verified enabled, UI, read by me 2026-11-05 | — |
+| Automatic dependency submission | Retain current choice | Verified disabled, UI, read by me 2026-11-05 | Reassess when build ecosystems change. |
+| Dependabot alerts | Enabled | Verified enabled, UI, read by me 2026-11-05; the alerts API returns 403 to the API read-back | Alert inventory was not audited here. |
+| Dependabot security updates | Enabled | Verified enabled, API and UI 2026-11-05; enabled by me on 2026-10-29 (#85) | Pull requests target main; see [Governance](GOVERNANCE.md). No security-update PR has been opened yet. |
+| Grouped security updates | Retain current choice | Verified disabled, UI, read by me 2026-11-05 | Does not disable individual security updates. |
+| Malware alerts | No change proposed | Verified disabled, UI, read by me 2026-11-05 | Dependabot does not alert on malicious packages; the pinned, hash-locked tool requirements remain the control. |
 | Secret scanning | Enabled | Verified enabled, API | No secret-injection test performed. |
 | Push protection | Enabled | Verified enabled, API | No blocked-push demonstration performed. |
 | Non-provider patterns / validity checks | Retain current choice | Verified disabled / disabled, API | Optional controls to evaluate separately. |
 | CodeQL | Configured; validate coverage | Verified default setup, API 2026-11-05: Actions and Python, default query suite, remote threat model, weekly, last updated 2026-10-29. Run evidence: [CodeQL Setup](https://github.com/danielep71/K-LCR/actions/runs/40829870792) on `4176184`, [push analysis](https://github.com/danielep71/K-LCR/actions/runs/40836157419) on `0547772` and analysis on PR #87 | Not observed on PRs into release/0.1.0 (#86; again absent on #133 and #134). Not a required check. No claim of VBA analysis. Alerts return 403 without admin access. |
-| Code scanning thresholds | Retain current choice | Unverified | A failure threshold alone does not make the scan a required merge gate. |
-| Dependabot auto-triage | Review before standardizing | Unverified | Do not assume low-impact alerts stay visible. |
-| AI scans / Copilot Autofix | No change proposed | Unverified | Read in the Settings UI. |
+| Code scanning thresholds | Retain current choice | Verified, UI, read by me 2026-11-05: security alerts High or higher; standard alerts errors only | A failure threshold alone does not make the scan a required merge gate, and CodeQL does not report on pull requests into release/0.1.0. |
+| Dependabot auto-triage | Review before standardizing | Verified, UI, read by me 2026-11-05: two GitHub presets; "Dismiss low-impact alerts for development-scoped dependencies" enabled, "Dismiss package malware alerts" disabled; no custom rule | Low-impact alerts for development-scoped dependencies are dismissed automatically: do not assume they stay visible. |
+| Copilot Autofix | No change proposed | Verified enabled, UI, read by me 2026-11-05 | It suggests fixes on code-scanning alerts; a suggestion is reviewed like any other change. |
 
 ## Actions and dependency automation
 
-Repository-level Actions settings were **not re-read** for this snapshot: the
-Actions permissions API is not available to this read-back (HTTP 403). The
-values below come from the 2026-10-28 alignment record. Workflow YAML is
-evidence of that workflow only, not of the repository-wide defaults.
+The Actions permissions API is not available to the API read-back (HTTP 403),
+so I read the repository-level Actions settings in **Settings > Actions >
+General** on 2026-11-05. Workflow YAML is evidence of that workflow only, not
+of the repository-wide defaults.
 
 | Control | Desired baseline | Observed state / date | Evidence / remaining work |
 | --- | --- | --- | --- |
-| Full-SHA requirement at repository level | Enforce | Historical: required, 2026-10-28 | Reread Actions settings; distinguish policy from pins in YAML. |
-| Default GITHUB_TOKEN permissions | Read-only | Historical: read-only, 2026-10-28 | Jobs may explicitly request more permissions. |
-| Actions may create/approve PRs | Disabled | Historical: disabled, 2026-10-28 | Reread the repository toggle. |
-| Allowed Actions and reusable workflows | Explicit reviewed policy | Unverified | Record allowed publishers/patterns before declaring a standard. |
-| External-contributor workflow approval | Explicit reviewed policy | Unverified | Record the selected contributor category. |
-| Repository log/artifact retention | Explicit documented period | Historical: 90 days, 2026-10-28 | The integrity workflow uploads its report with 30-day retention ([tools/README.md](../tools/README.md)). |
+| Full-SHA requirement at repository level | Enforce | Verified required, UI, read by me 2026-11-05 | Repository policy, separate from the pins that `workflow-invariants` checks in the YAML. |
+| Default GITHUB_TOKEN permissions | Read-only | Verified read-only ("Read repository contents and packages permissions"), UI, read by me 2026-11-05 | Jobs may explicitly request more permissions; `workflow-invariants` limits which may. |
+| Actions may create/approve PRs | Disabled | Verified disabled, UI, read by me 2026-11-05 | — |
+| Allowed Actions and reusable workflows | Explicit reviewed policy | Verified "Allow all actions and reusable workflows", UI, read by me 2026-11-05; no allow list | Gap against the desired baseline: any action may run, limited only by the full-SHA requirement and review of workflow changes. Restricting the list is my decision, not part of this record. |
+| External-contributor workflow approval | Explicit reviewed policy | Verified "Require approval for first-time contributors", UI, read by me 2026-11-05 | Later pull requests of a contributor run without approval. |
+| Repository log/artifact retention | Explicit documented period | Verified 90 days, UI, read by me 2026-11-05 | The integrity workflow uploads its report with 30-day retention ([tools/README.md](../tools/README.md)). |
 | Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, which I closed on 2026-10-29 to update the tool pins by hand. |
 | Integrity / labels / issue triage / PR milestones | Preserve installed gates and read-only audits | Repository integrity, label sync and drift, issue triage and Keep milestones issue-only workflows installed | [Tooling](../tools/README.md); this documentation change does not audit all workflow executions. |
-| Traffic analytics | Not configured | No traffic workflow, branch or credential | Activation is tracked in #17. |
-| Environments, collaborators, deploy keys | Not cloned from other projects | Unverified (environments API not available to this read-back) | 2026-10-28 alignment record: repository-specific credentials, collaborators, deployments and environments are not cloned. |
+| Traffic analytics | Not configured | No traffic workflow on main or release/0.1.0, no `traffic-history` branch and no credential; the `analytics` environment exists (below) | Activation is tracked in #17 (PR #92, open). |
+| Environments, collaborators, deploy keys | Not cloned from other projects | Verified, UI, read by me 2026-11-05: environments `analytics` (created for #17) and `github-pages` (Pages); no deploy key; no repository or environment secret or variable. Collaborators read through the authenticated API on 2026-11-05: danielep71 (admin) only | Secret values were never accessed. Pending invitations were not read. |
 
 ## Open verification and maintenance
 
-Before promoting this snapshot as fully verified, read the Settings UI for the
-historical and unverified security rows, the Actions settings, the Pages
-source and environment controls, and confirm CodeQL coverage of release-branch
-pull requests. Controlled enforcement demonstrations and fresh settings
-verification remain in #16; final baseline certification is #23.
+Every row above was verified on 2026-11-05, through the API or in the
+Settings UI (#16), except where a row says otherwise. Open points:
+- CodeQL does not report on pull requests into release/0.1.0;
+- the Actions allow list is open ("Allow all actions");
+- the alert inventories (Dependabot, code scanning) and the environment
+  protection rules were not audited;
+- the `main` ruleset was not exercised with a failing commit.
+
+Final baseline certification is #23.
 
 After a settings change, update its observed value, date, evidence and exception
 in this file through the normal documentation workflow. Keep desired policy
@@ -187,3 +191,4 @@ Do not treat pending items or disabled features below as current facts.
 | 2026-10-28 | I turned off the release-branch pull-request requirement after it refused a fast-forward synchronization (#59, #61). |
 | 2026-10-28 | I made K-LCR public and enabled private vulnerability reporting, secret scanning and push protection (#66). |
 | 2026-10-29 | I enabled GitHub Pages (main, `/docs`; #63), Dependabot security updates and CodeQL default setup (#85), and restored the release-branch pull-request requirement with squash or merge only (#88). |
+| 2026-11-04 | I set the About description and topics and uploaded the social preview (#18). |
