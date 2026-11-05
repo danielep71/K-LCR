@@ -38,7 +38,8 @@ The first command should be empty. A future VBA module should show `i/lf`
 and `w/crlf` on Windows; repository Markdown should show LF in both locations.
 Check generated outputs using `git check-ignore`; source and fixtures should
 remain visible. Never run `git add -f` on an ignored workbook without an
-explicit reviewed allowlist entry.
+explicit reviewed entry in `.github/binary-allowlist.json`: the `binaries`
+gate rejects any other tracked binary outside `docs/methodology/sources/`.
 
 For a new `.gitattributes` policy, inspect `git add --renormalize .` and
 `git diff --cached --check` before committing a separate mechanical change.

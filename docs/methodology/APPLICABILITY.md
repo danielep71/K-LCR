@@ -9,15 +9,17 @@ parameter set that will hold its values and the tests that will cover it. It
 then records what the sources resolve and what they leave to me.
 
 It states no percentage, run-off rate, haircut or threshold. Those values
-enter a parameter set only through #10, each with its register ID and
-locator, and are tested only through #11.
+enter a parameter set only in the format of
+[PARAMETERS_AND_RESULTS.md](PARAMETERS_AND_RESULTS.md) (#10), each with its
+register ID and locator, and are tested only as
+[TEST_CASES.md](TEST_CASES.md) (#11) requires.
 
 ## 🧩 Planned parameter sets
 
 | Parameter set | Profile | Sources | Status |
 | --- | --- | --- | --- |
-| `EU-LCR-DA-2022-07-08` | EU | `SRC-02` as consolidated on 2022-07-08, with `SRC-01` as consolidated on 2026-06-26 | Planned (#10) |
-| `BASEL-LCR-2019-12-15` | Basel | `SRC-06`, version effective as of 15 December 2019 | Planned (#10) |
+| `EU-LCR-DA-2022-07-08` | EU | `SRC-02` as consolidated on 2022-07-08, with `SRC-01` as consolidated on 2026-06-26 | Planned: identifier and format fixed (#10); sourced values follow with the EU profile (B002) |
+| `BASEL-LCR-2019-12-15` | Basel | `SRC-06`, version effective as of 15 December 2019 | Planned: identifier and format fixed (#10); sourced values follow with the Basel profile (B001) |
 
 A parameter set's identifier names its source edition. A new edition creates
 a new parameter set; it never changes an existing one. Each run names its

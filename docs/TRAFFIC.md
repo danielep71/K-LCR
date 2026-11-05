@@ -137,8 +137,8 @@ pull requests.
 | `visitors.json` | `visitors (14d)` | Unique visitors over the API's 14-day window, from the latest snapshot. Daily unique counts cannot be summed into a unique count. |
 | `visits.json` | `visits` | Daily unique visitors summed since tracking began: a visitor counts once per day they visit. |
 
-On a public repository, a README can show one with
-`https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/OWNER/REPOSITORY/traffic-history/data/badges/clones.json`.
+A README shows one with
+`https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/danielep71/K-LCR/traffic-history/data/badges/clones.json`.
 Large numbers are shortened (`1.2k`, `11k`). A badge file changes only when its
 value does. Clones include those made by workflow checkouts, so CI activity
 raises the count; for the same reason they never raise a

@@ -96,6 +96,11 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   issue ([TRAFFIC.md](docs/TRAFFIC.md)). It is not active: it needs the App
   credentials, the `TRAFFIC_HISTORY` variable and the workflow on `main`
   (#17).
+- The `binaries` gate: every tracked binary is a byte-preserved regulatory
+  source, a UserForm `.frx` or listed with its SHA-256 in
+  `.github/binary-allowlist.json`; and the
+  [file audit](docs/release/FILE_AUDIT_v0.1.0.md) of every tracked file, with
+  its findings and their disposition (#21).
 - [CONTRIBUTING.md](CONTRIBUTING.md), a [code of conduct](CODE_OF_CONDUCT.md)
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel
