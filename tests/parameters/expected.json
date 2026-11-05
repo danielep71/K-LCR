@@ -1,0 +1,52 @@
+{
+ "description": "Expected findings, as [code, path], of each parameter-set or result example in tests/parameters. The values in the parameter sets are illustrative only.",
+ "cases": {
+  "parameter-set-basel-illustrative.json": [],
+  "parameter-set-eu-illustrative.json": [],
+  "parameter-set-invalid.json": [
+   [
+    "PAR-HEADER",
+    "verified_on"
+   ],
+   [
+    "PAR-VALUE",
+    "factors[0]"
+   ],
+   [
+    "PAR-FACTOR-DUPLICATE",
+    "factors[110]"
+   ],
+   [
+    "PAR-FACTOR-MISSING",
+    "factors"
+   ],
+   [
+    "PAR-LIMIT",
+    "limits"
+   ]
+  ],
+  "result-invalid.json": [
+   [
+    "RES-LINEAGE",
+    "lineage.code_commit"
+   ],
+   [
+    "RES-FIGURES",
+    "figures"
+   ],
+   [
+    "RES-DIAGNOSTIC",
+    "diagnostics[0]"
+   ],
+   [
+    "RES-STATUS",
+    "status"
+   ],
+   [
+    "RES-ILLUSTRATIVE",
+    "illustrative"
+   ]
+  ],
+  "result-rejected.json": []
+ }
+}

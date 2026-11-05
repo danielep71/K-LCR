@@ -1,6 +1,6 @@
 # 🏗️ K-LCR scope and architecture
 
-[![Architecture: VBA + Excel host](https://img.shields.io/badge/Architecture-VBA_%2B_Excel_host-217346?style=flat-square)](#-implementation-and-host-profile)
+[![Architecture: VBA + Excel host](https://img.shields.io/badge/Architecture-VBA_%2B_Excel_host-217346?style=flat-square)](#%EF%B8%8F-implementation-and-host-profile)
 [![Maturity: Setup](https://img.shields.io/badge/Maturity-Setup-BF8700?style=flat-square)](#-purpose-and-maturity)
 
 ## ✨ Purpose and maturity
@@ -10,7 +10,7 @@ for learning, research and independent validation. Intended users are risk
 analysts, validators, researchers and educators working with synthetic examples
 and independently sourced expected results.
 
-The owner selected Excel/VBA, separate EU and Basel profiles, and reference and
+I selected Excel/VBA, separate EU and Basel profiles, and reference and
 validation use on 2026-10-28 in issue #3. The repository currently contains setup
 tooling and documentation: it has no LCR calculation engine or validated workbook.
 This document defines the intended design, not functionality already delivered.
@@ -31,8 +31,10 @@ fail validation rather than silently selecting a default or substituting the
 other profile. Shared code is permitted only where the documented semantics agree;
 profile-specific classification, parameters and rules remain explicit.
 
-Issue #9 establishes the authoritative source register and exact applicability
-decisions before formula work starts. Issue #10 defines schemas and issue #11
+The [source register](methodology/SOURCES.md) records the authoritative
+editions, and the [applicability map](methodology/APPLICABILITY.md) links each
+LCR topic to them and records my applicability decisions, which come before
+formula work starts. Issue #10 defines schemas and issue #11
 defines independently derived validation fixtures. No percentages, thresholds,
 eligibility rules or effective-date claims are established by this architecture
 document. Compare profiles only on deliberately mapped inputs with explained
@@ -104,8 +106,14 @@ are not claims that those components exist today.
 | Path | Purpose | Status |
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
+| AGENTS.md | Editorial and assistant rules | Present |
+| CONTRIBUTING.md, CODE_OF_CONDUCT.md, INSTALLATION.md | Contributor workflow, conduct policy, host matrix and developer setup | Present |
+| CHANGELOG.md, RELEASING.md | Notable changes; versioning, milestone closeout and release procedure | Present |
+| VERSION | The newest released version | Created with the first release |
+| docs/release/ | Milestone closeout template | Present |
 | docs/ | Governance, repository settings, scope, decisions, contracts and evidence guidance | Present |
-| .github/ | Labels, issue forms, dependency configuration and workflows | Present |
+| docs/methodology/ | Source register, applicability map and, later, contracts and fixture rules | Present |
+| .github/ | Labels, issue forms, pull request template, dependency configuration and workflows | Present |
 | tools/ | Portable checks and developer utilities | Present |
 | src/core/ | Host-independent VBA calculations and profile rules | Planned |
 | src/api/ | Public VBA entry points, validation orchestration and contracts | Planned |
@@ -138,5 +146,5 @@ A neutral test scaffold or template proves infrastructure only.
 
 The [decision log and follow-on backlog](DECISIONS.md) records accepted direction,
 remaining decisions and the work to schedule after setup. Work moves through
-release/0.1.0 first; integration into main follows explicit owner authorization
+release/0.1.0 first; integration into main follows my explicit authorization
 under [governance](GOVERNANCE.md).

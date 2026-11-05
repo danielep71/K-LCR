@@ -1,6 +1,6 @@
 # 🔒 Security and confidential data
 
-[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#-security-features)
+[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#%EF%B8%8F-security-features)
 [![Reporting: Private](https://img.shields.io/badge/Reporting-Private-1f3a5f?style=flat-square)](#-report-a-vulnerability)
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-secrets)
 
@@ -61,7 +61,10 @@ open issues with read-only issue and pull-request access. Label drift reads
 live labels; label sync writes labels only on trusted `main` events and is
 validation-only for pull requests. Actions are pinned to full commit SHAs,
 checkouts do not persist credentials, and the Python quality tools are
-installed from hash-locked requirements. CodeQL code scanning runs as
+installed from hash-locked requirements. Keep milestones issue-only runs on
+`pull_request_target` with `pull-requests: write` in its single job and no
+other permission; it executes only its inline script from the default branch
+and never checks out pull request contents. CodeQL code scanning runs as
 GitHub's default setup, with no workflow file in the repository. Dependabot
 security updates open pull requests against `main`, reviewed like any other
 change. No traffic credential or workbook execution workflow is configured.
@@ -84,7 +87,7 @@ or enforcement.
   issue attachments.
 - Keep access tokens, credentials and environment files out of source,
   fixtures, GitHub issue bodies and build logs. Use GitHub secrets only after
-  an owner-approved access decision and limit their permissions and lifetime.
+  an access decision approved by me and limit their permissions and lifetime.
 - Review imported workbooks, formulas, macros and artifacts for external links,
   hidden sheets, connections, names, embedded files and metadata before any
   commit. A workbook extension or a clean text scan does not establish safety.
@@ -95,7 +98,7 @@ or enforcement.
   portable check does not certify numerical correctness or host safety.
 
 If a secret or sensitive record is accidentally committed, stop sharing the
-content, revoke or rotate affected credentials through the owner, and
+content, revoke or rotate affected credentials through me, and
 coordinate remediation privately. Do not paste the sensitive value into a
 cleanup issue.
 

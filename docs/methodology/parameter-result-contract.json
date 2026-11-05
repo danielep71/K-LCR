@@ -1,0 +1,81 @@
+{
+  "schema": "klcr-parameter-result-contract",
+  "contract_version": 1,
+  "description": "Contract of K-LCR parameter sets and results, version 1. PARAMETERS_AND_RESULTS.md explains it; tools/check_parameters.py is its reference validator.",
+  "decimal": {
+    "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+    "max_significant_digits": 15,
+    "note": "Factors and limits are decimal fractions written as JSON strings: 0.25 means one quarter, never a percentage."
+  },
+  "parameter_set": {
+    "schema": "klcr-parameter-set",
+    "statuses": {
+      "illustrative": "Values chosen for synthetic fixtures only. A result computed with them is labelled illustrative and is never a regulatory figure.",
+      "sourced": "Every value was read in its source and verified against its locator on the date recorded."
+    },
+    "fields": {
+      "schema": "Always klcr-parameter-set.",
+      "parameter_set_version": "Version of this file's layout; 1.",
+      "parameter_set": "Identifier of the set; it names the source edition and never changes once used.",
+      "profile": "EU or BASEL.",
+      "status": "illustrative or sourced.",
+      "source_register_version": "Version of SOURCES.md the set cites.",
+      "categories_version": "Version of categories.json the set covers.",
+      "verified_on": "Date of the verification, YYYY-MM-DD; required when status is sourced, absent otherwise.",
+      "factors": "One entry per in-scope category of the profile: category, kind, value, source, locator; Basel discretionary categories add discretion_choice.",
+      "limits": "One entry per limit of the profile: id, value, source, locator."
+    },
+    "factor_kinds": {"asset": "haircut", "outflow": "outflow_rate", "inflow": "inflow_rate"},
+    "sources": {"EU": ["SRC-01", "SRC-02"], "BASEL": ["SRC-06"]},
+    "limits": {
+      "EU": [
+        {"id": "LCR-MINIMUM", "source": "SRC-02", "locator": "Art. 4(2)"},
+        {"id": "LEVEL1-MINIMUM-SHARE", "source": "SRC-02", "locator": "Art. 17(1)(a)"},
+        {"id": "LEVEL1-EXCL-EHQCB-MINIMUM-SHARE", "source": "SRC-02", "locator": "Art. 17(1)(b)"},
+        {"id": "LEVEL2B-MAXIMUM-SHARE", "source": "SRC-02", "locator": "Art. 17(1)(c)"},
+        {"id": "INFLOW-CAP", "source": "SRC-02", "locator": "Art. 33(1)"}
+      ],
+      "BASEL": [
+        {"id": "LCR-MINIMUM", "source": "SRC-06", "locator": "LCR20.5"},
+        {"id": "LEVEL2-MAXIMUM-SHARE", "source": "SRC-06", "locator": "LCR30.34"},
+        {"id": "LEVEL2B-MAXIMUM-SHARE", "source": "SRC-06", "locator": "LCR30.33"},
+        {"id": "INFLOW-CAP", "source": "SRC-06", "locator": "LCR40.77"}
+      ]
+    }
+  },
+  "result": {
+    "schema": "klcr-result",
+    "statuses": {
+      "calculated": "The run passed the input contract and the calculation completed.",
+      "rejected": "The input contract reported findings; no figure is given.",
+      "failed": "The calculation could not complete; no figure is given."
+    },
+    "fields": {
+      "schema": "Always klcr-result.",
+      "result_version": "Version of this file's layout; 1.",
+      "status": "calculated, rejected or failed.",
+      "illustrative": "true when the parameter set is illustrative.",
+      "lineage": "run_fingerprint, input_contract_version, parameter_set, parameter_set_sha256, categories_version, source_register_version and code_commit.",
+      "figures": "Only when calculated: liquidity_buffer, outflows, inflows, inflows_after_cap, net_outflows and lcr, each a decimal string in the reporting currency except lcr, a decimal fraction.",
+      "components": "Only when calculated: one object per category with exactly category, amount, factor (at most 1) and weighted, each a decimal string except category, so that every figure reconciles with the input totals.",
+      "diagnostics": "Every diagnostic, with code, severity, message and the records or limits it refers to."
+    },
+    "lineage_fields": ["run_fingerprint", "input_contract_version", "parameter_set", "parameter_set_sha256",
+                       "categories_version", "source_register_version", "code_commit"],
+    "figures": ["liquidity_buffer", "outflows", "inflows", "inflows_after_cap", "net_outflows", "lcr"],
+    "severities": ["error", "warning", "info"],
+    "diagnostics": {
+      "CALC-INPUT-REJECTED": {"severity": "error", "meaning": "The input contract reported findings; their codes are listed."},
+      "CALC-ILLUSTRATIVE": {"severity": "warning", "meaning": "The parameter set is illustrative: the result is not a regulatory figure."},
+      "CALC-PARAMETER-SET-INVALID": {"severity": "error", "meaning": "The parameter set does not pass its contract."},
+      "CALC-PARAMETER-SET-PROFILE": {"severity": "error", "meaning": "The parameter set belongs to another profile or source edition than the run."},
+      "CALC-ASSET-EXCLUDED": {"severity": "info", "meaning": "A holding with requirements_met N is left out of the buffer."},
+      "CALC-OUTSIDE-HORIZON": {"severity": "info", "meaning": "An item maturing after the 30-day horizon is left out."},
+      "CALC-COMPOSITION-LIMIT": {"severity": "info", "meaning": "A composition limit of the buffer binds."},
+      "CALC-INFLOW-CAP": {"severity": "info", "meaning": "The inflow cap binds."},
+      "CALC-ZERO-NET-OUTFLOWS": {"severity": "error", "meaning": "Net outflows are zero, so the ratio is undefined; no ratio is given."},
+      "CALC-BELOW-MINIMUM": {"severity": "warning", "meaning": "The ratio is below the profile's minimum requirement."},
+      "CALC-INTERNAL": {"severity": "error", "meaning": "An unexpected condition stopped the calculation; earlier outputs are withdrawn."}
+    }
+  }
+}

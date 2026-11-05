@@ -2,21 +2,22 @@
 
 The K-LCR landing page lives in `docs/index.html`, with styles in
 `docs/assets/site.css` and its planned-architecture illustration in
-`docs/assets/architecture.svg`. The page structure and CSS are adapted from
-K-SFTs at `e6bae6df272083ba596c9eb866b14e6f9152bc15` under MPL-2.0.
-K-LCR copy and the SVG describe the current setup scope.
+`docs/assets/architecture.svg`. The sources and licenses of the adapted page
+structure and styles are recorded in [NOTICE.md](../NOTICE.md). The copy and
+the SVG describe the current setup scope.
 
 ## 📦 Publishing
 
 The site is live at <https://danielep71.github.io/K-LCR/>. GitHub Pages
 deploys it from Settings → Pages → **Deploy from a branch**, branch **main**,
-folder **/docs**, matching the sibling project sites. Its deployment of
+folder **/docs**. Its deployment of
 `4f4277f` on 2026-10-29 was verified live (#63).
 The empty `.nojekyll` file makes this a plain static site: no package
 installation, JavaScript, analytics or external fonts are required.
 
-Changes follow the active release branch, review and owner-authorized main
-integration process in [Governance](GOVERNANCE.md). The live page updates only
+Changes follow the active release branch, review and main integration process
+in [Governance](GOVERNANCE.md); integration into main needs my authorization.
+The live page updates only
 after the reviewed files reach main and GitHub's Pages deployment succeeds.
 Verify that deployment and the live page after each change. A README link
 alone is not deployment evidence. Do not change repository visibility as part

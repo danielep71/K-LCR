@@ -1,0 +1,28 @@
+{
+ "schema": "klcr-result",
+ "result_version": 1,
+ "status": "calculated",
+ "illustrative": true,
+ "lineage": {
+  "run_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "input_contract_version": 1,
+  "parameter_set": "EU-LCR-DA-2022-07-08",
+  "parameter_set_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "categories_version": 1,
+  "source_register_version": 1,
+  "code_commit": ""
+ },
+ "figures": {
+  "liquidity_buffer": "100",
+  "lcr": "1.5"
+ },
+ "components": [],
+ "diagnostics": [
+  {
+   "code": "CALC-ZERO-NET-OUTFLOWS",
+   "severity": "warning",
+   "message": "x",
+   "refs": []
+  }
+ ]
+}
