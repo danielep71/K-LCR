@@ -221,6 +221,17 @@ class FieldTests(ContractTestCase):
                           ["LCR-ALLOWED", "assets", 2, "requirements_met"],
                           ["LCR-DUPLICATE-KEY", "assets", 3, "asset_id"]])
 
+    def test_a_trailing_newline_never_passes_a_pattern(self) -> None:
+        # Python's $ also matches before a final newline; a quoted field may hold one.
+        rows = ['"A1\n";EU-A-L1-CASH;5;EUR;Y', "A1;EU-A-L1-CASH;5;EUR;Y",
+                'A2;EU-A-L1-CASH;"5\n";EUR;Y', 'A3;EU-A-L1-CASH;5;"EUR\n";Y']
+        self.assertEqual(self.assets_with(*rows),
+                         [["LCR-TYPE", "assets", 1, "asset_id"], ["LCR-TYPE", "assets", 3, "market_value"],
+                          ["LCR-TYPE", "assets", 4, "original_currency"]])
+        header = FLOWS.splitlines()[0]
+        self.space.write(assets=ASSETS, flows=header + '\nF1;INFLOW;EU-I-LOANS;1;EUR;"2026-07-10\n";;\n')
+        self.assertEqual(self.space.findings(), [["LCR-TYPE", "flows", 1, "maturity_date"]])
+
     def test_dates(self) -> None:
         header = FLOWS.splitlines()[0]
         rows = ["F1;INFLOW;EU-I-LOANS;1;EUR;2026-02-30;;", "F2;INFLOW;EU-I-LOANS;1;EUR;30/06/2026;;",
