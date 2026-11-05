@@ -60,7 +60,7 @@ required check on a pull request.
 | Protect release branches: release/** | PR required; squash or merge; 0 approvals; conversations resolved; same required check and strict up-to-date rule; deletion and force pushes blocked | [26063663](https://github.com/danielep71/K-LCR/rules/26063663) | Check not enforced on initial branch creation. No bypass. PR requirement off from 2026-10-28 and restored on 2026-10-29 (#88). |
 | Prevent release branch deletion: release/** | Deletion blocked independently | [26063689](https://github.com/danielep71/K-LCR/rules/26063689) | No bypass. |
 | Protect release tags: v* | Updates, deletion and force pushes blocked | [26063723](https://github.com/danielep71/K-LCR/rules/26063723) | Creation is not blocked by this ruleset. No tag exists. |
-| Protect traffic history: traffic-history | Deletion and force pushes blocked | [26063762](https://github.com/danielep71/K-LCR/rules/26063762) | No PR or CI requirement. No traffic-history branch exists yet (#17). |
+| Protect traffic history: traffic-history | Deletion and force pushes blocked | [26063762](https://github.com/danielep71/K-LCR/rules/26063762) | No PR or CI requirement: the Traffic history workflow pushes directly. The branch exists since 2026-11-05, orphan commit `6c7a9ea` by me (#17). |
 
 Both PR rules disable stale-review dismissal, code-owner review and last-push
 approval; no required reviewers are configured. Both also carry
@@ -159,7 +159,7 @@ of the repository-wide defaults.
 | Repository log/artifact retention | Explicit documented period | Verified 90 days, UI, read by me 2026-11-05 | The integrity workflow uploads its report with 30-day retention ([tools/README.md](../tools/README.md)). |
 | Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, which I closed on 2026-10-29 to update the tool pins by hand. |
 | Integrity / labels / issue triage / PR milestones | Preserve installed gates and read-only audits | Repository integrity, label sync and drift, issue triage and Keep milestones issue-only workflows installed | [Tooling](../tools/README.md); this documentation change does not audit all workflow executions. |
-| Traffic analytics | Not configured | No traffic workflow on main or release/0.1.0, no `traffic-history` branch and no credential; the `analytics` environment exists (below) | Activation is tracked in #17 (PR #92, open). |
+| Traffic analytics | Not configured | The `traffic-history` branch exists since 2026-11-05 with header-only files; the `analytics` environment exists (below); no App credential, no `TRAFFIC_HISTORY` variable, no traffic workflow on `main`. The workflow reaches `release/0.1.0` with PR #92 | Activation and the first collection are tracked in #17 ([TRAFFIC.md](TRAFFIC.md#activation-state)). |
 | Environments, collaborators, deploy keys | Not cloned from other projects | Verified, UI, read by me 2026-11-05: environments `analytics` (created for #17) and `github-pages` (Pages); no deploy key; no repository or environment secret or variable. Collaborators read through the authenticated API on 2026-11-05: danielep71 (admin) only | Secret values were never accessed. Pending invitations were not read. |
 
 ## Open verification and maintenance

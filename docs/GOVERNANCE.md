@@ -20,7 +20,7 @@ tooling, dependency updates and fixes.
 | release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
 | `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. Never `codex/` or `claude/` ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
-| traffic-history | Reserved data-only branch; not yet created. Never a task base or merged into source branches. |
+| traffic-history | Data-only branch of the traffic history, created on 2026-11-05 as an orphan commit; the Traffic history workflow pushes to it directly ([TRAFFIC.md](TRAFFIC.md)). Never a task base or merged into source branches. |
 
 A new active release branch requires my decision. A release branch name,
 completed issue, green check or closed milestone does not authorize integration

@@ -90,6 +90,12 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   #16).
 - This changelog and the release and milestone procedure in
   [RELEASING.md](RELEASING.md) (#20).
+- The opt-in **Traffic history** workflow and `tools/traffic_history.py`:
+  daily traffic, stars, forks, watchers and open issues merged into CSV files
+  on the data-only `traffic-history` branch, badge files and a traffic alert
+  issue ([TRAFFIC.md](docs/TRAFFIC.md)). It is not active: it needs the App
+  credentials, the `TRAFFIC_HISTORY` variable and the workflow on `main`
+  (#17).
 - [CONTRIBUTING.md](CONTRIBUTING.md), a [code of conduct](CODE_OF_CONDUCT.md)
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel

@@ -124,7 +124,7 @@ The full layout, with the planned paths, is in
 | Contributing and conduct | [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) |
 | Development, review and checks | [Governance](docs/GOVERNANCE.md) · [Repository tooling](tools/README.md) · [Working rules](AGENTS.md) |
 | Changes, versions and releases | [Changelog](CHANGELOG.md) · [Releasing and milestones](RELEASING.md) |
-| Settings, evidence, verification gaps | [Repository settings](docs/REPOSITORY_SETTINGS.md) · [Settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md) |
+| Settings, evidence, verification gaps | [Repository settings](docs/REPOSITORY_SETTINGS.md) · [Settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md) · [Traffic history](docs/TRAFFIC.md) |
 | Source files and generated artifacts | [Source control](docs/SOURCE_CONTROL.md) |
 | VBA and Excel target | [House style](docs/VBA_HOUSE_STYLE.md) · [Installation](INSTALLATION.md) |
 | License, provenance and safe examples | [Notice](NOTICE.md) · [Security](SECURITY.md) |
