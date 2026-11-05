@@ -72,11 +72,20 @@ stays on the branch.
 | Step | State |
 | --- | --- |
 | 1. Branch | Done on 2026-11-05: orphan commit `6c7a9ea` with the four history files, headers only (#17) |
-| 2. `analytics` environment | Done on 2026-10-29, deployment limited to `main`; no secret or variable (2026-11-05) |
-| 3 to 5. App, installation and credentials | Not done |
-| 6. `TRAFFIC_HISTORY` variable | Not set |
-| Workflow on `main` | Not yet: it reaches `main` with the next integration, after my approval |
-| 7. First collection and same-day rerun | Not run: no collection has happened |
+| 2. `analytics` environment | Done on 2026-10-29, deployment limited to `main` |
+| 3 to 5. App, installation and credentials | Done on 2026-11-05: the App is installed on this repository; `TRAFFIC_APP_CLIENT_ID` and `TRAFFIC_APP_PRIVATE_KEY` are in `analytics` |
+| 6. `TRAFFIC_HISTORY` variable | Set to `enabled` on 2026-11-05 |
+| Workflow on `main` | Since 2026-11-05: integration #141, merge commit `0e96e86` |
+| 7. First collection and same-day rerun | Done on 2026-11-05, see below |
+
+The runs of 2026-11-05 on `main`:
+
+| Run | Result |
+| --- | --- |
+| [42040025723](https://github.com/danielep71/K-LCR/actions/runs/42040025723) | Skipped: `TRAFFIC_HISTORY` was not yet a repository variable |
+| [42040626604](https://github.com/danielep71/K-LCR/actions/runs/42040626604) | Failed at *Create the traffic App token* with 404: the App was not yet installed on this repository. Nothing was written; the red run is the failure signal |
+| [42040875116](https://github.com/danielep71/K-LCR/actions/runs/42040875116) | First collection: `traffic-history` commit `222a07b`, 14 days of views and clones, 8 paths, 1 referrer, the snapshot and the three badge files; no alert due |
+| [42041029911](https://github.com/danielep71/K-LCR/actions/runs/42041029911) | Same-day rerun: commit `6d4ba57` changes only `observed_at`; every value and every `collected_at` is unchanged, and the earlier commits stay on the branch |
 
 ## ⏱️ Schedule
 
@@ -144,10 +153,8 @@ value does. Clones include those made by workflow checkouts, so CI activity
 raises the count; for the same reason they never raise a
 [traffic alert](#-traffic-alert).
 
-The README shows no traffic badge yet: the badge files are written by the
-first collection. Once it has run, add the three badges for
-`danielep71/K-LCR` at the top of the README, in the same pull request that
-records the first collection in #17.
+The README shows the three badges, in `flat-square` style, under the
+project badges; each links to this section.
 
 ### Merge rules
 

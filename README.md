@@ -16,6 +16,12 @@
 
 <br>
 
+[![Clones, including CI](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fclones.json&style=flat-square)](docs/TRAFFIC.md#badges)
+[![Unique visitors, last 14 days](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fvisitors.json&style=flat-square)](docs/TRAFFIC.md#badges)
+[![Daily unique visitors since tracking began](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fvisits.json&style=flat-square)](docs/TRAFFIC.md#badges)
+
+<br>
+
 [Website](https://danielep71.github.io/K-LCR/) · [Wiki](https://github.com/danielep71/K-LCR/wiki) ·
 [Status](#-status) · [What this project is](#-what-this-project-is) ·
 [Get started](#-get-started) · [Architecture](#%EF%B8%8F-architecture) ·
