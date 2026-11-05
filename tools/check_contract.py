@@ -247,7 +247,10 @@ def value_finding(value: str, column: Mapping[str, Any],
     if kind == "integer":
         if not INTEGER.fullmatch(value):
             return "LCR-TYPE", f"{value!r} is not an integer"
-        if not rules["integer_min"] <= int(value) <= rules["integer_max"]:
+        # The pattern forbids leading zeros, so a longer value is larger; int() refuses
+        # more than 4,300 digits.
+        if len(value) > len(str(rules["integer_max"])) \
+                or not rules["integer_min"] <= int(value) <= rules["integer_max"]:
             return "LCR-RANGE", f"{value} is outside {rules['integer_min']} to {rules['integer_max']}"
         return None
     pattern = rules["patterns"].get(kind)
