@@ -1,6 +1,6 @@
 # 🏗️ K-LCR scope and architecture
 
-[![Architecture: VBA + Excel host](https://img.shields.io/badge/Architecture-VBA_%2B_Excel_host-217346?style=flat-square)](#-implementation-and-host-profile)
+[![Architecture: VBA + Excel host](https://img.shields.io/badge/Architecture-VBA_%2B_Excel_host-217346?style=flat-square)](#%EF%B8%8F-implementation-and-host-profile)
 [![Maturity: Setup](https://img.shields.io/badge/Maturity-Setup-BF8700?style=flat-square)](#-purpose-and-maturity)
 
 ## ✨ Purpose and maturity
@@ -107,6 +107,7 @@ are not claims that those components exist today.
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
 | AGENTS.md | Editorial and assistant rules | Present |
+| CONTRIBUTING.md, CODE_OF_CONDUCT.md, INSTALLATION.md | Contributor workflow, conduct policy, host matrix and developer setup | Present |
 | CHANGELOG.md, RELEASING.md | Notable changes; versioning, milestone closeout and release procedure | Present |
 | VERSION | The newest released version | Created with the first release |
 | docs/release/ | Milestone closeout template | Present |

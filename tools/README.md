@@ -11,7 +11,7 @@ LCR calculation.
 
 Requirements: Git, Python 3.13, Node.js 22 and actionlint 1.7.12 on `PATH`,
 plus the quality tools below. `check.py` itself needs only the standard
-library. The setup is in [INSTALLATION.md](../INSTALLATION.md#-source-and-developer-setup).
+library. The setup is in [INSTALLATION.md](../INSTALLATION.md#developer-setup).
 
 ```sh
 python tools/check.py --ci

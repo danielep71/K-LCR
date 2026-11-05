@@ -8,8 +8,8 @@
 
 <br>
 
-[![Excel VBA](https://img.shields.io/badge/Excel_VBA-64--bit_target-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md#-host-matrix)
-[![Platform](https://img.shields.io/badge/Platform-Windows_target-0078D6?style=for-the-badge&logo=windows&logoColor=white)](INSTALLATION.md#-host-matrix)
+[![Excel VBA](https://img.shields.io/badge/Excel_VBA-64--bit_target-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md#host-matrix)
+[![Platform](https://img.shields.io/badge/Platform-Windows_target-0078D6?style=for-the-badge&logo=windows&logoColor=white)](INSTALLATION.md#host-matrix)
 [![Profiles](https://img.shields.io/badge/Profiles-EU_%C2%B7_Basel_planned-1f3a5f?style=for-the-badge)](docs/REPOSITORY_STRUCTURE.md#-regulatory-profiles)
 [![Status](https://img.shields.io/badge/Status-Repository_setup-BF8700?style=for-the-badge)](#-status)
 [![License](https://img.shields.io/badge/License-MPL_2.0-2ea44f?style=for-the-badge)](LICENSE)
@@ -18,8 +18,9 @@
 
 [Website](https://danielep71.github.io/K-LCR/) · [Wiki](https://github.com/danielep71/K-LCR/wiki) ·
 [Status](#-status) · [What this project is](#-what-this-project-is) ·
-[Get started](#-get-started) · [Architecture](#-architecture) ·
-[Documentation](#-documentation) · [Limitations](#-limitations)
+[Get started](#-get-started) · [Architecture](#%EF%B8%8F-architecture) ·
+[Layout](#-repository-layout) · [Documentation](#%EF%B8%8F-documentation) ·
+[Contributing](CONTRIBUTING.md) · [Limitations](#%EF%B8%8F-limitations)
 
 ---
 
@@ -56,8 +57,9 @@ K-LCR is planned as an auditable Liquidity Coverage Ratio reference. The
 design separates regulatory source and parameter choices, deterministic
 calculation, public API and Excel input/output. Synthetic fixtures and
 independent expected values will support validation as those components are
-implemented. Exact regulatory editions, inputs, outputs and reconciliation
-rules are tracked in the setup issues rather than presumed here.
+implemented. The source editions, the applicability decisions, the input,
+parameter and result contracts and the test-case rules are already defined in
+[docs/methodology](docs/methodology/README.md); the calculation is not.
 
 ### Where K-LCR belongs
 
@@ -69,7 +71,8 @@ result exists yet.
 
 ## 📥 Get started
 
-Clone the repository and switch to the active integration branch:
+Clone the repository, switch to the active integration branch and run the
+repository checks:
 
 ```sh
 git clone https://github.com/danielep71/K-LCR.git
@@ -78,9 +81,12 @@ git switch release/0.1.0
 python tools/check.py --ci
 ```
 
-The check requires the tools listed in [Installation](INSTALLATION.md#-source-and-developer-setup).
-It writes a candidate-bound report in `test-results/`. No workbook is
-available to install. Do not treat a static PASS as Excel or LCR evidence.
+The check needs Python 3.13, Node.js 22, actionlint and the hash-locked Ruff,
+mypy and PyYAML; [Installation](INSTALLATION.md#developer-setup) gives the
+steps, which I verified from a fresh clone. Every gate should report PASS,
+and the report goes to `test-results/`. No workbook is available to install.
+Do not treat a static PASS as Excel or LCR evidence. To contribute, read
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 🏗️ Architecture
 
@@ -94,12 +100,28 @@ available to install. Do not treat a static PASS as Excel or LCR evidence.
 See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 [VBA house style](docs/VBA_HOUSE_STYLE.md) for the boundaries.
 
+## 🧱 Repository layout
+
+| Path | Holds |
+| --- | --- |
+| `docs/` | Governance, scope and decisions, settings evidence, the VBA house style and the website |
+| `docs/methodology/` | Source register, applicability map, contracts, test-case rules, validation plan and the stored EU source copies |
+| `tests/contract/`, `tests/parameters/`, `tests/cases/`, `tests/derivations/` | Synthetic fixtures for the contracts and the registered test cases |
+| `tools/` | `check.py` and its gates, with their tests |
+| `.github/` | Labels, issue forms, the pull request template, Dependabot and the workflows |
+| `src/`, `tests/unit/`, `tests/host/` | Planned VBA core, API, Excel adapter and their tests; not created yet |
+
+The full layout, with the planned paths, is in
+[REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md#%EF%B8%8F-repository-layout).
+
 ## 🗂️ Documentation
 
 | Topic | Read |
 | --- | --- |
 | Scope, decisions and follow-on work | [Architecture](docs/REPOSITORY_STRUCTURE.md) · [Decisions](docs/DECISIONS.md) |
 | Regulatory sources and applicability | [Source register](docs/methodology/SOURCES.md) · [Applicability map](docs/methodology/APPLICABILITY.md) |
+| Contracts, test cases and validation | [Input contract](docs/methodology/DATA_CONTRACT.md) · [Parameter sets and results](docs/methodology/PARAMETERS_AND_RESULTS.md) · [Test cases](docs/methodology/TEST_CASES.md) · [Validation plan](docs/methodology/VALIDATION_PLAN.md) |
+| Contributing and conduct | [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) |
 | Development, review and checks | [Governance](docs/GOVERNANCE.md) · [Repository tooling](tools/README.md) · [Working rules](AGENTS.md) |
 | Changes, versions and releases | [Changelog](CHANGELOG.md) · [Releasing and milestones](RELEASING.md) |
 | Settings, evidence, verification gaps | [Repository settings](docs/REPOSITORY_SETTINGS.md) · [Settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md) |

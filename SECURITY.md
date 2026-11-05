@@ -1,6 +1,6 @@
 # 🔒 Security and confidential data
 
-[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#-security-features)
+[![Visibility: Public](https://img.shields.io/badge/Visibility-Public-1f3a5f?style=flat-square)](#%EF%B8%8F-security-features)
 [![Reporting: Private](https://img.shields.io/badge/Reporting-Private-1f3a5f?style=flat-square)](#-report-a-vulnerability)
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-secrets)
 

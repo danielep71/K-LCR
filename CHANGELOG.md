@@ -90,6 +90,10 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   #16).
 - This changelog and the release and milestone procedure in
   [RELEASING.md](RELEASING.md) (#20).
+- [CONTRIBUTING.md](CONTRIBUTING.md), a [code of conduct](CODE_OF_CONDUCT.md)
+  and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
+  setup, verified from a fresh clone on Linux, troubleshooting, and the Excel
+  steps, marked as not executed (#19).
 
 ### Validation
 
