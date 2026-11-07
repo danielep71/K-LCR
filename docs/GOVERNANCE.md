@@ -9,7 +9,7 @@ The application profile has no additional labels.
 
 ## 👤 Ownership and development target
 
-Daniele Penza (@danielep71) decides scope, priorities and release integration.
+I, Daniele Penza (@danielep71), decide scope, priorities and release integration.
 All development goes first into **release/0.1.0**. The GitHub default branch
 remains main, but it is not the development target. This includes documentation,
 tooling, dependency updates and fixes.
@@ -18,7 +18,7 @@ tooling, dependency updates and fixes.
 | --- | --- |
 | main | Integrated baseline; accepts only a release integration PR after my explicit authorization for that candidate. |
 | release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
-| `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. Never `codex/` or `claude/` ([AGENTS.md](../AGENTS.md)). |
+| `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. No other prefix ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
 | traffic-history | Data-only branch of the traffic history, created on 2026-11-05 as an orphan commit; the Traffic history workflow pushes to it directly ([TRAFFIC.md](TRAFFIC.md)). Never a task base or merged into source branches. |
 
@@ -52,8 +52,10 @@ my separate authorization required for main. CI and review are
 separate evidence. After any
 head change, repeat the affected validation and review and record the new SHA.
 The automated code reviewer reviews PRs opened by people, not bot-authored PRs,
-and does not re-run after a fix push. Wait for its review to complete before
-merging; requesting a re-run needs my approval each time. Record
+and does not re-run after a fix push by itself. After a fix push, request a
+re-run with the reviewer's review comment: I gave a standing permission for it
+on 2026-11-05, so it needs no separate approval. Wait for the review of the final
+head to complete before merging. Record
 whether a review actually completed for that SHA, including findings; do not
 infer coverage from a previous review.
 Automated code review was observed on 2026-10-28 for exact PR heads,
@@ -73,7 +75,7 @@ integration and synchronization it relies on.
 
 1. Prepare a release/0.1.0 -> main PR with candidate head/base SHAs, carried
    issues and PRs, validation evidence and known limitations.
-2. **Wait for explicit authorization from @danielep71 to merge this candidate
+2. **Wait for my explicit authorization to merge this candidate
    into main.** General development approval, including permission to implement
    an issue, is not authorization. Record my decision and its source
    in the PR; a changed candidate needs renewed authorization.
@@ -129,7 +131,8 @@ Forms default bugs to P2 and enhancements/documentation to P3.
 Every issue includes a Dependencies and blocking status section. Write None
 if ready, name prerequisite issues with #number, or use a line beginning
 External condition: for an external blocker. Apply blocked only while a
-named prerequisite is unresolved. Review dependent issues when a prerequisite
+named prerequisite is unresolved or an External condition: line is present;
+replace that line when the condition is met. Review dependent issues when a prerequisite
 closes. Pull-request references do not count as blocking prerequisites.
 
 The read-only Issue triage workflow audits open issues on issue events and
@@ -178,12 +181,12 @@ Status and triage labels:
 
 | Label | Use |
 | --- | --- |
-| `blocked` | A named open prerequisite or an `External condition:` line prevents progress; remove it when none remains |
+| `blocked` | A named open prerequisite or an External condition: line prevents progress; remove it when none remains |
 | `question` | I need further information or need to make a decision |
 | `help wanted` | I welcome external investigation, implementation, validation, or review |
 | `good first issue` | Well-scoped task suitable for a first contribution |
 | `duplicate` | An existing issue or pull request already covers this work |
-| `invalid` | The report is incomplete, unsupported, or not actionable as submitted |
+| `invalid` | Report is incomplete, unsupported, or not actionable as submitted |
 | `wontfix` | I have decided not to implement or continue this work |
 
 Labels do not assign priorities or milestones automatically.
@@ -283,7 +286,7 @@ pull request and the settings read-back of 2026-11-05 are recorded there
 delivered in #7; metadata automation is in #8; traffic activation in #17;
 release procedure in [RELEASING.md](../RELEASING.md) (#20); final baseline certification in #23. Existing green
 checks cover only the installed portable gates, not LCR calculations, host
-execution or these future gates.
+execution or the closeout certification.
 
 ## 🔒 Licensing and data
 

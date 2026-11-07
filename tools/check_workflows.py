@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check the security and governance invariants of the workflows and Dependabot.
 
-Reads .github/workflows/*.yml and .github/dependabot.yml with PyYAML and
+Reads .github/workflows/*.yml and *.yaml and .github/dependabot.yml with PyYAML and
 reports every finding (docs/GOVERNANCE.md; tools/README.md, workflow-invariants).
 Read-only. Without PyYAML it fails when GITHUB_ACTIONS is set and exits 2
 (skipped) otherwise, so that only a local run can skip it.

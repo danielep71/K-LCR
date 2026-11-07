@@ -81,7 +81,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).
 - The input, parameter-set and result contracts, with validators and
-  synthetic fixtures (#10).
+  synthetic fixtures (#10); Art. 12(1)(f) assets are a Level 2B category in
+  scope (#148).
 - The test-case format, the oracle and tolerance rules and the validation
   plan, with two illustrative cases (#11).
 - The project website, README branding and the social preview (#63, #18).
@@ -93,14 +94,17 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 - The opt-in **Traffic history** workflow and `tools/traffic_history.py`:
   daily traffic, stars, forks, watchers and open issues merged into CSV files
   on the data-only `traffic-history` branch, badge files and a traffic alert
-  issue ([TRAFFIC.md](docs/TRAFFIC.md)). It is not active: it needs the App
-  credentials, the `TRAFFIC_HISTORY` variable and the workflow on `main`
-  (#17).
+  issue ([TRAFFIC.md](docs/TRAFFIC.md)), with three traffic badges in the
+  README. It is active on `main` since 2026-11-05 (#17).
 - The `binaries` gate: every tracked binary is a byte-preserved regulatory
   source, a UserForm `.frx` or listed with its SHA-256 in
   `.github/binary-allowlist.json`; and the
   [file audit](docs/release/FILE_AUDIT_v0.1.0.md) of every tracked file, with
   its findings and their disposition (#21).
+- The [documentation audit](docs/release/DOC_AUDIT_v0.1.0.md): every
+  document, comment and docstring compared with the implemented behaviour, its
+  findings fixed or recorded; the tracked-text check now also covers HTML,
+  CSS, SVG and XML (#22).
 - [CONTRIBUTING.md](CONTRIBUTING.md), a [code of conduct](CODE_OF_CONDUCT.md)
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel
@@ -111,6 +115,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 - `python tools/check.py --ci` and the hosted Repository integrity check
   pass on each merged change. They are static checks: they neither compile
   nor run VBA, and they calculate no LCR.
+- The Traffic history workflow made its first collection on `main` on
+  2026-11-05, and a same-day rerun changed no value (#17).
 
 ### Known limitations
 

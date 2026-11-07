@@ -5,7 +5,7 @@
 
 ## ✅ My accepted decisions — 2026-10-28
 
-These decisions were supplied by @danielep71 while implementing issue #3.
+I made these decisions on 2026-10-28 while implementing issue #3.
 
 | ID | Decision | Consequence |
 | --- | --- | --- |
@@ -29,11 +29,12 @@ exact supported builds and tested configurations remain subject to #15.
 | Input, parameter-set and result contracts; units, reconciliation, fingerprints and diagnostics | #10 | [Input contract](methodology/DATA_CONTRACT.md), [parameter sets and results](methodology/PARAMETERS_AND_RESULTS.md), their validators and synthetic fixtures |
 | Test-case format, oracle and comparison rules, validation plan | #11 | [Test cases](methodology/TEST_CASES.md), [validation plan](methodology/VALIDATION_PLAN.md), `tools/check_test_cases.py` and two neutral examples |
 | File audit of every tracked file; exact binary allowlist | #21 | [File audit](release/FILE_AUDIT_v0.1.0.md) and the `binaries` gate |
+| Documentation audit of every document, comment and docstring | #22 | [Documentation audit](release/DOC_AUDIT_v0.1.0.md) |
 | README, contributor guide, conduct policy and installation guidance, verified from a fresh clone | #19 | [README](../README.md), [CONTRIBUTING.md](../CONTRIBUTING.md), [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) and [INSTALLATION.md](../INSTALLATION.md#verified-setup) |
 | Changelog, versioning, milestone closeout and release procedure | #20 | [CHANGELOG.md](../CHANGELOG.md), [RELEASING.md](../RELEASING.md), the [closeout template](release/CLOSEOUT.md) and the `changelog` gate |
 | VBA static checks: conditional compilation, jumps, native, dynamic and COM constructs, reviewed host exceptions | #12 | [Static checks](VBA_HOUSE_STYLE.md#-static-checks), the `vba-conditionals`, `vba-jumps` and `vba-dynamic` gates and their fixtures in `tools/test_check_vba.py` |
 
-## 📋 Remaining setup decisions
+## 📋 Remaining decisions (v0.2.0 - Host execution)
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |

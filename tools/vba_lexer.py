@@ -68,8 +68,9 @@ def tracked_components(root: Path) -> list[str]:
 
 
 def read_component(root: Path, path: str) -> str:
-    """Component text with LF line ends. A non-ASCII byte becomes U+FFFD; the
-    vba-source gate reports it, the other checks still analyze the file."""
+    """Component text with LF line ends. A non-ASCII byte becomes U+FFFD, and
+    the checks still analyze the file; no gate rejects non-ASCII VBA yet, so
+    the ASCII-only rule (docs/VBA_HOUSE_STYLE.md) is checked in review."""
     text = (root / path).read_bytes().decode("ascii", errors="replace")
     return text.replace("\r\n", "\n")
 

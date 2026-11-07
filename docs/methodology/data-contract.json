@@ -77,7 +77,7 @@
   },
   "findings": {
     "LCR-ENCODING": "The file is not valid UTF-8 or contains a NUL character.",
-    "LCR-SYNTAX": "The record is not valid CSV: a quote inside an unquoted field, text after a closing quote, or a quoted field left open.",
+    "LCR-SYNTAX": "The record is not valid CSV: a quote inside an unquoted field, text after a closing quote, a quoted field left open, or a carriage return outside a quoted field.",
     "LCR-EMPTY": "The file has no header record.",
     "LCR-DELIMITER": "The header is a single field containing a comma or a tab: the file uses another delimiter than ';'.",
     "LCR-HEADER-DUPLICATE": "A column name appears more than once in the header.",

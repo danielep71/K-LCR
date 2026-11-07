@@ -13,7 +13,7 @@ The contract follows my applicability decisions A01 to A09
 ([APPLICABILITY.md](APPLICABILITY.md)). Passing the contract means that the
 input is well formed and inside the v0.1 perimeter. It says nothing about
 whether a figure calculated from it would be correct: that is the work of the
-calculation contracts and of the independent fixtures (#11).
+calculation contracts and of the independent cases planned in [VALIDATION_PLAN.md](VALIDATION_PLAN.md).
 
 ## 📁 Files of a run
 
@@ -50,13 +50,15 @@ A run is one folder holding three files:
 | `code` | One of the values the column allows, or a category of the run's profile |
 | `flag` | `Y` or `N` |
 | `currency` | Three capital letters (ISO 4217) |
-| `integer` | Digits only, from 1 to 999 |
-| `amount` | A decimal number, zero or more, in the reporting currency |
+| `integer` | Digits only, without a sign or a leading zero, from 1 to 999 |
+| `amount` | A decimal number, zero or more, in the reporting currency: no sign, no leading zero before other digits, and digits on both sides of a `.` |
 | `date` | `YYYY-MM-DD`, a real calendar date |
+| `text` | Free text of at most 200 characters (`LCR-LENGTH`). No column uses it in version 1 |
 
 The forms of `id`, `currency`, `integer`, `amount` and `date` describe the
 whole value: any other character, such as a space or a line break inside
-quotes, gets `LCR-TYPE`.
+quotes, gets `LCR-TYPE`. A value that starts with a formula character gets
+`LCR-FORMULA` first.
 
 Text never starts with `=`, `+`, `-`, `@`, a tab or a carriage return, so
 that a spreadsheet does not read it as a formula.
@@ -102,13 +104,14 @@ that a spreadsheet does not read it as a formula.
 
 [categories.json](categories.json) lists, for each profile, the liquid-asset,
 outflow and inflow categories in scope (A03, A08), at the granularity at which
-the source gives a distinct treatment: 23 liquid-asset, 67 outflow and 28
+the source gives a distinct treatment: 24 liquid-asset, 67 outflow and 28
 inflow categories for the EU profile, and 12, 57 and 22 for Basel. Each
 category has its locator in `SRC-02` or `SRC-06`, a short description, and its
-treatment: a haircut, outflow rate or inflow rate, an inclusion rule, or an
-exclusion. An exclusion category, such as a retail term deposit outside the
-horizon, lets the provider classify an item that the source leaves out of
-the calculation. Basel categories also say whether they are a national
+treatment. A CRR article named in a description or a note is a cross-reference
+that the `SRC-02` point makes, not a locator of `SRC-01`. The treatment is a
+haircut, outflow rate or inflow rate, an inclusion rule, or an exclusion. An
+exclusion category, such as a retail term deposit outside the horizon, lets
+the provider classify an item that the source leaves out of the calculation. Basel categories also say whether they are a national
 discretion (A07). The categories hold no parameter value.
 
 A flow category also states its collateral rule:
@@ -120,8 +123,11 @@ A flow category also states its collateral rule:
 
 A derivative category may carry `netting_set_id`.
 
-The file also lists the excluded categories (A03 to A06), so that input naming
-one is rejected rather than ignored. This includes the secured flows whose
+The file also lists the excluded categories, so that input naming one is
+rejected rather than ignored: for the EU profile those of A03 and A06, for
+Basel those of A03 and A04. My other exclusions (EU A04 and A05, Basel A05,
+and the significant-currency LCR of A02) have no input field or category in
+version 1, so no input can claim them. This includes the secured flows whose
 collateral is an excluded asset class, such as securitisations or CIUs.
 
 ## 🚦 Findings
@@ -130,17 +136,21 @@ Each finding has a stable code, the file, the physical line, the record
 number (0 for the header) and the column. The codes and their meanings are
 in [data-contract.json](data-contract.json). In order of checking:
 
-1. **File:** `LCR-FILE-MISSING`, `LCR-ENCODING`, `LCR-TOO-LARGE`,
+1. **File:** `LCR-FILE-MISSING`, `LCR-TOO-LARGE` (bytes), `LCR-ENCODING`,
    `LCR-SYNTAX`, `LCR-EMPTY`, `LCR-DELIMITER`, `LCR-HEADER-DUPLICATE`,
-   `LCR-HEADER-MISSING`, `LCR-HEADER-UNKNOWN`, `LCR-FIELD-COUNT`. After one of
-   these, the file is not read as records.
-2. **Field:** `LCR-BLANK-RECORD`, `LCR-REQUIRED`, `LCR-FORMULA`, `LCR-TYPE`,
-   `LCR-NON-FINITE`, `LCR-PRECISION`, `LCR-RANGE`, `LCR-ALLOWED`,
-   `LCR-LENGTH`, `LCR-DUPLICATE-KEY`. A field reports its first finding only.
-3. **Run:** `LCR-RECORD-COUNT`, `LCR-PARAMETER-SET`, `LCR-REGISTER-VERSION`.
+   `LCR-HEADER-MISSING`, `LCR-HEADER-UNKNOWN`, `LCR-TOO-LARGE` (records),
+   `LCR-FIELD-COUNT`. After one of these, the file is not read as records.
+2. **Field:** `LCR-BLANK-RECORD`, `LCR-REQUIRED`, then the value:
+   `LCR-FORMULA`, `LCR-NON-FINITE`, `LCR-TYPE`, `LCR-PRECISION`,
+   `LCR-RANGE`, `LCR-LENGTH`, `LCR-ALLOWED`; then `LCR-DUPLICATE-KEY`. A
+   field reports its first finding only.
+3. **Run:** `LCR-RECORD-COUNT`, `LCR-PARAMETER-SET`, `LCR-REGISTER-VERSION`,
+   when `run.csv` is readable and has no field finding.
 4. **Records against the run:** `LCR-CATEGORY-UNKNOWN`, `LCR-OUT-OF-SCOPE`,
-   `LCR-COLLATERAL`, `LCR-NETTING-SET`, `LCR-MATURITY`. These run only when
-   `run.csv` is valid, and only on records without field findings.
+   `LCR-COLLATERAL`, `LCR-NETTING-SET`, `LCR-MATURITY`. These run when
+   `run.csv` is readable, has exactly one record without field findings and
+   names a known profile, even if step 3 reported a finding; and only on
+   records without field findings.
 
 Treatment:
 

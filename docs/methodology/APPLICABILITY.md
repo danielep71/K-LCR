@@ -31,7 +31,7 @@ Locators are articles of `SRC-02` unless marked `CRR` (`SRC-01`), and
 paragraphs of `SRC-06`. A dash means no counterpart has been located in that
 profile; it is not a claim that none exists.
 
-| ID | Topic | EU locators | Basel locators | Future tests (#11) |
+| ID | Topic | EU locators | Basel locators | Test directions |
 | --- | --- | --- | --- | --- |
 | `REQ-01` | Ratio: liquidity buffer over net liquidity outflows | Art. 4(1); Annex II; CRR Art. 412(1) | LCR20.5; LCR40.1 | Ratio from known numerator and denominator; rejection of an empty denominator |
 | `REQ-02` | Horizon of 30 calendar days | Art. 4(1); Art. 17(2) | LCR20.1; LCR20.5; LCR40.1 | Items maturing on the last day inside and the first day outside the horizon |
@@ -61,7 +61,8 @@ profile; it is not a claim that none exists.
 | `REQ-26` | Reporting and disclosure | CRR Art. 415, 416 and 451a; `SRC-05` | LCR20.7; LCR20.8 | None: outside the calculation, informs #10 only |
 
 `LCR99` summarises the Basel factors; the cited chapter paragraphs remain the
-source of each value. The tests listed are directions for #11, not fixtures.
+source of each value. The test directions are not cases: the planned cases are
+in [VALIDATION_PLAN.md](VALIDATION_PLAN.md).
 
 ## ✅ Resolved by the sources
 
@@ -87,7 +88,7 @@ given a default.
 | --- | --- | --- | --- | --- |
 | `A01` | One perimeter per run, declared in the input as individual or already consolidated. K-LCR does not consolidate. | The input names its perimeter type. No group structure, third-country asset rule or liquidity transfer restriction is modelled. | Art. 2; CRR Art. 6(4), 8 and 11(3) | LCR10.1 to LCR10.8 |
 | `A02` | Only the LCR in the reporting currency. Every amount arrives converted, and keeps its original currency. The separate LCR in each significant currency is later work. | Amounts are in the reporting currency, with an original-currency field. A request for a significant-currency LCR is rejected. | Art. 4(5); Art. 8(6) | LCR10.9; LCR30.29 |
-| `A03` | Level 1, 2A and 2B assets only. | The special categories are rejected. | Art. 10 to 16 | LCR30.40 to LCR30.47 |
+| `A03` | Level 1, 2A and 2B assets only. | The special categories are rejected. Every Level 2B point of Art. 12(1), including (f), is in scope: my decision of 2026-11-05 (#148). | Art. 10 to 16 | LCR30.40 to LCR30.47 |
 | `A04` | Alternative liquidity approaches are out of scope. | Rejected. | Art. 19 | LCR31 |
 | `A05` | Transitional and grandfathering provisions are out of scope. | Rejected. | Art. 35 to 38 | LCR90 |
 | `A06` | Treatments that need supervisory approval or authorisation (R06) are out of scope. | Inputs claiming them are rejected. The inflow cap of Art. 33(1) and LCR40.77 always applies. | Art. 26, 29, 33(2) to (6) and 34 | — |

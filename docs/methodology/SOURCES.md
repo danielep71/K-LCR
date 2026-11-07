@@ -90,10 +90,13 @@ material, with the BIS cited as the source
 copy of `SRC-06` is not covered (decision A09 in
 [APPLICABILITY.md](APPLICABILITY.md)).
 
-A stored copy goes under `docs/methodology/sources/`, byte for byte: Git does
-not normalize those files and the tracked-text check skips them. It is named
-`<ID>_<short-title>.<extension>`, and its SHA-256 is added to the retrieval
-record.
+A stored file goes under `docs/methodology/sources/` and is kept byte for
+byte: Git does not normalize those files and the tracked-text check skips
+them. It is either the retrieved file or a page extract made as
+[sources/README.md](sources/README.md) describes. It is named
+`<ID>_<short-title>.<extension>`, and its SHA-256 is recorded in
+[sources/README.md](sources/README.md); the retrieval record above keeps the
+hash of the retrieved file.
 
 ## ✅ Verifying an entry
 

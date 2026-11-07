@@ -12,7 +12,7 @@
 #   - GitHub Linguist reports exported modules as VBA.
 #   - Text/binary handling follows file type, except for copies of regulatory
 #     sources in docs/methodology/sources/, which are stored byte for byte.
-#   - VBA export encoding awaits an actual host round trip in issues #6/#14.
+#   - VBA export encoding awaits an actual host round trip in issues #14/#15.
 #
 # PLACEMENT
 #   Keep this file at the repository root. Custom [attr] macros are honored only
@@ -234,10 +234,11 @@ VERSION         text eol=lf
 #------------------------------------------------------------------------------
 # REGULATORY SOURCE COPIES
 #------------------------------------------------------------------------------
-# Convention: a published regulatory source kept in docs/methodology/sources/
-# is a byte-for-byte copy whose SHA-256 is recorded in the README beside it.
-# Never normalized, so the checked-out bytes keep the recorded hash; the README
-# itself is ordinary documentation. No copy is committed yet.
+# Convention: every file kept in docs/methodology/sources/ is stored byte for
+# byte, with its SHA-256 recorded in the README beside it, which also says
+# whether the file is a full copy or an extract. Never normalized, so the
+# checked-out bytes keep the recorded hash; the README itself is ordinary
+# documentation.
 docs/methodology/sources/**             -text
 docs/methodology/sources/README.md      text eol=lf
 
@@ -259,4 +260,4 @@ docs/methodology/sources/README.md      text eol=lf
 #------------------------------------------------------------------------------
 # VBE exports can depend on the Windows system code page. No Git working-tree
 # encoding is configured before the source import/export decision and round-trip
-# evidence in issues #6/#14. Do not infer ASCII-only support here.
+# evidence in issues #14/#15. Do not infer ASCII-only support here.

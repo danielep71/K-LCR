@@ -297,5 +297,20 @@ class MainTests(unittest.TestCase):
         self.assertEqual(check_contract.check_fixtures(ROOT), [])
 
 
+class CategoryFileTests(unittest.TestCase):
+    def test_level_2b_secured_flows_allow_every_asset_their_point_names(self) -> None:
+        # Art. 28(3)(g) and Art. 32(3)(b)(vii) cover the Level 2B assets of Art. 12(1)(b), (c) and (f).
+        categories = check_contract.load_json(ROOT / check_contract.CATEGORIES)
+        eu = categories["profiles"]["EU"]
+        assets = sorted(a["code"] for a in eu["assets"]
+                        if a["locator"] in ("Art. 12(1)(b)", "Art. 12(1)(c)", "Art. 12(1)(f)"))
+        self.assertEqual(len(assets), 3)
+        flows = [f for f in eu["outflows"] + eu["inflows"]
+                 if f["locator"] in ("Art. 28(3)(g)", "Art. 32(3)(b)(vii)")]
+        self.assertEqual(len(flows), 2)
+        for flow in flows:
+            self.assertEqual(sorted(flow["collateral"]["allowed"]), assets, flow["code"])
+
+
 if __name__ == "__main__":
     unittest.main()

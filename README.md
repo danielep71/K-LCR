@@ -16,6 +16,12 @@
 
 <br>
 
+[![Clones, including CI](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fclones.json&style=flat-square)](docs/TRAFFIC.md#badges)
+[![Unique visitors, last 14 days](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fvisitors.json&style=flat-square)](docs/TRAFFIC.md#badges)
+[![Daily unique visitors since tracking began](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdanielep71%2FK-LCR%2Ftraffic-history%2Fdata%2Fbadges%2Fvisits.json&style=flat-square)](docs/TRAFFIC.md#badges)
+
+<br>
+
 [Website](https://danielep71.github.io/K-LCR/) · [Wiki](https://github.com/danielep71/K-LCR/wiki) ·
 [Status](#-status) · [What this project is](#-what-this-project-is) ·
 [Get started](#-get-started) · [Architecture](#%EF%B8%8F-architecture) ·
@@ -45,8 +51,9 @@
 
 The selected implementation is Excel/VBA with separate planned EU and Basel
 profiles. The portable **Repository integrity** check covers repository
-tooling, tracked text, workflows, the input and parameter contracts, the
-registered test cases and static VBA rules. It does not validate regulatory
+tooling, Python lint and types, tracked text, workflows, the input and
+parameter contracts, the registered test cases, static VBA rules, binary files
+and the changelog. It does not validate regulatory
 calculations or execute Excel. The figures in the image above are regulatory
 requirements, with their sources in [docs/assets](docs/assets/README.md#-social-preview),
 not results.

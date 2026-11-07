@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check CHANGELOG.md and VERSION against the rules of RELEASING.md.
+"""Check CHANGELOG.md and VERSION against the date and version rules of CHANGELOG.md.
 
 It never tags or publishes a release. CHANGELOG.md starts with an ``## [Unreleased]`` section; each release
 heading is ``## [X.Y.Z] - YYYY-MM-DD`` with a real date, newest first by

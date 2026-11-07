@@ -109,7 +109,7 @@ an adapted or copied file, with its revision.
 | `docs/.nojekyll` | Serves docs/ as a plain static site on Pages | Written for K-LCR | MPL-2.0 |
 | `docs/DECISIONS.md` | My accepted decisions and follow-on backlog | Written for K-LCR | MPL-2.0 |
 | `docs/GOVERNANCE.md` | Branches, review, integration, issues and labels | Adapted (NOTICE) | MPL-2.0 |
-| `docs/REPOSITORY_SETTINGS.md` | Portable register of non-default settings | Copied unchanged (NOTICE) | MPL-2.0 |
+| `docs/REPOSITORY_SETTINGS.md` | Portable register of non-default settings | Adapted (NOTICE) | MPL-2.0 |
 | `docs/REPOSITORY_SETTINGS_EVIDENCE.md` | Dated settings read-back and enforcement demonstration | Adapted (NOTICE) | MPL-2.0 |
 | `docs/REPOSITORY_STRUCTURE.md` | Scope, architecture and repository layout | Written for K-LCR | MPL-2.0 |
 | `docs/SOURCE_CONTROL.md` | Source layout, encoding and generated files | Written for K-LCR | MPL-2.0 |
@@ -183,7 +183,7 @@ an adapted or copied file, with its revision.
 | `tools/README.md` | Tooling guide: gates, triage, traffic, tool versions | Adapted (NOTICE) | MPL-2.0 |
 | `tools/check.py` | Runs every gate; writes the integrity report | Adapted (NOTICE) | MPL-2.0 |
 | `tools/check_binaries.py` | Gate: tracked binary files | Adapted (NOTICE) | MPL-2.0 |
-| `tools/check_changelog.py` | Gate: changelog, VERSION and release state | Copied unchanged (NOTICE) | MPL-2.0 |
+| `tools/check_changelog.py` | Gate: changelog, VERSION and release state | Adapted (NOTICE) | MPL-2.0 |
 | `tools/check_contract.py` | Gate: input contract validator | Written for K-LCR; structure adapted (NOTICE) | MPL-2.0 |
 | `tools/check_files.py` | Gate: tracked text format | Written for K-LCR | MPL-2.0 |
 | `tools/check_issues.py` | Issue triage rules and configuration gate | Adapted (NOTICE) | MPL-2.0 |

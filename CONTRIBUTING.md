@@ -21,7 +21,7 @@ the checks run and what was not validated.
 
 - Start a task branch from the active release branch, `release/0.1.0`, and
   name it `docs/`, `fix/`, `feat/` or `chore/` plus the issue number and a
-  slug, for example `fix/42-empty-input-report`. Never `codex/` or `claude/`.
+  slug, for example `fix/42-empty-input-report`. No other prefix is allowed.
 - Open the pull request against `release/0.1.0`, never `main`: `main` takes
   only release integrations that I authorize
   ([task integration](docs/GOVERNANCE.md#-task-integration-and-review)).

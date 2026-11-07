@@ -69,7 +69,7 @@ An output is either **text**, compared exactly, or a **number**:
 | Quantity | Kind | Meaning | Executed today |
 | --- | --- | --- | --- |
 | `input_status` | text | `pass` or `fail`: the [input contract](DATA_CONTRACT.md) verdict | Yes, by the input validator |
-| `input_findings` | text | The finding codes, sorted and joined by `,`; empty when the input passes | Yes, by the input validator |
+| `input_findings` | text | The distinct finding codes, sorted and joined by `,`; empty when the input passes | Yes, by the input validator |
 | `result_status` | text | `calculated`, `rejected` or `failed` ([results](PARAMETERS_AND_RESULTS.md)) | No: registered |
 | `liquidity_buffer`, `outflows`, `inflows`, `inflows_after_cap`, `net_outflows` | number, currency | The result figures of the same name | No: registered |
 | `lcr` | number, `1` | The ratio, as a decimal fraction | No: registered |
@@ -121,7 +121,9 @@ An actual number `a` matches the expected value `e` when
 - **Non-finite values never match:** an expected or actual NaN or infinity is
   a failure, not a tolerance question.
 - **Domain rules come first:** a figure that may not be negative fails when it
-  is negative, however small.
+  is negative, however small. This rule is for the comparison of result
+  figures, which no case executes yet; the checker's comparison does not apply
+  it.
 - **No rounding before comparison,** unless the result contract rounds the
   figure. The comparison itself runs at a precision wide enough for its
   operands, so it never rounds.
@@ -158,6 +160,24 @@ with an expected one. `tools/check_test_cases.py` reports both counts:
 
 A run that leaves an expected assertion unexecuted is incomplete, never a
 pass for that assertion.
+
+The checker's findings:
+
+- `CASE-JSON`: a file is not strict JSON (duplicate keys or non-finite
+  numbers);
+- `CASE-METADATA`: `case.json` breaks the metadata rules, or names a missing
+  parameter set, one of another profile or, outside `invalid-parameters`, one
+  with findings;
+- `CASE-INPUT`: a case other than `invalid-input` breaks the input contract;
+- `CASE-EXPECTED`: `expected.json` has the wrong keys, schema or case, no
+  outputs or a repeated quantity, or outputs its category does not allow;
+- `CASE-OUTPUT`: an output breaks the rules of *Expected outputs*;
+- `CASE-REFERENCE`: a reference breaks the rules of *Reference classes*;
+- `CASE-SCRIPT`: a reference names no existing script in `tests/derivations/`;
+- `CASE-ORACLE`: a derivation script does not parse, uses a relative import or
+  imports anything but the standard library;
+- `CASE-MISMATCH`: an executed assertion gives another value, or its script
+  fails or gives no value.
 
 A rule is **validated** only when at least one `published` or `independent`
 case for it executes and passes. `illustrative` cases never count. No rule is

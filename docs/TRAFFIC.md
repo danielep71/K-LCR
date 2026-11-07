@@ -72,11 +72,20 @@ stays on the branch.
 | Step | State |
 | --- | --- |
 | 1. Branch | Done on 2026-11-05: orphan commit `6c7a9ea` with the four history files, headers only (#17) |
-| 2. `analytics` environment | Done on 2026-10-29, deployment limited to `main`; no secret or variable (2026-11-05) |
-| 3 to 5. App, installation and credentials | Not done |
-| 6. `TRAFFIC_HISTORY` variable | Not set |
-| Workflow on `main` | Not yet: it reaches `main` with the next integration, after my approval |
-| 7. First collection and same-day rerun | Not run: no collection has happened |
+| 2. `analytics` environment | Done on 2026-10-29, deployment limited to `main` |
+| 3 to 5. App, installation and credentials | Done on 2026-11-05: the App is installed on this repository; `TRAFFIC_APP_CLIENT_ID` and `TRAFFIC_APP_PRIVATE_KEY` are in `analytics` |
+| 6. `TRAFFIC_HISTORY` variable | Set to `enabled` on 2026-11-05 |
+| Workflow on `main` | Since 2026-11-05: integration #141, merge commit `0e96e86` |
+| 7. First collection and same-day rerun | Done on 2026-11-05, see below |
+
+The runs of 2026-11-05 on `main`:
+
+| Run | Result |
+| --- | --- |
+| [42040025723](https://github.com/danielep71/K-LCR/actions/runs/42040025723) | Skipped: `TRAFFIC_HISTORY` was not yet a repository variable |
+| [42040626604](https://github.com/danielep71/K-LCR/actions/runs/42040626604) | Failed at *Create the traffic App token* with 404: the App was not yet installed on this repository. Nothing was written; the red run is the failure signal |
+| [42040875116](https://github.com/danielep71/K-LCR/actions/runs/42040875116) | First collection: `traffic-history` commit `222a07b`, 14 days of views and clones, 8 paths, 1 referrer, the snapshot and the three badge files; no alert due |
+| [42041029911](https://github.com/danielep71/K-LCR/actions/runs/42041029911) | Same-day rerun: commit `6d4ba57` changes only `observed_at`; every value and every `collected_at` is unchanged, and the earlier commits stay on the branch |
 
 ## ⏱️ Schedule
 
@@ -144,10 +153,8 @@ value does. Clones include those made by workflow checkouts, so CI activity
 raises the count; for the same reason they never raise a
 [traffic alert](#-traffic-alert).
 
-The README shows no traffic badge yet: the badge files are written by the
-first collection. Once it has run, add the three badges for
-`danielep71/K-LCR` at the top of the README, in the same pull request that
-records the first collection in #17.
+The README shows the three badges, in `flat-square` style, under the
+project badges; each links to this section.
 
 ### Merge rules
 
@@ -231,10 +238,10 @@ issue's table and summed in the clones badge.
 At most one issue is opened per snapshot date: the job skips a date whose
 issue exists, open or closed. The issue is assigned to the issue-form account,
 labelled `P3` and `repository`, filed under the open milestone with the
-earliest due date after the collection day, and carries a dependency section
+earliest due date after the day the job runs (UTC), and carries a dependency section
 and a target end date (seven days after the snapshot, or the day before the
 milestone's due date if that is earlier), so it passes **Issue triage**. The
-job needs at least one open milestone due after the collection day.
+job needs at least one open milestone due after the day it runs.
 
 The job uses the workflow token with `issues: write` and `contents: read`. It
 has no environment, so it never receives the App's key or token, and it runs
@@ -251,9 +258,9 @@ invalid, and leaves the history unchanged. Read the failing step:
 | Step and message | Cause | Action |
 | --- | --- | --- |
 | *Check the traffic App configuration*: `TRAFFIC_APP_CLIENT_ID or TRAFFIC_APP_PRIVATE_KEY is not set` | Variable or secret missing, or the run is not in the `analytics` environment. | Follow *Enabling*, steps 2–5. |
-| *Create the traffic App token* fails | Wrong client ID or key, the key was deleted, or the App is not installed on this repository. | Check the App's installation, then rotate the key as above. |
+| *Create the traffic App token* fails | Wrong client ID or key, the key was deleted, the App lacks *Administration: read*, or the App is not installed on this repository (HTTP 404, as on 2026-11-05). | Check the App's permission and installation, then rotate the key as above. |
 | *Fetch*: HTTP 401 | The installation token was rejected, for example because the App was uninstalled during the run. | Check the App's installation and run the workflow again. |
-| *Fetch*: HTTP 403 or 404 | The App lacks *Administration: read*, or is not installed on this repository. | Grant the permission (the account must accept the change) or install the App, then run again. |
+| *Fetch*: HTTP 403 or 404 | The installation token does not grant *Administration: read* for this repository, for example after a permission change not yet accepted. | Grant the permission (the account must accept the change), then run again. |
 | *Fetch*: HTTP 429 or 5xx after retries | Rate limit or GitHub outage. | Run it again later; the next run collects the same 14 days. |
 | *Merge*: `ERROR: ...; the history was not changed` | The API returned an unexpected shape, or a history file no longer has the expected layout. | Inspect the response or the named file; a file edited by hand must keep its header and columns. |
 | *Commit and push*: `Could not push the history` | `traffic-history` kept moving, or a rule rejected the push. | Check the branch's rules and recent commits, then run again. |
@@ -262,7 +269,17 @@ invalid, and leaves the history unchanged. Read the failing step:
 | *Traffic alert*: `gh issue create` fails | A label, the assignee or the milestone no longer exists. | Restore it, then run the workflow again; the history is already saved. |
 
 A failed run can always be repeated: the merge is idempotent, and each
-collection covers the last 14 days. To repair the branch, change it with a new
-commit made with `python tools/traffic_history.py merge` or by hand, keeping
-every header. `python tools/traffic_history.py init --data data` recreates
-missing files with their headers and never overwrites an existing one.
+collection covers the last 14 days. To repair the branch, check it out beside
+a clone of the default branch, as the workflow does, and change it with a new
+commit, keeping every header:
+
+```sh
+git worktree add ../traffic-history traffic-history
+python tools/traffic_history.py init --data ../traffic-history/data
+python tools/traffic_history.py merge --raw RAW --data ../traffic-history/data --collected-at 2026-11-05T06:17:00Z
+```
+
+`init` recreates missing files with their headers and never overwrites an
+existing one; `merge` needs a directory `RAW` of API responses, as the
+workflow's *Fetch* step writes them. A change by hand is a normal commit on
+the branch; then commit and push from `../traffic-history`.

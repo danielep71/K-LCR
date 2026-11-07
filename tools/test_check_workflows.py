@@ -287,6 +287,19 @@ class WorkflowInvariantTests(unittest.TestCase):
         self.repo.dependabot["updates"][0]["milestone"] = 4
         self.assertFinding("`github-actions` sets a milestone")
 
+    def test_dependabot_directory(self) -> None:
+        pip = next(u for u in self.repo.dependabot["updates"] if u["package-ecosystem"] == "pip")
+        pip["directory"] = "/"
+        self.assertFinding("`pip` must cover `/tools`")
+
+    def test_rulesets_need_their_branch_line(self) -> None:
+        self.repo.governance = re.sub(r"^Applies to `", "Covers `", self.repo.governance, flags=re.M)
+        self.assertFinding("no 'Applies to ... branch' line for the rulesets")
+
+    def test_labels_sync_needs_its_reconcile_job(self) -> None:
+        del self.repo.workflows["labels-sync.yml"]["jobs"]["reconcile"]
+        self.assertFinding("labels-sync.yml: no reconcile job")
+
     def test_dependabot_priorities(self) -> None:
         self.repo.dependabot["updates"][1]["labels"].append("P2")
         self.assertFinding("`pip` has priorities ['P2', 'P3']")

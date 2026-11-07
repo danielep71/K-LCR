@@ -30,7 +30,8 @@ Resolves #
 
 <!-- Wait for the automated code review of the current head to complete
 (docs/GOVERNANCE.md, Task integration and review). It does not re-run after a
-push; requesting a new review needs my approval each time. Write the reviewed
+push by itself: request a re-run with the reviewer's review comment, under my
+standing permission of 2026-11-05. Write the reviewed
 SHA and the result here as text: the review summary comment is edited in
 place, so its link later shows another commit. For a bot-authored PR, record
 my review of the final head and that the automated review was skipped. A sync

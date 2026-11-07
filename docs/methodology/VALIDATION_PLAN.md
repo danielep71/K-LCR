@@ -18,8 +18,8 @@ and once for Basel, unless its row names one profile.
 - No `published` worked LCR example has been registered yet, and no
   independent implementation is registered as `IMPL-`. Finding them is the
   first task of numerical validation (B005).
-- `contract` values, the input-contract findings and statuses, are executed
-  today against the input validator.
+- `contract` values for `input_status` and `input_findings` are executed today
+  against the input validator; `result_status` is registered only.
 
 ## 🗺️ Planned cases
 
@@ -44,8 +44,8 @@ Status: `registered` (in `tests/cases/`) or `planned`.
 | `PC-15` | invalid-parameters | — | A parameter set of the other profile, or an incomplete one: `CALC-PARAMETER-SET-PROFILE` or `CALC-PARAMETER-SET-INVALID` | planned |
 | `PC-16` | nominal | REQ-11 | Basel only: Level 2B included or not by the parameter set's discretion choice (A07) | planned |
 | `PC-17` | nominal | REQ-13 | The same mapped inputs under both profiles, with the composition difference explained (I03) | planned |
-| `illustrative-eu-input-totals` | nominal | — | Format example: synthetic input totals from a derivation script | registered |
-| `illustrative-eu-rejected-input` | invalid-input | — | Format example: a negative amount rejected by the input contract | registered |
+| `illustrative-eu-input-totals` | nominal | — | EU only. Format example: synthetic input totals from a derivation script | registered |
+| `illustrative-eu-rejected-input` | invalid-input | — | EU only. Format example: a negative amount rejected by the input contract | registered |
 
 ## 📊 Evidence for a validated rule
 

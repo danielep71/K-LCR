@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".mjs", ".toml", ".txt", ".csv",
-                 ".bas", ".cls", ".frm"}
+                 ".bas", ".cls", ".frm", ".html", ".css", ".svg", ".xml"}
 TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore"}
 EXCLUDED = {"LICENSE"}
 # Byte-for-byte copies of regulatory sources (.gitattributes); only the README

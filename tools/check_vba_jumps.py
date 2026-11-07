@@ -5,8 +5,9 @@
 defined in the same procedure, labels must be unique within a procedure, and
 every procedure must be closed. Jumps serve a single error/cleanup handler
 only: no ``GoSub``, no computed ``On <expression> GoTo``, no
-``On Error GoTo -1``, at most one ``On Error GoTo`` handler label and one other
-(cleanup) label per procedure, and no backward ``GoTo``. Each compilation
+``On Error GoTo -1``, at most one ``On Error GoTo`` target and one other
+(cleanup) jump target per procedure, and no backward ``GoTo``. A label that no
+jump uses is not limited. Each compilation
 environment of check_vba_conditionals.py is checked separately, so that
 mutually exclusive ``#If`` branches are never combined.
 """
