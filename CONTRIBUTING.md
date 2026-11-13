@@ -23,8 +23,10 @@ the checks run and what was not validated.
   name it `docs/`, `fix/`, `feat/` or `chore/` plus the issue number and a
   slug, for example `fix/42-empty-input-report`. No other prefix is allowed.
 - Open the pull request against `release/0.1.0`, never `main`: `main` takes
-  only release integrations that I authorize
-  ([task integration](docs/GOVERNANCE.md#-task-integration-and-review)).
+  only release integrations that I authorize, apart from the Dependabot
+  security-update exception
+  ([task integration](docs/GOVERNANCE.md#-task-integration-and-review);
+  [exception](docs/GOVERNANCE.md#dependabot-security-updates)).
 - Fill in the [pull request template](.github/PULL_REQUEST_TEMPLATE.md). Its
   *Validated* section lists the checks you ran; write NOT RUN or NOT
   APPLICABLE with a reason instead of claiming evidence that was not

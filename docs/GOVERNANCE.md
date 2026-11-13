@@ -16,7 +16,7 @@ tooling, dependency updates and fixes.
 
 | Branch | Role |
 | --- | --- |
-| main | Integrated baseline; accepts only a release integration PR after my explicit authorization for that candidate. |
+| main | Integrated baseline; accepts only a release integration PR after my explicit authorization for that candidate, apart from the Dependabot security-update pull requests that GitHub opens against it ([below](#dependabot-security-updates)). |
 | release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
 | `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. No other prefix ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
@@ -250,7 +250,7 @@ Applies to `main` and every `release/**` branch:
 - Dependabot reads `.github/dependabot.yml` from the default branch. Version
   updates target the active release branch; update `target-branch` when a new
   release branch is opened.
-- Dependabot security updates ignore `target-branch` and open pull requests
+- <a id="dependabot-security-updates"></a>Dependabot security updates ignore `target-branch` and open pull requests
   against `main` without the labels and assignee set in
   `.github/dependabot.yml`. I handle each one by hand:
   1. In triage, add `security` and one priority (`P2` or `P3`, by the
@@ -284,9 +284,9 @@ The required check's controlled fail/pass demonstration on a release-branch
 pull request and the settings read-back of 2026-11-05 are recorded there
 (#16). Expanded portable CI and dependency retargeting were
 delivered in #7; metadata automation is in #8; traffic activation in #17;
-release procedure in [RELEASING.md](../RELEASING.md) (#20); final baseline certification in #23. Existing green
-checks cover only the installed portable gates, not LCR calculations, host
-execution or the closeout certification.
+release procedure in [RELEASING.md](../RELEASING.md) (#20); final baseline certification in #23, closed on 2026-11-07. Green
+checks cover only the installed portable gates, not LCR calculations or host
+execution.
 
 ## 🔒 Licensing and data
 
