@@ -11,8 +11,10 @@ Ratio.
 
 **Status.** The two modules below are source text. They have been read by the
 [static checks](../VBA_HOUSE_STYLE.md#-static-checks) and by
-`tools/test_vba_harness.py`, and nothing more: they have **not been compiled
-or run in Excel**. The first import, compile and run on a supported host is
+`tools/test_vba_harness.py`, and listed in the development workbook of
+`tools/vba-projects.json`; in LibreOffice they have only been imported into
+that workbook by `tools/build_xlsm.py`, never run. They have **not been
+compiled or run in Excel**. The first import, compile and run on a supported host is
 planned in #14 and #15; until then, every statement here about how a run ends
 is what the source says it does, not an observation.
 
@@ -44,7 +46,7 @@ tolerance that the case states.
 | Checking that the host state is as it was (calculation mode, alerts, events, screen updating, open workbooks) | `tests/host/`: the host test passes what it found to `EndRun` as `CleanupProblems` |
 | Evidence bound to one commit and the rejection of stale or mismatched evidence | #15 |
 
-The three static checks of Repository integrity forbid native, dynamic and COM
+The `vba-dynamic` check of Repository integrity forbids native, dynamic and COM
 constructs in `tests/unit/`, and `tools/test_vba_harness.py` forbids the names
 that would tie the harness to a host, a file, the clock or chance.
 
@@ -94,8 +96,10 @@ already required, every start is refused, the verification reports the
 deviations and leaves that state as it found it: the manual check of the host
 state that `ResetTests` stands for is never bypassed.
 
-To run the suite in Excel (planned, #14 and #15), import the two modules from
-`tests/unit/` into a scratch workbook, open the Immediate window and run
+To run the suite in Excel (planned, #14 and #15), build a development workbook
+with `tools/Sync-KLCR-VBA.ps1` (not yet run on a host) or import the two
+modules from `tests/unit/` into a scratch workbook by hand, open the Immediate
+window and run
 `TEST_LCR_Examples.CheckExampleModes`. That run has **not** been made.
 
 ## Log format

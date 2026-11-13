@@ -32,7 +32,7 @@ certifies a regulatory interpretation, a numerical result or a host.
 
 | Version | What it can contain |
 | --- | --- |
-| **v0.1.0 - Repo setup** | Governance, tooling, checks, the source register, the contracts, the test-case format and the static VBA rules. **No VBA source, no workbook, no LCR calculation and no Excel run.** If I release it, its release notes say so in their first lines, and it has no asset. |
+| **v0.1.0 - Repo setup** | Governance, tooling, checks, the source register, the contracts, the test-case format and the static VBA rules. **No VBA source, no workbook, no LCR calculation and no Excel run.** I closed it on 2026-11-13 without a release, so it has no release notes and no asset. |
 | Later `0.y.z` | Implementation work. Each release lists which rules are implemented, which are validated by `published` or `independent` cases ([VALIDATION_PLAN.md](docs/methodology/VALIDATION_PLAN.md#-evidence-for-a-validated-rule)), under which source edition and parameter set, and which host was tested. |
 | `1.0.0` and later | Only once I decide that calculation results, the input and output contracts and the public VBA API are stable enough to promise compatibility. |
 
@@ -116,7 +116,8 @@ A version may be published only when:
    and the hosted Repository integrity check is green on it;
 4. when the candidate contains VBA, it is imported, compiled and run in Excel
    on the supported host, with the evidence bound to the candidate as
-   [INSTALLATION.md](INSTALLATION.md) will describe (#14, #15); a version
+   [INSTALLATION.md](INSTALLATION.md#-importing-vba-into-excel) describes for
+   the import (#14) and #15 will define for the evidence; a version
    without VBA, such as v0.1.0, records "no Excel run" as a deviation;
 5. the annotated tag targets the candidate; and
 6. the checks after publication pass.

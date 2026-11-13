@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>K-LCR — A traceable foundation for liquidity risk</title>
-  <meta name="description" content="K-LCR is building an Excel/VBA foundation for Liquidity Coverage Ratio reference and independent validation, with separate planned EU and Basel profiles.">
+  <meta name="description" content="K-LCR is building an Excel/VBA foundation for Liquidity Coverage Ratio reference and independent validation, with separate EU and Basel profiles: an unvalidated EU prototype and a planned Basel profile.">
   <meta name="theme-color" content="#00338d">
   <link rel="canonical" href="https://danielep71.github.io/K-LCR/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="K-LCR — A traceable foundation for liquidity risk">
-  <meta property="og:description" content="Explore the scope, architecture and evidence boundaries of the K-LCR repository-setup project.">
+  <meta property="og:description" content="Explore the scope, architecture and evidence boundaries of the K-LCR prototype project.">
   <meta property="og:url" content="https://danielep71.github.io/K-LCR/">
   <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="assets/site.css">
@@ -25,27 +25,27 @@
   <div><p class="eyebrow">Liquidity risk / Reference and independent validation</p>
     <h1>A clearer view<br>of liquidity.<br><em>Built for scrutiny.</em></h1>
     <p class="lead">An Excel/VBA foundation for a traceable Liquidity Coverage Ratio reference.</p>
-    <p class="hero-copy">Separate planned EU and Basel profiles. Explicit inputs, reviewable rules and independent evidence, from the source decision to the reported result.</p>
+    <p class="hero-copy">Separate EU and Basel profiles: an EU prototype, a planned Basel profile. Explicit inputs, reviewable rules and independent evidence, from the source decision to the reported result.</p>
     <div class="actions"><a class="button primary" href="#scope">Explore the project ↓</a><a class="button secondary" href="https://github.com/danielep71/K-LCR/blob/main/docs/REPOSITORY_STRUCTURE.md">Read the architecture ↗</a></div>
   </div>
-  <figure class="hero-art"><img src="assets/architecture.svg" width="800" height="680" alt="Planned K-LCR design: explicit EU or Basel profile, liquidity inputs, deterministic VBA core, and results with reconciliation"><figcaption>Planned architecture · no calculation engine or workbook is implemented yet</figcaption></figure>
+  <figure class="hero-art"><img src="assets/architecture.svg" width="800" height="680" alt="Planned K-LCR design: explicit EU or Basel profile, liquidity inputs, deterministic VBA core, and results with reconciliation"><figcaption>Planned architecture · a prototype workbook calculates an EU LCR, not yet validated</figcaption></figure>
 </div><div class="wrap principles"><span>Distinct EU and Basel profiles</span><span>VBA source contracts</span><span>Synthetic data only</span><span>MPL-2.0 licensed</span></div></section>
 <div class="wrap"><aside class="status" aria-label="Project status"><strong>Prototype setup · validation and host evidence remain ahead.</strong> K-LCR currently contains contracts, documentation, portable repository checks and a prototype workbook of the EU profile that calculates but is not validated. There is no validated workbook or recorded Excel run. Windows desktop Excel 64-bit is the initial engineering target. <a href="https://github.com/danielep71/K-LCR/milestone/2">Follow the prototype milestone ↗</a></aside></div>
 <section id="scope" class="wrap"><p class="eyebrow">01 / Scope</p><h2>One project. Two explicit profiles.</h2>
   <p class="intro">K-LCR is being prepared for people who need to inspect and independently validate a Liquidity Coverage Ratio calculation. The foundation makes the intended method, its inputs and the evidence behind each result visible.</p>
   <ol class="steps">
-    <li><span class="number">01 / DEFINE</span><h3>Identify the applicable profile</h3><p>EU and Basel are distinct planned profiles. Source editions, reporting dates and parameter versions must be explicit before a calculation can be implemented.</p></li>
+    <li><span class="number">01 / DEFINE</span><h3>Identify the applicable profile</h3><p>EU and Basel are distinct profiles; only an unvalidated EU prototype exists. Source editions, reporting dates and parameter versions must be explicit before a calculation can be implemented.</p></li>
     <li><span class="number">02 / TRACE</span><h3>Follow inputs through the rules</h3><p>The planned scope covers liquidity-buffer classification, inflows, outflows, intermediate reconciliations and ratio outputs. Exact eligibility and treatment rules remain to be specified.</p></li>
     <li><span class="number">03 / VERIFY</span><h3>Build independent evidence</h3><p>Use synthetic cases, independently derived expected values and a real Excel host run. Each claim must point to its source, tested revision and recorded result.</p></li>
   </ol>
-  <p class="note">Production calculations, regulatory reporting submission, real portfolio data and numerical certification are outside the repository-setup milestone.</p>
+  <p class="note">Production calculations, regulatory reporting submission, real portfolio data and numerical certification are outside the prototype milestone.</p>
 </section>
 <section id="design" class="tint"><div class="wrap"><p class="eyebrow">02 / Architecture</p><h2>Keep the method visible.<br>Keep the layers deliberate.</h2>
   <p class="intro">The selected stack is Excel/VBA. The architecture separates deterministic calculation from request validation and Excel interaction. Python and Node support repository checks; they are not an alternative production calculation engine.</p>
   <div class="cards">
     <article><p class="number">PURE CORE</p><h3>Deterministic VBA</h3><p>Explicit inputs and immutable configuration. Planned core procedures depend on their arguments, without reading worksheets, files or mutable host state.</p><a href="https://github.com/danielep71/K-LCR/blob/main/docs/VBA_HOUSE_STYLE.md">Read the VBA contracts ↗</a></article>
     <article><p class="number">PUBLIC API</p><h3>Validate the whole request</h3><p>Deliberate entry points, named errors and documented types. Keep profile and version selection explicit, and preserve caller-owned inputs.</p><a href="https://github.com/danielep71/K-LCR/blob/main/docs/REPOSITORY_STRUCTURE.md">Explore the boundaries ↗</a></article>
-    <article><p class="number">EXCEL HOST</p><h3>Controlled input and output</h3><p>The planned adapter owns workbook interaction and state restoration. A macro-free template, source synchronization and host compatibility still require implementation and evidence.</p><a href="https://github.com/danielep71/K-LCR/blob/main/INSTALLATION.md">Read the host target ↗</a></article>
+    <article><p class="number">EXCEL HOST</p><h3>Controlled input and output</h3><p>The planned adapter owns workbook interaction and state restoration. The prototype's macro-free template and a source synchronization script exist; neither has run in Excel, and host compatibility still requires evidence.</p><a href="https://github.com/danielep71/K-LCR/blob/main/INSTALLATION.md">Read the host target ↗</a></article>
   </div>
 </div></section>
 <section id="start" class="wrap"><p class="eyebrow">03 / Get started</p><h2>Begin with the source and its contracts.</h2><div class="split">
@@ -61,6 +61,6 @@ python tools/check.py --ci</code></pre><p>The command records the candidate and 
 </div></div></section>
 <section class="closing"><div class="wrap"><div><p class="eyebrow">Reference / Research / Independent validation</p><h2>Start with a foundation you can inspect.</h2></div><a class="button primary" href="https://github.com/danielep71/K-LCR">Open K-LCR on GitHub ↗</a></div></section>
 </main>
-<footer><div class="wrap"><p><strong>K-LCR</strong> · An independent project by Daniele Penza.</p><p><a href="https://github.com/danielep71/K-LCR">Repository</a> · <a href="https://github.com/danielep71/K-LCR/wiki">Wiki</a> · <a href="https://github.com/danielep71/K-LCR/blob/main/LICENSE">MPL-2.0</a></p><p>Public source, explicit contracts and synthetic examples. Setup-stage reference project; not certified for production or regulatory reporting.</p></div></footer>
+<footer><div class="wrap"><p><strong>K-LCR</strong> · An independent project by Daniele Penza.</p><p><a href="https://github.com/danielep71/K-LCR">Repository</a> · <a href="https://github.com/danielep71/K-LCR/wiki">Wiki</a> · <a href="https://github.com/danielep71/K-LCR/blob/main/LICENSE">MPL-2.0</a></p><p>Public source, explicit contracts and synthetic examples. Prototype-stage reference project; not certified for production or regulatory reporting.</p></div></footer>
 </body>
 </html>

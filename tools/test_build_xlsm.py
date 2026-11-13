@@ -49,7 +49,7 @@ class SourceTests(unittest.TestCase):
             build_xlsm.source_body(self.write("M_B.bas", "Option Explicit\r\n"))
 
     def test_every_tracked_component_has_a_name_and_option_explicit(self) -> None:
-        components = build_xlsm.modules() + build_xlsm.documents()
+        components = build_xlsm.modules(mode="development") + build_xlsm.documents()
         self.assertTrue(components)
         for path in components:
             with self.subTest(path=path.name):
@@ -57,9 +57,23 @@ class SourceTests(unittest.TestCase):
                 self.assertEqual(name, path.stem)
                 self.assertIn("Option Explicit", body)
 
-    def test_the_workbook_holds_the_prototype_and_its_self_test_only(self) -> None:
-        folders = {path.parent.relative_to(ROOT).as_posix() for path in build_xlsm.modules()}
-        self.assertEqual(folders, {"src/core", "src/modules", "src/workbook", "tests/modules"})
+    def test_the_components_are_those_of_the_manifest(self) -> None:
+        data = build_xlsm.manifest()
+        for mode in build_xlsm.MODES:
+            with self.subTest(mode=mode):
+                listed = [path.relative_to(ROOT).as_posix() for path in build_xlsm.modules(mode=mode)]
+                self.assertEqual(listed, data["configurations"][mode]["modules"])
+        self.assertEqual([path.relative_to(ROOT).as_posix() for path in build_xlsm.documents()],
+                         data["document_modules"])
+
+    def test_the_development_workbook_holds_every_test_and_production_none(self) -> None:
+        folders = {mode: {path.parent.relative_to(ROOT).parts[0] for path in build_xlsm.modules(mode=mode)}
+                   for mode in build_xlsm.MODES}
+        self.assertEqual(folders, {"development": {"src", "tests"}, "production": {"src"}})
+
+    def test_an_unknown_workbook_is_refused(self) -> None:
+        with self.assertRaises(ValueError):
+            build_xlsm.modules(mode="staging")
 
 
 class PackageTests(unittest.TestCase):
@@ -111,6 +125,7 @@ class ComparisonTests(unittest.TestCase):
             outcome.expect("fails", False, "detail")
         self.assertEqual(outcome.failures, ["fails"])
         self.assertEqual(printed.getvalue(), "PASS passes\nFAIL fails  detail\n")
+        self.assertEqual(outcome.summary(), "FAIL: 2 expectation(s), 1 failure(s)")
 
 
 if __name__ == "__main__":

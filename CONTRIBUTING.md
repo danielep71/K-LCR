@@ -6,7 +6,7 @@ in the documents it links, and it does not repeat them.
 By taking part you agree to the [code of conduct](CODE_OF_CONDUCT.md). Report
 a suspected vulnerability privately, as [SECURITY.md](SECURITY.md) describes,
 never in an issue or pull request. The working rules for everyone who edits
-the repository, assistants included, are in [AGENTS.md](AGENTS.md).
+the repository are in [AGENTS.md](AGENTS.md).
 
 ## 🐞 Issues
 

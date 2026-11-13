@@ -5,7 +5,8 @@ It checks every case folder under tests/cases: metadata, expected outputs,
 references, tolerances and derivation scripts. It executes the input-contract
 assertions with tools/check_contract.py and the outputs of each derivation
 script, and reports the result figures as registered but not executed: no LCR
-calculation exists yet.
+calculation reads the input contract yet (the prototype reads worksheet inputs,
+docs/PROTOTYPE.md).
 """
 
 from __future__ import annotations

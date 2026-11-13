@@ -5,7 +5,7 @@
 [![Data: Synthetic only](https://img.shields.io/badge/Data-Synthetic_only-0969da?style=flat-square)](#-data-and-secrets)
 
 K-LCR is a public Excel/VBA reference and independent-validation project at
-repository-setup stage. It has no validated LCR engine or production workbook.
+prototype stage. It has no validated LCR engine or production workbook.
 Treat its examples and outputs as unverified until independently validated.
 
 ## 📌 Supported versions
@@ -49,7 +49,7 @@ severity.
 ## 🎯 Scope
 
 In scope are this repository's workflows, scripts, issue forms, configuration
-and documentation and, when added, its VBA source and workbook templates.
+and documentation, its VBA source and its workbook template.
 Vulnerabilities in Excel, Windows, GitHub, Python, Node or other third-party
 tools should be reported to their maintainers.
 
@@ -111,7 +111,7 @@ cleanup issue.
 
 ## 🤝 Safe harbor
 
-The project will not initiate or recommend legal action for good-faith
+I will not initiate or recommend legal action for good-faith
 research that follows this policy, stays within this repository's own source,
 avoids privacy violations and destructive actions, and is reported privately.
 This does not authorize testing third-party systems; no bug bounty is offered.

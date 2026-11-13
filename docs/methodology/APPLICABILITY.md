@@ -1,6 +1,6 @@
 # 🧭 LCR applicability and requirement map
 
-**Register version 1 · Decisions of 2026-11-03, A03 amended on 2026-11-05 · No parameter values established here**
+**Register version 1 · Decisions of 2026-11-03, A03 amended on 2026-11-05, A06 on 2026-11-13 · No parameter values established here**
 
 This map links each LCR topic to its locators in the
 [source register](SOURCES.md), for the EU profile (`SRC-01`, `SRC-02`) and the
