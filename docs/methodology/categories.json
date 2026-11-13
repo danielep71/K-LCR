@@ -1,6 +1,6 @@
 {
  "schema": "klcr-categories",
- "categories_version": 2,
+ "categories_version": 3,
  "source_register_version": 1,
  "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions, each with the code of the decision (A03, A04 or A06) in 'decision' and, where useful, a qualifier in 'notes'. A CRR article named in a description or a note is a cross-reference that the SRC-02 point of the category's locator makes; it is not a locator of SRC-01.",
  "profiles": {
@@ -269,20 +269,6 @@
      "description": "DGS-covered retail deposits in an established relationship or a transactional account.",
      "treatment": "outflow_rate",
      "notes": "Counterparty retail; DGS coverage (covered amount only); established relationship (Art. 24(2)) or transactional account (Art. 24(3)); not if Art. 25(2), (3) or (5) higher-rate criteria are met."
-    },
-    {
-     "code": "EU-O-RETAIL-STABLE-DGS-REDUCED",
-     "locator": "Art. 24(4)",
-     "description": "Stable retail deposits covered by a Commission-approved DGS, up to the DGS coverage level, under authority permission.",
-     "treatment": "outflow_rate",
-     "notes": "Requires competent authority authorisation with Commission approval (Art. 24(5)); DGS identity; amount up to the Directive 2014/49/EU coverage level."
-    },
-    {
-     "code": "EU-O-RETAIL-TC-DGS-REDUCED",
-     "locator": "Art. 24(6)",
-     "description": "Retail deposits covered by an equivalent third-country DGS where the authority allows a reduced rate.",
-     "treatment": "outflow_rate",
-     "notes": "Requires competent authority authorisation and third-country permission; DGS coverage."
     },
     {
      "code": "EU-O-RETAIL-OTHER",
@@ -1024,6 +1010,16 @@
      "code": "EU-O-SFT-COLL-CIU",
      "locator": "Art. 28(3)(h)",
      "decision": "A03", "notes": "Collateral of Art. 15"
+    },
+    {
+     "code": "EU-O-RETAIL-STABLE-DGS-REDUCED",
+     "locator": "Art. 24(4)",
+     "decision": "A06", "notes": "Needs the competent authority's authorisation and the Commission's prior approval (Art. 24(5))"
+    },
+    {
+     "code": "EU-O-RETAIL-TC-DGS-REDUCED",
+     "locator": "Art. 24(6)",
+     "decision": "A06", "notes": "Needs the competent authority's authorisation and the third country's permission"
     },
     {
      "code": "EU-O-INTERDEPENDENT",
