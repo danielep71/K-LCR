@@ -49,7 +49,7 @@ profile; it is not a claim that none exists.
 | `REQ-14` | Breach of requirements: a liquid asset that ceases to comply is no longer recognised | Art. 18 | — | A holding with `requirements_met` `N` is left out; the 30 calendar days of Art. 18(1) are not modelled |
 | `REQ-15` | Alternative liquidity approaches | Art. 19 | LCR31; LCR30.32 | Basel: rejection through an excluded category; EU: no input represents it (A04) |
 | `REQ-16` | Net outflows and netting of derivatives | Art. 20 and 21; Annex II | LCR40.1 to LCR40.4; LCR40.49; LCR40.91 | Netting by counterparty and netting set; no double counting (LCR40.4) |
-| `REQ-17` | Retail deposit outflows | Art. 24 and 25 | LCR40.5 to LCR40.18 | Category boundaries from the parameter set |
+| `REQ-17` | Retail deposit outflows | Art. 24 and 25 | LCR40.5 to LCR40.18 | Category boundaries from the parameter set; the reduced rates of Art. 24(4) and (6) are rejected through excluded categories (A06) |
 | `REQ-18` | Unsecured wholesale funding, operational deposits, other liabilities | Art. 27; Art. 28(1), (2) and (5) to (7) | LCR40.19 to LCR40.44 | Counterparty and operational-deposit classification |
 | `REQ-19` | Secured funding and collateral swaps | Art. 28(3) and (4) | LCR40.45 to LCR40.48 | Treatment by collateral level |
 | `REQ-20` | Additional outflows, credit and liquidity facilities, other contingent and contractual outflows | Art. 23, 30, 31 and 31a | LCR40.49 to LCR40.74 | Each category, with its parameter |
@@ -91,7 +91,7 @@ given a default.
 | `A03` | Level 1, 2A and 2B assets only. | Art. 12(1)(b), (c), (e) and (f) are Level 2B categories in scope; (f) joined them by my decision of 2026-11-05 (#148). Art. 12(1)(a), securitisations, and (d), the restricted-use committed liquidity facility, are special categories (Art. 13 and 14) and are rejected, like the Basel Level 2B RCLF of LCR30.46 and the categories of Art. 15 and 16 and LCR30.47. Secured flows whose collateral is an Art. 13 or 15 asset are rejected too. | Art. 10 to 16 | LCR30.40 to LCR30.47 |
 | `A04` | Alternative liquidity approaches are out of scope. | Basel: the category is excluded and rejected. EU: the input has no category or field for them, so none can be claimed. | Art. 19 | LCR31 |
 | `A05` | Transitional and grandfathering provisions are out of scope. | The input has no category or field for them, so none can be claimed. | Art. 35 to 38 | LCR90 |
-| `A06` | Treatments that need supervisory approval or authorisation (R06) are out of scope. | Art. 26, 29 and 34 are excluded categories and are rejected; the exemptions of Art. 33(2) to (6) have no input representation, so none can be claimed. The inflow cap of Art. 33(1) and LCR40.77 always applies. | Art. 26, 29, 33(2) to (6) and 34 | — |
+| `A06` | Treatments that need supervisory approval or authorisation (R06) are out of scope. | Art. 24(4) and (6), 26, 29 and 34 are excluded categories and are rejected (Art. 24(4) and (6) by my decision of 2026-11-13, #172); the exemptions of Art. 33(2) to (6) have no input representation, so none can be claimed. The inflow cap of Art. 33(1) and LCR40.77 always applies. | Art. 24(4) to (6), 26, 29, 33(2) to (6) and 34 | — |
 | `A07` | Each Basel national discretion (R05) is a required parameter with no default. The parameter set records the choice, and fixtures use values labelled illustrative. | The Basel parameter schema makes every discretionary entry mandatory. | — | LCR10.4; LCR10.5; LCR30.44; LCR40.2; LCR40.93 |
 | `A08` | The contracts cover every standard outflow and inflow category, with the inflow cap. Implementation may come in stages. The treatments excluded by A06 stay out. | The category lists of the data contract are complete for both profiles. | Art. 22 to 25, 27, 28, 30, 31, 31a, 32 and 33(1) | LCR40 |
 | `A09` | No copy of BIS material is stored. EU copies (`SRC-02` in full and an extract of `SRC-01`) are stored only after I check the EUR-Lex legal notice on reuse. | I checked the notice on 2026-11-03: the copies are in [sources/](sources/README.md) (#129). | `SRC-01`, `SRC-02` | `SRC-06` |
@@ -112,7 +112,6 @@ design of the [input contract](DATA_CONTRACT.md), not by a source text.
 | ID | Question | Locators | Follow-up |
 | --- | --- | --- | --- |
 | `I03` | The EU text states its composition requirements as three limits on the buffer. Basel states two caps on Level 2 assets and gives an adjustment formula. The two are compared only on deliberately mapped inputs, with the difference explained. | Art. 17; Annex I; LCR30.31 to LCR30.39 | Planned case `PC-17` in [VALIDATION_PLAN.md](VALIDATION_PLAN.md) |
-| `I05` | R06 lists Art. 24(4) to (6) among the treatments that need an authorisation, and A06 puts such treatments out of scope. `categories.json` nevertheless lists `EU-O-RETAIL-STABLE-DGS-REDUCED` (Art. 24(4)) and `EU-O-RETAIL-TC-DGS-REDUCED` (Art. 24(6)) as categories, not as excluded ones. | Art. 24(4) to (6) | Open for my decision: keep them as categories whose rate the parameter set records, or exclude them under A06 |
 
 A resolved interpretation moves to the resolutions table, citing the source
 or the decision that resolved it.

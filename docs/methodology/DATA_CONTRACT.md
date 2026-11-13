@@ -107,7 +107,7 @@ by their own form: `-1` in an amount is `LCR-RANGE`, and `=1` there is
 
 [categories.json](categories.json) lists, for each profile, the liquid-asset,
 outflow and inflow categories in scope (A03, A08), at the granularity at which
-the source gives a distinct treatment: 24 liquid-asset, 67 outflow and 28
+the source gives a distinct treatment: 24 liquid-asset, 65 outflow and 28
 inflow categories for the EU profile, and 12, 57 and 22 for Basel. Each
 category has its locator in `SRC-02` or `SRC-06`, a short description, and its
 treatment. A CRR article named in a description or a note is a cross-reference
@@ -127,8 +127,9 @@ A flow category also states its collateral rule:
 A derivative category may carry `netting_set_id`.
 
 The file also lists the excluded categories, so that input naming one is
-rejected rather than ignored: for the EU profile those of A03 and A06, for
-Basel those of A03 and A04. My other exclusions (EU A04 and A05, Basel A05,
+rejected rather than ignored: for the EU profile those of A03 and A06, among them the
+reduced deposit-guarantee rates of Art. 24(4) and (6), for Basel those of A03
+and A04. My other exclusions (EU A04 and A05, Basel A05,
 and the significant-currency LCR of A02) have no input field or category in
 version 1, so no input can claim them. This includes the secured flows whose
 collateral is an excluded asset class, such as securitisations or CIUs.

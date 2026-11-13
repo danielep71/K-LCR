@@ -8,7 +8,7 @@
   "input_contract_version": 1,
   "parameter_set": "EU-LCR-DA-2022-07-08",
   "parameter_set_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
-  "categories_version": 2,
+  "categories_version": 3,
   "source_register_version": 1,
   "code_commit": "2222222222222222222222222222222222222222"
  },
