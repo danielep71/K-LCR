@@ -374,9 +374,10 @@ class BadgeTests(unittest.TestCase):
     def test_compact_numbers(self) -> None:
         self.assertEqual([traffic_history.compact(value)
                           for value in (0, 999, 1000, 1250, 11_000, 2_500_000,
-                                        999_949, 999_960, 999_999, 1_000_000)],
+                                        999_949, 999_960, 999_999, 1_000_000, 999_999_999,
+                                        1_000_000_000)],
                          ["0", "999", "1k", "1.2k", "11k", "2.5M",
-                          "999.9k", "1M", "1M", "1M"])
+                          "999.9k", "1M", "1M", "1M", "1000M", "1000M"])
 
 
 class AlertTests(unittest.TestCase):

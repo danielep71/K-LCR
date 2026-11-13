@@ -388,7 +388,7 @@ def compact(value: int) -> str:
     for limit, suffix in ((1_000_000, "M"), (1_000, "k")):
         if value >= limit:
             shown = f"{value / limit:.1f}"
-            if shown == "1000.0":  # 999_950 and above round up to the next unit
+            if shown == "1000.0" and suffix == "k":  # 999_950 and above round up to millions
                 return "1M"
             return shown.removesuffix(".0") + suffix
     return str(value)
