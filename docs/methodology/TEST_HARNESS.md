@@ -88,7 +88,11 @@ self-test that a failed run is never silent. `VerifyExampleModes` runs the four
 modes in order and returns a report with the required and the actual `RESULT`
 of each; `CheckExampleModes` prints it and raises `ERR_TEST_FAILED` when a mode
 did not end as required. The cleanup problem of the last mode is simulated, so
-the verification acknowledges it with `ResetTests`.
+the verification acknowledges it with `ResetTests`, but only when that mode ran
+in the same call and ended as required. If a run was active or recovery was
+already required, every start is refused, the verification reports the
+deviations and leaves that state as it found it: the manual check of the host
+state that `ResetTests` stands for is never bypassed.
 
 To run the suite in Excel (planned, #14 and #15), import the two modules from
 `tests/unit/` into a scratch workbook, open the Immediate window and run

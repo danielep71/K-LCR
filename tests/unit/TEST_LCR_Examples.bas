@@ -178,7 +178,11 @@ Public Function VerifyExampleModes() _
 ' ERROR POLICY
 '   Raises nothing for a deviation; CheckExampleModes does. The cleanup
 '   problem of the last mode is simulated, so the verification
-'   acknowledges it with ResetTests: no host state changed.
+'   acknowledges it with ResetTests, but only when that mode ran in this
+'   call and ended as required. A start refused because a run was active or
+'   recovery was already required is a deviation, and the state found is
+'   left as it was: the manual check that ResetTests stands for is not
+'   bypassed.
 '
 ' UPDATED
 '   2026-11-13
@@ -195,6 +199,7 @@ Public Function VerifyExampleModes() _
     Dim Deviations      As Long       'Modes that did not end as required
     Dim RunError        As Long       'Error that ended the run; 0 for none
     Dim Actual          As String     'RESULT record the run wrote
+    Dim Simulated       As Boolean    'True when the simulated cleanup problem ran and ended as required
     Dim Report          As String     'Report built so far
 
 '------------------------------------------------------------------------------
@@ -227,12 +232,17 @@ Public Function VerifyExampleModes() _
                 "; required=" & CStr(Required(i)) & "; actual=" & Actual & vbLf
             If RunError <> CLng(RequiredError(i)) Or Actual <> CStr(Required(i)) Then
                 Deviations = Deviations + 1
+            ElseIf CStr(Modes(i)) = "CLEANUP_PROBLEM" Then
+                Simulated = True
             End If
         Next i
 
     'The cleanup problem of the last mode was simulated: no host state
-    'changed, so acknowledging it is correct here.
-        TEST_LCR_Harness.ResetTests
+    'changed, so acknowledging it is correct, but only when this call ran it.
+    'A refused start leaves the state that was found, for the manual check.
+        If Simulated Then
+            TEST_LCR_Harness.ResetTests
+        End If
         Report = Report & "VERIFICATION=" & IIf(Deviations = 0, "PASS", "FAIL") & _
             "; modes=" & CStr(UBound(Modes) - LBound(Modes) + 1) & _
             "; deviations=" & CStr(Deviations)

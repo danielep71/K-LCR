@@ -160,6 +160,16 @@ class ExampleSuiteTests(unittest.TestCase):
             with self.subTest(result=first):
                 self.assertIn(f'"{first}; {rest}"', joined)
 
+    def test_the_verification_acknowledges_recovery_only_after_its_own_simulated_run(self) -> None:
+        body = "\n".join(code_lines(self.bodies["VerifyExampleModes"]))
+        resets = [m.start() for m in re.finditer(r"TEST_LCR_Harness\.ResetTests", body)]
+        self.assertEqual(len(resets), 1)
+        guard = body.rfind("If Simulated Then", 0, resets[0])
+        self.assertGreater(guard, 0, "the reset is guarded")
+        self.assertNotIn("End If", body[guard:resets[0]])
+        # The flag is set only for the simulated mode, and only when it ended as required.
+        self.assertRegex(body, r'ElseIf CStr\(Modes\(i\)\) = "CLEANUP_PROBLEM" Then\n\s+Simulated = True')
+
     def test_the_documented_modes_are_the_modes_the_runner_knows(self) -> None:
         modes = re.search(r"Modes = Array\(([^)]*)\)", self.bodies["VerifyExampleModes"])
         assert modes is not None
