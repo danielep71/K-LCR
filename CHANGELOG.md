@@ -60,8 +60,10 @@ Use only the categories an entry needs.
 
 ## [Unreleased]
 
-Work of *v0.1.0 - Repo setup*: the repository, its rules and its contracts.
-Nothing in it calculates a Liquidity Coverage Ratio.
+Work of *v0.1.0 - Repo setup*: the repository, its rules and its contracts;
+and, since 2026-11-13, of *v0.2.0 - Prototype setup*, whose purpose is a
+working prototype to refine afterwards. The prototype calculates an EU
+Liquidity Coverage Ratio that nothing validates.
 
 ### Added
 
@@ -118,6 +120,20 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel
   steps, marked as not executed (#19).
+- The neutral VBA test harness in `tests/unit/` and its
+  [guide](docs/methodology/TEST_HARNESS.md): stable case identifiers, exact,
+  tolerance and expected-error assertions, expected and executed counts, a
+  deterministic log, and four example modes that show a pass, a failure, a
+  skipped case and a cleanup failure. It is source only: it has not been
+  compiled or run in Excel, and `tools/test_vba_harness.py` checks its text
+  without Excel (#13).
+- The [prototype workbook](docs/PROTOTYPE.md) of the EU profile: its VBA
+  source, self-test and macro-free template, the Python model
+  `tools/lcr_spec.py` with tests that pin its demonstration figures, and two
+  source and preview scripts. It calculates an LCR from line-level inputs; it
+  is not validated, its factors are not checked against `SRC-02`, and its
+  catalogue includes categories that A03 and A06 exclude from the contracts
+  (#179).
 
 ### Validation
 
@@ -129,9 +145,11 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 
 ### Known limitations
 
-- No VBA source, workbook or LCR calculation exists. No rule is validated:
-  no `published` or `independent` test case is registered.
-- No Excel host has been tested; import, compilation and a real host run
-  are planned in *v0.2.0 - Host execution* (#13, #14, #15).
+- The prototype calculates an LCR, but no rule is validated: no `published`
+  or `independent` test case is registered, and its model is written for the
+  prototype. No workbook is released.
+- No Excel host has been tested; neither the prototype nor the harness has
+  been compiled or run in Excel as part of this repository's checks. Import, compilation and a real host run are planned in
+  *v0.2.0 - Prototype setup* (#14, #15).
 
 [Unreleased]: https://github.com/danielep71/K-LCR/commits/main

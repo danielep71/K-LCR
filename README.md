@@ -43,8 +43,10 @@
 ## 📍 Status
 
 > [!IMPORTANT]
-> **Repository setup.** There is no LCR calculation engine, validated
-> workbook, Excel import/compile run or supported host claim yet.
+> **Prototype.** A [prototype workbook](docs/PROTOTYPE.md) of the EU
+> profile is in the repository: it calculates an LCR, and nothing validates
+> it. There is no validated workbook, Excel import/compile run or supported
+> host claim yet.
 > Windows desktop Excel 64-bit is an **engineering target**, not a tested
 > configuration. This project is intended for reference and independent
 > validation, not operational reporting or production use.
@@ -73,8 +75,8 @@ parameter and result contracts and the test-case rules are already defined in
 K-LCR adds liquidity risk to the
 [K-Risk Engines](https://github.com/danielep71/K-Risk-Engines) portfolio of
 independent risk calculators, whose other projects cover counterparty credit,
-market, CVA and interest-rate risk. It is planned, not implemented: no LCR
-result exists yet.
+market, CVA and interest-rate risk. A prototype of the EU profile exists; no
+validated LCR result exists yet.
 
 ## 📥 Get started
 
@@ -116,7 +118,9 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | `tests/contract/`, `tests/parameters/`, `tests/cases/`, `tests/derivations/` | Synthetic fixtures for the contracts and the registered test cases |
 | `tools/` | `check.py` and its gates, with their tests |
 | `.github/` | Labels, issue forms, the pull request template, Dependabot and the workflows |
-| `src/`, `tests/unit/`, `tests/host/` | Planned VBA core, API, Excel adapter and their tests; not created yet |
+| `tests/unit/` | The neutral VBA test harness and its example suite: source only, not yet compiled or run in Excel |
+| `src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/` | The [prototype workbook](docs/PROTOTYPE.md): its VBA source, its macro-free template and its self-test; not validated |
+| `src/api/`, `src/host/excel/`, `tests/host/` | Planned API, Excel adapter and host tests; not created yet |
 
 The full layout, with the planned paths, is in
 [REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md#%EF%B8%8F-repository-layout).
@@ -133,7 +137,7 @@ The full layout, with the planned paths, is in
 | Changes, versions and releases | [Changelog](CHANGELOG.md) · [Releasing and milestones](RELEASING.md) |
 | Settings, evidence, verification gaps | [Repository settings](docs/REPOSITORY_SETTINGS.md) · [Settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md) · [Traffic history](docs/TRAFFIC.md) |
 | Source files and generated artifacts | [Source control](docs/SOURCE_CONTROL.md) |
-| VBA and Excel target | [House style](docs/VBA_HOUSE_STYLE.md) · [Installation](INSTALLATION.md) |
+| VBA and Excel target | [Prototype workbook](docs/PROTOTYPE.md) · [House style](docs/VBA_HOUSE_STYLE.md) · [Installation](INSTALLATION.md) |
 | License, provenance and safe examples | [Notice](NOTICE.md) · [Security](SECURITY.md) |
 
 ## ⚠️ Limitations

@@ -9,9 +9,10 @@ counts as validation. The [validation plan](VALIDATION_PLAN.md) lists the cases
 the profiles need. `tools/check_test_cases.py` checks the cases and runs what
 can run today.
 
-No LCR calculation exists yet. The cases here are **registered**: their
-metadata and expected values are checked, but no LCR figure is executed until
-an implementation exists (B001 to B005 in [DECISIONS.md](../DECISIONS.md)).
+The [prototype workbook](../PROTOTYPE.md) calculates an LCR, but no case runs
+it yet. The cases here are **registered**: their metadata and expected values
+are checked, but no LCR figure is executed until an implementation is
+connected to them (B001 to B005 in [DECISIONS.md](../DECISIONS.md)).
 
 ## 📁 Files of a case
 
@@ -162,7 +163,9 @@ with an expected one. `tools/check_test_cases.py` reports both counts:
   executed**.
 
 A run that leaves an expected assertion unexecuted is incomplete, never a
-pass for that assertion.
+pass for that assertion. The neutral VBA [test harness](TEST_HARNESS.md)
+applies the same rule to a suite's expected case and assertion counts; it has
+not yet been run in Excel.
 
 The checker's findings:
 

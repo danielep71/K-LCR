@@ -4,8 +4,10 @@
 [![Excel evidence: Not run](https://img.shields.io/badge/Excel_evidence-Not_run-BF8700?style=flat-square)](#host-matrix)
 [![Developer setup: Verified](https://img.shields.io/badge/Developer_setup-Verified_2026--11--09-2ea44f?style=flat-square)](#verified-setup)
 
-K-LCR holds repository setup, contracts and static checks. It has **no VBA
-source and no workbook** yet, so nothing can be installed into Excel. This
+K-LCR holds repository setup, contracts, static checks, a neutral test
+harness and a [prototype workbook](docs/PROTOTYPE.md) whose source and
+macro-free template are tracked. None of its VBA has been **compiled or run**
+as part of this repository's checks, and no workbook is released. This
 page says which hosts are intended and which are tested, how to set up the
 repository checks, and which Excel steps are planned. Every step is marked
 **verified** (run and recorded below) or **not executed** (planned, never
@@ -139,8 +141,8 @@ step below.
 
 ## 🔐 Excel prerequisites
 
-Not executed: there is no workbook yet. Once the host template exists (#14),
-building and running it on Windows will need:
+Not executed here. Building and running the prototype workbook on Windows
+needs:
 
 - desktop Excel 64-bit, with macros allowed only for the workbook you build
   from the candidate, never by lowering the security of other workbooks;
@@ -154,10 +156,11 @@ building and running it on Windows will need:
 
 ## 📥 Importing VBA into Excel
 
-Not executed. #14 defines the macro-free template, the component manifest,
-the backup-before-change rule and the repeatable import and export tooling.
-Until then, the **manual fallback**, for a developer trying a module by hand,
-is:
+Not executed here. The prototype is built by hand from its macro-free
+template, as [PROTOTYPE.md](docs/PROTOTYPE.md#building-the-workbook-by-hand)
+describes. #14 defines the component manifest, the backup-before-change rule
+and the repeatable import and export tooling. Until then, the **manual
+fallback**, for a developer trying a module by hand, is:
 
 1. Copy an approved macro-free template to a new file; never work on a user
    workbook.
