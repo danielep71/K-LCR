@@ -2,7 +2,7 @@
  "schema": "klcr-categories",
  "categories_version": 2,
  "source_register_version": 1,
- "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions. A CRR article named in a description or a note is a cross-reference that the SRC-02 point of the category's locator makes; it is not a locator of SRC-01.",
+ "description": "Liquid-asset, outflow and inflow categories of each profile for the v0.1 perimeter (A03 to A08). Each category cites its locator in SRC-02 (EU) or SRC-06 (Basel); none holds a parameter value. 'collateral' says whether flows.csv must, may or must not give the collateral's asset category; 'excluded' lists categories rejected by my decisions, each with the code of the decision (A03, A04 or A06) in 'decision' and, where useful, a qualifier in 'notes'. A CRR article named in a description or a note is a cross-reference that the SRC-02 point of the category's locator makes; it is not a locator of SRC-01.",
  "profiles": {
   "EU": {
    "assets": [
@@ -84,7 +84,7 @@
      "locator": "Art. 10(1)(d)(i)",
      "description": "Claims on, or guaranteed by, a third-country central government or central bank not assessed at the highest credit quality step.",
      "treatment": "haircut",
-     "notes": "Recognition capped per currency at stressed net outflows in that currency (Art. 10(1)(d), second and third subparagraphs); needs currency and whether it is the third country's domestic currency."
+     "notes": "Recognition capped per currency at stressed net outflows in that currency (Art. 10(1)(d), third and fourth subparagraphs); needs currency and whether it is the third country's domestic currency."
     },
     {
      "code": "EU-A-L1-CB-TC-LOWERCQS-RES",
@@ -1013,17 +1013,17 @@
     {
      "code": "EU-O-SFT-COLL-L2B-SEC-A",
      "locator": "Art. 28(3)(d)",
-     "decision": "A03: collateral of Art. 13"
+     "decision": "A03", "notes": "Collateral of Art. 13"
     },
     {
      "code": "EU-O-SFT-COLL-L2B-SEC-B",
      "locator": "Art. 28(3)(f)",
-     "decision": "A03: collateral of Art. 13"
+     "decision": "A03", "notes": "Collateral of Art. 13"
     },
     {
      "code": "EU-O-SFT-COLL-CIU",
      "locator": "Art. 28(3)(h)",
-     "decision": "A03: collateral of Art. 15"
+     "decision": "A03", "notes": "Collateral of Art. 15"
     },
     {
      "code": "EU-O-INTERDEPENDENT",
@@ -1038,17 +1038,17 @@
     {
      "code": "EU-I-SFT-COLL-L2B-SEC-A",
      "locator": "Art. 32(3)(b)(iv)",
-     "decision": "A03: collateral of Art. 13"
+     "decision": "A03", "notes": "Collateral of Art. 13"
     },
     {
      "code": "EU-I-SFT-COLL-L2B-SEC-B",
      "locator": "Art. 32(3)(b)(vi)",
-     "decision": "A03: collateral of Art. 13"
+     "decision": "A03", "notes": "Collateral of Art. 13"
     },
     {
      "code": "EU-I-SFT-COLL-CIU",
      "locator": "Art. 32(3)(b)(viii)",
-     "decision": "A03: collateral of Art. 15"
+     "decision": "A03", "notes": "Collateral of Art. 15"
     },
     {
      "code": "EU-I-INTRAGROUP-FACILITY",
