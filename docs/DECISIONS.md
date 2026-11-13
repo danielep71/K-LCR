@@ -34,11 +34,18 @@ exact supported builds and tested configurations remain subject to #15.
 | Changelog, versioning, milestone closeout and release procedure | #20 | [CHANGELOG.md](../CHANGELOG.md), [RELEASING.md](../RELEASING.md), the [closeout template](release/CLOSEOUT.md) and the `changelog` gate |
 | VBA static checks: conditional compilation, jumps, native, dynamic and COM constructs, reviewed host exceptions | #12 | [Static checks](VBA_HOUSE_STYLE.md#-static-checks), the `vba-conditionals`, `vba-jumps` and `vba-dynamic` gates and their fixtures in `tools/test_check_vba.py` |
 
-## 📋 Remaining decisions (v0.2.0 - Host execution)
+## 📋 Remaining decisions (v0.2.0 - Prototype setup)
+
+I renamed the milestone v0.2.0 to *v0.2.0 - Prototype setup* on 2026-11-13. Its purpose is to
+bring in a working prototype, to refine afterwards. The prototype is not a
+validated calculation: what counts as validated is decided by the
+[validation plan](methodology/VALIDATION_PLAN.md), and the follow-on backlog
+below is unchanged.
 
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
-| Neutral scaffold, workbook synchronization and real host evidence | #13, #14, #15 | Executed evidence bound to the tested candidate |
+| Neutral test scaffold | #13 | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
+| Workbook synchronization and real host evidence | #14, #15 | Executed evidence bound to the tested candidate |
 
 Do not silently turn an unresolved item into a default. Record my decision
 or the source-based resolution in its tracking issue and update the relevant document.

@@ -60,8 +60,10 @@ Use only the categories an entry needs.
 
 ## [Unreleased]
 
-Work of *v0.1.0 - Repo setup*: the repository, its rules and its contracts.
-Nothing in it calculates a Liquidity Coverage Ratio.
+Work of *v0.1.0 - Repo setup*: the repository, its rules and its contracts;
+and, since 2026-11-13, of *v0.2.0 - Prototype setup*, whose purpose is a
+working prototype to refine afterwards. Nothing in it calculates a Liquidity
+Coverage Ratio.
 
 ### Added
 
@@ -118,6 +120,13 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   and [INSTALLATION.md](INSTALLATION.md): the host matrix, the developer
   setup, verified from a fresh clone on Linux, troubleshooting, and the Excel
   steps, marked as not executed (#19).
+- The neutral VBA test harness in `tests/unit/` and its
+  [guide](docs/methodology/TEST_HARNESS.md): stable case identifiers, exact,
+  tolerance and expected-error assertions, expected and executed counts, a
+  deterministic log, and four example modes that show a pass, a failure, a
+  skipped case and a cleanup failure. It is source only: it has not been
+  compiled or run in Excel, and `tools/test_vba_harness.py` checks its text
+  without Excel (#13).
 
 ### Validation
 
@@ -129,9 +138,11 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 
 ### Known limitations
 
-- No VBA source, workbook or LCR calculation exists. No rule is validated:
-  no `published` or `independent` test case is registered.
-- No Excel host has been tested; import, compilation and a real host run
-  are planned in *v0.2.0 - Host execution* (#13, #14, #15).
+- No VBA calculation source, workbook or LCR calculation exists: the only VBA
+  source is the neutral test harness. No rule is validated: no `published` or
+  `independent` test case is registered.
+- No Excel host has been tested; the harness has not been compiled or run in
+  Excel. Import, compilation and a real host run are planned in
+  *v0.2.0 - Prototype setup* (#14, #15).
 
 [Unreleased]: https://github.com/danielep71/K-LCR/commits/main

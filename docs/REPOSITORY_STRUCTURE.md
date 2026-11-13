@@ -121,7 +121,7 @@ are not claims that those components exist today.
 | src/api/ | Public VBA entry points, validation orchestration and contracts | Planned |
 | src/host/excel/ | Workbook input/output and user-interface adapters | Planned |
 | tests/contract/, tests/parameters/, tests/cases/, tests/derivations/ | Synthetic contract fixtures, parameter and result examples, registered test cases and their derivation scripts | Present |
-| tests/unit/ | Core/API tests independent of workbook layout | Planned |
+| tests/unit/ | Neutral test harness and its example suite, independent of workbook layout; later the core and API tests | Present: harness source, not yet run in Excel |
 | tests/fixtures/eu/ | EU fixtures with independent expected results | Planned |
 | tests/fixtures/basel/ | Basel fixtures with independent expected results | Planned |
 | tests/host/ | Excel import, compile, adapter and cleanup checks | Planned |

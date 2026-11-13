@@ -4,8 +4,9 @@
 [![Excel evidence: Not run](https://img.shields.io/badge/Excel_evidence-Not_run-BF8700?style=flat-square)](#host-matrix)
 [![Developer setup: Verified](https://img.shields.io/badge/Developer_setup-Verified_2026--11--09-2ea44f?style=flat-square)](#verified-setup)
 
-K-LCR holds repository setup, contracts and static checks. It has **no VBA
-source and no workbook** yet, so nothing can be installed into Excel. This
+K-LCR holds repository setup, contracts and static checks. Its only VBA
+source is a neutral test harness that has **not been compiled or run**, and it
+has **no workbook** yet, so nothing can be installed into Excel. This
 page says which hosts are intended and which are tested, how to set up the
 repository checks, and which Excel steps are planned. Every step is marked
 **verified** (run and recorded below) or **not executed** (planned, never

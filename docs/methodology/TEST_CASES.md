@@ -162,7 +162,9 @@ with an expected one. `tools/check_test_cases.py` reports both counts:
   executed**.
 
 A run that leaves an expected assertion unexecuted is incomplete, never a
-pass for that assertion.
+pass for that assertion. The neutral VBA [test harness](TEST_HARNESS.md)
+applies the same rule to a suite's expected case and assertion counts; it has
+not yet been run in Excel.
 
 The checker's findings:
 
