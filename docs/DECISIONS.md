@@ -45,7 +45,16 @@ below is unchanged.
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
 | Neutral test scaffold | #13 | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
+| Prototype workbook source | #179 | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template and model; its build tools are #180 |
 | Workbook synchronization and real host evidence | #14, #15 | Executed evidence bound to the tested candidate |
+
+On 2026-11-13 I decided that the prototype keeps its own layout and names
+(`src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/`; `CORE_*`,
+`M_Main`, `sh<Sheet>`, `TEST_Engine`) until it is refactored, with the
+[VBA house style](VBA_HOUSE_STYLE.md) as the target, and that it may implement
+formulas before their contracts are resolved, as an exception to the
+sequencing below. Its differences from the contracts and from A03 and A06 are
+listed in [PROTOTYPE.md](PROTOTYPE.md#differences-from-the-repositorys-decisions).
 
 Do not silently turn an unresolved item into a default. Record my decision
 or the source-based resolution in its tracking issue and update the relevant document.

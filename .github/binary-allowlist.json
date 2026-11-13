@@ -4,6 +4,10 @@
     "docs/assets/K-LCR_social_preview.png": {
       "sha256": "ff128d636b9059f5d999736ebfabd33e213c36dcee6f9ffd0fda3bac6cddc5ef",
       "reason": "Social preview image rendered from docs/assets/K-LCR_social_preview.html (#18); provenance in docs/assets/README.md"
+    },
+    "src/workbook/LCR_Template.xlsx": {
+      "sha256": "9a16390078538bffe26d4ed687b99332c8590f44f2e99951dac5842edf52aebb",
+      "reason": "Macro-free template of the prototype workbook (#179): no vbaProject, no sensitivity label, no author; the creator 'openpyxl' was cleared, no other part changed; built by the prototype's build_template.py, not yet tracked; see docs/PROTOTYPE.md"
     }
   }
 }

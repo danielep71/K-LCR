@@ -2,8 +2,9 @@
 
 **Sources first · Explicit profiles · No unsourced regulatory claims**
 
-This folder holds the regulatory basis of K-LCR's EU and Basel profiles. No
-formula is implemented or validated yet. The input, parameter and result
+This folder holds the regulatory basis of K-LCR's EU and Basel profiles. The
+[prototype workbook](../PROTOTYPE.md) implements the EU formulas outside these
+contracts; no formula is validated yet. The input, parameter and result
 contracts (#10) and the test-case format with two illustrative cases (#11)
 are in place; no independent or published case exists yet.
 
