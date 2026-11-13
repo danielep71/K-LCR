@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import contextlib
 import copy
+import io
 import json
 import shutil
 import tempfile
@@ -181,6 +183,15 @@ class MalformedInputTests(ParameterTestCase):
         result["diagnostics"][0]["code"] = {"x": 1}
         self.assertIn(["RES-DIAGNOSTIC", "diagnostics[0]"], self.codes(result))
 
+    def test_result_header_is_checked(self) -> None:
+        for key, bad in (("schema", "klcr-parameter-set"), ("result_version", 2), ("result_version", True),
+                         ("status", "done"), ("illustrative", "yes")):
+            with self.subTest(key=key, bad=bad):
+                data = {**copy.deepcopy(RESULT), key: bad}
+                self.assertIn("RES-HEADER", [f.code for f in check_parameters.check_result(data, self.root)])
+        self.assertEqual([[f.code, f.path] for f in check_parameters.check_result([], self.root)],
+                         [["RES-HEADER", ""]])
+
     def test_every_component_is_checked(self) -> None:
         data = copy.deepcopy(RESULT)
         data["components"] = [None, {"category": "EU-A-L1", "amount": "1", "factor": "1.5", "weighted": "x"},
@@ -193,6 +204,38 @@ class MalformedInputTests(ParameterTestCase):
 class FixtureTests(unittest.TestCase):
     def test_repository_fixtures_match_expected(self) -> None:
         self.assertEqual(check_parameters.check_fixtures(ROOT), [])
+
+
+class MainTests(unittest.TestCase):
+    def run_main(self, *argv: str) -> tuple[int, str, str]:
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = check_parameters.main(["--root", str(ROOT), *argv])
+        return code, out.getvalue(), err.getvalue()
+
+    def test_fixtures_pass(self) -> None:
+        code, out, _ = self.run_main("--check-fixtures")
+        self.assertEqual(code, 0)
+        self.assertIn("parameter-result-contract: PASS", out)
+
+    def test_a_file_with_findings_exits_1(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "set.json"
+            path.write_text(json.dumps({**EU_SET, "parameter_set_version": True}), encoding="utf-8")
+            code, out, _ = self.run_main("--file", str(path))
+        self.assertEqual(code, 1)
+        self.assertIn("PAR-HEADER", out)
+
+    def test_a_missing_or_invalid_file_exits_2(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing.json"
+            broken = Path(directory) / "broken.json"
+            broken.write_text("{", encoding="utf-8")
+            for path in (missing, broken):
+                with self.subTest(path=path.name):
+                    code, out, err = self.run_main("--file", str(path))
+                    self.assertEqual((code, out), (2, ""))
+                    self.assertIn("ERROR", err)
 
 
 if __name__ == "__main__":

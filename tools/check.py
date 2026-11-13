@@ -30,6 +30,11 @@ class Gate:
     tool: str
     command: tuple[str, ...] = ()
     probe: Callable[[Path, Path], tuple[int, str]] | None = None
+    also: tuple[str, ...] = ()  # further tools the command needs: a missing one is NOT RUN
+
+    @property
+    def tools(self) -> tuple[str, ...]:
+        return (self.tool, *self.also)
 
 
 @dataclass(frozen=True)
@@ -97,7 +102,8 @@ def default_gates() -> list[Gate]:
              ("node", ".github/scripts/labels-sync.mjs", "--mode", "validate")),
         Gate("labels-drift-self-test", "node",
              ("node", ".github/scripts/labels-drift.mjs", "--self-test")),
-        Gate("issue-config", "pyyaml", (python, "tools/check_issues.py", "--check-config")),
+        Gate("issue-config", "pyyaml", (python, "tools/check_issues.py", "--check-config"),
+             also=("node",)),
         Gate("format-fixtures", "python", (python, "tools/check_files.py", "--self-test")),
         Gate("tracked-text", "python", (python, "tools/check_files.py")),
         Gate("ruff", "ruff", ("ruff", "check", "--no-cache", "tools")),
@@ -129,7 +135,7 @@ def tool_versions(gates: Sequence[Gate], root: Path) -> dict[str, str]:
     flags = {"python": "--version", "node": "--version", "ruff": "--version",
              "mypy": "--version", "actionlint": "-version"}
     versions: dict[str, str] = {}
-    for tool in sorted({gate.tool for gate in gates}):
+    for tool in sorted({tool for gate in gates for tool in gate.tools}):
         if not available(tool):
             versions[tool] = "not installed"
             continue
@@ -148,15 +154,16 @@ def run_gates(gates: Sequence[Gate], root: Path, output: Path) -> list[Result]:
     results = []
     with tempfile.TemporaryDirectory(prefix="probe-", dir=output) as scratch:
         for gate in gates:
-            if not available(gate.tool):
-                code, log = -1, f"{gate.tool} is not installed or not on PATH"
+            gone = next((tool for tool in gate.tools if not available(tool)), None)
+            if gone is not None:
+                code, log = -1, f"{gone} is not installed or not on PATH"
             elif gate.probe is not None:
                 code, log = gate.probe(root, Path(scratch))
             else:
                 code, log = run(gate.command, root)
             (output / f"{gate.name}.log").write_text(log, encoding="utf-8", newline="\n")
             status = "not-run" if code == -1 else ("pass" if code == 0 else "fail")
-            detail = f"{gate.tool} not available" if code == -1 else f"exit {code}"
+            detail = f"{gone} not available" if gone else f"exit {code}"
             results.append(Result(gate.name, status, detail))
             print(f"{gate.name}: {label(status)}", flush=True)
             if status == "fail":
