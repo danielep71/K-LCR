@@ -41,7 +41,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, and the VBA checks' valid and invalid fixtures (`test_check_vba.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), and the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |

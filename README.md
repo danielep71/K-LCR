@@ -116,7 +116,8 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | `tests/contract/`, `tests/parameters/`, `tests/cases/`, `tests/derivations/` | Synthetic fixtures for the contracts and the registered test cases |
 | `tools/` | `check.py` and its gates, with their tests |
 | `.github/` | Labels, issue forms, the pull request template, Dependabot and the workflows |
-| `src/`, `tests/unit/`, `tests/host/` | Planned VBA core, API, Excel adapter and their tests; not created yet |
+| `tests/unit/` | The neutral VBA test harness and its example suite: source only, not yet compiled or run in Excel |
+| `src/`, `tests/host/` | Planned VBA core, API, Excel adapter and host tests; not created yet |
 
 The full layout, with the planned paths, is in
 [REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md#%EF%B8%8F-repository-layout).

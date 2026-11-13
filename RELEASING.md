@@ -20,7 +20,7 @@ the version and changelog rules are in
 | Released versions | None |
 | `VERSION` | Does not exist yet; it is created when the first release is prepared |
 | Active release branch | `release/0.1.0` |
-| Open milestones | *v0.2.0 - Host execution*, due 2026-12-31 |
+| Open milestones | *v0.2.0 - Prototype setup*, due 2026-12-31 |
 | v0.1.0 outcome | Closed without a release, by my decision of 2026-11-07 (#23): no tag, no published version, and the changelog stays under `[Unreleased]`; I closed the milestone *v0.1.0 - Repo setup* on 2026-11-13 |
 
 <a id="what-a-version-means"></a>
@@ -265,7 +265,7 @@ Logs and artifacts expire: copy the decisive lines.
 | --- | --- | --- |
 | Tag-triggered release workflow that checks the tag and builds an attested source bundle and checksums | Deferred: no asset is published before a workbook exists | #137 |
 | Command that verifies a published release (tag, candidate, assets, milestone) | Deferred: the checks of step 6 are manual | #137 |
-| Excel run bound to the candidate | Deferred to *v0.2.0 - Host execution* | #14, #15 |
+| Excel run bound to the candidate | Deferred to *v0.2.0 - Prototype setup* | #14, #15 |
 | Workbook asset and its packaging | Deferred: no workbook exists | B004 and B006 in [DECISIONS.md](docs/DECISIONS.md) |
 | User manual and distribution review | Deferred: no workbook exists | None recorded |
 
