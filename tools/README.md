@@ -41,7 +41,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the component manifest's valid and invalid fixtures (`test_check_vba_manifest.py`), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
@@ -59,6 +59,7 @@ versions; each gate also writes `<gate>.log`.
 | `parameter-result-contract` | Every parameter-set and result example in `tests/parameters/` gives exactly the findings recorded in `tests/parameters/expected.json` (`check_parameters.py --check-fixtures`). The contract is [docs/methodology/PARAMETERS_AND_RESULTS.md](../docs/methodology/PARAMETERS_AND_RESULTS.md). |
 | `vba-conditionals` | Every `#If` block of the tracked VBA components evaluates in each compilation environment (VBA6 Win32, VBA7 Win32, VBA7 Win64); every `Declare` reachable under VBA7 is `PtrSafe` and none reachable under VBA6 uses `PtrSafe` or `LongPtr` (`check_vba_conditionals.py`). |
 | `vba-jumps` | Every jump target is a label of the same procedure, in each environment; jumps serve one error/cleanup handler: no `GoSub`, computed `On ... GoTo`, `On Error GoTo -1` or backward `GoTo` (`check_vba_jumps.py`). |
+| `vba-manifest` | `tools/vba-projects.json` lists every tracked component of each workbook, once and in sorted order: the document modules of `src/workbook/`, the other `src/` components for production, and those plus every component under `tests/` for development (`check_vba_manifest.py`). |
 | `vba-dynamic` | No `Declare`, `CreateObject`, `GetObject`, `New` automation object, `CallByName`, `Run`, `Evaluate` or other dynamic call outside the host homes; there, each use needs a reviewed entry in `tools/vba-exceptions.json` (a `Declare` only in `src/host/excel/`, a `CreateObject` only with a literal ProgID), and stale entries fail (`check_vba_dynamic.py`). |
 | `binaries` | Every tracked binary file, by `.gitattributes` or by a NUL byte anywhere in it, is a byte-preserved regulatory source under `docs/methodology/sources/`, a UserForm `.frx` beside its `.frm`, or listed in `.github/binary-allowlist.json` with its current SHA-256 and a reason; an allowlisted file whose content changed fails, and so does an Office package with macros or personal metadata (`check_binaries.py`). |
 | `changelog` | `CHANGELOG.md` and `VERSION` follow the [date and version rules](../CHANGELOG.md#date-and-version-rules): headings, real dates, order, link references into this repository, no `VERSION` before the first dated release and the newest release afterwards; the changelog introduction and the *Current status* of [RELEASING.md](../RELEASING.md#current-status) agree on the release state, with no placeholder line; the README mentions no "Release Candidate" and holds no unchecked task item (it is not compared with the release state); a released section equals its content at its tag, and a shallow checkout fails once a release exists, which is why the workflow checks out the full history and tags (`check_changelog.py --repository danielep71/K-LCR`). It never tags or publishes. |
@@ -66,6 +67,24 @@ versions; each gate also writes `<gate>.log`.
 The label gates run on every pull request here, although the label workflows
 run on a pull request only when it changes label files. Live label
 reconciliation and drift detection stay in those workflows.
+
+<a id="vba-synchronization"></a>
+
+## 🔄 VBA synchronization
+
+`Sync-KLCR-VBA.ps1` imports the repository's VBA into a workbook built from
+`src/workbook/LCR_Template.xlsx`, by Excel's VBA object model, in the mode
+and with the components that `vba-projects.json` lists. The `.cmd` files run
+it for a workbook dragged onto them; `Sync-KLCR-VBA-Downloads.cmd` imports the
+modules found in a folder instead. With `-FromTemplate` it first builds the
+workbook from the template. It needs Windows Excel and *Trust access to the
+VBA project object model*; the procedure, its safeguards and its exit codes
+are in [INSTALLATION.md](../INSTALLATION.md#synchronizing-vba).
+
+It skips homes that do not exist yet, stops before opening Excel when a
+source component is missing from the manifest, imports forms from the
+repository only, never runs the VBA and records no run. No test runs it: it
+needs Windows Excel, and it has not yet been run on a host (#14).
 
 ## 🗂️ Issue triage
 

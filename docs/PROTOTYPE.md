@@ -77,6 +77,7 @@ A line with an error is excluded and listed on `Checks`; with
 | `tools/build_template.py` | Writes `LCR_Template.xlsx` from `lcr_spec.py` with `openpyxl` (through `tools/plain_openpyxl.py`, which selects its standard-library XML writer); `tools/test_build_template.py` rebuilds it and compares every part with the tracked file |
 | `tools/build_xlsm.py` | Builds the macro-enabled workbook in LibreOffice from the template and the VBA of `src/` and `tests/modules/`, into the ignored `test-results/` |
 | `tools/run_lo_test.py` | Runs the workbook's VBA in LibreOffice and compares `Results` with `compute()` |
+| `tools/vba-projects.json`, `tools/Sync-KLCR-VBA.ps1` | The components of the production and development workbooks, and the script that imports them into a workbook in Windows Excel (#14) |
 | `tools/preview.py` | Renders each sheet of a workbook to PNG for a visual check; needs LibreOffice and `pdftoppm` |
 
 The prototype keeps this layout until it is refactored, by my decision of
@@ -93,8 +94,10 @@ The macro-enabled workbook is not tracked. To build one:
 1. Copy `src/workbook/LCR_Template.xlsx` to a new file outside the checkout,
    or under the ignored `test-results/`.
 2. Open it in desktop Excel, open the VBE (Alt+F11) and use File > Import File
-   for every `.bas` of `src/core/`, `src/modules/`, `src/workbook/` and
-   `tests/modules/`.
+   for every `.bas` that `tools/vba-projects.json` lists for the workbook you
+   want: production, or development with the tests of `tests/`. Or let
+   `tools/Sync-KLCR-VBA.ps1` do it
+   ([INSTALLATION.md](../INSTALLATION.md#synchronizing-vba)).
 3. The document modules (`ThisWorkbook`, `sh<Sheet>`) hold only
    `Option Explicit`: nothing needs to be copied into them.
 4. Save as `.xlsm`. Review `Params`, enter lines on `HQLA`, `Outflows` and
