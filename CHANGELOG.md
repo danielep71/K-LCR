@@ -141,6 +141,13 @@ Liquidity Coverage Ratio that nothing validates.
   `test-results/`, and `tools/run_lo_test.py` runs its VBA there against
   `compute()`. LibreOffice is an optional host and its run is not Excel
   evidence (#180).
+- The component manifest `tools/vba-projects.json`, kept equal to the
+  tracked components by the new `vba-manifest` gate, and
+  `tools/Sync-KLCR-VBA.ps1`, which imports a production or development
+  workbook's components into a workbook built from the template, in Windows
+  Excel, with a backup and a check that the sheets are unchanged. The script
+  has not been run on a host; INSTALLATION.md documents it, the manual route,
+  the export back and the recovery (#14).
 
 ### Validation
 
