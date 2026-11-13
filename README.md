@@ -32,7 +32,7 @@
 
 <p align="center">
   <img width="100%"
-       alt="K-LCR: Liquidity Coverage Ratio in Excel VBA, with EU and Basel profiles. The ratio is the liquidity buffer over net liquidity outflows over 30 calendar days, at least 100 %; inflows are recognised up to 75 % of outflows; Level 2 assets are at most 40 % and Level 2B at most 15 % of the buffer. Status: v0.2.0, prototype setup, an EU prototype that is not validated, synthetic data only."
+       alt="K-LCR: Liquidity Coverage Ratio, a 30-day liquidity stress in Excel VBA: HQLA buffer, outflows and capped inflows. Status: prototype 0.2.0, not validated. A dashboard shows the prototype's demonstration data in EUR millions: scope TOTAL with an LCR of 194.8 %, a liquidity buffer of 3,209.6 and a net outflow of 1,647.7; inflows recognised up to 75 % of outflows; the EU profile selected, Basel planned; and a LibreOffice smoke test in which the VBA agreed with the Python model."
        src="docs/assets/K-LCR_social_preview.png">
 </p>
 
