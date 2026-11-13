@@ -19,8 +19,9 @@ repository's social preview image: 1280 x 640 px and under GitHub's 1 MB
 limit. Its palette and `K` mark are those of the website.
 
 - **Content:** the project name, the method, the two profiles and the current
-  status, "v0.1.0 · Repository setup", with "No LCR calculation yet".
-  Update the status with each release or when a calculation exists.
+  status, "v0.2.0 · Prototype setup", with "EU prototype, not validated" and
+  "Synthetic data only" (#185). Update the status with each release, or when
+  the prototype is validated or a host run is recorded.
 - **Figures:** the card states four requirements, not results:
 
   | Statement | EU, Delegated Regulation (EU) 2015/61 | Basel Framework, LCR, in force from 15 Dec 2019 |
@@ -40,9 +41,10 @@ limit. Its palette and `K` mark are those of the website.
 
 Regenerate the PNG by opening the HTML in Chromium with a 1280 x 640 viewport
 at device scale factor 1, waiting for `document.fonts.ready`, and capturing
-the viewport. The current PNG was rendered with Playwright 1.63.0 and its
-Chromium build on Linux; its SHA-256 is
-`ff128d636b9059f5d999736ebfabd33e213c36dcee6f9ffd0fda3bac6cddc5ef`. A
-different browser or font build gives a slightly different image. Then upload
+the viewport. The current PNG was rendered on 2026-11-13 with Playwright
+1.63.0 and its Chromium build on Linux; its SHA-256 is
+`e0884b6599660dc946a8b1bb19f2567a6c3cc292f56ea057c3f4142d379d6864`. The same
+setup rendered the previous HTML to exactly the previous PNG. A different
+browser or font build gives a slightly different image. Then upload
 the PNG in **Settings > General > Social preview**; GitHub has no API for this
 setting.
