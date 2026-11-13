@@ -17,7 +17,7 @@ tooling, dependency updates and fixes.
 | Branch | Role |
 | --- | --- |
 | main | Integrated baseline; accepts only a release integration PR after my explicit authorization for that candidate, apart from the Dependabot security-update pull requests that GitHub opens against it ([below](#dependabot-security-updates)). |
-| release/0.1.0 | Active development/integration branch for v0.1.0 - Repo setup; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28. |
+| release/0.1.0 | Active development/integration branch; created from main at ff01720c79633d28ba342a7a1ac2c6836aafdf95 on 2026-10-28 for v0.1.0 - Repo setup, which I closed on 2026-11-13, and now carrying v0.2.0 - Prototype setup. |
 | `docs/<issue>-<slug>`, `fix/<issue>-<slug>`, `feat/<issue>-<slug>`, `chore/<issue>-<slug>` | Short-lived task branches cut from the active release branch; PRs target release/0.1.0. No other prefix ([AGENTS.md](../AGENTS.md)). |
 | `release/X.Y.Z` | Release branch naming: version digits only, without a `v` prefix. |
 | traffic-history | Data-only branch of the traffic history, created on 2026-11-05 as an orphan commit; the Traffic history workflow pushes to it directly ([TRAFFIC.md](TRAFFIC.md)). Never a task base or merged into source branches. |
@@ -36,7 +36,7 @@ into main, tagging, publication or a visibility change.
    of the linked issue; milestones belong to issues only.
 3. Review the final diff and record the exact head SHA, reviewer identity,
    findings and their resolution in the PR description or review. Keep author
-   attribution truthful; an agent review must not be described as my approval.
+   attribution truthful; an automated review must not be described as my approval.
 4. Require a passing Repository integrity check for the current candidate and
    current base, an up-to-date task branch and resolved review conversations.
    Path-specific label checks supplement the universal required check.

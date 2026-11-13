@@ -20,7 +20,8 @@ canonical calculation source.
   The approved macro-free template, `src/workbook/LCR_Template.xlsx` (#179),
   has one exact rooted negation rule in `.gitignore` and one entry with its
   SHA-256 in `.github/binary-allowlist.json`; no generic exception. Its
-  component manifest is #14.
+  component manifest is `tools/vba-projects.json` (#14), which the
+  `vba-manifest` gate keeps equal to the tracked components.
 - Create `src/`, `tests/` and `templates/` only with meaningful content,
   following [the proposed layout](REPOSITORY_STRUCTURE.md).
 
@@ -31,13 +32,14 @@ From a fresh checkout at the exact candidate commit:
 ```sh
 git status --short
 git ls-files --eol
-git check-attr text eol -- path/to/module.bas
+git check-attr text eol -- src/core/CORE_Engine.bas
 git check-ignore -v -- test-results/sample.json scratch.xlsm
 git diff --check
 ```
 
-The first command should be empty. A future VBA module should show `i/lf`
-and `w/crlf` on Windows; repository Markdown should show LF in both locations.
+The first command should be empty. A VBA module, such as
+`src/core/CORE_Engine.bas`, should show `i/lf` and `w/crlf` on Windows;
+repository Markdown should show LF in both locations.
 Check generated outputs using `git check-ignore`; source and fixtures should
 remain visible. Never run `git add -f` on an ignored workbook without an
 explicit reviewed entry in `.github/binary-allowlist.json`: the `binaries`

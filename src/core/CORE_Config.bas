@@ -12,7 +12,7 @@ Attribute VB_Name = "CORE_Config"
 '
 ' PUBLIC SURFACE
 '   None outside this VBA project. The constants are Public for in-project use
-'   by CORE_Engine, M_Main, LCR_Formulas and TEST_Engine; Option Private
+'   by CORE_Engine, M_Main and TEST_Engine; Option Private
 '   Module keeps them off the supported external surface.
 '
 ' DEPENDENCIES

@@ -2,7 +2,8 @@
 """Build the prototype's macro-enabled workbook from the template and the exported VBA.
 
 1. LibreOffice (headless, UNO) loads the template, switches the document to
-   VBA compatibility mode, inserts every .bas module of src/ and tests/modules/ and
+   VBA compatibility mode, inserts the components that tools/vba-projects.json
+   lists for the chosen workbook (development by default, or production) and
    the document modules (ThisWorkbook, sh*), and saves a scratch .xlsm;
    its xl/vbaProject.bin carries the VBA source (Excel compiles it on the
    first open).
@@ -14,12 +15,14 @@ The workbook is written under the ignored test-results/ by default; it is
 never source. LibreOffice is an optional build host: a workbook it produced
 is not evidence that the VBA compiles or runs in Excel.
 
-Usage: python tools/build_xlsm.py [template.xlsx] [output.xlsm]
+Usage: python tools/build_xlsm.py [template.xlsx] [output.xlsm] [--mode production|development]
 """
 
 from __future__ import annotations
 
+import argparse
 import importlib
+import json
 import re
 import shutil
 import subprocess
@@ -35,6 +38,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "src" / "workbook" / "LCR_Template.xlsx"
 OUTPUT = ROOT / "test-results" / "K-LCR.xlsm"
+MANIFEST = Path("tools") / "vba-projects.json"
+MODES = ("development", "production")
 PORT = 2002
 FILTER_XLSM = "Calc MS Excel 2007 VBA XML"
 MAIN_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
@@ -44,17 +49,22 @@ VBA_RELATIONSHIP = ('<Relationship Id="rIdVBA" Type="http://schemas.microsoft.co
                     'vbaProject" Target="vbaProject.bin"/>')
 
 
-def modules(root: Path = ROOT) -> list[Path]:
-    """The standard modules: every .bas of src/ and the self-test of tests/modules/, in a fixed order.
+def manifest(root: Path = ROOT) -> dict[str, Any]:
+    """tools/vba-projects.json, which the vba-manifest gate keeps equal to the tracked components."""
+    data: dict[str, Any] = json.loads((root / MANIFEST).read_text(encoding="utf-8"))
+    return data
 
-    The neutral harness of tests/unit/ is not part of the prototype workbook.
-    """
-    return sorted((root / "src").rglob("*.bas")) + sorted((root / "tests" / "modules").glob("*.bas"))
+
+def modules(root: Path = ROOT, mode: str = "development") -> list[Path]:
+    """The standard and class modules that the manifest lists for one workbook, in its order."""
+    if mode not in MODES:
+        raise ValueError(f"unknown workbook {mode!r}: use one of {', '.join(MODES)}")
+    return [root / entry for entry in manifest(root)["configurations"][mode]["modules"]]
 
 
 def documents(root: Path = ROOT) -> list[Path]:
-    """The document modules (ThisWorkbook and the sheets)."""
-    return sorted((root / "src" / "workbook").glob("*.cls"))
+    """The document modules (ThisWorkbook and the sheets) that the manifest lists."""
+    return [root / entry for entry in manifest(root)["document_modules"]]
 
 
 def source_body(path: Path) -> tuple[str, str]:
@@ -152,7 +162,7 @@ def basic_helper(ctx: Any) -> Any:
         "vnd.sun.star.script:KLcrBuild.Builder.InsertDocModule?language=Basic&location=application")
 
 
-def insert_modules(ctx: Any, doc: Any, root: Path) -> None:
+def insert_modules(ctx: Any, doc: Any, root: Path, mode: str) -> None:
     """Every document module through the Basic helper, then every standard module."""
     uno = uno_module()
     libs = doc.BasicLibraries
@@ -172,20 +182,21 @@ def insert_modules(ctx: Any, doc: Any, root: Path) -> None:
         helper.invoke((doc, name, "Option VBASupport 1\n" + body), (), ())
     existing = set(lib.getElementNames())
     normal = uno.getConstantByName("com.sun.star.script.ModuleType.NORMAL")
-    for path in modules(root):
+    klass = uno.getConstantByName("com.sun.star.script.ModuleType.CLASS")
+    for path in modules(root, mode):
         name, body = source_body(path)
         code = "Option VBASupport 1\n" + body
         if name in existing:
             lib.replaceByName(name, code)
             continue
         info = uno.createUnoStruct("com.sun.star.script.ModuleInfo")
-        info.ModuleType = normal
+        info.ModuleType = klass if path.suffix.lower() == ".cls" else normal
         if not lib.hasModuleInfo(name):
             lib.insertModuleInfo(name, info)
         lib.insertByName(name, code)
 
 
-def vba_project(template: Path, root: Path = ROOT) -> bytes:
+def vba_project(template: Path, root: Path = ROOT, mode: str = "development") -> bytes:
     """The xl/vbaProject.bin that LibreOffice writes for the template and the source."""
     with office() as ctx, tempfile.TemporaryDirectory(prefix="klcr-build-") as scratch:
         desktop = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
@@ -194,7 +205,7 @@ def vba_project(template: Path, root: Path = ROOT) -> bytes:
         doc = desktop.loadComponentFromURL(work.as_uri(), "_blank", 0, (pv("Hidden", True),))
         if doc is None:
             raise RuntimeError(f"LibreOffice could not load {template}")
-        insert_modules(ctx, doc, root)
+        insert_modules(ctx, doc, root, mode)
         saved = Path(scratch) / "scratch.xlsm"
         doc.storeToURL(saved.as_uri(), (pv("FilterName", FILTER_XLSM),))
         doc.close(True)
@@ -224,12 +235,15 @@ def inject(template: Path, bin_data: bytes, output: Path) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = sys.argv[1:] if argv is None else argv
-    template = Path(args[0]) if args else TEMPLATE
-    output = Path(args[1]) if len(args) > 1 else OUTPUT
-    data = vba_project(template)
-    inject(template, data, output)
-    print("written", output, "vbaProject.bin", len(data), "bytes")
+    parser = argparse.ArgumentParser(description="Build the prototype's macro-enabled workbook in LibreOffice.")
+    parser.add_argument("template", nargs="?", type=Path, default=TEMPLATE)
+    parser.add_argument("output", nargs="?", type=Path, default=OUTPUT)
+    parser.add_argument("--mode", choices=MODES, default="development",
+                        help="the workbook of tools/vba-projects.json to build (default: development)")
+    args = parser.parse_args(argv)
+    data = vba_project(args.template, mode=args.mode)
+    inject(args.template, data, args.output)
+    print("written", args.output, args.mode, "vbaProject.bin", len(data), "bytes")
     return 0
 
 

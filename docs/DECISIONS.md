@@ -25,7 +25,7 @@ exact supported builds and tested configurations remain subject to #15.
 | Source layout, encoding and generated-file handling | #5 | [Source control](SOURCE_CONTROL.md), `.editorconfig`, `.gitattributes` and `.gitignore` |
 | General host, API, numeric-type and source-authoring conventions | #6 | [VBA house style](VBA_HOUSE_STYLE.md) and [Installation](../INSTALLATION.md); actual host execution remains #14/#15 |
 | EU/Basel source editions, requirement map, source-based resolutions and interpretation register | #9 | [Source register](methodology/SOURCES.md) and [applicability map](methodology/APPLICABILITY.md) |
-| EU and Basel applicability positions for v0.1 | #126 | My decisions A01 to A09 of 2026-11-03 in the [applicability map](methodology/APPLICABILITY.md#-my-applicability-decisions--2026-11-03) |
+| EU and Basel applicability positions for v0.1 | #126 | My decisions A01 to A09 of 2026-11-03, A03 amended on 2026-11-05 (#148) and A06 on 2026-11-13 (#172), in the [applicability map](methodology/APPLICABILITY.md#-my-applicability-decisions--2026-11-03) |
 | Input, parameter-set and result contracts; units, reconciliation, fingerprints and diagnostics | #10 | [Input contract](methodology/DATA_CONTRACT.md), [parameter sets and results](methodology/PARAMETERS_AND_RESULTS.md), their validators and synthetic fixtures |
 | Test-case format, oracle and comparison rules, validation plan | #11 | [Test cases](methodology/TEST_CASES.md), [validation plan](methodology/VALIDATION_PLAN.md), `tools/check_test_cases.py` and two neutral examples |
 | File audit of every tracked file; exact binary allowlist | #21 | [File audit](release/FILE_AUDIT_v0.1.0.md) and the `binaries` gate |
@@ -36,17 +36,18 @@ exact supported builds and tested configurations remain subject to #15.
 
 ## 📋 Remaining decisions (v0.2.0 - Prototype setup)
 
-I renamed the milestone v0.2.0 to *v0.2.0 - Prototype setup* on 2026-11-13. Its purpose is to
+I renamed the milestone *v0.2.0 - Host execution* to *v0.2.0 - Prototype setup* on 2026-11-13. Its purpose is to
 bring in a working prototype, to refine afterwards. The prototype is not a
 validated calculation: what counts as validated is decided by the
 [validation plan](methodology/VALIDATION_PLAN.md), and the follow-on backlog
 below is unchanged.
 
-| Decision or deliverable | Tracking issue | Completion evidence |
-| --- | --- | --- |
-| Neutral test scaffold | #13 | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
-| Prototype workbook source | #179 | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template and model; its build tools came in with #180 |
-| Workbook synchronization and real host evidence | #14, #15 | Executed evidence bound to the tested candidate |
+| Decision or deliverable | Tracking issue | State | Completion evidence |
+| --- | --- | --- | --- |
+| Neutral test scaffold | #13 | Delivered as source | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
+| Prototype workbook source | #179, #180 | Delivered, not validated | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template, model and build tools |
+| Component manifest and synchronization script | #14 | Delivered, not run on a host | `tools/vba-projects.json`, the `vba-manifest` gate and `tools/Sync-KLCR-VBA.ps1`; the host demonstration stays open in #14 |
+| Real host evidence | #15 | Open | Executed evidence bound to the tested candidate |
 
 On 2026-11-13 I decided that the prototype keeps its own layout and names
 (`src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/`; `CORE_*`,

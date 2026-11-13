@@ -30,7 +30,8 @@ desktop workbook; any other library or COM object needs a reviewed exception
 
 ## 📥 Get the source
 
-Verified. Clone the repository, switch to the active release branch and note
+Verified on 2026-11-09 ([Verified setup](#verified-setup)). Clone the
+repository, switch to the active release branch and note
 the exact commit you are working on:
 
 ```sh
@@ -50,7 +51,9 @@ before changing anything.
 
 ## 🛠️ Developer setup
 
-Verified on Linux. The repository checks need:
+Verified on Linux on 2026-11-09 ([Verified setup](#verified-setup)), before
+openpyxl, its type stubs and the `vba-manifest` gate were added: those have
+passed in CI, not in a new fresh-clone run. The repository checks need:
 
 | Tool | Version | Used by |
 | --- | --- | --- |
@@ -61,8 +64,9 @@ Verified on Linux. The repository checks need:
 | actionlint | 1.7.12 | Workflow syntax |
 
 `tools/check.py` itself needs only the Python standard library. LibreOffice
-is optional: only the prototype's workbook builder and smoke test use it
-([docs/PROTOTYPE.md](docs/PROTOTYPE.md)), the checks never do, and a run in it
+is optional: only the prototype's workbook builder, its smoke test and
+`tools/preview.py` use it ([docs/PROTOTYPE.md](docs/PROTOTYPE.md)), the checks
+never do, and a run in it
 is not evidence for Excel.
 
 1. Create a virtual environment and install the Python quality tools. The
@@ -121,7 +125,7 @@ I ran the shell blocks of *Get the source* and *Developer setup*, extracted verb
 | --- | --- |
 | Commit | `7afec586713d1a62f3c04679c9ffe293c09b8b5e`, the head of the pull request that updates the tools (#158), checked out in place of the release branch (earlier runs: `a8784cb` with 20 gates, `fc98b17` with 21) |
 | System | Ubuntu 24.04.5 LTS, Linux x86_64 |
-| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.17.3, mypy 2.4.1, PyYAML 6.0.3 |
+| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.17.2, mypy 2.4.0, PyYAML 6.0.3 |
 | Fresh clone | `git status --short` printed nothing, before and after the setup; the virtual environment is ignored and actionlint sits in `../klcr-tools` |
 | actionlint archive | `sha256sum --check --strict` printed `OK` (on 2026-11-05 a first attempt stopped at the download with HTTP 504, and the repeated run passed) |
 | `python tools/check.py --ci` | All 21 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |
@@ -172,7 +176,7 @@ ignored `test-results/`.
 
 | Workbook | Components |
 | --- | --- |
-| Production | Every standard and class module under `src/` |
+| Production | Every standard and class module under `src/`. The **Self-test** button on `Results` calls `TEST_Engine`, which only the development workbook holds |
 | Development | The production components and every component under `tests/`: the prototype's self-test and the neutral harness with its example suite |
 | Both | The document modules of `src/workbook/` (`ThisWorkbook`, `sh<Sheet>`), whose code replaces the code of the existing workbook and sheet objects |
 
@@ -206,7 +210,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps
 | Replaces document-module code, if you agree | It asks, unless `-IncludeSheets` or `-SkipSheets` answers; the workbook's sheet objects are kept. |
 | Builds the workbook | `-FromTemplate` saves the template as an `.xlsm` at `-WorkbookPath`, replacing a file of that name, before the synchronization, so the sheets are the current template's. |
 | Imports from a folder | `-SourceDir` (or `tools/Sync-KLCR-VBA-Downloads.cmd`, which asks for one and defaults to `Downloads`) takes only the `.bas` and `.cls` files found there, by their `Attribute VB_Name`, after listing them for confirmation. A new standard module is taken only with a project prefix (`CORE_`, `LCR_`, `M_`, `TEST_`). |
-| Protects the workbook | A backup copy first, removed after a successful save. It writes no cells, formulas, names or formatting, and before saving it checks that no sheet was added, removed, renamed or reordered. The workbook is closed unsaved on any error. |
+| Protects the workbook | A backup copy first, removed after a successful save; `-NoBackup` skips it, and `-FromTemplate` takes none because it replaces the file at `-WorkbookPath`. It writes no cells, formulas, names or formatting, and before saving it checks that no sheet was added, removed, renamed or reordered. The workbook is closed unsaved on any error. `-Visible` shows the Excel window. |
 
 It never writes to the repository, never runs the VBA and records no run.
 After it, compile as in step 3.
@@ -216,7 +220,7 @@ After it, compile as in step 3.
 | Exit code | Meaning | What to do |
 | --- | --- | --- |
 | 0 | Synchronized and saved; the backup is removed | Compile and run what you need |
-| 1 | Failed: the workbook was closed without saving | The message names the cause. If a backup was taken, its path is printed and it is kept beside the workbook (`<name>.pre-vba-sync.<timestamp>.xlsm`): the workbook itself is unchanged, so remove the backup once you have checked that |
+| 1 | Failed: the workbook was closed without saving | The message names the cause. If a backup was taken, its path is printed and it is kept beside the workbook (`<name>.pre-vba-sync.<timestamp>.xlsm`): the workbook itself is unchanged, so remove the backup once you have checked that. With `-NoBackup` there is no copy. With `-FromTemplate` a workbook that was at that path is gone and the file there is the template saved as `.xlsm`: run again, or rebuild it |
 | 2 | Cancelled, or nothing to import: the workbook was not changed | Nothing |
 
 A synchronization that runs twice imports the same components twice and

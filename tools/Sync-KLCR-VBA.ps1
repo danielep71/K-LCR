@@ -33,6 +33,12 @@ it is. -IncludeSheets or -SkipSheets gives the answer in advance.
 
 It does not run the VBA and records no Excel run.
 
+A backup copy of the workbook is taken before it is opened, and removed after
+a successful save. -NoBackup skips it. -FromTemplate takes none: it replaces
+any file at -WorkbookPath with the template, so a workbook already at that
+path is gone even if the synchronization then fails. -Visible shows the Excel
+window during the synchronization.
+
 .NOTES
 Requirements:
 - Windows desktop Excel.
@@ -199,9 +205,10 @@ function Get-DeclaredVbaName {
 
 function Get-VbaEncoding {
     # Repository VBA is ASCII only (docs/VBA_HOUSE_STYLE.md). Code text read
-    # for a document module is decoded as cp1252, the code page the VBE
-    # exports in, which reads ASCII unchanged and keeps any other byte as a
-    # visible character rather than failing as UTF-8 would. Windows
+    # for a document module is decoded as cp1252, the code page the VBE is
+    # assumed to export in on Western-European hosts (not yet demonstrated
+    # here, #14 and #15); it reads ASCII unchanged and keeps any other byte
+    # as a visible character rather than failing as UTF-8 would. Windows
     # PowerShell has the code page built in; PowerShell 7 may need the
     # code-page provider registered.
     try {
@@ -627,8 +634,8 @@ try {
     # The homes of docs/REPOSITORY_STRUCTURE.md and of the prototype. Each is
     # created with its first component, so a home that does not exist yet
     # holds none.
-    $homes = @("src\api", "src\classes", "src\core", "src\forms", "src\host\excel", "src\modules",
-        "src\workbook", "tests\host", "tests\modules", "tests\unit")
+    $homes = @("src\api", "src\core", "src\host\excel", "src\modules", "src\workbook",
+        "tests\host", "tests\modules", "tests\unit")
     $sourceRoots = @(
         foreach ($relative in $homes) {
             $root = Join-Path $repoFullPath $relative

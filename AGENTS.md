@@ -1,8 +1,8 @@
-# 🧭 Working rules for contributors and assistants
+# 🧭 Working rules for contributors
 
-These rules apply to everyone who edits this repository, including automated
-assistants. Editorial and assistant rules live only in this file; other
-documents describe the project and its procedures and link here when needed.
+These rules apply to everyone who edits this repository, by hand or with a
+tool. Editorial and working rules live only in this file; other documents
+describe the project and its procedures and link here when needed.
 Branching, review and integration procedures are in
 [docs/GOVERNANCE.md](docs/GOVERNANCE.md).
 
@@ -19,7 +19,9 @@ Branching, review and integration procedures are in
   comments, issue and pull request templates) describes only this repository:
   its files, rules, settings and evidence.
 - Do not name other repositories, copy their history or wording about them, or
-  record conversation or session context.
+  record conversation or session context. The one exception is the README's
+  section *Where K-LCR belongs*, which names and links the K-Risk Engines
+  portfolio that K-LCR belongs to, by my decision of 2026-11-13.
 - Attributions of imported or adapted material go only in the license files,
   [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
 

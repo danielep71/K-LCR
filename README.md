@@ -10,8 +10,8 @@
 
 [![Excel VBA](https://img.shields.io/badge/Excel_VBA-64--bit_target-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md#host-matrix)
 [![Platform](https://img.shields.io/badge/Platform-Windows_target-0078D6?style=for-the-badge&logo=windows&logoColor=white)](INSTALLATION.md#host-matrix)
-[![Profiles](https://img.shields.io/badge/Profiles-EU_%C2%B7_Basel_planned-1f3a5f?style=for-the-badge)](docs/REPOSITORY_STRUCTURE.md#-regulatory-profiles)
-[![Status](https://img.shields.io/badge/Status-Repository_setup-BF8700?style=for-the-badge)](#-status)
+[![Profiles](https://img.shields.io/badge/Profiles-EU_prototype_%C2%B7_Basel_planned-1f3a5f?style=for-the-badge)](docs/REPOSITORY_STRUCTURE.md#-regulatory-profiles)
+[![Status](https://img.shields.io/badge/Status-Prototype_not_validated-BF8700?style=for-the-badge)](#-status)
 [![License](https://img.shields.io/badge/License-MPL_2.0-2ea44f?style=for-the-badge)](LICENSE)
 
 <br>
@@ -51,24 +51,27 @@
 > configuration. This project is intended for reference and independent
 > validation, not operational reporting or production use.
 
-The selected implementation is Excel/VBA with separate planned EU and Basel
-profiles. The portable **Repository integrity** check covers repository
+The selected implementation is Excel/VBA with separate EU and Basel profiles:
+an unvalidated prototype implements the EU profile, and the Basel profile is
+planned. The portable **Repository integrity** check covers repository
 tooling, Python lint and types, tracked text, workflows, the input and
 parameter contracts, the registered test cases, static VBA rules, binary files
 and the changelog. It does not validate regulatory
-calculations or execute Excel. The figures in the image above are regulatory
-requirements, with their sources in [docs/assets](docs/assets/README.md#-social-preview),
-not results.
+calculations or execute Excel. The figures in the image above are the
+prototype's demonstration outputs and its LibreOffice smoke test, with their
+sources in [docs/assets](docs/assets/README.md#-social-preview): none is a
+validated result.
 
 ## ✨ What this project is
 
-K-LCR is planned as an auditable Liquidity Coverage Ratio reference. The
+K-LCR is meant to be an auditable Liquidity Coverage Ratio reference. The
 design separates regulatory source and parameter choices, deterministic
-calculation, public API and Excel input/output. Synthetic fixtures and
-independent expected values will support validation as those components are
-implemented. The source editions, the applicability decisions, the input,
-parameter and result contracts and the test-case rules are already defined in
-[docs/methodology](docs/methodology/README.md); the calculation is not.
+calculation, public API and Excel input/output. The source editions, the
+applicability decisions, the input, parameter and result contracts and the
+test-case rules are defined in [docs/methodology](docs/methodology/README.md).
+A [prototype workbook](docs/PROTOTYPE.md) calculates an EU LCR from
+worksheet inputs; it does not yet follow those contracts, and no synthetic
+fixture with independent expected values validates it yet.
 
 ### Where K-LCR belongs
 
@@ -91,8 +94,9 @@ python tools/check.py --ci
 ```
 
 The check needs Python 3.13, Node.js 22, actionlint and the hash-locked Ruff,
-mypy and PyYAML; [Installation](INSTALLATION.md#developer-setup) gives the
-steps, which I verified from a fresh clone. Every gate should report PASS,
+mypy, PyYAML and openpyxl; [Installation](INSTALLATION.md#developer-setup) gives the
+steps, which I last verified from a fresh clone on 2026-11-09, before openpyxl
+and the `vba-manifest` gate were added. Every gate should report PASS,
 and the report goes to `test-results/`. No workbook is available to install.
 Do not treat a static PASS as Excel or LCR evidence. To contribute, read
 [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -101,7 +105,7 @@ Do not treat a static PASS as Excel or LCR evidence. To contribute, read
 
 | Boundary | Planned role | Current state |
 | --- | --- | --- |
-| Pure VBA core | Deterministic calculation, with explicit profile and parameter versions | Contract only |
+| Pure VBA core | Deterministic calculation, with explicit profile and parameter versions | Prototype in `src/core/` (#179), not validated and not yet on the contracts |
 | Public API | Request validation, named errors and results | Contract only |
 | Excel adapter | Host I/O and state restoration | Contract only |
 | Validation | Independent fixtures and real host evidence | Case format and plan defined (#11); host evidence planned under #15 |
@@ -116,7 +120,7 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | `docs/` | Governance, scope and decisions, settings evidence, the VBA house style and the website |
 | `docs/methodology/` | Source register, applicability map, contracts, test-case rules, validation plan and the stored EU source copies |
 | `tests/contract/`, `tests/parameters/`, `tests/cases/`, `tests/derivations/` | Synthetic fixtures for the contracts and the registered test cases |
-| `tools/` | `check.py` and its gates, with their tests |
+| `tools/` | `check.py` and its gates, with their tests; the prototype's model and build tools; the VBA component manifest and the Excel synchronization script |
 | `.github/` | Labels, issue forms, the pull request template, Dependabot and the workflows |
 | `tests/unit/` | The neutral VBA test harness and its example suite: source only, not yet compiled or run in Excel |
 | `src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/` | The [prototype workbook](docs/PROTOTYPE.md): its VBA source, its macro-free template and its self-test; not validated |

@@ -4,7 +4,9 @@
 Per component of src/ and tests/: ASCII only, `Attribute VB_Name` equal to the
 file name, `Option Explicit`, `Option Private Module` in the core and in the
 tests, no tab, no trailing whitespace and no line over 120 columns. It runs on
-its own (`python tools/check_source.py`); it is not a gate of tools/check.py.
+its own (`python tools/check_source.py`), and the tool-tests gate of
+tools/check.py runs it on the repository (test_check_source.py), so a finding
+fails the checks.
 Exit code 0 means no finding and 1 means at least one.
 """
 

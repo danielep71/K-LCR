@@ -10,7 +10,8 @@ binary file passes only if it is:
 - under docs/methodology/sources/, the byte-preserved regulatory sources;
 - a UserForm .frx with its .frm beside it; or
 - listed in .github/binary-allowlist.json with its current SHA-256 and a
-  reason, as the workbook template will be (docs/REPOSITORY_STRUCTURE.md).
+  reason, as the prototype's template src/workbook/LCR_Template.xlsx and the
+  social preview image are.
 
 .gitignore keeps such files out by default; this check catches one added on
 purpose, for example with git add -f.

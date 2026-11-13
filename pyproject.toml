@@ -1,7 +1,9 @@
 # Quality settings for the repository's Python tooling (tools/). The tooling
 # needs only the standard library, except PyYAML for check_workflows.py and
-# check_issues.py --check-config; Ruff and mypy are CI and development tools,
-# installed from tools/requirements-quality-ci.txt (see INSTALLATION.md).
+# check_issues.py --check-config, openpyxl for build_template.py and its test,
+# and LibreOffice's Python bridge for build_xlsm.py and run_lo_test.py. Ruff,
+# mypy, PyYAML and openpyxl are installed from
+# tools/requirements-quality-ci.txt (see INSTALLATION.md).
 
 [tool.ruff]
 target-version = "py313"

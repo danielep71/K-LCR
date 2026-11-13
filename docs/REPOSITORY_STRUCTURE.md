@@ -23,8 +23,10 @@ decision, data controls, independent validation and operational acceptance.
 
 ## 📚 Regulatory profiles
 
-EU and Basel are distinct planned profiles, not interchangeable labels for one
-parameter set. Neither profile is implemented or numerically validated yet.
+EU and Basel are distinct profiles, not interchangeable labels for one
+parameter set. Neither profile is numerically validated. The EU profile is
+implemented only by the [prototype](PROTOTYPE.md), outside the contracts; the
+Basel profile is not implemented.
 
 Every future run must identify the profile, regulatory source edition, parameter
 version and reporting date explicitly. Missing or unsupported combinations must
@@ -35,8 +37,10 @@ profile-specific classification, parameters and rules remain explicit.
 The [source register](methodology/SOURCES.md) records the authoritative
 editions, and the [applicability map](methodology/APPLICABILITY.md) links each
 LCR topic to them and records my applicability decisions, which come before
-formula work starts. Issue #10 defines schemas and issue #11
-defines independently derived validation fixtures. No percentages, thresholds,
+formula work starts. #10 delivered the input, parameter and result contracts
+and #11 the test-case format and validation plan; independently derived
+validation fixtures are planned
+([VALIDATION_PLAN.md](methodology/VALIDATION_PLAN.md)). No percentages, thresholds,
 eligibility rules or effective-date claims are established by this architecture
 document. Compare profiles only on deliberately mapped inputs with explained
 differences.
@@ -93,7 +97,8 @@ The API owns the contract boundary, validation orchestration and stable error
 categories. The core owns calculations; the host adapter owns workbook mapping,
 presentation and user interaction. Numeric types follow
 [VBA house style](VBA_HOUSE_STYLE.md). Input schemas are specified in #10 and
-rounding and tolerances in #11 before implementation; concrete function
+rounding and tolerances in #11 before implementation; the prototype is a
+recorded exception ([DECISIONS.md](DECISIONS.md)). Concrete function
 signatures are fixed with the first API implementation.
 
 An independent validation fixture must not obtain its sole expected value from
@@ -109,7 +114,7 @@ are not claims that those components exist today.
 | Path | Purpose | Status |
 | --- | --- | --- |
 | README.md | Entry point, maturity and navigation | Present |
-| AGENTS.md | Editorial and assistant rules | Present |
+| AGENTS.md | Editorial and contribution rules | Present |
 | CONTRIBUTING.md, CODE_OF_CONDUCT.md, INSTALLATION.md | Contributor workflow, conduct policy, host matrix and developer setup | Present |
 | CHANGELOG.md, RELEASING.md | Notable changes; versioning, milestone closeout and release procedure | Present |
 | VERSION | The newest released version | Created with the first release |

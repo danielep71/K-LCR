@@ -34,11 +34,16 @@ class Outcome:
 
     def __init__(self) -> None:
         self.failures: list[str] = []
+        self.count = 0
 
     def expect(self, label: str, ok: bool, detail: object = "") -> None:
         print(("PASS " if ok else "FAIL ") + label + ("" if ok else "  " + str(detail)))
+        self.count += 1
         if not ok:
             self.failures.append(label)
+
+    def summary(self) -> str:
+        return f"{'FAIL' if self.failures else 'PASS'}: {self.count} expectation(s), {len(self.failures)} failure(s)"
 
 
 def call(doc: Any, module: str, proc: str, args: Sequence[object] = ()) -> Any:
@@ -183,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
         rejected_lines(doc, out)
         validate_and_stop(doc, out)
         doc.close(True)
-    print(f"\n{'FAIL' if out.failures else 'PASS'}: {len(out.failures)} failure(s)")
+    print("\n" + out.summary())
     return 1 if out.failures else 0
 
 
