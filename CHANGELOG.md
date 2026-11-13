@@ -94,7 +94,8 @@ Nothing in it calculates a Liquidity Coverage Ratio.
 - The project website, README branding and the social preview (#63, #18).
 - Repository settings: a portable register and a dated evidence record,
   including a demonstration that the required check blocks a merge (#90,
-  #16).
+  #16). The governance documents, the audits and the provenance record describe
+  the closeout as delivered: v0.1.0 is closed without a release (#161).
 - This changelog and the release and milestone procedure in
   [RELEASING.md](RELEASING.md) (#20).
 - The opt-in **Traffic history** workflow and `tools/traffic_history.py`:

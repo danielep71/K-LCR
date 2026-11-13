@@ -5,16 +5,17 @@
 This audit covers every file tracked on `release/0.1.0` for *v0.1.0 - Repo
 setup* (#21). It started from `e777984252d46288499ad26581342dc935dd9240` and
 covers the tree of the pull request that adds this file, findings fixed. The
-merge commit is recorded in the resolution of #21. A file changed after that
-commit is audited again at the closeout (#23,
-[closeout template](CLOSEOUT.md)).
+merge commit is recorded in the resolution of #21. The files changed after
+that commit were audited again at the closeout on 2026-11-07 (#23,
+[closeout template](CLOSEOUT.md)); see *Closeout re-audit* below.
 
 ## 🧭 Method
 
 On 2026-11-05 I:
 
 - listed every tracked file with `git ls-files`, hidden configuration
-  included: 130 files;
+  included: 130 files, the 131st, `docs/release/DOC_AUDIT_v0.1.0.md`, being
+  written afterwards for K-LCR (#22);
 - classified each file as text or binary from `.gitattributes` and its
   bytes, then checked every binary against the new `binaries` gate;
 - searched every text file for other repositories' names outside
@@ -43,9 +44,9 @@ Accepted as they are:
 
 - `README.md` links the author's portfolio of risk engines: authorship
   branding, kept on purpose.
-- `AGENTS.md`, `CONTRIBUTING.md` and `docs/GOVERNANCE.md` name assistant
-  tools only to forbid their branch prefixes; `docs/REPOSITORY_SETTINGS_EVIDENCE.md`
-  names *Copilot Autofix*, a GitHub setting.
+- `docs/REPOSITORY_SETTINGS_EVIDENCE.md` names *Copilot Autofix*, a GitHub
+  setting; `AGENTS.md`, `CONTRIBUTING.md` and `docs/GOVERNANCE.md` name no
+  assistant tool since #152.
 - `SECURITY.md` publishes my reporting address on purpose; the other e-mail
   addresses are `example.invalid` test values.
 - `docs/.nojekyll` is empty on purpose: it makes Pages serve `docs/` as is.
@@ -53,6 +54,17 @@ Accepted as they are:
 
 No credential, employer or firm name, client or personal data, generated
 file or cache was found. Nothing was deleted.
+
+## 🔁 Closeout re-audit
+
+On 2026-11-07 I scanned the 57 files changed after this audit for the closeout
+of *v0.1.0 - Repo setup* (#23): no third-person wording, other-repository
+name, tool name, employer name, placeholder, credential or new binary; every
+Markdown anchor resolves. The inventory below lists all 131 tracked files:
+the 130 of the first listing and `docs/release/DOC_AUDIT_v0.1.0.md`. The
+consistency review of 2026-11-13 found the two label rows marked *Copied
+unchanged* wrongly (their blobs differ from the sources recorded in
+`NOTICE.md`) and the missing inventory row; both are fixed (#161).
 
 ## 🗃️ Binary files
 
@@ -86,9 +98,9 @@ an adapted or copied file, with its revision.
 | `.github/PULL_REQUEST_TEMPLATE.md` | Pull request record: changes, validation, final-head review | Adapted (NOTICE) | MPL-2.0 |
 | `.github/binary-allowlist.json` | Reviewed binary files with their SHA-256 | Adapted (NOTICE) | MPL-2.0 |
 | `.github/dependabot.yml` | Weekly updates of pinned Actions and Python tools into the release branch | Written for K-LCR | MPL-2.0 |
-| `.github/labels.json` | Label catalogue, schema 2 | Copied unchanged (NOTICE) | MPL-2.0 |
+| `.github/labels.json` | Label catalogue, schema 2 | Adapted (NOTICE) | MPL-2.0 |
 | `.github/scripts/labels-drift.mjs` | Label synchronization and drift detection | Copied unchanged (NOTICE) | MPL-2.0 |
-| `.github/scripts/labels-sync.mjs` | Label synchronization and drift detection | Copied unchanged (NOTICE) | MPL-2.0 |
+| `.github/scripts/labels-sync.mjs` | Label synchronization and drift detection | Adapted (NOTICE) | MPL-2.0 |
 | `.github/workflows/issue-triage.yml` | Label sync, label drift or issue triage workflow | Adapted (NOTICE) | MPL-2.0 |
 | `.github/workflows/labels-drift.yml` | Label sync, label drift or issue triage workflow | Adapted (NOTICE) | MPL-2.0 |
 | `.github/workflows/labels-sync.yml` | Label sync, label drift or issue triage workflow | Adapted (NOTICE) | MPL-2.0 |
@@ -136,6 +148,7 @@ an adapted or copied file, with its revision.
 | `docs/methodology/sources/SRC-01_CRR-575-2013_consolidated-2026-06-26_extract.pdf` | Stored EU legal text (SRC-01 extract, SRC-02 full) | EU legal text (NOTICE) | CC BY 4.0 |
 | `docs/methodology/sources/SRC-02_LCR-Delegated-Regulation-2015-61_consolidated-2022-07-08.pdf` | Stored EU legal text (SRC-01 extract, SRC-02 full) | EU legal text (NOTICE) | CC BY 4.0 |
 | `docs/release/CLOSEOUT.md` | Milestone closeout template | Adapted (NOTICE) | MPL-2.0 |
+| `docs/release/DOC_AUDIT_v0.1.0.md` | The documentation audit (#22) | Written for K-LCR | MPL-2.0 |
 | `docs/release/FILE_AUDIT_v0.1.0.md` | This file audit (#21) | Written for K-LCR | MPL-2.0 |
 | `docs/sitemap.xml` | Website sitemap | Written for K-LCR | MPL-2.0 |
 | `pyproject.toml` | Ruff and strict mypy configuration | Adapted (NOTICE) | MPL-2.0 |

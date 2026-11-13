@@ -80,8 +80,9 @@ Update this inventory when workflows, tokens or security features change.
 
 Current security-feature observations, verification dates, evidence and
 limitations are maintained in the [repository settings evidence](docs/REPOSITORY_SETTINGS_EVIDENCE.md#security-settings).
-Its dated observations (read-back of 2026-11-05, #16) supersede the tables recorded here on 2026-10-28
-(#66) and 2026-10-29 (#85). This policy remains authoritative for reporting and
+Its dated observations (read-back of 2026-11-05, #16) replace the tables that
+this policy recorded on 2026-10-28 (#66) and 2026-10-29 (#85); no such table
+remains here. This policy remains authoritative for reporting and
 handling vulnerabilities; a settings record does not establish scan coverage
 or enforcement.
 
