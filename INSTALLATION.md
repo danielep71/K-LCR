@@ -56,11 +56,14 @@ Verified on Linux. The repository checks need:
 | --- | --- | --- |
 | Git | Any recent version | Every check reads the Git index |
 | Python | 3.13 | `tools/check.py` and its gates |
-| Ruff, mypy, PyYAML | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `ruff-complexity-probe`, `mypy`, `mypy-strict-probe`, `issue-config`, `workflow-invariants` |
+| Ruff, mypy, PyYAML, openpyxl | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `ruff-complexity-probe`, `mypy`, `mypy-strict-probe`, `issue-config`, `workflow-invariants`; openpyxl and its type stubs for `mypy` and the template test in `tool-tests` |
 | Node.js | 22 | The label scripts in `.github/scripts/`, and the `issue-config` gate |
 | actionlint | 1.7.12 | Workflow syntax |
 
-`tools/check.py` itself needs only the Python standard library.
+`tools/check.py` itself needs only the Python standard library. LibreOffice
+is optional: only the prototype's workbook builder and smoke test use it
+([docs/PROTOTYPE.md](docs/PROTOTYPE.md)), the checks never do, and a run in it
+is not evidence for Excel.
 
 1. Create a virtual environment and install the Python quality tools. The
    hashes cover CPython 3.13 on Linux x86_64, as in CI. Git ignores `.venv/`,

@@ -45,7 +45,7 @@ below is unchanged.
 | Decision or deliverable | Tracking issue | Completion evidence |
 | --- | --- | --- |
 | Neutral test scaffold | #13 | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
-| Prototype workbook source | #179 | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template and model; its build tools are #180 |
+| Prototype workbook source | #179 | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template and model; its build tools came in with #180 |
 | Workbook synchronization and real host evidence | #14, #15 | Executed evidence bound to the tested candidate |
 
 On 2026-11-13 I decided that the prototype keeps its own layout and names

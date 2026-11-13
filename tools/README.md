@@ -41,7 +41,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), and the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
@@ -121,7 +121,7 @@ badges and alerts, and checks that an alert issue passes Issue triage.
 | --- | --- | --- |
 | Python | 3.13 | `actions/setup-python` |
 | Node.js | 22 | `actions/setup-node` |
-| Ruff, mypy, PyYAML | 0.17.3, 2.4.1, 6.0.3 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
+| Ruff, mypy, PyYAML, openpyxl, types-openpyxl | 0.17.3, 2.4.1, 6.0.3, 3.1.5, 3.1.5.20261017 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
 | actionlint | 1.7.12 | Release archive verified by SHA-256 in the workflow |
 
 Install the same quality tools locally, on CPython 3.13 and Linux x86_64:
@@ -131,7 +131,8 @@ python -m pip install --only-binary=:all: --require-hashes -r tools/requirements
 ```
 
 On another platform, install the same versions without the lock
-(`pip install ruff==0.17.3 mypy==2.4.1 pyyaml==6.0.3`); CI remains the reference run.
+(`pip install ruff==0.17.3 mypy==2.4.1 pyyaml==6.0.3 openpyxl==3.1.5 types-openpyxl==3.1.5.20261017`);
+CI remains the reference run.
 actionlint is available from its
 [1.7.12 release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12).
 
@@ -157,7 +158,7 @@ reports on every pull request and is the required check of both rulesets.
 ## 📦 Dependency updates
 
 `.github/dependabot.yml` proposes weekly updates to the pinned GitHub Actions
-and, separately, to the hash-locked Ruff/mypy/PyYAML requirements
+and, separately, to the hash-locked Ruff/mypy/PyYAML/openpyxl requirements
 (`tools/requirements-quality-ci.txt`, releases at least 14 days old). Each
 ecosystem's updates are grouped into one pull request against the active
 release branch, with the `ci` and `P3` labels and danielep71 as assignee. Dependabot reads this file
