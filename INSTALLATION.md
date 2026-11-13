@@ -116,7 +116,7 @@ I ran the shell blocks of *Get the source* and *Developer setup*, extracted verb
 | --- | --- |
 | Commit | `7afec586713d1a62f3c04679c9ffe293c09b8b5e`, the head of the pull request that updates the tools (#158), checked out in place of the release branch (earlier runs: `a8784cb` with 20 gates, `fc98b17` with 21) |
 | System | Ubuntu 24.04.5 LTS, Linux x86_64 |
-| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.17.2, mypy 2.4.0, PyYAML 6.0.3 |
+| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.17.3, mypy 2.4.1, PyYAML 6.0.3 |
 | Fresh clone | `git status --short` printed nothing, before and after the setup; the virtual environment is ignored and actionlint sits in `../klcr-tools` |
 | actionlint archive | `sha256sum --check --strict` printed `OK` (on 2026-11-05 a first attempt stopped at the download with HTTP 504, and the repeated run passed) |
 | `python tools/check.py --ci` | All 21 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |

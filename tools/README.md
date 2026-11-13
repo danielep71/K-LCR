@@ -121,7 +121,7 @@ badges and alerts, and checks that an alert issue passes Issue triage.
 | --- | --- | --- |
 | Python | 3.13 | `actions/setup-python` |
 | Node.js | 22 | `actions/setup-node` |
-| Ruff, mypy, PyYAML | 0.17.2, 2.4.0, 6.0.3 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
+| Ruff, mypy, PyYAML | 0.17.3, 2.4.1, 6.0.3 | `tools/requirements-quality-ci.txt`, hash-locked for CPython 3.13 on Linux x86_64 |
 | actionlint | 1.7.12 | Release archive verified by SHA-256 in the workflow |
 
 Install the same quality tools locally, on CPython 3.13 and Linux x86_64:
@@ -131,7 +131,7 @@ python -m pip install --only-binary=:all: --require-hashes -r tools/requirements
 ```
 
 On another platform, install the same versions without the lock
-(`pip install ruff==0.17.2 mypy==2.4.0 pyyaml==6.0.3`); CI remains the reference run.
+(`pip install ruff==0.17.3 mypy==2.4.1 pyyaml==6.0.3`); CI remains the reference run.
 actionlint is available from its
 [1.7.12 release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12).
 
