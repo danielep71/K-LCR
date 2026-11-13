@@ -15,7 +15,6 @@ import re
 import sys
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass
-from datetime import date
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -70,7 +69,7 @@ def header_findings(data: Mapping[str, Any], contract: Mapping[str, Any], inputs
                 "source_register_version": inputs["source_register_version"],
                 "categories_version": categories["categories_version"]}
     for key, value in expected.items():
-        if data.get(key) != value:
+        if not check_contract.same_value(data.get(key), value):
             found.append(Finding("PAR-HEADER", key, f"expected {value!r}, found {data.get(key)!r}"))
     profile = text(data.get("profile"))
     if profile not in inputs["profiles"]:
@@ -88,10 +87,8 @@ def header_findings(data: Mapping[str, Any], contract: Mapping[str, Any], inputs
 def verified_findings(data: Mapping[str, Any], status: Any) -> list[Finding]:
     verified = data.get("verified_on")
     if status == "sourced":
-        try:
-            date.fromisoformat(str(verified))
-        except ValueError:
-            return [Finding("PAR-HEADER", "verified_on", "a sourced set needs its verification date")]
+        if check_contract.iso_date(verified) is None:
+            return [Finding("PAR-HEADER", "verified_on", "a sourced set needs its verification date, YYYY-MM-DD")]
     elif verified is not None:
         return [Finding("PAR-HEADER", "verified_on", "only a sourced set has a verification date")]
     return []
@@ -282,7 +279,7 @@ def check_result(data: Any, root: Path) -> list[Finding]:
     if not isinstance(data, dict):
         return [Finding("RES-HEADER", "", "a result must be a JSON object")]
     found = []
-    if data.get("schema") != spec["schema"] or data.get("result_version") != 1:
+    if data.get("schema") != spec["schema"] or not check_contract.same_value(data.get("result_version"), 1):
         found.append(Finding("RES-HEADER", "schema", "expected klcr-result, version 1"))
     if text(data.get("status")) not in spec["statuses"]:
         found.append(Finding("RES-HEADER", "status", f"{data.get('status')!r} is not a result status"))
@@ -322,13 +319,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     mode.add_argument("--check-fixtures", action="store_true", help="check tests/parameters against expected.json")
     args = parser.parse_args(argv)
     root = args.root.resolve()
-    if args.check_fixtures:
-        problems = check_fixtures(root)
-        for problem in problems:
-            print(f"FAIL: {problem}")
-        print(f"parameter-result-contract: {'PASS' if not problems else 'FAIL'}")
-        return 1 if problems else 0
-    findings = check_file(args.file, root)
+    try:
+        if args.check_fixtures:
+            problems = check_fixtures(root)
+            for problem in problems:
+                print(f"FAIL: {problem}")
+            print(f"parameter-result-contract: {'PASS' if not problems else 'FAIL'}")
+            return 1 if problems else 0
+        findings = check_file(args.file, root)
+    except (OSError, ValueError) as error:  # unreadable, not UTF-8 or not JSON
+        print(f"parameter-result-contract: ERROR: {error}", file=sys.stderr)
+        return 2
     print(json.dumps([asdict(f) for f in findings], indent=2))
     return 1 if findings else 0
 

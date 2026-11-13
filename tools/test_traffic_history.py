@@ -362,10 +362,21 @@ class BadgeTests(unittest.TestCase):
             report = ws.merge("2026-10-14T12:00:00")
             self.assertEqual([name for name in report.changed if name.startswith("badges/")], [])
 
+    def test_patterns_match_the_whole_text(self) -> None:
+        """A trailing newline must not pass for a date or a time stamp."""
+        for pattern, good in ((traffic_history.ISO_DATE, "2026-10-13"),
+                              (traffic_history.STAMP, "2026-10-13T06:00:00Z"),
+                              (traffic_history.MIDNIGHT, "2026-10-13T00:00:00Z")):
+            with self.subTest(pattern=pattern.pattern):
+                self.assertIsNotNone(pattern.fullmatch(good))
+                self.assertIsNone(pattern.fullmatch(good + "\n"))
+
     def test_compact_numbers(self) -> None:
         self.assertEqual([traffic_history.compact(value)
-                          for value in (0, 999, 1000, 1250, 11_000, 2_500_000)],
-                         ["0", "999", "1k", "1.2k", "11k", "2.5M"])
+                          for value in (0, 999, 1000, 1250, 11_000, 2_500_000,
+                                        999_949, 999_960, 999_999, 1_000_000)],
+                         ["0", "999", "1k", "1.2k", "11k", "2.5M",
+                          "999.9k", "1M", "1M", "1M"])
 
 
 class AlertTests(unittest.TestCase):

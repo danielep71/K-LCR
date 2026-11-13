@@ -312,6 +312,15 @@ def quiet_main() -> int:
         return cw.main(["--root", str(ROOT)])
 
 
+class PatternTests(unittest.TestCase):
+    def test_a_trailing_newline_is_not_a_pin_or_a_priority(self) -> None:
+        pin = "actions/checkout@" + "0" * 40
+        self.assertIsNotNone(cw.SHA_PINNED.fullmatch(pin))
+        self.assertIsNone(cw.SHA_PINNED.fullmatch(pin + "\n"))
+        self.assertIsNotNone(cw.PRIORITY.fullmatch("P2"))
+        self.assertIsNone(cw.PRIORITY.fullmatch("P2\n"))
+
+
 class StrictLoaderTests(unittest.TestCase):
     def test_duplicate_key_is_rejected(self) -> None:
         text = "permissions:\n  issues: write\n  contents: read\n  issues: read\n"

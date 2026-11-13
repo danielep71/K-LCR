@@ -98,7 +98,8 @@ def load_allowlist(root: Path, findings: list[str]) -> dict[str, str]:
         findings.append(f"{ALLOWLIST.as_posix()}: not valid UTF-8 JSON ({error})")
         return {}
     files = data.get("files") if isinstance(data, dict) else None
-    if not isinstance(data, dict) or data.get("schema_version") != 1 or not isinstance(files, dict):
+    version = data.get("schema_version") if isinstance(data, dict) else None
+    if not isinstance(data, dict) or type(version) is not int or version != 1 or not isinstance(files, dict):
         findings.append(f"{ALLOWLIST.as_posix()}: needs schema_version 1 and a files object")
         return {}
     allowed: dict[str, str] = {}

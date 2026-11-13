@@ -238,7 +238,7 @@ def load_exceptions(root: Path) -> tuple[list[dict[str, Any]], list[Finding]]:
     except (OSError, ValueError) as error:
         return [], [Finding(EXCEPTIONS, None, f"cannot be read: {error}")]
     if not isinstance(data, dict) or set(data) != {"schema", "version", "exceptions"} or \
-            data["schema"] != SCHEMA or data["version"] != 1 or \
+            data["schema"] != SCHEMA or type(data["version"]) is not int or data["version"] != 1 or \
             not isinstance(data["exceptions"], list):
         return [], [Finding(EXCEPTIONS, None, f'must be {{"schema": "{SCHEMA}", "version": 1, '
                                               '"exceptions": [...]}')]

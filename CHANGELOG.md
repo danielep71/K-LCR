@@ -31,9 +31,10 @@ commit log nor release evidence. **No version has been released.**
 The `changelog` gate of `python tools/check.py` runs
 `tools/check_changelog.py`. It checks the headings, dates, order, link
 references and `VERSION`; that every link reference points into this
-repository; that this introduction, the *Current status* of
-[RELEASING.md](RELEASING.md#current-status) and the README describe the same
-release state; and, once a release's tag exists, that its section still
+repository; that this introduction and the *Current status* of
+[RELEASING.md](RELEASING.md#current-status) describe the same release state;
+that the README mentions no Release Candidate and holds no unchecked task
+item; and, once a release's tag exists, that its section still
 equals the section at the tag, unless it holds the dated correction line
 above. What a version number means is checked in review.
 
@@ -76,7 +77,9 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   workflow and issue-configuration checks, the input and parameter
   contracts, the registered test cases and VBA static checks, run locally by
   `python tools/check.py` and as the required check (#7, #52, #105, #109,
-  #12).
+  #12). The validators accept only `YYYY-MM-DD` dates in range and integer
+  versions, match patterns against the whole value, and exit 2 when they
+  could not run (#159).
 - The regulatory source register and applicability map for both profiles,
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).

@@ -35,10 +35,6 @@ INTEGER = re.compile(r"^(?:0|[1-9][0-9]*)$")
 DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 NON_FINITE = re.compile(r"^[+-]?(?:nan|inf|infinity)$", re.IGNORECASE)
 FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
-# Findings after which the file cannot be read as records.
-STRUCTURAL = frozenset({"LCR-FILE-MISSING", "LCR-ENCODING", "LCR-SYNTAX", "LCR-EMPTY",
-                        "LCR-DELIMITER", "LCR-HEADER-DUPLICATE", "LCR-HEADER-MISSING",
-                        "LCR-HEADER-UNKNOWN", "LCR-FIELD-COUNT", "LCR-TOO-LARGE"})
 
 
 @dataclass(frozen=True)
@@ -203,6 +199,29 @@ def fill_table(table: Table, records: Sequence[Record], limits: Mapping[str, Any
 
 
 # --- Field values -----------------------------------------------------------
+
+
+# The range of types.date in data-contract.json; a test keeps the two equal.
+DATE_RANGE = (date(2000, 1, 1), date(2199, 12, 31))
+
+
+def iso_date(value: Any) -> date | None:
+    """The calendar date of a YYYY-MM-DD string inside the contract's range, else None.
+
+    Compact forms ("20261113"), ISO-week forms, numbers and dates outside the range are not dates
+    of the contract, although date.fromisoformat reads some of them."""
+    if not isinstance(value, str) or not DATE.fullmatch(value):
+        return None
+    try:
+        day = date.fromisoformat(value)
+    except ValueError:
+        return None
+    return day if DATE_RANGE[0] <= day <= DATE_RANGE[1] else None
+
+
+def same_value(found: Any, expected: Any) -> bool:
+    """found equals expected and has its type: true is not 1 and 1.0 is not 1."""
+    return type(found) is type(expected) and found == expected
 
 
 def significant_digits(value: str) -> int:
