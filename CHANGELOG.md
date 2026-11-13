@@ -134,6 +134,13 @@ Liquidity Coverage Ratio that nothing validates.
   is not validated, its factors are not checked against `SRC-02`, and its
   catalogue includes categories that A03 and A06 exclude from the contracts
   (#179).
+- The prototype's build tools: `tools/build_template.py` rebuilds the
+  template with the hash-locked `openpyxl` 3.1.5, byte for byte, and a test
+  compares every part with the tracked file; `tools/build_xlsm.py` builds
+  the macro-enabled workbook in LibreOffice under the ignored
+  `test-results/`, and `tools/run_lo_test.py` runs its VBA there against
+  `compute()`. LibreOffice is an optional host and its run is not Excel
+  evidence (#180).
 
 ### Validation
 

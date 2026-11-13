@@ -9,8 +9,9 @@
 > independent oracle in the sense of the
 > [validation plan](methodology/VALIDATION_PLAN.md). Its regulatory factors have
 > **not** been checked against the stored source `SRC-02`. The repository's
-> checks read its source; they do not compile or run it. It is not for
-> reporting or production use.
+> checks read its source and rebuild its template; they do not compile or run
+> its VBA. A run in LibreOffice is a smoke test on a second host, not evidence
+> for Excel. It is not for reporting or production use.
 
 I brought it in for *v0.2.0 - Prototype setup*, whose purpose is a working
 prototype to refine afterwards (#179). It is tracked as I wrote it, with the
@@ -73,6 +74,9 @@ A line with an error is excluded and listed on `Checks`; with
 | `tests/modules/` | `TEST_Engine`, the self-test that the `Results` sheet runs |
 | `tools/lcr_spec.py` | The Python model: parameters, catalogue, demonstration inputs and `compute()`; `tools/test_lcr_spec.py` pins its figures |
 | `tools/check_source.py` | Extra checks of the VBA source (names, `Option Explicit`, `Option Private Module`, ASCII, 120 columns); run it on its own |
+| `tools/build_template.py` | Writes `LCR_Template.xlsx` from `lcr_spec.py` with `openpyxl` (through `tools/plain_openpyxl.py`, which selects its standard-library XML writer); `tools/test_build_template.py` rebuilds it and compares every part with the tracked file |
+| `tools/build_xlsm.py` | Builds the macro-enabled workbook in LibreOffice from the template and the VBA of `src/` and `tests/modules/`, into the ignored `test-results/` |
+| `tools/run_lo_test.py` | Runs the workbook's VBA in LibreOffice and compares `Results` with `compute()` |
 | `tools/preview.py` | Renders each sheet of a workbook to PNG for a visual check; needs LibreOffice and `pdftoppm` |
 
 The prototype keeps this layout until it is refactored, by my decision of
@@ -98,8 +102,35 @@ The macro-enabled workbook is not tracked. To build one:
    **Self-test** on `Results` runs `TEST_Engine` and the formula check.
 
 None of these steps has been run as part of this repository's checks; the run
-on a supported host is #15. The tooling that builds the template and the
-workbook automatically is not tracked yet: see *Not tracked yet*.
+on a supported host is #15.
+
+## Building and smoke-testing it in LibreOffice
+
+The tools below need the hash-locked tool requirements (for `openpyxl`) and,
+for the workbook, LibreOffice with its Python bridge (`uno`). LibreOffice is an
+optional, untested host here: it runs the VBA in a compatibility mode, so a
+pass is a smoke test of the logic, never evidence that the workbook compiles
+or runs in Excel.
+
+```sh
+python tools/build_template.py     # src/workbook/LCR_Template.xlsx
+python3 tools/build_xlsm.py        # test-results/K-LCR.xlsm, with LibreOffice's Python
+python3 tools/run_lo_test.py       # runs the VBA in LibreOffice and compares with compute()
+```
+
+`build_template.py` writes the same bytes on every run: openpyxl's
+standard-library XML writer even where lxml is installed, fixed entry dates and
+no author or dates in the document properties. A rebuild therefore gives the
+tracked template, which `tools/test_build_template.py` checks part by part.
+`build_xlsm.py` and `run_lo_test.py` need LibreOffice, so the repository's
+checks test only their parts that do not (`tools/test_build_xlsm.py`).
+
+On 2026-11-13 I ran the three tools with LibreOffice 24.2.7.2 on Linux:
+`run_lo_test.py` reported 26 expectations passed and none failed. That run
+covers the self-test before and after a run, the 16 values of each scope
+against `compute()`, the formula check, rejected lines, validation only and a
+stopped run. It is a record of that one run, not a check that the repository
+repeats.
 
 ## Differences from the repository's decisions
 
@@ -147,18 +178,25 @@ difference is a point to settle when the prototype is refined.
   function, so that importing them runs nothing; their checks and output are
   unchanged.
 - The template's `docProps/core.xml` had `creator` set to `openpyxl`; I cleared
-  it, as the `binaries` gate requires. No other part of the template changed.
+  it, as the `binaries` gate requires.
+- With #180 the build tools came in, typed for strict mypy, and I rebuilt the
+  template with them. The rebuilt parts equal the earlier ones after XML
+  canonicalization, except `docProps/core.xml`, which no longer holds the
+  creation and modification dates. The builder now also removes the theme
+  scheme from the default font whatever spacing the XML writer uses, writes
+  conditional formats through a typed helper equivalent to openpyxl's
+  `FormulaRule`, and drops the reference to another workbook from its
+  docstring.
+- `build_xlsm.py` and `run_lo_test.py` write under `test-results/` instead of
+  `dist/`, use a temporary LibreOffice profile and scratch folder that are
+  removed afterwards, and `build_xlsm.py` takes only `tests/modules/` from
+  `tests/`, so the neutral harness of `tests/unit/` stays out of the workbook.
 
 ## Not tracked yet
 
 - **The macro-enabled workbook.** The copy I made carries a Microsoft
   sensitivity label with an organization identifier and a directory-style
   author name in its properties, and a generated workbook is not source. Build
-  one by hand as above.
-- **`build_template.py`, `build_xlsm.py` and `run_lo_test.py`.** They build the
-  template and the workbook and run the VBA in LibreOffice against
-  `compute()`. They need `openpyxl` and LibreOffice, which the pinned tool set
-  does not hold, and they do not yet pass Ruff and strict mypy. #180 brings
-  them in once they are typed and their dependencies pinned.
+  one by hand or with `build_xlsm.py` as above.
 - **`VERSION`.** No version has been released, and `VERSION` is created only
   when the first release is prepared ([RELEASING.md](../RELEASING.md)).

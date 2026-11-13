@@ -70,8 +70,8 @@
 *.ade
 
 # The one approved workbook: the prototype's macro-free template (#179),
-# inspected for macros, labels and identifiers, and allowlisted with its
-# SHA-256 in .github/binary-allowlist.json. A macro-enabled workbook stays
+# written by tools/build_template.py (#180), inspected for macros, labels and
+# identifiers, and allowlisted with its SHA-256 in .github/binary-allowlist.json. A macro-enabled workbook stays
 # ignored: build it outside the checkout or under /test-results/.
 !/src/workbook/LCR_Template.xlsx
 

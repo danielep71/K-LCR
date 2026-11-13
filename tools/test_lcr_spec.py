@@ -20,7 +20,7 @@ def demonstration() -> dict[str, dict[str, float | None]]:
 
 
 class DemonstrationFigureTests(unittest.TestCase):
-    """The figures of the demonstration data, which the README of the prototype shows."""
+    """The figures that compute() returns for the demonstration data."""
 
     def test_the_scopes_are_each_currency_and_the_total(self) -> None:
         self.assertEqual(set(demonstration()), {"EUR", "USD", "TOTAL"})
