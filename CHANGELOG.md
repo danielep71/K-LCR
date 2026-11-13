@@ -62,8 +62,8 @@ Use only the categories an entry needs.
 
 Work of *v0.1.0 - Repo setup*: the repository, its rules and its contracts;
 and, since 2026-11-13, of *v0.2.0 - Prototype setup*, whose purpose is a
-working prototype to refine afterwards. Nothing in it calculates a Liquidity
-Coverage Ratio.
+working prototype to refine afterwards. The prototype calculates an EU
+Liquidity Coverage Ratio that nothing validates.
 
 ### Added
 
@@ -127,6 +127,13 @@ Coverage Ratio.
   skipped case and a cleanup failure. It is source only: it has not been
   compiled or run in Excel, and `tools/test_vba_harness.py` checks its text
   without Excel (#13).
+- The [prototype workbook](docs/PROTOTYPE.md) of the EU profile: its VBA
+  source, self-test and macro-free template, the Python model
+  `tools/lcr_spec.py` with tests that pin its demonstration figures, and two
+  source and preview scripts. It calculates an LCR from line-level inputs; it
+  is not validated, its factors are not checked against `SRC-02`, and its
+  catalogue includes categories that A03 and A06 exclude from the contracts
+  (#179).
 
 ### Validation
 
@@ -138,11 +145,11 @@ Coverage Ratio.
 
 ### Known limitations
 
-- No VBA calculation source, workbook or LCR calculation exists: the only VBA
-  source is the neutral test harness. No rule is validated: no `published` or
-  `independent` test case is registered.
-- No Excel host has been tested; the harness has not been compiled or run in
-  Excel. Import, compilation and a real host run are planned in
+- The prototype calculates an LCR, but no rule is validated: no `published`
+  or `independent` test case is registered, and its model is written for the
+  prototype. No workbook is released.
+- No Excel host has been tested; neither the prototype nor the harness has
+  been compiled or run in Excel as part of this repository's checks. Import, compilation and a real host run are planned in
   *v0.2.0 - Prototype setup* (#14, #15).
 
 [Unreleased]: https://github.com/danielep71/K-LCR/commits/main

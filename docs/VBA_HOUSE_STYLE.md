@@ -8,8 +8,10 @@ This is the K-LCR adaptation of the established VBA style structure: naming,
 module rules, procedure contracts, cleanup, layout, export compatibility and
 review. [Architecture](REPOSITORY_STRUCTURE.md) owns layer boundaries;
 [host and import guidance](../INSTALLATION.md) owns execution evidence.
-The project has no VBA calculation source and no validated workbook yet; its
-only VBA source is the [neutral test harness](methodology/TEST_HARNESS.md).
+The project's VBA is the [prototype workbook](PROTOTYPE.md), which keeps its
+own layout and names until it is refactored, and the
+[neutral test harness](methodology/TEST_HARNESS.md); there is no validated
+workbook yet. The names and layers below are the target of that refactoring.
 The [static checks](#-static-checks) enforce the mechanical rules; the Excel
 run in #15 is still pending.
 
@@ -134,8 +136,7 @@ cleanup result.
 `.cls` and `.frm` file. Each also runs on its own, for example
 `python tools/check_vba_jumps.py`. Each finding names the file and, where it
 has one, the line. Each passes and says how many components it examined: the
-two of the test harness today, and none of the core, API or adapter, which do
-not exist.
+prototype's and the test harness's today.
 
 | Check | Enforces |
 | --- | --- |
@@ -146,7 +147,8 @@ not exist.
 ### Reviewed exceptions
 
 `tools/vba-exceptions.json` lists the host-boundary uses I reviewed. It lists
-none yet, since the only VBA source, the test harness, needs none. An entry has this form; the values below
+none yet: neither the prototype nor the test harness uses a native, dynamic
+or COM construct. An entry has this form; the values below
 are illustrative, not a recorded review:
 
 ```json

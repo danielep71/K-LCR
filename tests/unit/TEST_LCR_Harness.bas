@@ -66,7 +66,7 @@ Attribute VB_Name = "TEST_LCR_Harness"
     'Test-only error numbers, kept apart from the production range in use.
     'Written as literals equal to vbObjectError + n so that a constant
     'expression never depends on the host.
-        Public Const ERR_TEST_DIRTY_START   As Long = &H80040FE0   'vbObjectError + 4064: Run refused: active or recovery required
+        Public Const ERR_TEST_DIRTY_START   As Long = &H80040FE0   'vbObjectError + 4064: Run refused
         Public Const ERR_TEST_FAILED        As Long = &H80040FE1   'vbObjectError + 4065: Run finished without PASS
         Public Const ERR_TEST_USAGE         As Long = &H80040FE2   'vbObjectError + 4066: Lifecycle used out of order
 

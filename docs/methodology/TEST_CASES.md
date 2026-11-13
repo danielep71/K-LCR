@@ -9,9 +9,10 @@ counts as validation. The [validation plan](VALIDATION_PLAN.md) lists the cases
 the profiles need. `tools/check_test_cases.py` checks the cases and runs what
 can run today.
 
-No LCR calculation exists yet. The cases here are **registered**: their
-metadata and expected values are checked, but no LCR figure is executed until
-an implementation exists (B001 to B005 in [DECISIONS.md](../DECISIONS.md)).
+The [prototype workbook](../PROTOTYPE.md) calculates an LCR, but no case runs
+it yet. The cases here are **registered**: their metadata and expected values
+are checked, but no LCR figure is executed until an implementation is
+connected to them (B001 to B005 in [DECISIONS.md](../DECISIONS.md)).
 
 ## 📁 Files of a case
 

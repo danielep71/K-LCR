@@ -17,8 +17,10 @@ canonical calculation source.
   is a source-authoring rule, not a validated VBE encoding or code-page claim.
 - Ignore generated workbooks, reports, caches, secrets and workstation files.
   Keep exported source, fixtures and repository configuration trackable.
-  An approved macro-free template, if introduced in #14, gets one exact
-  rooted negation rule in `.gitignore` and a manifest; no generic exception.
+  The approved macro-free template, `src/workbook/LCR_Template.xlsx` (#179),
+  has one exact rooted negation rule in `.gitignore` and one entry with its
+  SHA-256 in `.github/binary-allowlist.json`; no generic exception. Its
+  component manifest is #14.
 - Create `src/`, `tests/` and `templates/` only with meaningful content,
   following [the proposed layout](REPOSITORY_STRUCTURE.md).
 
