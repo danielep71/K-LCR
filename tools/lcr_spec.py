@@ -18,7 +18,7 @@ import datetime as dt
 from collections.abc import Sequence
 
 # A parameter: (code, description, value, number format, editable, reference).
-Param = tuple[str, str, object, str, bool, str]
+Param = tuple[str, str, dt.datetime | str | float, str, bool, str]
 # A catalogue entry: (code, type, class, description, factor, editable, reference).
 Category = tuple[str, str, str, str, float, bool, str]
 # A holding: (id, description, category, currency, market value, unwind adjustment).

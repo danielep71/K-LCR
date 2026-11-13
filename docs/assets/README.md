@@ -16,33 +16,35 @@ holds the regulatory sources and the requirement map.
 
 `K-LCR_social_preview.html` is the source of `K-LCR_social_preview.png`, the
 repository's social preview image: 1280 x 640 px and under GitHub's 1 MB
-limit. Its palette and `K` mark are those of the website.
+limit.
 
-- **Content:** the project name, the method, the two profiles and the current
-  status, "v0.1.0 · Repository setup", with "No LCR calculation yet".
-  Update the status with each release or when a calculation exists.
-- **Figures:** the card states four requirements, not results:
+- **Layout:** a dark grid background, the `VBA { }` badge, the title
+  `K-LCR`, a two-line subtitle, a status pill and, on the right, a tilted
+  dashboard of the calculation. The provenance of the layout is in
+  [NOTICE.md](../../NOTICE.md).
+- **Status:** the pill reads "Prototype 0.2.0" and the line beside it "LCR ·
+  Excel / VBA · not validated" (#187). Update them with each release, or when
+  the prototype is validated or a host run is recorded.
+- **Figures:** every figure is a prototype output, not a validated result:
 
-  | Statement | EU, Delegated Regulation (EU) 2015/61 | Basel Framework, LCR, in force from 15 Dec 2019 |
+  | Panel | Figures | Source |
   | --- | --- | --- |
-  | Liquidity buffer over net liquidity outflows over 30 calendar days, at least 100 % | Art. 4(1) and (2) | LCR20.5 |
-  | Inflows recognised up to 75 % of outflows | Art. 33(1) | LCR40.1 |
-  | Level 2 at most 40 % and Level 2B at most 15 % of the buffer | Art. 17(1)(a) and (c) | LCR30.31 and LCR30.33 |
+  | Scope TOTAL | LCR 194.8 %; liquidity buffer 3,209.6; excess liquid assets 382.3; outflows 3,173.6; capped inflows 1,525.9; net outflow 1,647.7 (EUR millions) | `compute()` of `tools/lcr_spec.py` on the demonstration data; the capped inflows are outflows minus net outflow |
+  | Inflow cap | Recognised inflows rise with inflows up to 75 % of outflows | Art. 33(1) of `SRC-02`; the curve is a sketch, not data |
+  | Profile | EU selected, Basel not implemented | [PROTOTYPE.md](../PROTOTYPE.md) |
+  | Smoke test | LCR of EUR, USD and TOTAL, self-test 22/22 and 46 lines, each ticked | The LibreOffice run recorded in [PROTOTYPE.md](../PROTOTYPE.md): the VBA agreed with the Python model; it is not an Excel run and the model is not an independent oracle |
 
-  The EU text sets a minimum of 60 % Level 1 assets, the complement of the
-  40 % Level 2 maximum. I checked the EU figures against the stored copy of
-  `SRC-02` and the Basel figures against the LCR20, LCR30 and LCR40 chapters
-  on bis.org on 2026-11-04. Both apply after the adjustments each text
-  describes, which the image does not show.
-- **Fonts:** Inter and JetBrains Mono, both under the SIL Open Font License
-  1.1, installed on the rendering machine. The HTML loads no external file;
-  without these fonts the browser substitutes others and the layout shifts.
+- **Fonts:** Barlow, Barlow Condensed and JetBrains Mono, under the SIL Open
+  Font License 1.1, loaded from Google Fonts when the page is rendered; no
+  font file is stored here. Rendering therefore needs the network.
 
 Regenerate the PNG by opening the HTML in Chromium with a 1280 x 640 viewport
-at device scale factor 1, waiting for `document.fonts.ready`, and capturing
-the viewport. The current PNG was rendered with Playwright 1.63.0 and its
+at device scale factor 1. Wait for the network to be idle and for
+`document.fonts.ready`, check that the three families are loaded (a family
+that fails to load falls back silently), and capture the viewport. The
+current PNG was rendered on 2026-11-13 with Playwright 1.63.0 and its
 Chromium build on Linux; its SHA-256 is
-`ff128d636b9059f5d999736ebfabd33e213c36dcee6f9ffd0fda3bac6cddc5ef`. A
+`004a9bd8850786436336e80fe6e8061514e746c23feea6a6391c849efe9e1df6`. A
 different browser or font build gives a slightly different image. Then upload
 the PNG in **Settings > General > Social preview**; GitHub has no API for this
 setting.
