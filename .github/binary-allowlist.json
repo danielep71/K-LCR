@@ -2,8 +2,8 @@
   "schema_version": 1,
   "files": {
     "docs/assets/K-LCR_social_preview.png": {
-      "sha256": "e0884b6599660dc946a8b1bb19f2567a6c3cc292f56ea057c3f4142d379d6864",
-      "reason": "Social preview image rendered from docs/assets/K-LCR_social_preview.html (#18), re-rendered with the prototype status (#185); provenance in docs/assets/README.md"
+      "sha256": "004a9bd8850786436336e80fe6e8061514e746c23feea6a6391c849efe9e1df6",
+      "reason": "Social preview image rendered from docs/assets/K-LCR_social_preview.html (#18), restyled with the prototype's demonstration figures (#187); provenance in docs/assets/README.md and NOTICE.md"
     },
     "src/workbook/LCR_Template.xlsx": {
       "sha256": "3a26cbd3f3e9beafd1613a1637913d06711ccab932326688599b893c672dce27",
