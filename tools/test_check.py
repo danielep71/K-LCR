@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any
 
 import check
 
@@ -112,6 +113,14 @@ class MainTests(unittest.TestCase):
         self.assertEqual(self.report()["status"], "incomplete")
         self.assertEqual(self.report()["tools"], {MISSING_TOOL: "not installed"})
 
+    def test_a_gate_needing_two_tools_is_not_run_when_one_is_missing(self) -> None:
+        two = check.Gate("two", "python", (sys.executable, "-c", "pass"), also=(MISSING_TOOL,))
+        self.assertEqual(self.main("--allow-missing", gates=[two]), 0)
+        self.assertEqual(self.report()["status"], "incomplete")
+        tools: Any = self.report()["tools"]
+        self.assertEqual(tools[MISSING_TOOL], "not installed")
+        self.assertEqual(self.main(gates=[two]), 1)
+
     def test_ci_rejects_a_dirty_tree(self) -> None:
         (self.root / "untracked.txt").write_text("x\n", encoding="utf-8")
         self.assertEqual(self.main("--ci", gates=[gate("ok", 0)]), 1)
@@ -126,8 +135,10 @@ class DefaultGatesTests(unittest.TestCase):
     def test_names_are_unique_and_cover_every_tool(self) -> None:
         gates = check.default_gates()
         self.assertEqual(len({g.name for g in gates}), len(gates))
-        self.assertEqual({g.tool for g in gates},
+        self.assertEqual({tool for g in gates for tool in g.tools},
                          {"python", "node", "ruff", "mypy", "actionlint", "pyyaml"})
+        issue_config = next(g for g in gates if g.name == "issue-config")
+        self.assertIn("node", issue_config.tools)  # it runs labels-sync.mjs
         for g in gates:
             self.assertTrue(bool(g.command) != (g.probe is not None), g.name)
 

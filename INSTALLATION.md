@@ -2,7 +2,7 @@
 
 [![Host: Windows 64-bit target](https://img.shields.io/badge/Host-Windows_64--bit_target-217346?style=flat-square)](#host-matrix)
 [![Excel evidence: Not run](https://img.shields.io/badge/Excel_evidence-Not_run-BF8700?style=flat-square)](#host-matrix)
-[![Developer setup: Verified](https://img.shields.io/badge/Developer_setup-Verified_2026--11--05-2ea44f?style=flat-square)](#verified-setup)
+[![Developer setup: Verified](https://img.shields.io/badge/Developer_setup-Verified_2026--11--09-2ea44f?style=flat-square)](#verified-setup)
 
 K-LCR holds repository setup, contracts and static checks. It has **no VBA
 source and no workbook** yet, so nothing can be installed into Excel. This
@@ -55,7 +55,7 @@ Verified on Linux. The repository checks need:
 | Git | Any recent version | Every check reads the Git index |
 | Python | 3.13 | `tools/check.py` and its gates |
 | Ruff, mypy, PyYAML | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `ruff-complexity-probe`, `mypy`, `mypy-strict-probe`, `issue-config`, `workflow-invariants` |
-| Node.js | 22 | The label scripts in `.github/scripts/` |
+| Node.js | 22 | The label scripts in `.github/scripts/`, and the `issue-config` gate |
 | actionlint | 1.7.12 | Workflow syntax |
 
 `tools/check.py` itself needs only the Python standard library.
@@ -110,15 +110,15 @@ demonstrate no VBA behaviour and no LCR calculation.
 
 ## ✅ Verified setup
 
-On 2026-11-05 I ran the shell blocks of *Get the source* and *Developer setup*, extracted verbatim from this page, in a new empty folder: first for #19, then again for the documentation audit (#22), after the `binaries` gate was added. The table records the second run:
+I ran the shell blocks of *Get the source* and *Developer setup*, extracted verbatim from this page, in a new empty folder: on 2026-11-05 for #19, and again for the documentation audit (#22) after the `binaries` gate was added; on 2026-11-09 for the update of Ruff and mypy (#156). The table records the third run:
 
 | Item | Value |
 | --- | --- |
-| Commit | `fc98b1756115cec0c8a873e7feb6a83edba2bf81` on `release/0.1.0` (first run: `a8784cb`, 20 gates) |
+| Commit | `7afec586713d1a62f3c04679c9ffe293c09b8b5e`, the head of the pull request that updates the tools (#158), checked out in place of the release branch (earlier runs: `a8784cb` with 20 gates, `fc98b17` with 21) |
 | System | Ubuntu 24.04.5 LTS, Linux x86_64 |
-| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.16.6, mypy 2.3.1, PyYAML 6.0.3 |
+| Tools | Git 2.43.0, Python 3.13.17, Node.js 22.22.0, actionlint 1.7.12, Ruff 0.17.2, mypy 2.4.0, PyYAML 6.0.3 |
 | Fresh clone | `git status --short` printed nothing, before and after the setup; the virtual environment is ignored and actionlint sits in `../klcr-tools` |
-| actionlint archive | `sha256sum --check --strict` printed `OK`; a first attempt stopped at the download with HTTP 504, and the repeated run passed |
+| actionlint archive | `sha256sum --check --strict` printed `OK` (on 2026-11-05 a first attempt stopped at the download with HTTP 504, and the repeated run passed) |
 | `python tools/check.py --ci` | All 21 gates PASS; exit code 0; the report names the commit, mode `ci`, `dirty: false`, status `pass` |
 | Without actionlint on `PATH` | With `--ci`: `actionlint: NOT RUN`, overall FAIL, exit code 1; with `--allow-missing` instead (the two options exclude each other), INCOMPLETE and exit code 0 |
 | With an untracked file and `--ci` | "working tree is dirty: --ci requires a clean checkout", FAIL, exit code 1 |

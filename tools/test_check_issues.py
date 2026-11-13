@@ -303,36 +303,20 @@ class ConfigTests(unittest.TestCase):
                               encoding="utf-8")
             self.assertIn(expected, check_issues.config_findings(root))
 
-    def test_dependabot_entries_are_counted_whatever_their_key_order(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.copy_configuration(root)
-            config = root / ".github/dependabot.yml"
-            text = config.read_text(encoding="utf-8")
-            reordered = text.replace("  - package-ecosystem: github-actions\n    directory: /\n",
-                                     "  - directory: /\n    package-ecosystem: github-actions\n", 1)
-            self.assertNotEqual(reordered, text)
-            config.write_text(reordered, encoding="utf-8")
-            self.assertEqual(check_issues.config_findings(root), [])
+    def test_dependabot_update_that_is_not_a_mapping_assigns_nobody(self) -> None:
+        findings = check_issues.dependabot_findings(
+            "updates:\n  - just-a-string\n  - assignees: [triage-person]\n", {"P3"}, "triage-person")
+        self.assertEqual(findings, [".github/dependabot.yml must assign 'triage-person' in each of its 2 "
+                                    "update entries, found 1"])
 
-    def test_dependabot_keys_that_open_an_update_entry_are_read(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.copy_configuration(root)
-            config = root / ".github/dependabot.yml"
-            text = config.read_text(encoding="utf-8")
-            entry = "  - package-ecosystem: github-actions\n"
-            config.write_text(text.replace(entry, "  - assignees: [danielep71]\n    package-ecosystem: github-actions\n", 1)
-                              .replace("    assignees:\n      - danielep71\n", "", 1), encoding="utf-8")
-            self.assertEqual(check_issues.config_findings(root), [])
-            config.write_text(text.replace(entry, "  - labels: [no-such-label]\n    package-ecosystem: github-actions\n", 1)
-                              .replace("    labels:\n      - ci\n      - P3\n", "", 1), encoding="utf-8")
-            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
-                          check_issues.config_findings(root))
-            config.write_text(text.replace(entry, "  - labels:\n      - no-such-label\n    package-ecosystem: github-actions\n", 1)
-                              .replace("    labels:\n      - ci\n      - P3\n", "", 1), encoding="utf-8")
-            self.assertIn(".github/dependabot.yml sets unknown label 'no-such-label'",
-                          check_issues.config_findings(root))
+    def test_dependabot_empty_labels_and_two_assignees(self) -> None:
+        text = ("updates:\n"
+                "  - labels:\n    assignees: [triage-person]\n"
+                "  - labels: [P3]\n    assignees: [triage-person, someone-else]\n")
+        self.assertEqual(check_issues.dependabot_findings(text, {"P3"}, "triage-person"),
+                         [".github/dependabot.yml assigns 'someone-else', not 'triage-person'",
+                          ".github/dependabot.yml must assign 'triage-person' in each of its 2 "
+                          "update entries, found 1"])
 
     def test_dependabot_flow_style_entries_are_read(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -157,7 +157,7 @@ of the repository-wide defaults.
 | Allowed Actions and reusable workflows | Explicit reviewed policy | Verified "Allow all actions and reusable workflows", UI, read by me 2026-11-05; no allow list | Gap against the desired baseline: any action may run, limited only by the full-SHA requirement and review of workflow changes. Restricting the list is my decision, not part of this record. |
 | External-contributor workflow approval | Explicit reviewed policy | Verified "Require approval for first-time contributors", UI, read by me 2026-11-05 | Later pull requests of a contributor run without approval. |
 | Repository log/artifact retention | Explicit documented period | Verified 90 days, UI, read by me 2026-11-05 | The integrity workflow uploads its report with 30-day retention ([tools/README.md](../tools/README.md)). |
-| Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, which I closed on 2026-10-29 to update the tool pins by hand. |
+| Version updates | Weekly grouped updates | File inspected 2026-10-29: GitHub Actions and pip (`/tools`, 14-day cooldown); Monday 05:00 Europe/Rome; target release/0.1.0; limit 5; ci/P3; assignee danielep71 | [.github/dependabot.yml](../.github/dependabot.yml); main's definition controls activation. Run evidence: the first pip update opened #82, which I closed on 2026-10-29 to update the tool pins by hand; the target and the two ecosystems were read again through the API on 2026-11-07 (#23); the pip update #118 was carried into v0.2.0 as #156 and replaced by #158. |
 | Integrity / labels / issue triage / PR milestones | Preserve installed gates and read-only audits | Repository integrity, label sync and drift, issue triage and Keep milestones issue-only workflows installed | [Tooling](../tools/README.md); this documentation change does not audit all workflow executions. |
 | Traffic analytics | Opt-in collection with a dedicated App | Updated 2026-11-05 after activation (#17): the workflow is on `main` (#141); the App is installed on this repository, its client ID and private key are in `analytics` and the repository variable `TRAFFIC_HISTORY` is `enabled`, shown by successful runs on `main` (values not read). The first collection and a same-day rerun passed | Runs and their results: [TRAFFIC.md](TRAFFIC.md#activation-state). |
 | Environments, collaborators, deploy keys | Not cloned from other projects | Verified, UI, read by me 2026-11-05: environments `analytics` (created for #17) and `github-pages` (Pages); no deploy key; no repository or environment secret or variable at that reading, before the traffic credentials and variable of #17 (row above). Collaborators read through the authenticated API on 2026-11-05: danielep71 (admin) only | Secret values were never accessed. Pending invitations were not read. |
@@ -172,7 +172,8 @@ Settings UI (#16), except where a row says otherwise. Open points:
   protection rules were not audited;
 - the `main` ruleset was not exercised with a failing commit.
 
-Final baseline certification is #23.
+Final baseline certification was #23, closed on 2026-11-07; it did not repeat
+the Settings UI read-backs above.
 
 After a settings change, update its observed value, date, evidence and exception
 in this file through the normal documentation workflow. Keep desired policy

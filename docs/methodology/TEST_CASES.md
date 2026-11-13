@@ -23,8 +23,11 @@ Each case is a folder `tests/cases/<case-id>/`:
 | `run.csv`, `assets.csv`, `flows.csv` | The inputs, in the [input contract](DATA_CONTRACT.md) |
 | `expected.json` | The expected outputs and their references |
 
-The case ID is lower case, with digits and hyphens. A case whose expected
-values are all `illustrative` has an ID starting with `illustrative-`.
+The case ID is lower case, with digits and hyphens. An `illustrative_`
+quantity is allowed only in a case whose ID starts with `illustrative-`: the
+checker enforces that direction only, so a case whose values are all
+`illustrative` is expected, by convention, to carry the prefix, and a case
+without it is not rejected for that reason.
 
 ## 🏷️ Case metadata — `case.json`
 

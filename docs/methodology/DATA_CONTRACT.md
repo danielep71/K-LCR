@@ -57,11 +57,14 @@ A run is one folder holding three files:
 
 The forms of `id`, `currency`, `integer`, `amount` and `date` describe the
 whole value: any other character, such as a space or a line break inside
-quotes, gets `LCR-TYPE`. A value that starts with a formula character gets
-`LCR-FORMULA` first.
+quotes, gets `LCR-TYPE`.
 
-Text never starts with `=`, `+`, `-`, `@`, a tab or a carriage return, so
-that a spreadsheet does not read it as a formula.
+Only a value of type `id`, `code` or `text` is checked for a leading formula
+character: it never starts with `=`, `+`, `-`, `@`, a tab or a carriage
+return, so that a spreadsheet does not read it as a formula, and a value that
+does gets `LCR-FORMULA` before any other finding. The other types are checked
+by their own form: `-1` in an amount is `LCR-RANGE`, and `=1` there is
+`LCR-TYPE`.
 
 ## 📋 run.csv
 

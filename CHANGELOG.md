@@ -31,9 +31,10 @@ commit log nor release evidence. **No version has been released.**
 The `changelog` gate of `python tools/check.py` runs
 `tools/check_changelog.py`. It checks the headings, dates, order, link
 references and `VERSION`; that every link reference points into this
-repository; that this introduction, the *Current status* of
-[RELEASING.md](RELEASING.md#current-status) and the README describe the same
-release state; and, once a release's tag exists, that its section still
+repository; that this introduction and the *Current status* of
+[RELEASING.md](RELEASING.md#current-status) describe the same release state;
+that the README mentions no Release Candidate and holds no unchecked task
+item; and, once a release's tag exists, that its section still
 equals the section at the tag, unless it holds the dated correction line
 above. What a version number means is checked in review.
 
@@ -76,19 +77,25 @@ Nothing in it calculates a Liquidity Coverage Ratio.
   workflow and issue-configuration checks, the input and parameter
   contracts, the registered test cases and VBA static checks, run locally by
   `python tools/check.py` and as the required check (#7, #52, #105, #109,
-  #12).
+  #12). The validators accept only `YYYY-MM-DD` dates in range and integer
+  versions, match patterns against the whole value, and exit 2 when they
+  could not run (#159).
 - The regulatory source register and applicability map for both profiles,
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).
 - The input, parameter-set and result contracts, with validators and
   synthetic fixtures (#10); Art. 12(1)(f) assets are a Level 2B category in
-  scope (#148).
+  scope (#148). The applicability map, the categories and the validation plan
+  now agree with one another and with the stored SRC-02: A03 names the Level
+  2B points in scope and the special categories rejected, and the
+  requirements that no input can claim are marked as such (#160).
 - The test-case format, the oracle and tolerance rules and the validation
   plan, with two illustrative cases (#11).
 - The project website, README branding and the social preview (#63, #18).
 - Repository settings: a portable register and a dated evidence record,
   including a demonstration that the required check blocks a merge (#90,
-  #16).
+  #16). The governance documents, the audits and the provenance record describe
+  the closeout as delivered: v0.1.0 is closed without a release (#161).
 - This changelog and the release and milestone procedure in
   [RELEASING.md](RELEASING.md) (#20).
 - The opt-in **Traffic history** workflow and `tools/traffic_history.py`:

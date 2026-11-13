@@ -21,7 +21,7 @@ the version and changelog rules are in
 | `VERSION` | Does not exist yet; it is created when the first release is prepared |
 | Active release branch | `release/0.1.0` |
 | Open milestones | *v0.1.0 - Repo setup*, due 2026-11-20; *v0.2.0 - Host execution*, due 2026-12-31 |
-| v0.1.0 outcome | Not decided: I decide at its closeout (#23) whether it is closed without a release or released as a setup baseline |
+| v0.1.0 outcome | Closed without a release, by my decision of 2026-11-07 (#23): no tag, no published version, and the changelog stays under `[Unreleased]`; closing the milestone on the milestones page is mine |
 
 <a id="what-a-version-means"></a>
 
@@ -243,7 +243,8 @@ Logs and artifacts expire: copy the decisive lines.
 - **A wrong integration into `main`, before the tag:** fix it on the release
   branch through a task pull request and integrate again; the new merge
   commit is the candidate. `main` takes only integration pull requests,
-  never a direct push.
+  never a direct push; the one exception is a Dependabot security-update pull
+  request, which GitHub opens against `main` ([GOVERNANCE.md](docs/GOVERNANCE.md#dependabot-security-updates)).
 - **A protected branch moved unexpectedly:** stop, record the divergence and
   get my decision, as
   [GOVERNANCE.md](docs/GOVERNANCE.md#-release-integration-and-synchronization)
@@ -265,7 +266,8 @@ Logs and artifacts expire: copy the decisive lines.
 | Tag-triggered release workflow that checks the tag and builds an attested source bundle and checksums | Deferred: no asset is published before a workbook exists | #137 |
 | Command that verifies a published release (tag, candidate, assets, milestone) | Deferred: the checks of step 6 are manual | #137 |
 | Excel run bound to the candidate | Deferred to *v0.2.0 - Host execution* | #14, #15 |
-| Workbook asset, user manual and distribution review | Deferred: no workbook exists | B004 and B006 in [DECISIONS.md](docs/DECISIONS.md) |
+| Workbook asset and its packaging | Deferred: no workbook exists | B004 and B006 in [DECISIONS.md](docs/DECISIONS.md) |
+| User manual and distribution review | Deferred: no workbook exists | None recorded |
 
 ## ✅ Checklist
 

@@ -25,7 +25,7 @@ DEPENDABOT = Path(".github/dependabot.yml")
 GOVERNANCE = Path("docs/GOVERNANCE.md")
 SETTINGS = Path("docs/REPOSITORY_SETTINGS.md")
 
-SHA_PINNED = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[0-9a-f]{40}$")
+SHA_PINNED = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[0-9a-f]{40}")
 DEFAULT_BRANCH_REF = "github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"
 # The whole condition, so that `||` or an extra clause cannot weaken it.
 LABELS_IF = "github.event_name != 'pull_request' && " + DEFAULT_BRANCH_REF
@@ -63,7 +63,7 @@ SCRIPT = re.compile(r"<<'PY'\n(.*)\nPY\s*$", re.S)
 
 # Ecosystems whose versions are pinned here, and where Dependabot must look.
 PINNED_ECOSYSTEMS = {"github-actions": "/", "pip": "/tools"}
-PRIORITY = re.compile(r"^P\d$")
+PRIORITY = re.compile(r"P\d")
 
 Workflow = Mapping[Any, Any]
 
@@ -122,7 +122,7 @@ def action_findings(name: str, workflow: Workflow) -> list[str]:
         uses += [(f"job {job_id} step {i}", step["uses"]) for i, step in enumerate(steps, 1)
                  if isinstance(step, Mapping) and "uses" in step]
         for where, ref in uses:
-            if not SHA_PINNED.match(str(ref)):
+            if not SHA_PINNED.fullmatch(str(ref)):
                 findings.append(f"{name}: {where}: `{ref}` is not pinned to a 40-character SHA")
         for i, step in enumerate(steps, 1):
             if isinstance(step, Mapping) and str(step.get("uses", "")).startswith("actions/checkout@"):
@@ -329,7 +329,7 @@ def dependabot_findings(config: Any) -> list[str]:
         if "milestone" in update:
             findings.append(f"{DEPENDABOT}: `{ecosystem}` sets a milestone")
         priorities = sorted(str(label) for label in update.get("labels") or []
-                            if PRIORITY.match(str(label)))
+                            if PRIORITY.fullmatch(str(label)))
         if priorities != ["P3"]:
             findings.append(f"{DEPENDABOT}: `{ecosystem}` has priorities {priorities}; "
                             "expected exactly ['P3']")
