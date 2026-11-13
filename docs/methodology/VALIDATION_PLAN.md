@@ -39,7 +39,7 @@ Status: `registered` (in `tests/cases/`) or `planned`.
 | `PC-10` | nominal | REQ-06 | Amounts converted from several original currencies; totals in the reporting currency only (A02) | planned |
 | `PC-11` | nominal | REQ-05 | The same portfolio declared `INDIVIDUAL` and `CONSOLIDATED`: identical figures, since K-LCR does not consolidate (A01) | planned |
 | `PC-12` | nominal | REQ-01 | The records of `PC-01` in reverse order: identical figures | planned |
-| `PC-13` | invalid-input | REQ-11, REQ-12, REQ-15 (Basel), REQ-21, REQ-24 | Each excluded category of `categories.json` rejected with `LCR-OUT-OF-SCOPE` (A03, A04 and A06) | planned |
+| `PC-13` | invalid-input | REQ-11, REQ-12, REQ-15 (Basel), REQ-17, REQ-21, REQ-24 | Each excluded category of `categories.json` rejected with `LCR-OUT-OF-SCOPE` (A03, A04 and A06) | planned |
 | `PC-14` | invalid-input | — | One case per input-contract finding group: structure, field, run and category rules | planned |
 | `PC-15` | invalid-parameters | — | A parameter set of the other profile, or an incomplete one: `CALC-PARAMETER-SET-PROFILE` or `CALC-PARAMETER-SET-INVALID` | planned |
 | `PC-16` | nominal | REQ-11 | Basel only: Level 2B included or not by the parameter set's discretion choice (A07) | planned |
