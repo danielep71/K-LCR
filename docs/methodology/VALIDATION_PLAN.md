@@ -32,20 +32,33 @@ Status: `registered` (in `tests/cases/`) or `planned`.
 | `PC-03` | boundary | REQ-02, REQ-22 | Items maturing on the last day of the 30-day horizon and on the next day | planned |
 | `PC-04` | boundary | REQ-23 | The inflow cap exactly binding, just binding and not binding | planned |
 | `PC-05` | boundary | REQ-13 | Each composition limit exactly binding and not binding, before and after the unwind of secured transactions | planned |
-| `PC-06` | boundary | REQ-07 | A holding with `requirements_met` `N`, left out with `CALC-ASSET-EXCLUDED` | planned |
+| `PC-06` | boundary | REQ-07, REQ-14 | A holding with `requirements_met` `N`, left out with `CALC-ASSET-EXCLUDED`; the 30 calendar days of Art. 18(1) are not modelled | planned |
 | `PC-07` | boundary | REQ-03 | A ratio just below and just at the minimum: `CALC-BELOW-MINIMUM` only below | planned |
 | `PC-08` | boundary | REQ-16 | Derivatives netted within a netting set and not across sets | planned |
-| `PC-09` | boundary | REQ-19, REQ-20 | Secured funding, lending and collateral swaps for each collateral level | planned |
+| `PC-09` | boundary | REQ-19 | Secured funding, lending and collateral swaps for each collateral level | planned |
 | `PC-10` | nominal | REQ-06 | Amounts converted from several original currencies; totals in the reporting currency only (A02) | planned |
 | `PC-11` | nominal | REQ-05 | The same portfolio declared `INDIVIDUAL` and `CONSOLIDATED`: identical figures, since K-LCR does not consolidate (A01) | planned |
 | `PC-12` | nominal | REQ-01 | The records of `PC-01` in reverse order: identical figures | planned |
-| `PC-13` | invalid-input | REQ-12, REQ-15, REQ-21, REQ-24, REQ-25 | Each excluded category rejected with `LCR-OUT-OF-SCOPE` (A03 to A06) | planned |
+| `PC-13` | invalid-input | REQ-11, REQ-12, REQ-15 (Basel), REQ-21, REQ-24 | Each excluded category of `categories.json` rejected with `LCR-OUT-OF-SCOPE` (A03, A04 and A06) | planned |
 | `PC-14` | invalid-input | — | One case per input-contract finding group: structure, field, run and category rules | planned |
 | `PC-15` | invalid-parameters | — | A parameter set of the other profile, or an incomplete one: `CALC-PARAMETER-SET-PROFILE` or `CALC-PARAMETER-SET-INVALID` | planned |
 | `PC-16` | nominal | REQ-11 | Basel only: Level 2B included or not by the parameter set's discretion choice (A07) | planned |
 | `PC-17` | nominal | REQ-13 | The same mapped inputs under both profiles, with the composition difference explained (I03) | planned |
+| `PC-18` | boundary | REQ-18 | Unsecured wholesale funding: counterparty classification and the operational-deposit boundary, with the parameter set's rates | planned |
+| `PC-19` | boundary | REQ-20 | Each additional-outflow, facility and other contingent category, with its parameter | planned |
 | `illustrative-eu-input-totals` | nominal | — | EU only. Format example: synthetic input totals from a derivation script | registered |
 | `illustrative-eu-rejected-input` | invalid-input | — | EU only. Format example: a negative amount rejected by the input contract | registered |
+
+Requirements with no planned case, and why:
+
+- `REQ-04`, `REQ-26`: no test direction; the scenario and the reporting are
+  outside the calculation.
+- `REQ-08`: diversification is a diagnostic only and no diagnostic code is
+  registered for it, so there is nothing to execute; a case follows with the
+  code.
+- `REQ-15` (EU), `REQ-23` exemptions, `REQ-25` and the significant-currency
+  LCR of A02: no input represents them (A02, A04 to A06), so no input can
+  claim them and no rejection can be tested.
 
 ## 📊 Evidence for a validated rule
 
