@@ -116,7 +116,7 @@ their UPDATED dates current.
 ## 📦 Export compatibility and host evidence
 
 Git stores VBA text with LF and checks it out with CRLF. Use an ASCII-only
-repository source convention for future exported VBA (`ChrW` for deliberate
+repository source convention for exported VBA (`ChrW` for deliberate
 non-ASCII characters); do not configure a Git working-tree encoding or
 assume VBE code-page behavior has already been demonstrated. A real export,
 import, compile and byte/semantic round trip on the selected host is required
@@ -125,15 +125,17 @@ the latter binary. Workbook/sheet document modules cannot be imported as
 ordinary standard modules; map them to the corresponding host components.
 
 The portable Repository integrity gate validates tooling, tracked text,
-workflow syntax and the static VBA rules below, not VBA syntax, compilation or
-LCR calculations. A candidate-bound Excel run in #15 is a separate gate. Record
+workflow syntax, the static VBA rules below and the VBA component manifest,
+not VBA syntax, compilation or LCR calculations. A candidate-bound Excel run in #15 is a separate gate. Record
 the exact tested commit, Excel build/bitness, locale, fixture count and
 cleanup result.
 
 ## 🔍 Static checks
 
-**Repository integrity** runs three static checks on every tracked `.bas`,
-`.cls` and `.frm` file. Each also runs on its own, for example
+**Repository integrity** runs three static rule checks on every tracked `.bas`,
+`.cls` and `.frm` file, and a fourth gate, `vba-manifest`
+(`tools/check_vba_manifest.py`), keeps `tools/vba-projects.json` equal to the
+tracked components. Each also runs on its own, for example
 `python tools/check_vba_jumps.py`. Each finding names the file and, where it
 has one, the line. Each passes and says how many components it examined: the
 prototype's and the test harness's today.

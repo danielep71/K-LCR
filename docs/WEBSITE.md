@@ -4,7 +4,7 @@ The K-LCR landing page lives in `docs/index.html`, with styles in
 `docs/assets/site.css` and its planned-architecture illustration in
 `docs/assets/architecture.svg`. The sources and licenses of the adapted page
 structure and styles are recorded in [NOTICE.md](../NOTICE.md). The copy and
-the SVG describe the current setup scope.
+the SVG describe the current prototype scope.
 
 ## 📦 Publishing
 

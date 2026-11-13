@@ -19,7 +19,7 @@ from typing import Any
 SCOPE = ("Repository tooling, Python lint and types, labels, issue forms, tracked text, "
          "workflow syntax and invariants, input and parameter contracts, registered test cases, "
          "VBA static checks and component manifest, binary files, changelog and release state; "
-         "no VBA compilation, no Excel execution and no LCR calculation.")
+         "no VBA compilation, no Excel execution and no validated LCR calculation.")
 
 
 @dataclass(frozen=True)

@@ -3,9 +3,9 @@ catalogue, illustrative inputs, and a reference implementation of the
 EU LCR aggregation (Delegated Regulation (EU) 2015/61, as amended by
 Delegated Regulation (EU) 2018/1620, Annex I and Annex II).
 
-The template builder writes these values into the workbook; the test
-script compares the VBA engine's output with `compute()`. Neither script is
-tracked yet; tools/test_lcr_spec.py pins the figures that `compute()` returns
+tools/build_template.py writes these values into the workbook, and
+tools/run_lo_test.py compares the VBA engine's output with `compute()` in
+LibreOffice; tools/test_lcr_spec.py pins the figures that `compute()` returns
 for the demonstration data below.
 
 This is a model written for the prototype, not an independent oracle in the

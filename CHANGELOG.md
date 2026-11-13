@@ -95,7 +95,9 @@ Liquidity Coverage Ratio that nothing validates.
   categories under A06, and `categories.json` is version 3 (#172).
 - The test-case format, the oracle and tolerance rules and the validation
   plan, with two illustrative cases (#11).
-- The project website, README branding and the social preview (#63, #18).
+- The project website, README branding and the social preview (#63, #18);
+  the preview restyled to match my other engines, with the prototype's
+  demonstration figures (#185, #187).
 - Repository settings: a portable register and a dated evidence record,
   including a demonstration that the required check blocks a merge (#90,
   #16). The governance documents, the audits and the provenance record describe
@@ -138,7 +140,8 @@ Liquidity Coverage Ratio that nothing validates.
   template with the hash-locked `openpyxl` 3.1.5, byte for byte, and a test
   compares every part with the tracked file; `tools/build_xlsm.py` builds
   the macro-enabled workbook in LibreOffice under the ignored
-  `test-results/`, and `tools/run_lo_test.py` runs its VBA there against
+  `test-results/`, with the components of `tools/vba-projects.json` since
+  #194, and `tools/run_lo_test.py` runs its VBA there against
   `compute()`. LibreOffice is an optional host and its run is not Excel
   evidence (#180).
 - The component manifest `tools/vba-projects.json`, kept equal to the

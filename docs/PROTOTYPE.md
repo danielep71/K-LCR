@@ -43,7 +43,7 @@ the trail of every line.
 | `Outflows`, `Inflows` | One row per line, category chosen from a list |
 | `Results` | Per scope: buffer composition, excess liquid assets, outflows, inflows by cap class, net outflow, LCR, surplus, status, and a worksheet-formula check |
 | `LineCalc` | Every input line with factor, weighted amount and status |
-| `Checks` | Errors, warnings and information with stable codes (`LCR-P…`, `LCR-L…`, `LCR-S…`) |
+| `Checks` | Errors, warnings and information with stable codes (`LCR-P…`, `LCR-L…`, `LCR-S…`, and `LCR-R…` for the run summary) |
 | `README` | Conventions, methodology, scope and limitations |
 
 ## Calculation as implemented
@@ -55,7 +55,7 @@ of the regulation.
 | --- | --- | --- |
 | Liquid assets | Market value × (1 − haircut), per level L1, L1 EHQCB, L2A, L2B | DR 2015/61 Art. 9 to 12 |
 | Excess liquid assets | S − MIN(S, A1/0.30, (A1 + A1CB)/0.60, (A1 + A1CB + A2A)/0.85) on the adjusted amounts | Annex I para 4 |
-| Liquidity buffer | L1 + L2A + L2B − MIN(L1 + L2A + L2B, excess) | Annex I para 2 |
+| Liquidity buffer | L1 + L1CB + L2A + L2B − MIN(L1 + L1CB + L2A + L2B, excess), level 1 including EHQCB | Annex I para 2 |
 | Outflows | Balance × outflow rate | Art. 22 to 31a |
 | Net outflow | TO − MIN(FEI, TO) − MIN(IHC, 0.9 × MAX(TO − FEI, 0)) − MIN(IC, 0.75 × MAX(TO − FEI − IHC/0.9, 0)) | Annex II, Art. 33 |
 | Ratio | Buffer / net outflow | Art. 4 |
@@ -71,11 +71,11 @@ A line with an error is excluded and listed on `Checks`; with
 | `src/core/` | `CORE_Config` (constants, error numbers, diagnostic codes) and `CORE_Engine` (pure functions of the aggregation) |
 | `src/modules/` | `LCR_Formulas`, the worksheet functions |
 | `src/workbook/` | `M_Main` (the macros), the document modules `ThisWorkbook` and `sh<Sheet>`, and `LCR_Template.xlsx`, the macro-free template |
-| `tests/modules/` | `TEST_Engine`, the self-test that the `Results` sheet runs |
+| `tests/modules/` | `TEST_Engine`, the self-test that the `Results` sheet runs; only the development workbook holds it |
 | `tools/lcr_spec.py` | The Python model: parameters, catalogue, demonstration inputs and `compute()`; `tools/test_lcr_spec.py` pins its figures |
-| `tools/check_source.py` | Extra checks of the VBA source (names, `Option Explicit`, `Option Private Module`, ASCII, 120 columns); run it on its own |
+| `tools/check_source.py` | Extra checks of the VBA source (names, `Option Explicit`, `Option Private Module`, ASCII, 120 columns); run it on its own, and the `tool-tests` gate runs it on the repository (`tools/test_check_source.py`) |
 | `tools/build_template.py` | Writes `LCR_Template.xlsx` from `lcr_spec.py` with `openpyxl` (through `tools/plain_openpyxl.py`, which selects its standard-library XML writer); `tools/test_build_template.py` rebuilds it and compares every part with the tracked file |
-| `tools/build_xlsm.py` | Builds the macro-enabled workbook in LibreOffice from the template and the VBA of `src/` and `tests/modules/`, into the ignored `test-results/` |
+| `tools/build_xlsm.py` | Builds the macro-enabled workbook in LibreOffice from the template and the components that `tools/vba-projects.json` lists for the development workbook (or, with `--mode production`, the production one), into the ignored `test-results/` |
 | `tools/run_lo_test.py` | Runs the workbook's VBA in LibreOffice and compares `Results` with `compute()` |
 | `tools/vba-projects.json`, `tools/Sync-KLCR-VBA.ps1` | The components of the production and development workbooks, and the script that imports them into a workbook in Windows Excel (#14) |
 | `tools/preview.py` | Renders each sheet of a workbook to PNG for a visual check; needs LibreOffice and `pdftoppm` |
@@ -102,7 +102,9 @@ The macro-enabled workbook is not tracked. To build one:
    `Option Explicit`: nothing needs to be copied into them.
 4. Save as `.xlsm`. Review `Params`, enter lines on `HQLA`, `Outflows` and
    `Inflows`, press **Run LCR**, then read `Results` and `Checks`.
-   **Self-test** on `Results` runs `TEST_Engine` and the formula check.
+   **Self-test** on `Results` runs `TEST_Engine` and the formula check. It
+   works only in a development workbook: a production workbook does not
+   hold `TEST_Engine`, so the button finds no macro there.
 
 None of these steps has been run as part of this repository's checks; the run
 on a supported host is #15.
@@ -128,12 +130,21 @@ tracked template, which `tools/test_build_template.py` checks part by part.
 `build_xlsm.py` and `run_lo_test.py` need LibreOffice, so the repository's
 checks test only their parts that do not (`tools/test_build_xlsm.py`).
 
-On 2026-11-13 I ran the three tools with LibreOffice 24.2.7.2 on Linux:
-`run_lo_test.py` reported 26 expectations passed and none failed. That run
-covers the self-test before and after a run, the 16 values of each scope
-against `compute()`, the formula check, rejected lines, validation only and a
-stopped run. It is a record of that one run, not a check that the repository
-repeats.
+On 2026-11-13 I ran the three tools with LibreOffice 24.2.7.2 on Linux, first
+for #180 and again for #194 with the development workbook of
+`tools/vba-projects.json`, which also holds the neutral harness of
+`tests/unit/`. Both runs passed all 24 expectations of `run_lo_test.py` with
+no failure; the record of #180 first said 26, a miscount. The expectations
+cover:
+
+- the engine self-test before a run (22 of 22 checks) and after it (25 of 25);
+- the 16 values of each scope against `compute()`, its formula check and its
+  status;
+- the 46 lines of `LineCalc`;
+- rejected lines, validation only and a stopped run.
+
+The script now prints the number of expectations with its verdict. This is a
+record of those runs, not a check that the repository repeats.
 
 ## Differences from the repository's decisions
 
@@ -192,8 +203,10 @@ difference is a point to settle when the prototype is refined.
   docstring.
 - `build_xlsm.py` and `run_lo_test.py` write under `test-results/` instead of
   `dist/`, use a temporary LibreOffice profile and scratch folder that are
-  removed afterwards, and `build_xlsm.py` takes only `tests/modules/` from
-  `tests/`, so the neutral harness of `tests/unit/` stays out of the workbook.
+  removed afterwards. Since #194 `build_xlsm.py` takes its components from
+  `tools/vba-projects.json`, like the synchronization script: the development
+  workbook by default, with the tests of `tests/modules/` and the neutral
+  harness of `tests/unit/`.
 
 ## Not tracked yet
 
