@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import shutil
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -73,6 +76,27 @@ class ContractTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.space = Workspace()
         self.addCleanup(self.space.close)
+
+
+class HelperTests(unittest.TestCase):
+    def test_date_range_is_the_contract_range(self) -> None:
+        bounds = json.loads((ROOT / check_contract.CONTRACT).read_text(encoding="utf-8"))["types"]["date"]
+        self.assertEqual(check_contract.DATE_RANGE,
+                         (date.fromisoformat(bounds["min"]),
+                          date.fromisoformat(bounds["max"])))
+
+    def test_iso_date_accepts_only_the_strict_form_in_range(self) -> None:
+        self.assertEqual(check_contract.iso_date("2026-11-13"), date(2026, 11, 13))
+        for value in ("2026-11-13\n", "20261113", "2026-1-3", "2026-02-30", "1999-12-31",
+                      "2200-01-01", "", None, 20261113, True):
+            with self.subTest(value=value):
+                self.assertIsNone(check_contract.iso_date(value))
+
+    def test_same_value_keeps_the_type(self) -> None:
+        self.assertTrue(check_contract.same_value(1, 1))
+        self.assertFalse(check_contract.same_value(True, 1))
+        self.assertFalse(check_contract.same_value(1.0, 1))
+        self.assertFalse(check_contract.same_value("1", 1))
 
 
 class SyntaxTests(unittest.TestCase):
@@ -192,6 +216,17 @@ class FileTests(ContractTestCase):
                                                  ["LCR-TOO-LARGE", "flows", 0, ""]])
 
 
+    def test_byte_limit(self) -> None:
+        contract = self.space.root / check_contract.CONTRACT
+        data = json.loads(contract.read_text(encoding="utf-8"))
+        largest = max(len(text.encode()) for text in (RUN, ASSETS, FLOWS))
+        for limit, expected in ((largest, []), (largest - 1, [["LCR-TOO-LARGE", "flows", 0, ""]])):
+            with self.subTest(limit=limit):
+                data["format"]["max_bytes"] = limit
+                contract.write_text(json.dumps(data), encoding="utf-8")
+                self.assertEqual(self.space.findings(), expected)
+
+
 class FieldTests(ContractTestCase):
     def assets_with(self, *rows: str) -> list[list[Any]]:
         header = ASSETS.splitlines()[0]
@@ -240,6 +275,30 @@ class FieldTests(ContractTestCase):
         self.assertEqual(self.space.findings(), [["LCR-TYPE", "flows", 1, "maturity_date"],
                                                  ["LCR-TYPE", "flows", 2, "maturity_date"],
                                                  ["LCR-RANGE", "flows", 3, "maturity_date"]])
+
+
+    def test_date_bounds_are_inclusive(self) -> None:
+        header = FLOWS.splitlines()[0]
+        rows = [f"F{n};INFLOW;EU-I-LOANS;1;EUR;{day};;" for n, day in
+                enumerate(("1999-12-31", "2000-01-01", "2199-12-31", "2200-01-01"), 1)]
+        self.space.write(flows="\n".join([header, *rows]) + "\n")
+        self.assertEqual([f for f in self.space.findings() if f[0] == "LCR-RANGE"],
+                         [["LCR-RANGE", "flows", 1, "maturity_date"], ["LCR-RANGE", "flows", 4, "maturity_date"]])
+
+    def test_identifier_is_at_most_64_characters(self) -> None:
+        rows = [f"{'A' * 64};EU-A-L1-CASH;1;EUR;Y", f"{'B' * 65};EU-A-L1-CASH;1;EUR;Y",
+                "_A;EU-A-L1-CASH;1;EUR;Y", "A 1;EU-A-L1-CASH;1;EUR;Y"]
+        self.assertEqual(self.assets_with(*rows),
+                         [["LCR-TYPE", "assets", 2, "asset_id"], ["LCR-TYPE", "assets", 3, "asset_id"],
+                          ["LCR-TYPE", "assets", 4, "asset_id"]])
+
+    def test_integer_bounds_are_inclusive(self) -> None:
+        results = {}
+        for version in ("0", "1", "999", "1000"):
+            self.space.write(run=RUN.replace(";1;2026-06-30", f";{version};2026-06-30"))
+            results[version] = [f[0] for f in self.space.findings()
+                                if f[0] == "LCR-RANGE" and f[3] == "source_register_version"]
+        self.assertEqual(results, {"0": ["LCR-RANGE"], "1": [], "999": [], "1000": ["LCR-RANGE"]})
 
 
 class RunTests(ContractTestCase):
@@ -295,6 +354,28 @@ class CategoryTests(ContractTestCase):
 class MainTests(unittest.TestCase):
     def test_repository_fixtures_match_expected(self) -> None:
         self.assertEqual(check_contract.check_fixtures(ROOT), [])
+
+    def run_main(self, *argv: str) -> tuple[int, str]:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = check_contract.main(argv)
+        return code, out.getvalue()
+
+    def test_check_fixtures_entry_point(self) -> None:
+        code, out = self.run_main("--root", str(ROOT), "--check-fixtures")
+        self.assertEqual(code, 0)
+        self.assertIn("data-contract: PASS", out)
+
+    def test_run_entry_point_writes_the_report_and_exits_by_status(self) -> None:
+        space = Workspace()
+        self.addCleanup(space.close)
+        output = space.root / "out" / "report.json"
+        code, out = self.run_main("--root", str(space.root), "--run", str(space.run), "--output", str(output))
+        self.assertEqual(code, 0)
+        self.assertEqual(json.loads(output.read_text(encoding="utf-8")), json.loads(out))
+        space.write(assets=ASSETS.replace("Y\n", "yes\n", 1))
+        code, out = self.run_main("--root", str(space.root), "--run", str(space.run))
+        self.assertEqual((code, json.loads(out)["status"]), (1, "fail"))
 
 
 class CategoryFileTests(unittest.TestCase):

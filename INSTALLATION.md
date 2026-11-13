@@ -55,7 +55,7 @@ Verified on Linux. The repository checks need:
 | Git | Any recent version | Every check reads the Git index |
 | Python | 3.13 | `tools/check.py` and its gates |
 | Ruff, mypy, PyYAML | The hash-locked versions in `tools/requirements-quality-ci.txt` | `ruff`, `ruff-complexity-probe`, `mypy`, `mypy-strict-probe`, `issue-config`, `workflow-invariants` |
-| Node.js | 22 | The label scripts in `.github/scripts/` |
+| Node.js | 22 | The label scripts in `.github/scripts/`, and the `issue-config` gate |
 | actionlint | 1.7.12 | Workflow syntax |
 
 `tools/check.py` itself needs only the Python standard library.

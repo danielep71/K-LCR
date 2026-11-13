@@ -71,10 +71,10 @@ REPOSITORY_COUNTS = {"stars": "stargazers_count", "forks": "forks_count",
                      "watchers": "subscribers_count", "open_issues": "open_issues_count"}
 BADGES = "badges"
 BADGE_COLOR = "217346"
-MIDNIGHT = re.compile(r"^(\d{4}-\d{2}-\d{2})T00:00:00Z$")
-ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+MIDNIGHT = re.compile(r"(\d{4}-\d{2}-\d{2})T00:00:00Z")
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 # Collection times are always written in this form, so they compare as strings.
-STAMP = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+STAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z")
 NUMERIC = {"views", "unique_views", "clones", "unique_clones", "views_14d", "unique_views_14d",
            "clones_14d", "unique_clones_14d", "rank", "count", "uniques", *REPOSITORY_COUNTS}
 STAMPS = {"collected_at", "views_collected_at", "clones_collected_at",
@@ -142,7 +142,7 @@ def parse_series(data: Any, key: str, collected: date) -> Series:
         where = f"{key}[{index}]"
         if not isinstance(item, dict):
             raise TrafficError(f"{where}: expected an object")
-        match = MIDNIGHT.match(text(item.get("timestamp"), f"{where}.timestamp"))
+        match = MIDNIGHT.fullmatch(text(item.get("timestamp"), f"{where}.timestamp"))
         if not match:
             raise TrafficError(f"{where}.timestamp: not aligned to UTC midnight")
         day = match.group(1)
@@ -207,7 +207,7 @@ def load_collection(raw: Path, collected_at: datetime) -> Collection:
 def calendar_date(value: str, where: str) -> date:
     """A YYYY-MM-DD string that names a real day, such as not 2026-02-30."""
     try:
-        if ISO_DATE.match(value):
+        if ISO_DATE.fullmatch(value):
             return date.fromisoformat(value)
     except ValueError:
         pass
@@ -271,7 +271,7 @@ def check_fields(name: str, number: int, row: Mapping[str, str]) -> None:
     if bad:
         raise TrafficError(f"{name}:{number}: non-numeric {', '.join(sorted(bad))}")
     bad = [key for key in STAMPS & set(row)
-           if not STAMP.match(row[key]) and not blank_metric(key)]
+           if not STAMP.fullmatch(row[key]) and not blank_metric(key)]
     if bad:
         raise TrafficError(f"{name}:{number}: invalid {', '.join(sorted(bad))}")
 
@@ -387,7 +387,10 @@ def compact(value: int) -> str:
     """A badge number: 950, 1.2k, 11k, 3.4M."""
     for limit, suffix in ((1_000_000, "M"), (1_000, "k")):
         if value >= limit:
-            return f"{value / limit:.1f}".removesuffix(".0") + suffix
+            shown = f"{value / limit:.1f}"
+            if shown == "1000.0" and suffix == "k":  # 999_950 and above round up to millions
+                return "1M"
+            return shown.removesuffix(".0") + suffix
     return str(value)
 
 

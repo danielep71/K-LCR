@@ -18,7 +18,6 @@ import subprocess
 import sys
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from datetime import date
 from decimal import Context, Decimal, Inexact, InvalidOperation, localcontext
 from pathlib import Path
 from typing import Any
@@ -98,7 +97,7 @@ def metadata_findings(case: str, data: Any, root: Path, requirements: set[str]) 
     def bad(key: str, message: str) -> None:
         found.append(Finding("CASE-METADATA", case, f"case.json:{key}", message))
 
-    if (data["schema"], data["case_version"]) != ("klcr-test-case", 1):
+    if data["schema"] != "klcr-test-case" or not check_contract.same_value(data["case_version"], 1):
         bad("schema", "expected klcr-test-case, version 1")
     if data["id"] != case or not CASE_ID.fullmatch(case):
         bad("id", "must equal the folder name: lower case, digits and hyphens")
@@ -152,11 +151,7 @@ def review_findings(case: str, review: Any, path: str) -> list[Finding]:
 
 
 def valid_date(value: Any) -> bool:
-    try:
-        date.fromisoformat(str(value))
-    except ValueError:
-        return False
-    return isinstance(value, str)
+    return check_contract.iso_date(value) is not None
 
 
 # --- Expected outputs ---------------------------------------------------------
@@ -277,7 +272,8 @@ def expected_findings(case: str, data: Any, metadata: Mapping[str, Any], currenc
                       sources: set[str], root: Path) -> list[Finding]:
     if not isinstance(data, dict) or set(data) != {"schema", "expected_version", "case", "outputs"}:
         return [Finding("CASE-EXPECTED", case, "expected.json", "keys must be schema, expected_version, case, outputs")]
-    if (data["schema"], data["expected_version"], data["case"]) != ("klcr-test-expected", 1, case):
+    if data["schema"] != "klcr-test-expected" or data["case"] != case \
+            or not check_contract.same_value(data["expected_version"], 1):
         return [Finding("CASE-EXPECTED", case, "expected.json", "expected klcr-test-expected, version 1, for this case")]
     outputs = data["outputs"]
     if not isinstance(outputs, list) or not outputs:
@@ -418,7 +414,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args(argv)
-    summary = check_all(args.root.resolve())
+    try:
+        summary = check_all(args.root.resolve())
+    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+        print(f"test-cases: ERROR: {error}", file=sys.stderr)
+        return 2
     for finding in summary.findings:
         print(f"FAIL: {finding.case} {finding.path} {finding.code}: {finding.message}")
     print(f"cases: {summary.cases}; executed assertions: {summary.executed}; "

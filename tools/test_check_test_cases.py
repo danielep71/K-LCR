@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import shutil
+import subprocess
 import tempfile
 import unittest
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 import check_test_cases as ctc
 
@@ -200,6 +204,33 @@ class ExecutionTests(Workspace):
         (self.root / "tests/derivations/illustrative_input_totals.py").write_text("raise SystemExit(3)\n",
                                                                                   encoding="utf-8")
         self.assertEqual([c[0] for c in self.codes()], ["CASE-MISMATCH", "CASE-MISMATCH"])
+
+
+class MainTests(Workspace):
+    def run_main(self) -> tuple[int, str, str]:
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = ctc.main(["--root", str(self.root)])
+        return code, out.getvalue(), err.getvalue()
+
+    def test_clean_run_exits_0(self) -> None:
+        code, out, _ = self.run_main()
+        self.assertEqual(code, 0)
+        self.assertIn("test-cases: PASS", out)
+
+    def test_findings_exit_1(self) -> None:
+        (self.root / "tests/derivations/illustrative_input_totals.py").write_text("raise SystemExit(3)\n",
+                                                                                  encoding="utf-8")
+        code, out, _ = self.run_main()
+        self.assertEqual(code, 1)
+        self.assertIn("test-cases: FAIL", out)
+
+    def test_a_script_timeout_exits_2(self) -> None:
+        with mock.patch.object(subprocess, "run",
+                               side_effect=subprocess.TimeoutExpired("script", 60)):
+            code, out, err = self.run_main()
+        self.assertEqual((code, out), (2, ""))
+        self.assertIn("timed out", err)
 
 
 if __name__ == "__main__":
