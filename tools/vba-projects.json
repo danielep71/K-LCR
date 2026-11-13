@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "description": "The VBA components of each workbook that tools/Sync-KLCR-VBA.ps1 builds from src/workbook/LCR_Template.xlsx; checked by the vba-manifest gate (tools/check_vba_manifest.py).",
+  "document_modules": [
+    "src/workbook/ThisWorkbook.cls",
+    "src/workbook/shChecks.cls",
+    "src/workbook/shHQLA.cls",
+    "src/workbook/shHome.cls",
+    "src/workbook/shInflows.cls",
+    "src/workbook/shLineCalc.cls",
+    "src/workbook/shOutflows.cls",
+    "src/workbook/shParams.cls",
+    "src/workbook/shReadme.cls",
+    "src/workbook/shResults.cls"
+  ],
+  "configurations": {
+    "production": {
+      "description": "A workbook that calculates: the components under src/, never a test.",
+      "modules": [
+        "src/core/CORE_Config.bas",
+        "src/core/CORE_Engine.bas",
+        "src/modules/LCR_Formulas.bas",
+        "src/workbook/M_Main.bas"
+      ]
+    },
+    "development": {
+      "description": "A workbook that runs the tests: the production components and every component under tests/.",
+      "modules": [
+        "src/core/CORE_Config.bas",
+        "src/core/CORE_Engine.bas",
+        "src/modules/LCR_Formulas.bas",
+        "src/workbook/M_Main.bas",
+        "tests/modules/TEST_Engine.bas",
+        "tests/unit/TEST_LCR_Examples.bas",
+        "tests/unit/TEST_LCR_Harness.bas"
+      ]
+    }
+  }
+}

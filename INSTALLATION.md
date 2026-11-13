@@ -150,8 +150,8 @@ needs:
 - desktop Excel 64-bit, with macros allowed only for the workbook you build
   from the candidate, never by lowering the security of other workbooks;
 - **Trust access to the VBA project object model**, in Trust Center >
-  Macro Settings, only if the import tooling of #14 uses it; switch it off
-  again afterwards;
+  Macro Settings, only for `tools/Sync-KLCR-VBA.ps1` and only as your
+  organization's policy allows; switch it off again afterwards;
 - a downloaded workbook unblocked only after its SHA-256 matches the recorded
   one (File Properties > Unblock), as your organisation's policy allows;
 - no add-in, reference or COM library beyond the standard references, unless a
@@ -159,22 +159,93 @@ needs:
 
 ## 📥 Importing VBA into Excel
 
-Not executed here. The prototype is built by hand from its macro-free
-template, as [PROTOTYPE.md](docs/PROTOTYPE.md#building-the-workbook-by-hand)
-describes. #14 defines the component manifest, the backup-before-change rule
-and the repeatable import and export tooling. Until then, the **manual
-fallback**, for a developer trying a module by hand, is:
+Not executed here: no step of this section has been run on a Windows Excel
+host, so none of it is host evidence yet (#15).
 
-1. Copy an approved macro-free template to a new file; never work on a user
-   workbook.
+Every workbook is built from the macro-free template
+`src/workbook/LCR_Template.xlsx`. The repository stays the source: never
+commit a macro-enabled workbook; build it outside the checkout or under the
+ignored `test-results/`.
+
+`tools/vba-projects.json` lists the components of each workbook, and the
+`vba-manifest` gate keeps it equal to the tracked components:
+
+| Workbook | Components |
+| --- | --- |
+| Production | Every standard and class module under `src/` |
+| Development | The production components and every component under `tests/`: the prototype's self-test and the neutral harness with its example suite |
+| Both | The document modules of `src/workbook/` (`ThisWorkbook`, `sh<Sheet>`), whose code replaces the code of the existing workbook and sheet objects |
+
+### By hand
+
+This route needs no special Excel setting.
+
+1. Copy the template to a new file; never work on a user workbook.
 2. In the VBE (Alt+F11), use File > Import File for each `.bas` and `.cls`
-   module; a `.frm` travels with its `.frx`. Map document modules onto the
-   existing workbook and sheet components instead of importing them.
-3. Debug > Compile VBAProject, then run the neutral harness of #13.
-4. Export the components again and compare them with the repository, which
-   stays the source: never commit a macro-enabled workbook.
+   module of the workbook you are building. For a document module, paste its
+   code below the existing `Option Explicit` of the matching object instead
+   of importing it; the prototype's document modules hold nothing else.
+3. Debug > Compile VBAProject, and save as `.xlsm`.
 
-This fallback has not been run and proves nothing about a host.
+<a id="synchronizing-vba"></a>
+
+### With the synchronization script (optional)
+
+`tools/Sync-KLCR-VBA.ps1` does step 2 for you. It needs **Trust access to
+the VBA project object model** ([Excel prerequisites](#-excel-prerequisites)),
+which the manual route does not. With the workbook closed, drag the `.xlsm`
+onto `tools/Sync-KLCR-VBA.cmd`, or run:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps1 -WorkbookPath "C:\path\K-LCR.xlsm" -Mode Development
+```
+
+| It does | Details |
+| --- | --- |
+| Imports the components of one workbook | `-Mode Production` or `-Mode Development`, as listed in `tools/vba-projects.json`. Without `-Mode` it asks. A component found under a source folder but missing from the manifest stops it before Excel is opened. |
+| Replaces document-module code, if you agree | It asks, unless `-IncludeSheets` or `-SkipSheets` answers; the workbook's sheet objects are kept. |
+| Builds the workbook | `-FromTemplate` saves the template as an `.xlsm` at `-WorkbookPath`, replacing a file of that name, before the synchronization, so the sheets are the current template's. |
+| Imports from a folder | `-SourceDir` (or `tools/Sync-KLCR-VBA-Downloads.cmd`, which asks for one and defaults to `Downloads`) takes only the `.bas` and `.cls` files found there, by their `Attribute VB_Name`, after listing them for confirmation. A new standard module is taken only with a project prefix (`CORE_`, `LCR_`, `M_`, `TEST_`). |
+| Protects the workbook | A backup copy first, removed after a successful save. It writes no cells, formulas, names or formatting, and before saving it checks that no sheet was added, removed, renamed or reordered. The workbook is closed unsaved on any error. |
+
+It never writes to the repository, never runs the VBA and records no run.
+After it, compile as in step 3.
+
+**Exit codes and recovery:**
+
+| Exit code | Meaning | What to do |
+| --- | --- | --- |
+| 0 | Synchronized and saved; the backup is removed | Compile and run what you need |
+| 1 | Failed: the workbook was closed without saving | The message names the cause. If a backup was taken, its path is printed and it is kept beside the workbook (`<name>.pre-vba-sync.<timestamp>.xlsm`): the workbook itself is unchanged, so remove the backup once you have checked that |
+| 2 | Cancelled, or nothing to import: the workbook was not changed | Nothing |
+
+A synchronization that runs twice imports the same components twice and
+leaves the same project: standard and class modules are removed and imported
+again, document-module code is replaced, and the sheet structure is checked
+before saving. That idempotence, and the preservation of cells, formats and
+names around it, are what #14 asks a host run to demonstrate; neither has
+been observed yet.
+
+<a id="exporting-changes-back"></a>
+
+### Exporting changes back
+
+1. In the VBE, right-click each changed component > **Export File**, and save
+   it over its file in the checkout, in the same folder. For a document
+   module, copy its code back into the matching `src/workbook/` file below
+   the existing `Attribute` lines instead.
+2. Review `git diff`. The VBE changes the capitalization of an identifier
+   everywhere it appears when one declaration changes case; revert case-only
+   changes you did not intend. Check that no non-ASCII character was
+   introduced ([export compatibility](docs/VBA_HOUSE_STYLE.md#-export-compatibility-and-host-evidence)).
+3. A new component goes into `tools/vba-projects.json` too, or the
+   `vba-manifest` gate fails.
+4. Run `python tools/check.py`. Its `vba-*` gates check the exported files
+   statically; they do not replace compiling in Excel.
+5. Commit. Git stores the files with LF; nothing is converted by hand.
+
+Exported files keep the VBE's header lines (`VERSION`, `BEGIN ... END`,
+`Attribute`). Never edit or remove them when reformatting.
 
 ## 🧾 Recording host evidence
 
