@@ -4,10 +4,10 @@
 # provenance and wheel hashes; see INSTALLATION.md.
 # CI installs with --only-binary=:all: --require-hashes.
 
-ruff==0.17.2 \
-    --hash=sha256:c60f93fec7142dba5b8f487f94bf2f6231dae24dc11e4c48648347c8b0720004
-mypy==2.4.0 \
-    --hash=sha256:6be721bd4bd57576193653b75b4af3461c9d0bf7dd8b528f782e9be210dc75bb
+ruff==0.17.3 \
+    --hash=sha256:7fa4b0f931cdbcb8a52044f370a3eb429fb42eb88807b0e800fcaa98dd42b24e
+mypy==2.4.1 \
+    --hash=sha256:1fb70621535c22fd4b1a0450d37ed1d6c5eb39656a1cebfb189084c12de54ba7
 ast-serialize==0.13.1 \
     --hash=sha256:9f99786e0d62082a5b121b3437f3167562133711df22128de1e9886f57f0b226
 librt==0.16.0 \
