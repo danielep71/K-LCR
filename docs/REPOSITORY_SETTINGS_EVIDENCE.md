@@ -99,9 +99,11 @@ approval of an integration.
 
 ## Required-check coverage and branch cleanup
 
-The workflow runs on every pull request into `main` and `release/**`, with no
-path filter, so documentation-only and synchronization pull requests are
-covered; `workflow-invariants` rejects a trigger filter. Run evidence:
+The workflow runs on every pull request, whatever its base (until #198, on
+pull requests into `main` and `release/**` only), with no path filter, so
+documentation-only and synchronization pull requests are covered;
+`workflow-invariants` rejects a `pull_request` filter and any `push` filter
+other than the protected branches. Run evidence:
 
 | Pull request kind | Example | `Repository integrity` |
 | --- | --- | --- |

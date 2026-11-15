@@ -83,7 +83,8 @@ Liquidity Coverage Ratio that nothing validates.
   `python tools/check.py` and as the required check (#7, #52, #105, #109,
   #12). The validators accept only `YYYY-MM-DD` dates in range and integer
   versions, match patterns against the whole value, and exit 2 when they
-  could not run (#159).
+  could not run (#159). The required check runs on a pull request to any
+  base and on pushes to `main` and `release/**` only (#198).
 - The regulatory source register and applicability map for both profiles,
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).
