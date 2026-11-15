@@ -35,11 +35,13 @@ standing permission of 2026-11-05. Write the reviewed
 SHA and the result here as text: the review summary comment is edited in
 place, so its link later shows another commit. For a bot-authored PR, record
 my review of the final head and that the automated review was skipped. A sync
-PR whose diff is empty needs CI only: record the empty diff instead of a
-review. -->
+PR needs CI only when its head is the integration's merge commit, its diff
+against the release branch is empty and the integration's final-head review
+covered the same tree: record the empty diff and name that review. A sync that
+changes any file is reviewed as usual. -->
 
 - Final PR head SHA:
-- Review type (automated review / my review of a bot-authored PR / not required: empty-diff sync PR):
+- Review type (automated review / my review of a bot-authored PR / not required: unchanged sync PR, naming the integration's review):
 - Reviewed commit SHA, result (as text) and review link:
 - `Repository integrity` result and run link:
 
