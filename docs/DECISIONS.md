@@ -47,7 +47,7 @@ below is unchanged.
 | Neutral test scaffold | #13 | Delivered as source | The [test harness](methodology/TEST_HARNESS.md) source in `tests/unit/` and its static tests; its host run is #15 |
 | Prototype workbook source | #179, #180 | Delivered, not validated | The [prototype](PROTOTYPE.md) in `src/` and `tests/modules/`, its template, model and build tools |
 | Component manifest and synchronization script | #14 | Delivered, not run on a host | `tools/vba-projects.json`, the `vba-manifest` gate and `tools/Sync-KLCR-VBA.ps1`; the host demonstration stays open in #14 |
-| Real host evidence | #15 | Open | Executed evidence bound to the tested candidate |
+| Real host evidence | #15 | Open: evidence defined, no run recorded | The recorder `tests/host/TEST_LCR_Excel_Evidence.bas`, the checker `tools/check_excel_run.py` and [Recording host evidence](../INSTALLATION.md#-recording-host-evidence); the executed run bound to the tested candidate is still to come |
 
 On 2026-11-13 I decided that the prototype keeps its own layout and names
 (`src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/`; `CORE_*`,

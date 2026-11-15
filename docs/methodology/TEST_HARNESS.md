@@ -15,8 +15,10 @@ Ratio.
 `tools/vba-projects.json`; in LibreOffice they have only been imported into
 that workbook by `tools/build_xlsm.py`, never run. They have **not been
 compiled or run in Excel**. The first import, compile and run on a supported host is
-planned in #14 and #15; until then, every statement here about how a run ends
-is what the source says it does, not an observation.
+planned in #14 and #15, recorded as
+[host evidence](../../INSTALLATION.md#-recording-host-evidence); until then,
+every statement here about how a run ends is what the source says it does,
+not an observation.
 
 ## Modules
 
@@ -42,9 +44,9 @@ tolerance that the case states.
 | Concern | Where it lives |
 | --- | --- |
 | Counting cases and assertions, identifiers, tolerance rule, completeness, the log | `tests/unit/` (this harness): independent of workbook state and of any host I/O |
-| Saving a log to a file, the environment record (host, version, Office bitness) | `tests/host/`, with the host run of #14 and #15 |
-| Checking that the host state is as it was (calculation mode, alerts, events, screen updating, open workbooks) | `tests/host/`: the host test passes what it found to `EndRun` as `CleanupProblems` |
-| Evidence bound to one commit and the rejection of stale or mismatched evidence | #15 |
+| Saving a log to a file, the environment record (host, version, build, Office bitness, VBA generation, locale) | `tests/host/TEST_LCR_Excel_Evidence.bas`, which saves the logs of a recorded run (#15) |
+| Checking that the host state is as it was (calculation mode, alerts, events, screen updating, open workbooks) | `tests/host/`: the recorder compares the state before and after its runs; a host test that changes it passes what it found to `EndRun` as `CleanupProblems` |
+| Evidence bound to one commit and the rejection of stale or mismatched evidence | `tools/check_excel_run.py`, run on the saved folder ([Recording host evidence](../../INSTALLATION.md#-recording-host-evidence)) |
 
 The `vba-dynamic` check of Repository integrity forbids native, dynamic and COM
 constructs in `tests/unit/`, and `tools/test_vba_harness.py` forbids the names
@@ -100,7 +102,11 @@ To run the suite in Excel (planned, #14 and #15), build a development workbook
 with `tools/Sync-KLCR-VBA.ps1` (not yet run on a host) or import the two
 modules from `tests/unit/` into a scratch workbook by hand, open the Immediate
 window and run
-`TEST_LCR_Examples.CheckExampleModes`. That run has **not** been made.
+`TEST_LCR_Examples.CheckExampleModes`. To keep the run as evidence, run
+`TEST_LCR_Excel_Evidence.SaveHarnessEvidence` in a development workbook
+instead, as [Recording host evidence](../../INSTALLATION.md#-recording-host-evidence)
+describes: it saves the log of each mode and the report of
+`VerifyExampleModes`. Neither run has been made.
 
 ## Log format
 
@@ -136,5 +142,6 @@ source, so two logs can be compared line by line. A number is written with
 `Str$`, which uses a period whatever the regional settings.
 
 Reproducibility on a host is a claim of #15, not of this page: it needs a real
-run on the supported profile, the Office build and bitness, and the log saved
-by `tests/host/`.
+run on the supported profile, the Office build and bitness, and the logs saved
+by `tests/host/TEST_LCR_Excel_Evidence.bas`, which `tools/check_excel_run.py`
+compares record for record with what the commit's suite writes.

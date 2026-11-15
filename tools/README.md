@@ -41,7 +41,7 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the component manifest's valid and invalid fixtures (`test_check_vba_manifest.py`), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the component manifest's valid and invalid fixtures (`test_check_vba_manifest.py`), the Excel-run evidence checker on a complete synthetic folder and one change per rule (`test_check_excel_run.py`), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
@@ -83,8 +83,33 @@ are in [INSTALLATION.md](../INSTALLATION.md#synchronizing-vba).
 
 It skips homes that do not exist yet, stops before opening Excel when a
 source component is missing from the manifest, imports forms from the
-repository only, never runs the VBA and records no run. No test runs it: it
-needs Windows Excel, and it has not yet been run on a host (#14).
+repository only and never runs the VBA. A development synchronization also
+prepares the evidence folder of an Excel run: it exports the workbook's
+modules and writes `candidate.txt` (below). No test runs it: it needs Windows
+Excel, and it has not yet been run on a host (#14).
+
+<a id="excel-run-evidence"></a>
+
+## 🧾 Excel run evidence
+
+`check_excel_run.py` checks the folder that an Excel run of the neutral
+harness leaves against the commit the workbook was built from, without
+Excel: `candidate.txt` (the commit, a clean working tree and the manifest's
+Git blob id), the modules exported back from the workbook, the four logs and
+the verification report that `tests/host/TEST_LCR_Excel_Evidence.bas` saves,
+the host record and the host state before and after the runs. It ends with
+`excel-run: PASS`, `FAIL` or `NOT_RUN` (exit 0, 1 or 2); the procedure and
+what each finding means are in
+[INSTALLATION.md](../INSTALLATION.md#-recording-host-evidence).
+
+```sh
+python tools/check_excel_run.py test-results/excel-run --commit <commit>
+```
+
+It is not a gate of `check.py`: it needs a recorded run, and none has been
+recorded (#15). `test_check_excel_run.py`, in `tool-tests`, checks it on a
+complete synthetic folder and on one change per rule; those logs are written
+from the documented outcomes of the harness, not recorded in Excel.
 
 ## 🗂️ Issue triage
 

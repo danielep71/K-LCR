@@ -108,7 +108,7 @@ Do not treat a static PASS as Excel or LCR evidence. To contribute, read
 | Pure VBA core | Deterministic calculation, with explicit profile and parameter versions | Prototype in `src/core/` (#179), not validated and not yet on the contracts |
 | Public API | Request validation, named errors and results | Contract only |
 | Excel adapter | Host I/O and state restoration | Contract only |
-| Validation | Independent fixtures and real host evidence | Case format and plan defined (#11); host evidence planned under #15 |
+| Validation | Independent fixtures and real host evidence | Case format and plan defined (#11); host evidence defined, with its recorder and checker, but no run recorded (#15) |
 
 See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 [VBA house style](docs/VBA_HOUSE_STYLE.md) for the boundaries.
@@ -124,7 +124,8 @@ See [scope and architecture](docs/REPOSITORY_STRUCTURE.md) and
 | `.github/` | Labels, issue forms, the pull request template, Dependabot and the workflows |
 | `tests/unit/` | The neutral VBA test harness and its example suite: source only, not yet compiled or run in Excel |
 | `src/core/`, `src/modules/`, `src/workbook/`, `tests/modules/` | The [prototype workbook](docs/PROTOTYPE.md): its VBA source, its macro-free template and its self-test; not validated |
-| `src/api/`, `src/host/excel/`, `tests/host/` | Planned API, Excel adapter and host tests; not created yet |
+| `tests/host/` | The recorder of an Excel run of the harness: source only, not yet compiled or run in Excel |
+| `src/api/`, `src/host/excel/` | Planned API and Excel adapter; not created yet |
 
 The full layout, with the planned paths, is in
 [REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md#%EF%B8%8F-repository-layout).

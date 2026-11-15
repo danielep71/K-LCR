@@ -210,10 +210,11 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps
 | Replaces document-module code, if you agree | It asks, unless `-IncludeSheets` or `-SkipSheets` answers; the workbook's sheet objects are kept. |
 | Builds the workbook | `-FromTemplate` saves the template as an `.xlsm` at `-WorkbookPath`, replacing a file of that name, before the synchronization, so the sheets are the current template's. |
 | Imports from a folder | `-SourceDir` (or `tools/Sync-KLCR-VBA-Downloads.cmd`, which asks for one and defaults to `Downloads`) takes only the `.bas` and `.cls` files found there, by their `Attribute VB_Name`, after listing them for confirmation. A new standard module is taken only with a project prefix (`CORE_`, `LCR_`, `M_`, `TEST_`). |
+| Prepares an Excel run's evidence | A `-Mode Development` synchronization, after saving, empties the evidence folder `test-results\excel-run` (or `-EvidenceDir`) of an earlier run's files, exports every module of the workbook into its `exported\` folder and writes `candidate.txt` with Git: the commit, whether the working tree had local changes, and the Git blob id of `tools/vba-projects.json`. Without Git it writes no `candidate.txt` and warns. Production and `-SourceDir` synchronizations leave the folder alone ([Recording host evidence](#-recording-host-evidence)). |
 | Protects the workbook | A backup copy first, removed after a successful save; `-NoBackup` skips it, and `-FromTemplate` takes none because it replaces the file at `-WorkbookPath`. It writes no cells, formulas, names or formatting, and before saving it checks that no sheet was added, removed, renamed or reordered. The workbook is closed unsaved on any error. `-Visible` shows the Excel window. |
 
-It never writes to the repository, never runs the VBA and records no run.
-After it, compile as in step 3.
+It writes no tracked file and never runs the VBA. After it, compile as in
+step 3.
 
 **Exit codes and recovery:**
 
@@ -253,8 +254,103 @@ Exported files keep the VBE's header lines (`VERSION`, `BEGIN ... END`,
 
 ## 🧾 Recording host evidence
 
-Not executed. A host run records the exact candidate SHA, a clean working
-tree, the Excel build and bitness, the Windows version, the locale, the
-import and compile results, the case counts and the cleanup result.
-`NOT_RUN` stays distinct from `PASS`. #15 defines the evidence and its
-validator; until such a run, every host above is an intended target only.
+Not executed: no run has been recorded yet (#15), so every host in the
+[host matrix](#host-matrix) is an intended target only. A recorded run is the
+evidence that one commit's VBA was imported, compiled and run in Excel, with
+the neutral harness of [TEST_HARNESS.md](docs/methodology/TEST_HARNESS.md)
+ending each of its four modes as documented. It needs no self-hosted runner
+and no change to the macro-security level beyond the
+[Excel prerequisites](#-excel-prerequisites).
+
+1. **Fix the candidate.** In a clone with no local changes
+   (`git status --short` prints nothing), run `git switch --detach <commit>`,
+   then `git rev-parse HEAD` for the full SHA.
+2. **Build a development workbook and its evidence folder** from that
+   checkout:
+   - **With the script:** run
+     `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps1 -WorkbookPath ".\test-results\K-LCR_Development.xlsm" -FromTemplate -Mode Development -IncludeSheets`.
+     It prepares `test-results\excel-run\` (or `-EvidenceDir`): the
+     modules exported into `exported\` and `candidate.txt`.
+   - **By hand:** build it as in [By hand](#by-hand), with every component.
+     In an empty folder, export each module into `exported\` under its own
+     name (VBE: right-click > **Export File**, the sheet and `ThisWorkbook`
+     modules included), without editing it, and write `candidate.txt`:
+
+     ```text
+     commit=<the output of git rev-parse HEAD>
+     worktree=clean
+     manifest=<the output of git rev-parse HEAD:tools/vba-projects.json>
+     ```
+
+3. **Compile** with **Debug > Compile VBAProject**, and note whether it
+   completed or the message it gave.
+4. **Run.** In the Immediate window type, with the full path of the folder
+   and no trailing backslash:
+
+   ```text
+   TEST_LCR_Excel_Evidence.SaveHarnessEvidence "C:\path\to\test-results\excel-run"
+   ```
+
+   It refuses a folder without `candidate.txt`, removes an earlier run's
+   files, runs the example suite in its four modes and saves `normal.log`,
+   `injected.log`, `skipped.log` and `cleanup.log`, then the report of
+   `VerifyExampleModes` (`verification.txt`), the host (`environment.txt`)
+   and the host state before and after the runs (`host-state.txt`). Each mode
+   prints `SAVED=<mode>; error=<number>`: `0` for `NORMAL`, `-2147217439`
+   (`ERR_TEST_FAILED`) for the three deliberate modes; the run ends with
+   `EVIDENCE=saved; files=7; cleanup=PASS`. The errors are printed, not
+   raised, so that every file is written.
+5. **Write `host.txt`** in the folder:
+
+   ```text
+   windows=Windows 11 Pro, version 24H2, OS build 26100.4061
+   references=Visual Basic For Applications; Microsoft Excel 16.0 Object Library; OLE Automation; Microsoft Office 16.0 Object Library
+   compile=PASS
+   ```
+
+   `windows` is what `winver` shows. `references` lists the boxes ticked in
+   **Tools > References**, separated by `; `. `compile` is `PASS` only if
+   step 3 reported no error; otherwise it is the message.
+6. **Check** the folder against the commit, with Python 3.12 or later and Git,
+   on Windows or from a Linux checkout that holds a copy of the folder:
+
+   ```sh
+   python tools/check_excel_run.py test-results/excel-run --commit <commit>
+   ```
+
+   It must end with `excel-run: PASS`. It prints the commit, the host, how
+   each mode ended and the Git blob id of every component and of the
+   manifest.
+7. **Record.** Copy the report into the issue or pull request, and the
+   commit, the Excel build and the Windows build into the
+   [host matrix](#host-matrix). The logs stay outside Git.
+
+The files hold no machine name, user or path: `environment.txt` has the
+Excel name, version and build, `Application.OperatingSystem`, the Office
+bitness, the VBA generation and the locale's decimal separator and country
+code. `check_excel_run.py` reads only the folder and the commit:
+
+| It fails when | Because |
+| --- | --- |
+| `candidate.txt` is missing, names another commit, a working tree with local changes or another manifest | The evidence is stale or not bound to this commit |
+| An exported module differs from the commit's file, or one is missing or extra; a sheet or `ThisWorkbook` module is compared by its code, without its header and `Attribute` lines | The workbook was not built from that commit (the synchronization round trip) |
+| A log is missing or empty, holds more than one run, or a line is not a `KEY=value` record | The log is incomplete |
+| A record is missing, extra or out of the order in which the commit's suite writes it in that mode, or a field differs from it | The run did not execute the suite as written |
+| The counts disagree with one another or with the records they count, or a compared number is not finite | The log is inconsistent |
+| `verification.txt` does not end with `VERIFICATION=PASS; modes=4; deviations=0`, or a mode in it did not end as required | A mode did not end as [documented](docs/methodology/TEST_HARNESS.md#the-example-suite-and-its-modes) |
+| `environment.txt` lacks a field or is not Microsoft Excel, 64-bit Office and VBA7 | The host is unknown or not the supported target |
+| `host-state.txt` reports a state after the runs other than before | Cleanup failed |
+| `host.txt` is missing or lacks a field, the references are not exactly the four standard ones, or `compile` is not `PASS` | The host record is incomplete |
+| A file of the run is older than `candidate.txt`, or a file holds a path | It was left by an earlier run, or it records machine details |
+
+| Verdict | Exit | Meaning |
+| --- | --- | --- |
+| `PASS` | 0 | The evidence is consistent with the commit |
+| `FAIL` | 1 | A finding above; each is printed |
+| `NOT_RUN` | 2 | The folder holds no output of a run, or the commit cannot be read |
+
+Each mode is reported apart: `PASS` when it ended as required, `FAIL` when it
+did not, `NOT_RUN` when its log is missing or the harness refused its start.
+The check cannot see Excel: the compile result, the references and the
+Windows build are the runner's own record. A `PASS` says the evidence is
+consistent with the commit; it validates no LCR calculation.
