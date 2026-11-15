@@ -337,7 +337,8 @@ code. `check_excel_run.py` reads only the folder and the commit:
 | A log is missing or empty, holds more than one run, or a line is not a `KEY=value` record | The log is incomplete |
 | A record is missing, extra or out of the order in which the commit's suite writes it in that mode, or a field differs from it | The run did not execute the suite as written |
 | The counts disagree with one another or with the records they count, or a compared number is not finite | The log is inconsistent |
-| `verification.txt` does not end with `VERIFICATION=PASS; modes=4; deviations=0`, or a mode in it did not end as required | A mode did not end as [documented](docs/methodology/TEST_HARNESS.md#the-example-suite-and-its-modes) |
+| A failure lacks its detail, or its `ASSERT`, `FAILURE` and `PRIMARY_FAILURE` records disagree; an exact comparison does not expect the commit's value or fails with the actual value equal to it; the completeness failure does not give the plan's counts | The failure is not the one the suite causes |
+| `verification.txt` does not end with `VERIFICATION=PASS; modes=4; deviations=0`, a mode in it did not end as required, or a mode's required error is not the commit's (`0` for `NORMAL`, `ERR_TEST_FAILED` of `TEST_LCR_Harness` for the others) | A mode did not end as [documented](docs/methodology/TEST_HARNESS.md#the-example-suite-and-its-modes) |
 | `environment.txt` lacks a field or is not Microsoft Excel, 64-bit Office and VBA7 | The host is unknown or not the supported target |
 | `host-state.txt` reports a state after the runs other than before | Cleanup failed |
 | `host.txt` is missing or lacks a field, the references are not exactly the four standard ones, or `compile` is not `PASS` | The host record is incomplete |

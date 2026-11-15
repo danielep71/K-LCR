@@ -13,9 +13,10 @@ against the candidate commit, without Excel:
   (the synchronization round trip);
 - the four logs that tests/host/TEST_LCR_Excel_Evidence.bas saves: each holds,
   record for record, what the commit's example suite writes in its mode, with
-  counts that agree with one another and finite numbers only;
+  counts that agree with one another, finite numbers only and each failure
+  with the detail the suite causes;
 - verification.txt, the report of VerifyExampleModes: every mode ended as
-  required;
+  required, with the error code the commit's suite requires;
 - environment.txt and host-state.txt: the supported host (Microsoft Excel,
   64-bit Office, VBA7) and the same host state after the runs as before;
 - host.txt, written by hand: the Windows build, the references and the
@@ -45,6 +46,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = "tools/vba-projects.json"
 EXAMPLES = "tests/unit/TEST_LCR_Examples.bas"
+HARNESS = "tests/unit/TEST_LCR_Harness.bas"
 EXPORTED = "exported"
 CANDIDATE = "candidate.txt"
 VERIFICATION = "verification.txt"
@@ -72,6 +74,8 @@ INJECTED = re.compile(r'If mMode = "INJECTED_FAILURE" Then\n((?:.*\n)*?)\s+End I
 ASSIGNED = re.compile(r"^\s+(\w+) = ", re.M)
 NUMBER = re.compile(r"^-?\d+(?:\.\d+)?(?:E[+-]?\d+)?$", re.I)
 PATH = re.compile(r"[A-Za-z]:[\\/]|\\\\|(?<![\w.])/(?:home|Users|root)/|\\Users\\", re.I)
+FAILED_CONSTANT = re.compile(r"^\s*Public Const ERR_TEST_FAILED\s+As Long = &H([0-9A-F]+)\b", re.M | re.I)
+EQUAL_DOUBLE = re.compile(r'TEST_LCR_Harness\.AssertEqualDouble "([^"]+)", ([-+0-9.E#]+),', re.I)
 DOCUMENT_HEADER = re.compile(r"^(?:VERSION |BEGIN|\s+\w+ = |END$|Attribute VB_)")
 
 
@@ -97,6 +101,7 @@ class Suite:
     injected: list[str]
     expected_cases: int
     expected_assertions: int
+    literals: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
@@ -240,6 +245,8 @@ def read_suite(source: bytes) -> Suite:
                    for variable in ASSIGNED.findall(block)}
         statements = re.sub(r" _\n\s*", " ", body).split("\n")
         for statement in statements:
+            for item, literal in EQUAL_DOUBLE.findall(statement):
+                suite.literals[f"{case_id}/{item}"] = float(literal.rstrip("#"))
             for item in ASSERTION.findall(statement):
                 suite.assertions.append(f"{case_id}/{item}")
                 if any(re.search(rf"\b{variable}\b", statement) for variable in changed):
@@ -249,6 +256,20 @@ def read_suite(source: bytes) -> Suite:
         if name in skipped_calls:
             suite.skipped += case
     return suite
+
+
+def failed_error(root: Path, commit: str, evidence: Evidence) -> int:
+    """TEST_LCR_Harness.ERR_TEST_FAILED at the commit, as the signed Long VBA reports."""
+    try:
+        source = git(root, "show", f"{commit}:{HARNESS}").decode("ascii", errors="replace")
+    except RuntimeError:
+        source = ""
+    found = FAILED_CONSTANT.search(source)
+    if found is None:
+        evidence.findings.append(f"no ERR_TEST_FAILED in {HARNESS} at {commit[:12]}")
+        return 0
+    value = int(found.group(1), 16)
+    return value - (1 << 32) if value >= 1 << 31 else value
 
 
 def plans(suite: Suite) -> list[Plan]:
@@ -372,6 +393,41 @@ def check_fields(name: str, records: list[Record], plan: Plan, suite: Suite,
         elif record.key == "RESULT" and {"RESULT": record.value, **record.fields} != plan.result:
             problems.append(f"{name}:{record.line}: RESULT={record.value} with "
                             f"{record.fields}, expected {plan.result}")
+    check_details(name, records, plan, suite, problems)
+
+
+def check_details(name: str, records: list[Record], plan: Plan, suite: Suite,
+                  problems: list[str]) -> None:
+    """Each failure carries the detail its kind requires, the same in its ASSERT,
+    FAILURE and PRIMARY_FAILURE records: an exact comparison its expected value
+    from the commit's source and an actual value that differs from it, and the
+    completeness failure the counts of the plan."""
+    completeness = {"expected cases": f"{suite.expected_cases}, assertions={suite.expected_assertions}",
+                    "observed cases": f"{len(plan.cases)}, assertions={len(plan.assertions)}"}
+    details: dict[str, dict[str, str]] = {}
+    for record in records:
+        if record.key == "ASSERT" and record.fields.get("status") == "FAIL":
+            details[record.value] = {key: value for key, value in record.fields.items()
+                                     if key != "status"}
+    for record in records:
+        if record.key not in ("FAILURE", "PRIMARY_FAILURE"):
+            continue
+        wanted = completeness if record.value == "harness.completeness" else details.get(record.value)
+        if wanted is not None and record.fields != wanted:
+            problems.append(f"{name}:{record.line}: {record.key}={record.value}: detail "
+                            f"{record.fields}, expected {wanted}")
+    for item, fields in details.items():
+        if item not in suite.literals:
+            continue
+        expected, actual = fields.get("expected"), fields.get("actual")
+        if expected is None or actual is None:
+            problems.append(f"{name}: ASSERT={item}: no expected= and actual= values")
+        elif NUMBER.match(expected) and NUMBER.match(actual):
+            if float(expected) != suite.literals[item]:
+                problems.append(f"{name}: ASSERT={item}: expected={expected}, but the commit's "
+                                f"suite expects {suite.literals[item]:g}")
+            if float(actual) == float(expected):
+                problems.append(f"{name}: ASSERT={item}: failed with actual equal to expected")
 
 
 def count(name: str, records: list[Record], key: str, field_name: str,
@@ -441,7 +497,8 @@ def check_logs(folder: Path, suite: Suite, evidence: Evidence) -> dict[str, str]
     return results
 
 
-def check_verification(folder: Path, results: dict[str, str], evidence: Evidence) -> None:
+def check_verification(folder: Path, results: dict[str, str], failed: int,
+                       evidence: Evidence) -> None:
     path = folder / VERIFICATION
     if not path.is_file():
         evidence.findings.append(f"{VERIFICATION}: missing")
@@ -459,6 +516,10 @@ def check_verification(folder: Path, results: dict[str, str], evidence: Evidence
             continue
         if errors.group(1) != errors.group(2) or report.group(1) != report.group(2):
             evidence.findings.append(f"{VERIFICATION}: MODE={mode} did not end as required")
+        required = 0 if mode == "NORMAL" else failed
+        if errors.group(1) != str(required):
+            evidence.findings.append(f"{VERIFICATION}: MODE={mode}: required_error={errors.group(1)}, "
+                                     f"but the commit's suite requires {required}")
         if mode in results and report.group(1) != results[mode]:
             evidence.findings.append(f"{VERIFICATION}: MODE={mode}: the suite requires "
                                      f"{report.group(1)}, but its source gives {results[mode]}")
@@ -537,7 +598,7 @@ def check(root: Path, commit: str, folder: Path) -> Evidence:
         evidence.findings.append(f"{EXAMPLES} at {commit[:12]}: INJECTED_FAILURE must change "
                                  f"exactly one assertion, found {suite.injected}")
     results = check_logs(folder, suite, evidence)
-    check_verification(folder, results, evidence)
+    check_verification(folder, results, failed_error(root, commit, evidence), evidence)
     check_host(folder, evidence)
     check_files(folder, evidence)
     return evidence

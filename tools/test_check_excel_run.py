@@ -243,6 +243,42 @@ class EvidenceTests(unittest.TestCase):
         self.assert_fails(lambda folder: edit(folder / "verification.txt", "deviations=0",
                                               "deviations=1"), "does not end with VERIFICATION=PASS")
 
+    def test_a_verification_without_the_required_errors_fails(self) -> None:
+        def change(folder: Path) -> None:
+            path = folder / "verification.txt"
+            write(path, path.read_bytes().decode("ascii").replace(
+                "required_error=-2147217439; error=-2147217439", "required_error=0; error=0"))
+        self.assert_fails(change, "MODE=INJECTED_FAILURE: required_error=0, but the commit's suite "
+                                  "requires -2147217439")
+
+    def test_a_failure_without_its_values_fails(self) -> None:
+        def change(folder: Path) -> None:
+            path = folder / "injected.log"
+            write(path, path.read_bytes().decode("ascii").replace(f"; {INJECTED_DETAIL}", ""))
+        self.assert_fails(change, f"ASSERT={INJECTED}: no expected= and actual= values")
+
+    def test_a_failure_with_equal_values_fails(self) -> None:
+        def change(folder: Path) -> None:
+            path = folder / "injected.log"
+            write(path, path.read_bytes().decode("ascii").replace("actual=0.75", "actual=0.5"))
+        self.assert_fails(change, "failed with actual equal to expected")
+
+    def test_a_failure_against_another_expected_value_fails(self) -> None:
+        def change(folder: Path) -> None:
+            path = folder / "injected.log"
+            write(path, path.read_bytes().decode("ascii").replace("expected=0.5", "expected=1"))
+        self.assert_fails(change, "but the commit's suite expects 0.5")
+
+    def test_failure_records_that_disagree_fail(self) -> None:
+        self.assert_fails(lambda folder: edit(folder / "injected.log",
+                                              f"PRIMARY_FAILURE={INJECTED}; expected=0.5; actual=0.75",
+                                              f"PRIMARY_FAILURE={INJECTED}; expected=0.5; actual=0.7"),
+                          "PRIMARY_FAILURE=exact-comparison/half-of-one: detail")
+        self.assert_fails(lambda folder: edit(folder / "skipped.log",
+                                              "FAILURE=harness.completeness; expected cases=3",
+                                              "FAILURE=harness.completeness; expected cases=4"),
+                          "FAILURE=harness.completeness: detail")
+
     def test_an_unsupported_host_fails(self) -> None:
         self.assert_fails(lambda folder: edit(folder / "environment.txt", "office=64-bit",
                                               "office=32-bit"), "not the supported target: office")
@@ -283,6 +319,7 @@ class SuiteTests(unittest.TestCase):
         self.assertEqual(suite.skipped, ["expected-error/negative-input", "expected-error/valid-input",
                                          "expected-error"])
         self.assertEqual((suite.expected_cases, suite.expected_assertions), (3, 9))
+        self.assertEqual(suite.literals, {INJECTED: 0.5})
 
 
 class MainTests(unittest.TestCase):
