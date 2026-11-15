@@ -154,6 +154,15 @@ Liquidity Coverage Ratio that nothing validates.
   Excel, with a backup and a check that the sheets are unchanged. The script
   has not been run on a host; INSTALLATION.md documents it, the manual route,
   the export back and the recovery (#14).
+- Host evidence of an Excel run (#15): `tests/host/TEST_LCR_Excel_Evidence.bas`
+  runs the example suite of the harness in its four modes and saves each
+  log, the verification of the modes, the host and the host state before and
+  after; a development synchronization exports the workbook's modules and
+  writes `candidate.txt` (commit, clean working tree, manifest fingerprint);
+  `tools/check_excel_run.py` checks the folder against the commit and ends
+  `PASS`, `FAIL` or `NOT_RUN`. INSTALLATION.md describes the procedure. No
+  run has been recorded: the recorder has not been compiled or run in Excel,
+  and its checks are tested on synthetic folders only.
 
 ### Validation
 

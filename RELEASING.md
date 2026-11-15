@@ -117,7 +117,9 @@ A version may be published only when:
 4. when the candidate contains VBA, it is imported, compiled and run in Excel
    on the supported host, with the evidence bound to the candidate as
    [INSTALLATION.md](INSTALLATION.md#-importing-vba-into-excel) describes for
-   the import (#14) and #15 will define for the evidence; a version
+   the import (#14) and
+   [Recording host evidence](INSTALLATION.md#-recording-host-evidence) for
+   the evidence (#15); a version
    without VBA, such as v0.1.0, records "no Excel run" as a deviation;
 5. the annotated tag targets the candidate; and
 6. the checks after publication pass.
@@ -175,8 +177,11 @@ green on the same SHA on `main`, and review the open alerts under
 
 ### 4. Record the host evidence
 
-When the candidate contains VBA, record the Excel run as #15 defines. Until
-then, record "no Excel run" in the evidence and the tag message.
+When the candidate contains VBA, record the Excel run as
+[Recording host evidence](INSTALLATION.md#-recording-host-evidence)
+describes, and copy the report of `tools/check_excel_run.py`, which must end
+`excel-run: PASS`, into the evidence. Until such a run, record "no Excel run"
+in the evidence and the tag message.
 
 ### 5. Create the annotated tag
 

@@ -31,7 +31,14 @@ modules in the source and asks whether to replace their code as well. Answer
 N for a workbook built from a newer template, whose sheet code must stay as
 it is. -IncludeSheets or -SkipSheets gives the answer in advance.
 
-It does not run the VBA and records no Excel run.
+It does not run the VBA. A full Development synchronization also prepares
+the evidence folder of an Excel run: test-results\excel-run in the
+repository, or -EvidenceDir. After saving the workbook it removes the files
+an earlier run left there, exports every module of the workbook into its
+exported\ folder and writes candidate.txt: the commit, whether the working
+tree was clean and the Git blob id of tools\vba-projects.json, read with Git.
+Without Git it writes no candidate.txt and says so. Production and -SourceDir
+synchronizations leave the folder alone.
 
 A backup copy of the workbook is taken before it is opened, and removed after
 a successful save. -NoBackup skips it. -FromTemplate takes none: it replaces
@@ -59,8 +66,9 @@ their code as well.
 .EXAMPLE
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps1 -WorkbookPath ".\test-results\K-LCR_Development.xlsm" -FromTemplate -Mode Development -IncludeSheets
 
-Builds a fresh development workbook from the template and imports every
-component into it.
+Builds a fresh development workbook from the template, imports every
+component into it and prepares test-results\excel-run for recording an Excel
+run (INSTALLATION.md, Recording host evidence).
 
 .EXAMPLE
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\Sync-KLCR-VBA.ps1 -WorkbookPath "C:\path\K-LCR.xlsm" -SourceDir "$env:USERPROFILE\Downloads"
@@ -120,7 +128,10 @@ param(
     [string]$Mode,
 
     [Parameter(Mandatory = $false)]
-    [switch]$FromTemplate
+    [switch]$FromTemplate,
+
+    [Parameter(Mandatory = $false)]
+    [string]$EvidenceDir
 )
 
 Set-StrictMode -Version Latest
@@ -429,6 +440,88 @@ function Get-ManifestSources {
     return @($files | Sort-Object FullName)
 }
 
+function Get-CandidateRecord {
+    # The candidate.txt lines of an Excel run: the commit checked out, whether
+    # the working tree has local changes to tracked files, and the Git blob id
+    # of the component manifest; $null when Git cannot answer.
+    param([Parameter(Mandatory = $true)][string]$RepoPath)
+
+    if ($null -eq (Get-Command git -ErrorAction SilentlyContinue)) {
+        return $null
+    }
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $commit = (& git -C $RepoPath rev-parse HEAD 2>$null)
+        if ($LASTEXITCODE -ne 0) { return $null }
+        $changes = @(& git -C $RepoPath status --porcelain --untracked-files=no 2>$null)
+        if ($LASTEXITCODE -ne 0) { return $null }
+        $manifest = (& git -C $RepoPath rev-parse "HEAD:tools/vba-projects.json" 2>$null)
+        if ($LASTEXITCODE -ne 0) { return $null }
+    }
+    finally {
+        $ErrorActionPreference = $previous
+    }
+
+    $worktree = "clean"
+    if ($changes.Count -gt 0) {
+        $worktree = "$($changes.Count) changed file(s)"
+    }
+    return @("commit=$([string]$commit)", "worktree=$worktree", "manifest=$([string]$manifest)")
+}
+
+function Export-RunEvidence {
+    # Start a new evidence folder: remove what an earlier run left, export
+    # every module of the workbook for check_excel_run.py and write
+    # candidate.txt last. Returns the number of modules exported.
+    param(
+        [Parameter(Mandatory = $true)]$VBProject,
+        [Parameter(Mandatory = $true)][string]$FolderPath,
+        [Parameter(Mandatory = $true)][string]$RepoPath
+    )
+
+    $exportedPath = Join-Path $FolderPath "exported"
+    $null = New-Item -ItemType Directory -Force -Path $exportedPath
+    $leftovers = @("candidate.txt", "normal.log", "injected.log", "skipped.log", "cleanup.log",
+        "verification.txt", "environment.txt", "host-state.txt", "host.txt")
+    foreach ($name in $leftovers) {
+        $path = Join-Path $FolderPath $name
+        if (Test-Path -LiteralPath $path -PathType Leaf) {
+            Remove-Item -LiteralPath $path -Force
+        }
+    }
+    Get-ChildItem -LiteralPath $exportedPath -File |
+        Where-Object { $_.Extension.ToLowerInvariant() -in @(".bas", ".cls", ".frm", ".frx") } |
+        Remove-Item -Force
+
+    $extensions = @{
+        $vbext_ct_StdModule   = ".bas"
+        $vbext_ct_ClassModule = ".cls"
+        $vbext_ct_MSForm      = ".frm"
+        $vbext_ct_Document    = ".cls"
+    }
+    $count = 0
+    foreach ($component in $VBProject.VBComponents) {
+        $type = [int]$component.Type
+        if ($extensions.ContainsKey($type)) {
+            $component.Export((Join-Path $exportedPath ($component.Name + $extensions[$type])))
+            $count++
+        }
+    }
+
+    $record = Get-CandidateRecord -RepoPath $RepoPath
+    if ($null -eq $record) {
+        Write-Warning ("candidate.txt not written: Git did not answer. Write it by hand " +
+            "(INSTALLATION.md, Recording host evidence).")
+    }
+    else {
+        $text = ($record -join "`n") + "`n"
+        [System.IO.File]::WriteAllText((Join-Path $FolderPath "candidate.txt"), $text,
+            (New-Object System.Text.ASCIIEncoding))
+    }
+    return $count
+}
+
 function Find-VbaComponent {
     param(
         [Parameter(Mandatory = $true)]$VBProject,
@@ -616,6 +709,7 @@ $saved = $false
 $backupPath = $null
 $stagePath = $null
 $syncMode = $null
+$evidencePath = $null
 
 try {
     # A workbook built from the template need not exist yet.
@@ -684,6 +778,9 @@ try {
     if ($FromTemplate -and -not [string]::IsNullOrWhiteSpace($SourceDir)) {
         throw "Use -FromTemplate only with a full synchronization, not with -SourceDir."
     }
+    if (-not [string]::IsNullOrWhiteSpace($SourceDir) -and -not [string]::IsNullOrWhiteSpace($EvidenceDir)) {
+        throw "Use -EvidenceDir only with a Development synchronization, not with -SourceDir."
+    }
 
     # Full synchronization: the production or the development component set.
     # -SourceDir instead takes what the folder holds.
@@ -707,6 +804,17 @@ try {
 
         $sourceFiles = @(Get-ManifestSources -RepoPath $repoFullPath -Mode $syncMode)
         Write-Host "Mode: $syncMode ($($sourceFiles.Count) components)"
+        if ($syncMode -eq "Development") {
+            $evidencePath = $EvidenceDir
+            if ([string]::IsNullOrWhiteSpace($evidencePath)) {
+                $evidencePath = Join-Path $repoFullPath "test-results\excel-run"
+            }
+            $evidencePath = [System.IO.Path]::GetFullPath(
+                $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($evidencePath))
+        }
+        elseif (-not [string]::IsNullOrWhiteSpace($EvidenceDir)) {
+            throw "Use -EvidenceDir only with a Development synchronization."
+        }
         Write-Host ""
         if ($sourceFiles.Count -eq 0) {
             Write-Host "Nothing to import: tools\vba-projects.json lists no $($syncMode.ToLowerInvariant()) component. The workbook was not changed."
@@ -864,6 +972,11 @@ try {
         (Test-Path -LiteralPath $backupPath -PathType Leaf)) {
         Remove-Item -LiteralPath $backupPath -Force
         Write-Host "Backup removed: $backupPath"
+    }
+
+    if ($null -ne $evidencePath) {
+        $exportedCount = Export-RunEvidence -VBProject $vbProject -FolderPath $evidencePath -RepoPath $repoFullPath
+        Write-Host "Evidence:   $exportedCount modules exported to $(Join-Path $evidencePath 'exported'); earlier run files removed"
     }
 
     Write-Host ""
