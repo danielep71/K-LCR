@@ -86,10 +86,12 @@ integration and synchronization it relies on.
    main -> release/0.1.0 sync PR and merge it with a merge commit after
    Repository integrity passes. The release ruleset requires a PR, so a direct
    fast-forward push is refused.
-5. For a sync PR whose file diff is genuinely empty, record the compared SHAs
-   and CI result; content review need not be repeated. A non-empty sync
-   requires normal review. Resume task merges only after the release push check
-   passes.
+5. A sync PR needs no new automated review when all three hold: its head is
+   the integration's merge commit, its file diff against the release branch is
+   empty, and the integration's final-head review covered the same tree. Its
+   record names that review, with the compared SHAs and the CI result; the
+   required CI check still runs. A sync that changes any file is reviewed as
+   usual. Resume task merges only after the release push check passes.
 
 Do not push directly to main or a protected release branch, and never
 force-push or use Update branch on them. Do not

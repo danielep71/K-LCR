@@ -1,15 +1,14 @@
 name: Repository integrity
 run-name: Repository integrity — ${{ github.ref_name }} @ ${{ github.sha }}
 
-# Runs tools/check.py on every integration push and PR, including docs-only PRs.
-# Static checks only, including Ruff and strict mypy for tools/; Excel
-# execution is tracked separately.
+# Runs tools/check.py on every pull request, whatever its base (a pull request
+# stacked on a task branch included), and on pushes to main and release/**
+# only, so a task-branch push never duplicates its pull request run. Static
+# checks only, including Ruff and strict mypy for tools/; Excel execution is
+# tracked separately.
 
 on:
   pull_request:
-    branches:
-      - main
-      - "release/**"
   push:
     branches:
       - main

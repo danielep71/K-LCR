@@ -187,12 +187,15 @@ def integrity_findings(workflows: Mapping[str, Workflow], governance: str,
             if key in job:
                 findings.append(f"{file}: required job {job_id} has `{key}`")
     on = triggers(workflow) or {}
+    if not isinstance(on, Mapping) or "pull_request" not in on or on.get("pull_request") not in (None, {}):
+        actual = on.get("pull_request", "absent") if isinstance(on, Mapping) else on
+        findings.append(f"{file}: `pull_request` filters are {actual!r}; the required check runs "
+                        "on a pull request to any base, so it takes no filter")
     expected = {"branches": protected}
-    for event in ("pull_request", "push"):
-        if not isinstance(on, Mapping) or on.get(event) != expected:
-            actual = on.get(event) if isinstance(on, Mapping) else on
-            findings.append(f"{file}: `{event}` filters are {actual!r}; {GOVERNANCE} requires "
-                            f"{expected!r} and no other filter")
+    if not isinstance(on, Mapping) or on.get("push") != expected:
+        actual = on.get("push") if isinstance(on, Mapping) else on
+        findings.append(f"{file}: `push` filters are {actual!r}; {GOVERNANCE} requires "
+                        f"{expected!r} and no other filter")
     return findings
 
 

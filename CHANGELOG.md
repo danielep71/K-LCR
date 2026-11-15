@@ -70,7 +70,9 @@ Liquidity Coverage Ratio that nothing validates.
 - Governance: `release/0.1.0` as the development branch, task, integration
   and synchronization pull requests, the label catalogue and issue forms
   with priorities, milestones and target end dates checked by Issue triage
-  (#2, #8, #56, #70, #107).
+  (#2, #8, #56, #70, #107). An unchanged sync pull request, whose head is the
+  integration's merge commit, needs CI and names the integration's review
+  instead of a new one (#199).
 - Scope and architecture for an Excel VBA engine with separate EU and Basel
   profiles, the VBA house style and the host conventions (#3, #6).
 - Licensing, provenance, security and synthetic-data policies under MPL-2.0
@@ -81,7 +83,8 @@ Liquidity Coverage Ratio that nothing validates.
   `python tools/check.py` and as the required check (#7, #52, #105, #109,
   #12). The validators accept only `YYYY-MM-DD` dates in range and integer
   versions, match patterns against the whole value, and exit 2 when they
-  could not run (#159).
+  could not run (#159). The required check runs on a pull request to any
+  base and on pushes to `main` and `release/**` only (#198).
 - The regulatory source register and applicability map for both profiles,
   with stored EU source copies and my applicability decisions A01 to A09
   (#9, #126, #129).
