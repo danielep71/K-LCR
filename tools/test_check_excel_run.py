@@ -263,6 +263,13 @@ class EvidenceTests(unittest.TestCase):
             write(path, path.read_bytes().decode("ascii").replace("actual=0.75", "actual=0.5"))
         self.assert_fails(change, "failed with actual equal to expected")
 
+    def test_a_failure_with_text_values_fails(self) -> None:
+        def change(folder: Path) -> None:
+            path = folder / "injected.log"
+            write(path, path.read_bytes().decode("ascii").replace(
+                INJECTED_DETAIL, "expected='wrong'; actual='wrong'"))
+        self.assert_fails(change, "an exact numeric comparison must report two finite numbers")
+
     def test_a_failure_against_another_expected_value_fails(self) -> None:
         def change(folder: Path) -> None:
             path = folder / "injected.log"

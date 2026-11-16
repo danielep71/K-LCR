@@ -422,7 +422,10 @@ def check_details(name: str, records: list[Record], plan: Plan, suite: Suite,
         expected, actual = fields.get("expected"), fields.get("actual")
         if expected is None or actual is None:
             problems.append(f"{name}: ASSERT={item}: no expected= and actual= values")
-        elif NUMBER.match(expected) and NUMBER.match(actual):
+        elif not (NUMBER.match(expected) and NUMBER.match(actual)):
+            problems.append(f"{name}: ASSERT={item}: expected={expected}; actual={actual}: an exact "
+                            "numeric comparison must report two finite numbers")
+        else:
             if float(expected) != suite.literals[item]:
                 problems.append(f"{name}: ASSERT={item}: expected={expected}, but the commit's "
                                 f"suite expects {suite.literals[item]:g}")
