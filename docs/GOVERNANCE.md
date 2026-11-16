@@ -114,14 +114,16 @@ does not mechanically enforce it.
 
 Use the Bug report, Enhancement or Documentation form. Each issue is assigned
 to danielep71, has exactly one priority and belongs to a milestone selected
-during triage, and an explicit Target end date: YYYY-MM-DD (Europe/Rome) in
-its body: the forms ask for it, and a Planning list states it as a line
-`- Target end date: YYYY-MM-DD (Europe/Rome)`. In triage I may change the
-reporter's date by writing that line, which then takes precedence over the
-form answer. The target end date must be earlier than the due date of its
-milestone, and the milestone must be open and have a due date. Issue triage
-checks all three on every open issue; it does not report a target end date
-that has passed.
+during triage, and an explicit Start date and Target end date, each
+YYYY-MM-DD (Europe/Rome), in its body: the forms ask for both, and a Planning
+list states them as lines `- Start date: YYYY-MM-DD (Europe/Rome)` and
+`- Target end date: YYYY-MM-DD (Europe/Rome)`. The start date is the day the
+work starts, or is planned to start. In triage I may change the reporter's
+dates by writing those lines, which then take precedence over the form
+answers. The start date must not be after the target end date, the target end
+date must be earlier than the due date of its milestone, and the milestone
+must be open and have a due date. Issue triage checks all of them on every
+open issue; it does not report a date that has passed.
 Forms default bugs to P2 and enhancements/documentation to P3.
 
 | Priority | Use |
