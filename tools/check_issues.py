@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check issue metadata, target end dates and dependency status that issue forms cannot enforce.
+"""Check issue metadata, start and target end dates and dependency status that issue forms cannot enforce.
 
 Read-only: the check never changes an issue. It reports findings for
 me to resolve by hand (docs/GOVERNANCE.md, Issues).
@@ -38,9 +38,11 @@ TABLE_LABEL = re.compile(r"^\|\s*`([^`]+)`\s*\|")
 # The Planning line triage writes, "- Target end date: 2026-11-13 (Europe/Rome)";
 # the list marker and bold are optional. It takes precedence over the form field.
 PLANNED_TARGET = re.compile(r"^\s*(?:[-*]\s*)?\**target end date\**:\**\s*(.*?)\s*$", re.I)
+# The same for the start date, "- Start date: 2026-11-02 (Europe/Rome)".
+PLANNED_START = re.compile(r"^\s*(?:[-*]\s*)?\**start date\**:\**\s*(.*?)\s*$", re.I)
 ROME_SUFFIX = re.compile(r"\s*\(Europe/Rome\)$", re.I)
-# Fields every issue form must have; target_end_date carries the target end date.
-FORM_FIELDS = ("acceptance", "validation", "dependencies", "target_end_date")
+# Fields every issue form must have; start_date and target_end_date carry the dates.
+FORM_FIELDS = ("acceptance", "validation", "dependencies", "start_date", "target_end_date")
 API = "https://api.github.com"
 
 
@@ -130,18 +132,28 @@ def metadata_findings(issue: Issue, assignee: str) -> list[Finding]:
 
 
 def target_end_dates(body: str) -> list[str]:
-    """The target end dates the body states, without the "(Europe/Rome)" suffix.
+    """The target end dates the body states, without the "(Europe/Rome)" suffix."""
+    return stated_dates(body, PLANNED_TARGET, "target end date")
+
+
+def start_dates(body: str) -> list[str]:
+    """The start dates the body states, without the "(Europe/Rome)" suffix."""
+    return stated_dates(body, PLANNED_START, "start date")
+
+
+def stated_dates(body: str, planned_line: re.Pattern[str], name: str) -> list[str]:
+    """The dates of one kind that the body states, without the "(Europe/Rome)" suffix.
 
     Every Planning line counts, and when there is one the form field is ignored:
     triage may change the reporter's date. Otherwise the first non-empty line
-    under the form's "Target end date" heading counts; an empty field yields "".
+    under the form's heading of that name counts; an empty field yields "".
     """
     lines = normalized(body).split("\n")
-    planned = [match.group(1) for line in lines if (match := PLANNED_TARGET.match(line))]
+    planned = [match.group(1) for line in lines if (match := planned_line.match(line))]
     if not planned:
         for index, line in enumerate(lines):
             heading = HEADING.match(line)
-            if heading and "target end date" in heading.group(1).lower():
+            if heading and name in heading.group(1).lower():
                 value = ""
                 for following in lines[index + 1:]:
                     if HEADING.match(following):
@@ -193,6 +205,29 @@ def target_date_findings(issue: Issue) -> list[Finding]:
     return []
 
 
+def start_date_findings(issue: Issue) -> list[Finding]:
+    """The start date must be one real ISO date, not after the target end date."""
+    values = start_dates(issue.body)
+    if not values:
+        return [Finding(issue.number, "start-date",
+                        "has no line 'Start date: YYYY-MM-DD (Europe/Rome)'")]
+    parsed = [(value, iso_date(value)) for value in values]
+    invalid = [value for value, day in parsed if day is None]
+    if invalid:
+        return [Finding(issue.number, "start-date", f"has start date {invalid[0]!r}, "
+                        "not a real date written YYYY-MM-DD (Europe/Rome)")]
+    dates = sorted({day for _, day in parsed if day is not None})
+    if len(dates) > 1:
+        listed = ", ".join(day.isoformat() for day in dates)
+        return [Finding(issue.number, "start-date", f"states different start dates: {listed}")]
+    targets = {iso_date(value) for value in target_end_dates(issue.body)}
+    if len(targets) == 1 and (target := targets.pop()) is not None and dates[0] > target:
+        return [Finding(issue.number, "start-date",
+                        f"has start date {dates[0].isoformat()}, which is after its target end "
+                        f"date {target.isoformat()}")]
+    return []
+
+
 def dependency_findings(issue: Issue, states: Mapping[int, str], repository: str,
                         pulls: Collection[int] = ()) -> list[Finding]:
     """A named pull request is a known reference, never a prerequisite."""
@@ -230,6 +265,7 @@ def audit(issues: Sequence[Issue], states: Mapping[int, str], repository: str,
         if issue.state != "open":
             continue
         findings += metadata_findings(issue, assignee)
+        findings += start_date_findings(issue)
         findings += target_date_findings(issue)
         findings += dependency_findings(issue, states, repository, pulls)
         if catalogue is not None:

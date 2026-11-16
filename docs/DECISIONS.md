@@ -64,7 +64,7 @@ or the source-based resolution in its tracking issue and update the relevant doc
 
 These are planning entries, not implemented features or scheduled promises.
 Before starting an entry, create a scoped issue with owner, priority, milestone,
-target end date, dependencies and checkable acceptance criteria. I select
+start date, target end date, dependencies and checkable acceptance criteria. I select
 the next milestone; these entries do not expand v0.1.0.
 
 | ID | Work | Entry conditions and acceptance direction |

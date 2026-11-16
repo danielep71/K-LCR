@@ -12,7 +12,8 @@ the repository are in [AGENTS.md](AGENTS.md).
 
 Open an issue with one of the issue forms. Issue triage checks every open
 issue: it needs the assignee, exactly one priority label, an open milestone,
-a target end date earlier than the milestone's due date, and a dependency
+a start date not after its target end date, a target end date earlier than
+the milestone's due date, and a dependency
 section ([issues](docs/GOVERNANCE.md#-issues)). `P1` is only for a confirmed
 calculation bug. An issue is closed with a *Resolution* section: the change,
 the checks run and what was not validated.

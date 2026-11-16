@@ -69,10 +69,10 @@ Liquidity Coverage Ratio that nothing validates.
 
 - Governance: `release/0.1.0` as the development branch, task, integration
   and synchronization pull requests, the label catalogue and issue forms
-  with priorities, milestones and target end dates checked by Issue triage
-  (#2, #8, #56, #70, #107). An unchanged sync pull request, whose head is the
-  integration's merge commit, needs CI and names the integration's review
-  instead of a new one (#199).
+  with priorities, milestones, start dates and target end dates checked by
+  Issue triage (#2, #8, #56, #70, #107, #205). An unchanged sync pull
+  request, whose head is the integration's merge commit, needs CI and names
+  the integration's review instead of a new one (#199).
 - Scope and architecture for an Excel VBA engine with separate EU and Basel
   profiles, the VBA house style and the host conventions (#3, #6).
 - Licensing, provenance, security and synthetic-data policies under MPL-2.0

@@ -515,8 +515,8 @@ def alert(data: Path, milestone_due: str) -> dict[str, str] | None:
         return (f"| {name} | {current[key] or 'not recorded'} "
                 f"| {previous[key] or 'not recorded'} |")
 
-    # Issue triage requires a target end date before the milestone's due date,
-    # and a target before the planned start would make no sense.
+    # Issue triage requires a start date not after the target end date, and a
+    # target end date before the milestone's due date.
     if date.fromisoformat(milestone_due) <= date.fromisoformat(day):
         raise TrafficError(f"the milestone is due {milestone_due}, not after the snapshot "
                            f"date {day}; open a milestone with a later due date")
@@ -541,7 +541,7 @@ def alert(data: Path, milestone_due: str) -> dict[str, str] | None:
         "- [ ] What was found, and any follow-up issue, is recorded in a Resolution.", "",
         "## Dependencies and blocking status", "", "None.", "",
         "## Planning", "",
-        f"- Planned start: {day} (UTC collection date)",
+        f"- Start date: {day} (Europe/Rome)",
         f"- Target end date: {target} (Europe/Rome)",
         f"- Milestone due date: {milestone_due}", "",
         "Dates are not evidence of completion.",
