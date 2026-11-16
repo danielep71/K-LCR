@@ -69,10 +69,10 @@ Liquidity Coverage Ratio that nothing validates.
 
 - Governance: `release/0.1.0` as the development branch, task, integration
   and synchronization pull requests, the label catalogue and issue forms
-  with priorities, milestones and target end dates checked by Issue triage
-  (#2, #8, #56, #70, #107). An unchanged sync pull request, whose head is the
-  integration's merge commit, needs CI and names the integration's review
-  instead of a new one (#199).
+  with priorities, milestones, start dates and target end dates checked by
+  Issue triage (#2, #8, #56, #70, #107, #205). An unchanged sync pull
+  request, whose head is the integration's merge commit, needs CI and names
+  the integration's review instead of a new one (#199).
 - Scope and architecture for an Excel VBA engine with separate EU and Basel
   profiles, the VBA house style and the host conventions (#3, #6).
 - Licensing, provenance, security and synthetic-data policies under MPL-2.0
@@ -154,6 +154,15 @@ Liquidity Coverage Ratio that nothing validates.
   Excel, with a backup and a check that the sheets are unchanged. The script
   has not been run on a host; INSTALLATION.md documents it, the manual route,
   the export back and the recovery (#14).
+- Host evidence of an Excel run (#15): `tests/host/TEST_LCR_Excel_Evidence.bas`
+  runs the example suite of the harness in its four modes and saves each
+  log, the verification of the modes, the host and the host state before and
+  after; a development synchronization exports the workbook's modules and
+  writes `candidate.txt` (commit, clean working tree, manifest fingerprint);
+  `tools/check_excel_run.py` checks the folder against the commit and ends
+  `PASS`, `FAIL` or `NOT_RUN`. INSTALLATION.md describes the procedure. No
+  run has been recorded: the recorder has not been compiled or run in Excel,
+  and its checks are tested on synthetic folders only.
 
 ### Validation
 

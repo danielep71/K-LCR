@@ -126,9 +126,11 @@ ordinary standard modules; map them to the corresponding host components.
 
 The portable Repository integrity gate validates tooling, tracked text,
 workflow syntax, the static VBA rules below and the VBA component manifest,
-not VBA syntax, compilation or LCR calculations. A candidate-bound Excel run in #15 is a separate gate. Record
-the exact tested commit, Excel build/bitness, locale, fixture count and
-cleanup result.
+not VBA syntax, compilation or LCR calculations. A candidate-bound Excel run
+is a separate gate (#15): it is recorded and checked by `tools/check_excel_run.py`
+as [Recording host evidence](../INSTALLATION.md#-recording-host-evidence)
+describes, with the exact tested commit, Excel build and bitness, locale, case
+counts and cleanup result.
 
 ## 🔍 Static checks
 

@@ -19,7 +19,7 @@ from check_issues import Issue
 ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY = "example-org/sample-project"
 BLOCKED_LABEL = check_issues.BLOCKED
-PLANNING = "## Planning\n\n- Target end date: 2026-11-13 (Europe/Rome)\n\n"
+PLANNING = "## Planning\n\n- Start date: 2026-11-02 (Europe/Rome)\n- Target end date: 2026-11-13 (Europe/Rome)\n\n"
 READY = PLANNING + "## Dependencies and blocking status\n\n**Ready to start**: none.\n"
 DUE = "2026-11-20"
 
@@ -71,12 +71,52 @@ class MetadataTests(unittest.TestCase):
         self.assertEqual([(f.number, f.rule) for f in findings], [(1, "catalogue")])
 
 
-FORM = "### 🗓️ Target end date (Europe/Rome)\n\n{}\n\n### 🔗 Dependencies and blocking status\n\nNone\n"
+FORM = ("### 🗓️ Start date (Europe/Rome)\n\n2026-11-02\n\n"
+        "### 🗓️ Target end date (Europe/Rome)\n\n{}\n\n### 🔗 Dependencies and blocking status\n\nNone\n")
+
+
+class StartDateTests(unittest.TestCase):
+    def test_planning_line_and_form_field_are_read(self) -> None:
+        self.assertEqual(check_issues.start_dates(READY), ["2026-11-02"])
+        self.assertEqual(check_issues.start_dates(FORM.format("2026-11-13")), ["2026-11-02"])
+        changed = "- Start date: 2026-11-05 (Europe/Rome)\n\n" + FORM.format("2026-11-13")
+        self.assertEqual(check_issues.start_dates(changed), ["2026-11-05"])
+        self.assertEqual(rules([issue(1, body=changed)]), [])
+
+    def test_missing_start_date(self) -> None:
+        without = READY.replace("- Start date: 2026-11-02 (Europe/Rome)\n", "")
+        self.assertEqual(rules([issue(1, body=without)]), [(1, "start-date")])
+        self.assertEqual(rules([issue(1, body=FORM.format("2026-11-13").replace("2026-11-02", "_No response_"))]),
+                         [(1, "start-date")])
+
+    def test_a_line_that_only_mentions_the_start_date_is_not_one(self) -> None:
+        note = READY.replace("- Start date: 2026-11-02 (Europe/Rome)\n",
+                             "- Start date recorded on 2026-11-16: the work began.\n")
+        self.assertEqual(rules([issue(1, body=note)]), [(1, "start-date")])
+
+    def test_invalid_start_dates_are_reported(self) -> None:
+        for value in ("2026/11/02", "2026-02-30", "soon", ""):
+            with self.subTest(value=value):
+                body = READY.replace("Start date: 2026-11-02", f"Start date: {value}")
+                self.assertEqual(rules([issue(1, body=body)]), [(1, "start-date")])
+
+    def test_different_start_dates_are_reported(self) -> None:
+        self.assertEqual(rules([issue(1, body=READY + "\n- Start date: 2026-11-03\n")]),
+                         [(1, "start-date")])
+
+    def test_start_date_may_equal_but_not_follow_the_target_end_date(self) -> None:
+        same = READY.replace("Start date: 2026-11-02", "Start date: 2026-11-13")
+        self.assertEqual(rules([issue(1, body=same)]), [])
+        late = READY.replace("Start date: 2026-11-02", "Start date: 2026-11-14")
+        findings = check_issues.audit([issue(1, body=late)], {1: "open"}, REPOSITORY,
+                                      assignee="triage-person")
+        self.assertEqual([(f.number, f.rule) for f in findings], [(1, "start-date")])
+        self.assertIn("after its target end date 2026-11-13", findings[0].message)
 
 
 class TargetDateTests(unittest.TestCase):
     def test_planning_line_form_field_and_bold_label_are_read(self) -> None:
-        bold = "**Target end date:** 2026-11-13\n\n" + READY.replace(PLANNING, "")
+        bold = "**Start date:** 2026-11-02\n**Target end date:** 2026-11-13\n\n" + READY.replace(PLANNING, "")
         for body in (READY, FORM.format("2026-11-13"), bold, dated("2026-11-13")):
             with self.subTest(body=body):
                 self.assertEqual(rules([issue(1, body=body)]), [])
@@ -93,11 +133,12 @@ class TargetDateTests(unittest.TestCase):
                          ["2026-11-13"])
 
     def test_missing_target_date(self) -> None:
-        self.assertEqual(rules([issue(1, body=READY.replace(PLANNING, ""))]), [(1, "target-date")])
+        without = READY.replace("- Target end date: 2026-11-13 (Europe/Rome)\n", "")
+        self.assertEqual(rules([issue(1, body=without)]), [(1, "target-date")])
 
     def test_empty_form_field_is_not_a_date(self) -> None:
         self.assertEqual(rules([issue(1, body=FORM.format("_No response_"))]), [(1, "target-date")])
-        heading_only = "### 🗓️ Target end date\n\n### 🔗 Dependencies\n\nNone\n"
+        heading_only = "- Start date: 2026-11-02\n\n### 🗓️ Target end date\n\n### 🔗 Dependencies\n\nNone\n"
         self.assertEqual(rules([issue(1, body=heading_only)]), [(1, "target-date")])
 
     def test_invalid_dates_are_reported(self) -> None:
@@ -245,6 +286,9 @@ class ConfigTests(unittest.TestCase):
             form.write_text(text.replace("id: target_end_date", "id: target"), encoding="utf-8")
             self.assertEqual(check_issues.config_findings(root),
                              ["documentation.yml has no target_end_date field"])
+            form.write_text(text.replace("id: start_date", "id: start"), encoding="utf-8")
+            self.assertEqual(check_issues.config_findings(root),
+                             ["documentation.yml has no start_date field"])
 
     def test_label_guide_explains_every_catalogue_label_once(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

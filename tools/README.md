@@ -41,11 +41,11 @@ versions; each gate also writes `<gate>.log`.
 
 | Gate | Checks |
 | --- | --- |
-| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the component manifest's valid and invalid fixtures (`test_check_vba_manifest.py`), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
+| `tool-tests` | Unit tests of the tooling (`tools/test_*.py`): this runner's status, report and missing-tool rules, the issue-triage rules, the workflow invariants, the contract and case checkers, the binary-file, changelog and traffic-history rules, the VBA checks' valid and invalid fixtures (`test_check_vba.py`), the static consistency of the VBA test harness and its example suite (`test_vba_harness.py`: counts, identifiers, documented records, no host object), the component manifest's valid and invalid fixtures (`test_check_vba_manifest.py`), the Excel-run evidence checker on a complete synthetic folder and one change per rule (`test_check_excel_run.py`), the prototype's Python model and source check (`test_lcr_spec.py`, `test_check_source.py`), and its build tools: a rebuild of the template equals the tracked file part by part, with fixed dates and no author (`test_build_template.py`, which needs openpyxl: skipped locally without it, run on GitHub Actions), and the parts of the workbook builder and the LibreOffice smoke test that need no LibreOffice (`test_build_xlsm.py`). |
 | `labels-sync-self-test` | The label synchronizer's validation and reconciliation fixtures. |
 | `labels-manifest` | `.github/labels.json` is a valid schema-2 catalogue: one `labels` list, no overlays. |
 | `labels-drift-self-test` | The read-only drift detector's fixtures. |
-| `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have the acceptance, validation, dependencies and target end date fields; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). It needs PyYAML and Node.js: without PyYAML it fails on GitHub Actions and is NOT RUN locally, and without Node.js it is NOT RUN. |
+| `issue-config` | The catalogue passes `labels-sync.mjs --mode validate`; the issue forms assign the person named in `bug.yml` and set exactly their default priority (bug `P2`, enhancement and documentation `P3`), use only catalogue labels and have the acceptance, validation, dependencies, start date and target end date fields; blank issues are disabled; `blocked` is the only dependency status label; the label tables of the Issues section of `docs/GOVERNANCE.md` explain every catalogue label exactly once; every Dependabot update, read with PyYAML, uses only catalogue labels and assigns exactly the same person (`check_issues.py --check-config`). It needs PyYAML and Node.js: without PyYAML it fails on GitHub Actions and is NOT RUN locally, and without Node.js it is NOT RUN. |
 | `format-fixtures` | The tracked-text checker's own fixtures: valid samples pass, malformed ones fail (`check_files.py --self-test`). |
 | `tracked-text` | Every tracked text file, read from the Git index rather than the working tree: valid UTF-8, no NUL or CR byte, a final newline and no trailing white space (`check_files.py`). Markdown, Python, YAML, JSON, JavaScript modules (`.mjs`), TOML, CSV, plain text, HTML, CSS, SVG, XML, VBA exports, PowerShell and batch scripts and the Git/editor configuration files are covered; `LICENSE` and the byte-for-byte regulatory source copies in `docs/methodology/sources/` (not its README) are excluded. |
 | `ruff` | Lint of `tools/` with the rules in `pyproject.toml`. |
@@ -83,8 +83,33 @@ are in [INSTALLATION.md](../INSTALLATION.md#synchronizing-vba).
 
 It skips homes that do not exist yet, stops before opening Excel when a
 source component is missing from the manifest, imports forms from the
-repository only, never runs the VBA and records no run. No test runs it: it
-needs Windows Excel, and it has not yet been run on a host (#14).
+repository only and never runs the VBA. A development synchronization also
+prepares the evidence folder of an Excel run: it exports the workbook's
+modules and writes `candidate.txt` (below). No test runs it: it needs Windows
+Excel, and it has not yet been run on a host (#14).
+
+<a id="excel-run-evidence"></a>
+
+## 🧾 Excel run evidence
+
+`check_excel_run.py` checks the folder that an Excel run of the neutral
+harness leaves against the commit the workbook was built from, without
+Excel: `candidate.txt` (the commit, a clean working tree and the manifest's
+Git blob id), the modules exported back from the workbook, the four logs and
+the verification report that `tests/host/TEST_LCR_Excel_Evidence.bas` saves,
+the host record and the host state before and after the runs. It ends with
+`excel-run: PASS`, `FAIL` or `NOT_RUN` (exit 0, 1 or 2); the procedure and
+what each finding means are in
+[INSTALLATION.md](../INSTALLATION.md#-recording-host-evidence).
+
+```sh
+python tools/check_excel_run.py test-results/excel-run --commit <commit>
+```
+
+It is not a gate of `check.py`: it needs a recorded run, and none has been
+recorded (#15). `test_check_excel_run.py`, in `tool-tests`, checks it on a
+complete synthetic folder and on one change per rule; those logs are written
+from the documented outcomes of the harness, not recorded in Excel.
 
 ## 🗂️ Issue triage
 
@@ -110,6 +135,11 @@ all must be the same date, and it must be earlier than the due date of the
 issue's milestone. The due date is the date part of the
 milestone's `due_on`, in UTC. A closed milestone and a milestone without a due
 date are findings. A target end date that has already passed is not.
+
+The start date is read the same way, from the Planning lines `Start date:
+YYYY-MM-DD` or else from the forms' "Start date" heading: it must be one real
+calendar date, not after the target end date. A line that only mentions the
+start date, such as `Start date recorded on ...`, is not one.
 
 Exit code 0 means no findings, 1 means findings, 2 means the audit could not
 run. Its rules are tested by `test_check_issues.py` in `tool-tests`.
